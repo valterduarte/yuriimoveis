@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: #fff; color: #1a1a1a; }
+
+section { scroll-margin-top: 80px; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f0f0f0; }
+::-webkit-scrollbar-thumb { background: #af1e23; border-radius: 3px; }
+
+@layer components {
+  .btn-primary {
+    @apply text-white uppercase tracking-widest text-xs font-bold py-3 px-8
+           transition-all duration-300 cursor-pointer inline-block;
+    background-color: #af1e23;
+  }
+  .btn-primary:hover { background-color: #9c1c1f; }
+
+  .btn-outline {
+    @apply uppercase tracking-widest text-xs font-bold py-3 px-8
+           transition-all duration-300 cursor-pointer inline-block;
+    border: 1px solid #af1e23;
+    color: #af1e23;
+  }
+  .btn-outline:hover { background-color: #af1e23; color: #fff; }
+
+  .btn-dark {
+    @apply text-white uppercase tracking-widest text-xs font-bold py-3 px-8
+           transition-all duration-300 cursor-pointer inline-block;
+    background-color: #1a1a1a;
+  }
+  .btn-dark:hover { background-color: #af1e23; }
+
+  .input-field {
+    @apply w-full px-4 py-3 border border-gray-300 bg-white text-gray-900
+           focus:outline-none transition-colors duration-200 text-sm;
+  }
+  .input-field:focus { border-color: #af1e23; }
+
+  .section-label {
+    @apply uppercase tracking-widest text-xs font-bold mb-3 block;
+    color: #af1e23;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold leading-tight;
+    color: #1a1a1a;
+  }
+}
