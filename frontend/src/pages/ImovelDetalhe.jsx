@@ -409,54 +409,17 @@ export default function ImovelDetalhe() {
           <h2 className="section-title mb-2">Desejo saber mais</h2>
           <p className="text-gray-500 text-sm mb-8">Preencha o formulário e entraremos em contato em breve.</p>
 
-          {formStatus === 'ok' ? (
-            <div className="bg-green-50 border border-green-200 p-8 text-center">
-              <FiCheckCircle className="text-green-500 mx-auto mb-3" size={32} />
-              <p className="font-bold text-green-700 uppercase tracking-widest text-sm">Mensagem enviada!</p>
-              <p className="text-green-600 text-xs mt-1">Em breve entraremos em contato.</p>
-              <button onClick={() => setFormStatus(null)}
-                className="mt-5 text-[10px] uppercase tracking-widest font-bold text-green-700 underline">
-                Enviar outra mensagem
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleFormSubmit} className="bg-white border border-gray-200 p-8 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500 block mb-1.5">
-                    Nome <span className="text-[#af1e23]">*</span>
-                  </label>
-                  <input type="text" name="nome" required value={form.nome} onChange={handleFormChange}
-                    className="input-field" placeholder="Seu nome completo" />
-                </div>
-                <div>
-                  <label className="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500 block mb-1.5">
-                    E-mail <span className="text-[#af1e23]">*</span>
-                  </label>
-                  <input type="email" name="email" required value={form.email} onChange={handleFormChange}
-                    className="input-field" placeholder="seu@email.com" />
-                </div>
-              </div>
-              <div>
-                <label className="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500 block mb-1.5">Telefone</label>
-                <input type="tel" name="telefone" value={form.telefone} onChange={handleFormChange}
-                  className="input-field" placeholder="(00) 00000-0000" />
-              </div>
-              <div>
-                <label className="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500 block mb-1.5">Mensagem</label>
-                <textarea name="mensagem" rows={4} value={form.mensagem} onChange={handleFormChange}
-                  className="input-field resize-none"
-                  placeholder={`Tenho interesse no imóvel: ${imovel.titulo}`} />
-              </div>
-              {formStatus === 'erro' && (
-                <p className="text-xs text-red-600">Erro ao enviar. Tente novamente ou entre em contato pelo WhatsApp.</p>
-              )}
-              <button type="submit" disabled={sending}
-                className="btn-primary w-full py-4 disabled:opacity-60">
-                {sending ? 'Enviando...' : 'Enviar mensagem'}
-              </button>
-            </form>
-          )}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <a href={`https://wa.me/5511967147840?text=${whatsMsg}`}
+              target="_blank" rel="noreferrer"
+              className="flex-1 flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
+              <FaWhatsapp size={22} /> WhatsApp
+            </a>
+            <a href="tel:5511967147840"
+              className="flex-1 flex items-center justify-center gap-3 bg-[#1a1a1a] hover:bg-[#af1e23] text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
+              <FiPhone size={20} /> (11) 96714-7840
+            </a>
+          </div>
         </section>
 
       </div>

@@ -1,27 +1,7 @@
-import { useState } from 'react'
-import { FiPhone, FiMail, FiMapPin, FiClock, FiSend, FiCheckCircle } from 'react-icons/fi'
+import { FiPhone, FiMail, FiMapPin, FiClock } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram, FaFacebook } from 'react-icons/fa'
-import axios from 'axios'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
 export default function Contato() {
-  const [form, setForm] = useState({ nome: '', email: '', telefone: '', assunto: '', mensagem: '' })
-  const [status, setStatus] = useState(null)
-
-  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
-
-  const handleSubmit = async e => {
-    e.preventDefault()
-    setStatus('loading')
-    try {
-      await axios.post(`${API_URL}/api/contato`, form)
-      setStatus('success')
-      setForm({ nome: '', email: '', telefone: '', assunto: '', mensagem: '' })
-    } catch {
-      setStatus('error')
-    }
-  }
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">
@@ -76,92 +56,23 @@ export default function Contato() {
               </div>
             </div>
 
-            {/* Formulário */}
+            {/* Contato direto */}
             <div className="lg:col-span-2">
               <div className="bg-white border border-gray-200 p-8">
-                <h2 className="text-xs font-bold uppercase tracking-widest text-dark mb-7">Envie uma Mensagem</h2>
+                <h2 className="text-xs font-bold uppercase tracking-widest text-dark mb-3">Fale Agora</h2>
+                <p className="text-sm text-gray-500 mb-8">Entre em contato diretamente pelo WhatsApp ou telefone. Atendemos de seg a sáb.</p>
 
-                {status === 'success' ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-primary flex items-center justify-center mx-auto mb-4">
-                      <FiCheckCircle className="text-white" size={28} />
-                    </div>
-                    <h3 className="text-lg font-black uppercase text-dark mb-2">Mensagem enviada!</h3>
-                    <p className="text-gray-500 text-sm mb-6">Retornaremos em breve pelo contato informado.</p>
-                    <button onClick={() => setStatus(null)} className="btn-primary">
-                      Enviar outra mensagem
-                    </button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">
-                          Nome <span className="text-primary">*</span>
-                        </label>
-                        <input type="text" name="nome" value={form.nome} onChange={handleChange}
-                          required placeholder="Seu nome completo" className="input-field" />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">
-                          E-mail <span className="text-primary">*</span>
-                        </label>
-                        <input type="email" name="email" value={form.email} onChange={handleChange}
-                          required placeholder="seu@email.com" className="input-field" />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">
-                          Telefone
-                        </label>
-                        <input type="tel" name="telefone" value={form.telefone} onChange={handleChange}
-                          placeholder="(11) 9 0000-0000" className="input-field" />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">
-                          Assunto
-                        </label>
-                        <select name="assunto" value={form.assunto} onChange={handleChange} className="input-field">
-                          <option value="">Selecione...</option>
-                          <option value="compra">Quero comprar um imóvel</option>
-                          <option value="aluguel">Quero alugar um imóvel</option>
-                          <option value="vender">Quero vender meu imóvel</option>
-                          <option value="visita">Agendar visita</option>
-                          <option value="avaliacao">Avaliação de imóvel</option>
-                          <option value="outro">Outro assunto</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">
-                        Mensagem <span className="text-primary">*</span>
-                      </label>
-                      <textarea name="mensagem" value={form.mensagem} onChange={handleChange}
-                        required rows={5} placeholder="Como podemos ajudar?" className="input-field resize-none" />
-                    </div>
-
-                    {status === 'error' && (
-                      <div className="bg-red-50 border-l-4 border-red-500 text-red-700 text-xs p-3">
-                        Erro ao enviar. Tente pelo WhatsApp: (11) 96714-7840
-                      </div>
-                    )}
-
-                    <button type="submit" disabled={status === 'loading'}
-                      className="btn-primary w-full flex items-center justify-center gap-2 py-4 disabled:opacity-60 disabled:cursor-not-allowed">
-                      {status === 'loading' ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Enviando...
-                        </>
-                      ) : (
-                        <><FiSend size={14} /> Enviar Mensagem</>
-                      )}
-                    </button>
-                  </form>
-                )}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <a href="https://wa.me/5511967147840?text=Olá! Gostaria de mais informações sobre imóveis."
+                    target="_blank" rel="noreferrer"
+                    className="flex-1 flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
+                    <FaWhatsapp size={22} /> WhatsApp
+                  </a>
+                  <a href="tel:5511967147840"
+                    className="flex-1 flex items-center justify-center gap-3 bg-[#1a1a1a] hover:bg-[#af1e23] text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
+                    <FiPhone size={20} /> (11) 96714-7840
+                  </a>
+                </div>
               </div>
             </div>
           </div>
