@@ -134,11 +134,7 @@ export default function Imoveis() {
                   <select value={filters.cidade} onChange={e => updateFilter('cidade', e.target.value)}
                     className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary">
                     <option value="">Todas</option>
-                    <option value="Canela">Canela</option>
-                    <option value="Gramado">Gramado</option>
-                    <option value="Nova Petrópolis">Nova Petrópolis</option>
-                    <option value="São Francisco de Paula">São Francisco de Paula</option>
-                    <option value="Caxias do Sul">Caxias do Sul</option>
+                    <option value="Osasco">Osasco</option>
                   </select>
                 </div>
 

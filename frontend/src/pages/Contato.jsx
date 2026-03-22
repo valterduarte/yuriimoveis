@@ -23,7 +23,7 @@ export default function Contato() {
               <h2 className="text-xs font-bold uppercase tracking-widest text-dark mb-6">Informações</h2>
 
               {[
-                { icon: FiMapPin, title: 'Endereço', content: 'Rua Canela das Araucárias, 123\nCentro, Canela - RS\nCEP: 95680-000' },
+                { icon: FiMapPin, title: 'Endereço', content: 'Osasco - SP' },
                 { icon: FiPhone, title: 'Telefone', content: '(11) 96714-7840' },
                 { icon: FiMail, title: 'E-mail', content: 'contato@corretoryuri.com.br' },
                 { icon: FiClock, title: 'Horário', content: 'Seg - Sex: 08h às 18h\nSábado: 08h às 12h' },

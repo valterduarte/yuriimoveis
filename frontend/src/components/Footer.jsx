@@ -86,7 +86,7 @@ export default function Footer() {
             <ul className="space-y-4 text-xs">
               <li className="flex items-start gap-3">
                 <FiMapPin className="text-primary mt-0.5 flex-shrink-0" size={13} />
-                <span className="leading-relaxed">Rua Canela das Araucárias, 123<br />Centro, Canela - RS</span>
+                <span className="leading-relaxed">Osasco - SP</span>
               </li>
               <li className="flex items-center gap-3">
                 <FiPhone className="text-primary flex-shrink-0" size={13} />
@@ -110,7 +110,7 @@ export default function Footer() {
       <div className="border-t border-gray-800">
         <div className="container mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-600">
           <p>© {year} Corretor Yuri Imóveis — Todos os direitos reservados.</p>
-          <p>CRECI-RS: 00000-J</p>
+          <p>CRECI-SP: 00000-J</p>
         </div>
       </div>
     </footer>

@@ -20,7 +20,7 @@ const categorias = [
 const diferenciais = [
   { num: '01', title: 'Atendimento Personalizado', desc: 'Cada cliente recebe atenção exclusiva e dedicada às suas necessidades específicas.' },
   { num: '02', title: 'Segurança Jurídica', desc: 'Todos os processos conduzidos com total transparência e segurança jurídica.' },
-  { num: '03', title: 'Experiência Regional', desc: 'Mais de 10 anos no mercado da Serra Gaúcha com profundo conhecimento local.' },
+  { num: '03', title: 'Experiência Regional', desc: 'Mais de 10 anos no mercado de Osasco e região com profundo conhecimento local.' },
   { num: '04', title: 'Portfólio Exclusivo', desc: 'Acesso a imóveis exclusivos e oportunidades únicas na região.' },
 ]
 
@@ -61,7 +61,7 @@ export default function Home() {
               Encontre o<br />Imóvel <span className="text-primary">Ideal</span>
             </h1>
             <p className="text-gray-300 text-base leading-relaxed max-w-lg">
-              Especialistas em imóveis residenciais e comerciais em Canela e toda a Serra Gaúcha. Realizamos o sonho da casa própria há mais de 10 anos.
+              Especialistas em imóveis residenciais e comerciais em Osasco e região. Realizamos o sonho da casa própria há mais de 10 anos.
             </p>
           </div>
           <div className="max-w-2xl">
@@ -154,7 +154,7 @@ export default function Home() {
                 Nossos<br />Diferenciais
               </h2>
               <p className="text-gray-400 leading-relaxed mb-8 text-sm">
-                Somos referência no mercado imobiliário da Serra Gaúcha com atendimento personalizado, transparência e segurança em cada negócio.
+                Somos referência no mercado imobiliário de Osasco e região com atendimento personalizado, transparência e segurança em cada negócio.
               </p>
               <Link to="/quem-somos" className="btn-primary inline-flex items-center gap-2">
                 Conheça nossa equipe <FiArrowRight size={14} />

@@ -149,7 +149,7 @@ export default function ImovelDetalhe() {
             </h1>
             <p className="flex items-center gap-2 text-gray-300 text-sm">
               <FiMapPin size={13} className="text-[#af1e23]" />
-              {imovel.endereco && `${imovel.endereco}, `}{imovel.bairro}, {imovel.cidade} — RS
+              {imovel.endereco && `${imovel.endereco}, `}{imovel.bairro}, {imovel.cidade} — SP
             </p>
           </div>
         </div>
@@ -384,7 +384,7 @@ export default function ImovelDetalhe() {
               <FiMapPin size={16} className="text-[#af1e23] flex-shrink-0 mt-0.5" />
               <span>
                 {imovel.endereco && `${imovel.endereco}, `}
-                <strong>{imovel.bairro}</strong>, {imovel.cidade} — RS
+                <strong>{imovel.bairro}</strong>, {imovel.cidade} — SP
                 {imovel.cep && ` · CEP: ${imovel.cep}`}
               </span>
             </p>
@@ -392,10 +392,10 @@ export default function ImovelDetalhe() {
           <div className="bg-[#1a1a1a] flex items-center justify-center" style={{ height: 300 }}>
             <div className="text-center">
               <FiMapPin size={40} className="mx-auto mb-3 text-[#af1e23]" />
-              <p className="text-white font-bold uppercase tracking-widest text-sm">{imovel.cidade} — RS</p>
+              <p className="text-white font-bold uppercase tracking-widest text-sm">{imovel.cidade} — SP</p>
               <p className="text-gray-400 text-xs mt-1 uppercase tracking-wider">{imovel.bairro}</p>
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${imovel.bairro}, ${imovel.cidade}, RS`)}`}
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${imovel.bairro}, ${imovel.cidade}, SP`)}`}
                 target="_blank" rel="noreferrer"
                 className="mt-5 inline-block text-[10px] uppercase tracking-widest font-bold text-[#af1e23] border border-[#af1e23] px-5 py-2 hover:bg-[#af1e23] hover:text-white transition-colors">
                 Ver no Google Maps

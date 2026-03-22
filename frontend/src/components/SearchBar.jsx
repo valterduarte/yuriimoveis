@@ -65,11 +65,7 @@ export default function SearchBar() {
           <select value={cidade} onChange={e => setCidade(e.target.value)}
             className="w-full text-sm text-dark focus:outline-none bg-white">
             <option value="">Todas as cidades</option>
-            <option value="Canela">Canela</option>
-            <option value="Gramado">Gramado</option>
-            <option value="Nova Petrópolis">Nova Petrópolis</option>
-            <option value="São Francisco de Paula">São Francisco de Paula</option>
-            <option value="Caxias do Sul">Caxias do Sul</option>
+            <option value="Osasco">Osasco</option>
           </select>
         </div>
         <div className="p-5">

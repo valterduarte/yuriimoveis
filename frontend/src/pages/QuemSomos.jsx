@@ -6,7 +6,7 @@ const equipe = [
   {
     nome: 'Yuri Corretor',
     cargo: 'Corretor de Imóveis · CRECI 12345',
-    descricao: 'Especialista em imóveis residenciais e comerciais com mais de 10 anos de experiência na Serra Gaúcha.',
+    descricao: 'Especialista em imóveis residenciais e comerciais com mais de 10 anos de experiência em Osasco e região.',
     img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
   },
   {
@@ -43,7 +43,7 @@ export default function QuemSomos() {
             Quem Somos
           </h1>
           <p className="text-gray-300 text-base max-w-xl">
-            Conheça a equipe do Corretor Yuri e nossa história de dedicação ao mercado imobiliário da Serra Gaúcha
+            Conheça a equipe do Corretor Yuri e nossa história de dedicação ao mercado imobiliário de Osasco e região
           </p>
         </div>
       </section>
@@ -57,10 +57,10 @@ export default function QuemSomos() {
               <h2 className="section-title mb-6">Mais de 10 anos<br />realizando sonhos</h2>
               <div className="space-y-4 text-sm text-gray-600 leading-relaxed">
                 <p>
-                  O Corretor Yuri nasceu do desejo de oferecer um serviço imobiliário diferenciado na Serra Gaúcha, com foco na satisfação do cliente e em negócios transparentes e seguros.
+                  O Corretor Yuri nasceu do desejo de oferecer um serviço imobiliário diferenciado em Osasco e região, com foco na satisfação do cliente e em negócios transparentes e seguros.
                 </p>
                 <p>
-                  Fundado em 2014 em Canela - RS, nos tornamos referência regional em compra, venda e locação de imóveis residenciais, comerciais e rurais. Nossa equipe de corretores especializados conhece cada detalhe da região.
+                  Fundado em 2014 em Osasco - SP, nos tornamos referência regional em compra, venda e locação de imóveis residenciais e comerciais. Nossa equipe de corretores especializados conhece cada detalhe da região.
                 </p>
                 <p>
                   Com mais de 500 imóveis comercializados e 1.000 famílias atendidas, continuamos crescendo com o mesmo propósito:{' '}
@@ -108,7 +108,7 @@ export default function QuemSomos() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-gray-700">
             {[
               { title: 'Missão', text: 'Facilitar o acesso à moradia e ao investimento imobiliário, oferecendo serviços de excelência com ética e transparência.' },
-              { title: 'Visão', text: 'Ser a imobiliária mais reconhecida e respeitada da Serra Gaúcha, referência em inovação e atendimento ao cliente.' },
+              { title: 'Visão', text: 'Ser a imobiliária mais reconhecida e respeitada de Osasco e região, referência em inovação e atendimento ao cliente.' },
               { title: 'Valores', text: valores.join(' · ') },
             ].map((item, i) => (
               <div key={item.title} className={`p-8 ${i < 2 ? 'border-b md:border-b-0 md:border-r border-gray-700' : ''}`}>
