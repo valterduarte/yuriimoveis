@@ -110,7 +110,7 @@ export default function Footer() {
       <div className="border-t border-gray-800">
         <div className="container mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-600">
           <p>© {year} Corretor Yuri Imóveis — Todos os direitos reservados.</p>
-          <p>CRECI-SP: 00000-J</p>
+          <p>CRECI-SP: 235509</p>
         </div>
       </div>
     </footer>
