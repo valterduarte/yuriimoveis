@@ -277,7 +277,7 @@ export default function ImovelDetalhe() {
 
           {/* ── SIDEBAR ── */}
           <div className="lg:col-span-1">
-            <div className="bg-[#252525] sticky top-36">
+            <div className="bg-white border border-gray-200 sticky top-36">
               <div className="bg-[#1a1a1a] p-7">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400 mb-1">Código #{imovel.id}</p>
                 <p className="text-3xl font-black text-[#af1e23] leading-tight">{formatPrice(imovel.preco, imovel.tipo)}</p>
@@ -296,16 +296,16 @@ export default function ImovelDetalhe() {
                   <FiPhone size={14} /> (11) 96714-7840
                 </a>
                 <button onClick={() => scrollToSection('contato')}
-                  className="w-full flex items-center justify-center gap-2 border border-[#444] hover:border-[#af1e23] hover:text-[#af1e23] text-gray-300 font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors">
+                  className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-[#af1e23] hover:text-[#af1e23] text-[#1a1a1a] font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors">
                   <FiCalendar size={14} /> Agendar Visita
                 </button>
                 <button onClick={() => scrollToSection('contato')}
-                  className="w-full flex items-center justify-center gap-2 border border-[#444] hover:border-[#af1e23] hover:text-[#af1e23] text-gray-300 font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors">
+                  className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-[#af1e23] hover:text-[#af1e23] text-[#1a1a1a] font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors">
                   <FiMail size={14} /> Enviar Mensagem
                 </button>
               </div>
-              <div className="border-t border-[#333] px-7 pb-7">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 py-5">Informações</p>
+              <div className="border-t border-gray-100 px-7 pb-7">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 py-5">Informações</p>
                 <div className="space-y-3">
                   {[
                     { l: 'Tipo', v: imovel.tipo },
@@ -317,8 +317,8 @@ export default function ImovelDetalhe() {
                     ...(imovel.vagas > 0 ? [{ l: 'Vagas', v: imovel.vagas }] : []),
                   ].map(item => (
                     <div key={item.l} className="flex justify-between text-xs">
-                      <span className="text-gray-500 capitalize">{item.l}</span>
-                      <span className="font-semibold text-gray-200 capitalize">{item.v}</span>
+                      <span className="text-gray-400 capitalize">{item.l}</span>
+                      <span className="font-semibold text-[#1a1a1a] capitalize">{item.v}</span>
                     </div>
                   ))}
                 </div>
