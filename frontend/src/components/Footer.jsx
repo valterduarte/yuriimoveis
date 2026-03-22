@@ -24,7 +24,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-xs leading-relaxed text-gray-500 mb-6">
-              Sua imobiliária de confiança em Canela e região. Realizando o sonho da casa própria há mais de 10 anos.
+              Sua imobiliária de confiança em Osasco e região. Realizando o sonho da casa própria há mais de 10 anos.
             </p>
             <div className="flex items-center gap-3">
               {[
