@@ -10,6 +10,14 @@ body { font-family: 'Inter', sans-serif; background: #fff; color: #1a1a1a; }
 
 section { scroll-margin-top: 80px; }
 
+/* bloco-perspectivas */
+@media (max-width: 1075px) {
+  .perspectivas-img { height: 350px !important; }
+}
+@media (max-width: 600px) {
+  .perspectivas-img { height: 350px !important; }
+}
+
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #f0f0f0; }
 ::-webkit-scrollbar-thumb { background: #af1e23; border-radius: 3px; }

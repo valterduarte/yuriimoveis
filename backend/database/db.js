@@ -1,57 +1,52 @@
-const Database = require('better-sqlite3')
-const path = require('path')
-const fs = require('fs')
+const { Pool } = require('pg')
 
-const DB_DIR = path.join(__dirname)
-const DB_PATH = path.join(DB_DIR, 'canelaforce.db')
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+})
 
-if (!fs.existsSync(DB_DIR)) {
-  fs.mkdirSync(DB_DIR, { recursive: true })
+async function initDB() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS imoveis (
+      id SERIAL PRIMARY KEY,
+      titulo TEXT NOT NULL,
+      descricao TEXT DEFAULT '',
+      tipo TEXT NOT NULL CHECK(tipo IN ('venda', 'aluguel')),
+      categoria TEXT NOT NULL,
+      preco NUMERIC NOT NULL,
+      area NUMERIC DEFAULT 0,
+      quartos INTEGER DEFAULT 0,
+      banheiros INTEGER DEFAULT 0,
+      vagas INTEGER DEFAULT 0,
+      endereco TEXT DEFAULT '',
+      bairro TEXT DEFAULT '',
+      cidade TEXT DEFAULT 'Canela',
+      estado TEXT DEFAULT 'RS',
+      cep TEXT DEFAULT '',
+      lat NUMERIC,
+      lng NUMERIC,
+      destaque BOOLEAN DEFAULT false,
+      ativo BOOLEAN DEFAULT true,
+      imagens TEXT DEFAULT '[]',
+      diferenciais TEXT DEFAULT '[]',
+      created_at TIMESTAMP DEFAULT NOW(),
+      updated_at TIMESTAMP DEFAULT NOW()
+    )
+  `)
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS contatos (
+      id SERIAL PRIMARY KEY,
+      nome TEXT NOT NULL,
+      email TEXT NOT NULL,
+      telefone TEXT DEFAULT '',
+      assunto TEXT DEFAULT '',
+      mensagem TEXT NOT NULL,
+      imovel_id INTEGER,
+      lido BOOLEAN DEFAULT false,
+      created_at TIMESTAMP DEFAULT NOW()
+    )
+  `)
 }
 
-const db = new Database(DB_PATH)
-
-// Enable WAL mode for performance
-db.pragma('journal_mode = WAL')
-
-// Create tables
-db.exec(`
-  CREATE TABLE IF NOT EXISTS imoveis (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    titulo TEXT NOT NULL,
-    descricao TEXT,
-    tipo TEXT NOT NULL CHECK(tipo IN ('venda', 'aluguel')),
-    categoria TEXT NOT NULL,
-    preco REAL NOT NULL,
-    area REAL DEFAULT 0,
-    quartos INTEGER DEFAULT 0,
-    banheiros INTEGER DEFAULT 0,
-    vagas INTEGER DEFAULT 0,
-    endereco TEXT,
-    bairro TEXT,
-    cidade TEXT DEFAULT 'Canela',
-    estado TEXT DEFAULT 'RS',
-    cep TEXT,
-    lat REAL,
-    lng REAL,
-    destaque INTEGER DEFAULT 0,
-    ativo INTEGER DEFAULT 1,
-    imagens TEXT DEFAULT '[]',
-    diferenciais TEXT DEFAULT '[]',
-    created_at TEXT DEFAULT (datetime('now')),
-    updated_at TEXT DEFAULT (datetime('now'))
-  );
-
-  CREATE TABLE IF NOT EXISTS contatos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    email TEXT NOT NULL,
-    telefone TEXT,
-    assunto TEXT,
-    mensagem TEXT NOT NULL,
-    lido INTEGER DEFAULT 0,
-    created_at TEXT DEFAULT (datetime('now'))
-  );
-`)
-
-module.exports = db
+module.exports = { pool, initDB }

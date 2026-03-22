@@ -1,31 +1,29 @@
 const express = require('express')
 const router = express.Router()
-const db = require('../database/db')
+const { pool } = require('../database/db')
 
 // POST /api/contato
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    const { nome, email, telefone, assunto, mensagem } = req.body
+    const { nome, email, telefone, assunto, mensagem, imovel_id } = req.body
 
     if (!nome || !email || !mensagem) {
       return res.status(400).json({ error: 'Campos obrigatórios: nome, email, mensagem' })
     }
 
-    // Simple email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       return res.status(400).json({ error: 'E-mail inválido' })
     }
 
-    const stmt = db.prepare(`
-      INSERT INTO contatos (nome, email, telefone, assunto, mensagem)
-      VALUES (@nome, @email, @telefone, @assunto, @mensagem)
-    `)
-    const result = stmt.run({ nome, email, telefone: telefone || '', assunto: assunto || '', mensagem })
+    const { rows } = await pool.query(`
+      INSERT INTO contatos (nome, email, telefone, assunto, mensagem, imovel_id)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id
+    `, [nome, email, telefone || '', assunto || '', mensagem, imovel_id || null])
 
     console.log(`📩 Novo contato: ${nome} <${email}>`)
-
-    res.status(201).json({ id: result.lastInsertRowid, message: 'Mensagem enviada com sucesso!' })
+    res.status(201).json({ id: rows[0].id, message: 'Mensagem enviada com sucesso!' })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Erro ao processar mensagem' })
@@ -33,19 +31,19 @@ router.post('/', (req, res) => {
 })
 
 // GET /api/contato (admin)
-router.get('/', (req, res) => {
+router.get('/', async (_req, res) => {
   try {
-    const contatos = db.prepare('SELECT * FROM contatos ORDER BY created_at DESC').all()
-    res.json(contatos)
+    const { rows } = await pool.query('SELECT * FROM contatos ORDER BY created_at DESC')
+    res.json(rows)
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' })
   }
 })
 
 // PATCH /api/contato/:id/lido
-router.patch('/:id/lido', (req, res) => {
+router.patch('/:id/lido', async (req, res) => {
   try {
-    db.prepare('UPDATE contatos SET lido = 1 WHERE id = ?').run(req.params.id)
+    await pool.query('UPDATE contatos SET lido = true WHERE id = $1', [req.params.id])
     res.json({ message: 'Marcado como lido' })
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' })
