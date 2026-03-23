@@ -319,7 +319,7 @@ export default function ImovelDetalhe() {
                 </p>
                 {imovel.tipo === 'venda' && (
                   <p className="text-[11px] text-green-400 mt-3 font-semibold">
-                    Parcelas a partir de {calcParcela(imovel.preco)}/mês
+                    Parcelas a partir de {imovel.parcela_display || calcParcela(imovel.preco)}/mês
                   </p>
                 )}
               </div>
