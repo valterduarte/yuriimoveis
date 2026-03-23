@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { FiArrowRight, FiArrowUpRight } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import SearchBar from '../components/SearchBar'
+import SEOHead from '../components/SEOHead'
 import PropertyCard from '../components/PropertyCard'
 import axios from 'axios'
 
@@ -37,6 +38,20 @@ export default function Home() {
 
   return (
     <div className="pb-16 md:pb-0">
+      <SEOHead
+        url="/"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'Corretor Yuri Imóveis',
+          url: 'https://yuriimoveis.com.br',
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: 'https://yuriimoveis.com.br/imoveis?busca={search_term_string}',
+            'query-input': 'required name=search_term_string',
+          },
+        }}
+      />
 
       {/* HERO */}
       <section

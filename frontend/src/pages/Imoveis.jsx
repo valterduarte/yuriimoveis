@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { FiFilter, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import PropertyCard from '../components/PropertyCard'
 import axios from 'axios'
+import SEOHead from '../components/SEOHead'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
@@ -73,6 +74,11 @@ export default function Imoveis() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEOHead
+        title="Imóveis à Venda e Aluguel em Canela"
+        description="Explore o catálogo completo de imóveis em Canela e região. Casas, apartamentos, terrenos, chalés e comerciais disponíveis para venda e aluguel."
+        url="/imoveis"
+      />
       {/* Page header */}
       <div className="bg-dark text-white py-12">
         <div className="container mx-auto px-6">

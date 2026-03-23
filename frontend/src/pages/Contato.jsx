@@ -1,10 +1,16 @@
 import { FiPhone, FiMapPin, FiClock } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
+import SEOHead from '../components/SEOHead'
 
 export default function Contato() {
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">
+      <SEOHead
+        title="Contato"
+        description="Entre em contato com o Corretor Yuri Imóveis. Atendimento via WhatsApp, telefone e e-mail para imóveis em Canela e região."
+        url="/contato"
+      />
 
       {/* Hero */}
       <section className="py-24 bg-dark text-white">

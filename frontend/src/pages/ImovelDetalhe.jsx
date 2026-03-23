@@ -7,6 +7,7 @@ import {
 import { FaCar, FaBath, FaWhatsapp } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
 import axios from 'axios'
+import SEOHead from '../components/SEOHead'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80'
@@ -116,8 +117,32 @@ export default function ImovelDetalhe() {
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER]
   const whatsMsg = encodeURIComponent(`Olá! Tenho interesse no imóvel: ${imovel.titulo} — Código #${imovel.id}`)
 
+  const imovelDescription = imovel.descricao
+    ? imovel.descricao.slice(0, 155).replace(/\n/g, ' ')
+    : `${imovel.titulo} em ${imovel.cidade || 'Canela'}, RS. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
+
   return (
     <div className="min-h-screen bg-[#f4f4f4] pb-20 md:pb-0">
+      <SEOHead
+        title={imovel.titulo}
+        description={imovelDescription}
+        image={images[0] !== PLACEHOLDER ? images[0] : undefined}
+        url={`/imoveis/${imovel.id}`}
+        type="article"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'Product',
+          name: imovel.titulo,
+          description: imovelDescription,
+          image: images,
+          offers: {
+            '@type': 'Offer',
+            price: imovel.preco,
+            priceCurrency: 'BRL',
+            availability: 'https://schema.org/InStock',
+          },
+        }}
+      />
 
       {/* ── HERO ── */}
       <div className="relative bg-[#1a1a1a]" style={{ height: '70vh', minHeight: 420 }}>
