@@ -2,6 +2,14 @@ const express = require('express')
 const router = express.Router()
 const { pool } = require('../database/db')
 
+function requireApiKey(req, res, next) {
+  const key = req.headers['x-api-key']
+  if (!key || key !== process.env.API_KEY) {
+    return res.status(401).json({ error: 'Não autorizado' })
+  }
+  next()
+}
+
 // GET /api/imoveis - list with filters and pagination
 router.get('/', async (req, res) => {
   try {
@@ -83,7 +91,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // POST /api/imoveis
-router.post('/', async (req, res) => {
+router.post('/', requireApiKey, async (req, res) => {
   try {
     const {
       titulo, descricao, tipo, categoria, preco, area,
@@ -116,7 +124,7 @@ router.post('/', async (req, res) => {
 })
 
 // PUT /api/imoveis/:id
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireApiKey, async (req, res) => {
   try {
     const existing = await pool.query('SELECT id FROM imoveis WHERE id = $1', [req.params.id])
     if (!existing.rows[0]) return res.status(404).json({ error: 'Imóvel não encontrado' })
@@ -171,7 +179,7 @@ router.put('/:id', async (req, res) => {
 })
 
 // DELETE /api/imoveis/:id (soft delete)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireApiKey, async (req, res) => {
   try {
     const result = await pool.query(
       'UPDATE imoveis SET ativo = false, updated_at = NOW() WHERE id = $1',
