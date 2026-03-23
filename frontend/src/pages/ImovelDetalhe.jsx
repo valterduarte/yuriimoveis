@@ -337,9 +337,9 @@ export default function ImovelDetalhe() {
                     { l: 'Categoria', v: imovel.categoria },
                     { l: 'Cidade', v: imovel.cidade },
                     { l: 'Bairro', v: imovel.bairro },
-                    ...(imovel.area > 0 ? [{ l: 'Área', v: `${imovel.area} m²` }] : []),
+                    ...(imovel.area_display || imovel.area > 0 ? [{ l: 'Área', v: imovel.area_display || `${imovel.area} m²` }] : []),
                     ...(imovel.quartos > 0 ? [{ l: 'Quartos', v: imovel.quartos }] : []),
-                    ...(imovel.vagas > 0 ? [{ l: 'Vagas', v: imovel.vagas }] : []),
+                    ...(imovel.vagas_display ? [{ l: 'Vagas', v: imovel.vagas_display }] : imovel.vagas > 0 ? [{ l: 'Vagas', v: imovel.vagas }] : []),
                   ].map(item => (
                     <div key={item.l} className="flex justify-between text-xs">
                       <span className="text-gray-400 capitalize">{item.l}</span>
