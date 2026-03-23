@@ -25,7 +25,7 @@ const contacts = [
 export default function FloatingContact() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden">
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-3">
         {contacts.map(c => (
           <a
             key={c.label}
