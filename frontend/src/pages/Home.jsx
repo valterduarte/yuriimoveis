@@ -150,8 +150,8 @@ export default function Home() {
               <p className="text-gray-400 leading-relaxed mb-8 text-sm">
                 Somos referência no mercado imobiliário de Osasco e região com atendimento personalizado, transparência e segurança em cada negócio.
               </p>
-              <Link to="/quem-somos" className="btn-primary inline-flex items-center gap-2">
-                Conheça nossa equipe <FiArrowRight size={14} />
+              <Link to="/imoveis" className="btn-primary inline-flex items-center gap-2">
+                Ver imóveis <FiArrowRight size={14} />
               </Link>
             </div>
             <div className="border border-gray-700">
