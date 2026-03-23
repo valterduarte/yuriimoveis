@@ -320,6 +320,7 @@ export default function ImovelDetalhe() {
                 {imovel.tipo === 'venda' && (
                   <p className="text-[11px] text-green-400 mt-3 font-semibold">
                     Parcelas a partir de {imovel.parcela_display || calcParcela(imovel.preco)}/mês
+                    {imovel.parcela_display && <span className="text-gray-500 text-[9px] font-normal ml-1">Período Obras</span>}
                   </p>
                 )}
               </div>
