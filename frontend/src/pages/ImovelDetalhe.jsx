@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   FiMaximize, FiMapPin, FiPhone, FiArrowLeft,
-  FiCheckCircle, FiMail, FiCalendar, FiChevronLeft, FiChevronRight
+  FiCheckCircle, FiCalendar, FiChevronLeft, FiChevronRight
 } from 'react-icons/fi'
 import { FaCar, FaBath, FaWhatsapp } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
@@ -26,6 +26,14 @@ function formatPrice(price, tipo) {
     maximumFractionDigits: 0,
   }).format(price)
   return tipo === 'aluguel' ? `${formatted}/mês` : formatted
+}
+
+function calcParcela(preco) {
+  const financiado = preco * 0.9
+  const r = 0.08 / 12
+  const n = 360
+  const parcela = financiado * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(parcela)
 }
 
 export default function ImovelDetalhe() {
@@ -309,24 +317,21 @@ export default function ImovelDetalhe() {
                 <p className="text-[10px] text-gray-400 uppercase tracking-wider mt-1">
                   {imovel.tipo === 'venda' ? 'Valor de venda' : 'Valor mensal'}
                 </p>
+                {imovel.tipo === 'venda' && (
+                  <p className="text-[11px] text-green-400 mt-3 font-semibold">
+                    Parcelas a partir de {calcParcela(imovel.preco)}/mês
+                  </p>
+                )}
               </div>
               <div className="p-7 space-y-3">
-                <a href={`https://wa.me/5511967147840?text=${whatsMsg}`}
+                <a href={`https://wa.me/5511967147840?text=${encodeURIComponent(`Olá! Gostaria de fazer uma simulação de financiamento para o imóvel: ${imovel.titulo} — Código #${imovel.id}`)}`}
                   target="_blank" rel="noreferrer"
                   className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors">
-                  <FaWhatsapp size={16} /> Falar pelo WhatsApp
-                </a>
-                <a href="tel:5511967147840"
-                  className="w-full flex items-center justify-center gap-2 bg-[#1a1a1a] hover:bg-[#af1e23] text-white font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors">
-                  <FiPhone size={14} /> (11) 96714-7840
+                  <FaWhatsapp size={16} /> Faça Sua Simulação
                 </a>
                 <button onClick={() => scrollToSection('contato')}
                   className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-[#af1e23] hover:text-[#af1e23] text-[#1a1a1a] font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors">
                   <FiCalendar size={14} /> Agendar Visita
-                </button>
-                <button onClick={() => scrollToSection('contato')}
-                  className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-[#af1e23] hover:text-[#af1e23] text-[#1a1a1a] font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors">
-                  <FiMail size={14} /> Enviar Mensagem
                 </button>
               </div>
               <div className="border-t border-gray-100 px-7 pb-7">
