@@ -438,7 +438,7 @@ export default function ImovelDetalhe() {
         <section id="contato">
           <span className="section-label">Contato</span>
           <h2 className="section-title mb-2">Desejo saber mais</h2>
-          <p className="text-gray-500 text-sm mb-8">Preencha o formulário e entraremos em contato em breve.</p>
+          <p className="text-gray-500 text-sm mb-8">Entre em contato pelo WhatsApp ou telefone e tire todas as suas dúvidas.</p>
 
           <div className="flex flex-col sm:flex-row gap-4">
             <a href={`https://wa.me/5511967147840?text=${whatsMsg}`}
