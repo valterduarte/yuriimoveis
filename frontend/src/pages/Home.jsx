@@ -9,14 +9,6 @@ import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
-const categorias = [
-  { label: 'Casas', slug: 'casa', count: '120+' },
-  { label: 'Apartamentos', slug: 'apartamento', count: '80+' },
-  { label: 'Terrenos', slug: 'terreno', count: '60+' },
-  { label: 'Chalés', slug: 'chale', count: '40+' },
-  { label: 'Comercial', slug: 'comercial', count: '30+' },
-  { label: 'Chácaras', slug: 'chacara', count: '25+' },
-]
 
 const diferenciais = [
   { num: '01', title: 'Atendimento Personalizado', desc: 'Cada cliente recebe atenção exclusiva e dedicada às suas necessidades específicas.' },
@@ -83,32 +75,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CATEGORIAS */}
-      <section className="py-20 bg-gray-100">
-        <div className="container mx-auto px-6">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <span className="section-label">Explore</span>
-              <h2 className="section-title">Tipos de Imóveis</h2>
-            </div>
-            <Link to="/imoveis" className="hidden md:flex items-center gap-2 text-xs uppercase tracking-widest font-bold text-dark hover:text-primary transition-colors">
-              Ver todos <FiArrowRight size={14} />
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 border border-gray-300">
-            {categorias.map((cat) => (
-              <Link
-                key={cat.slug}
-                to={`/imoveis?categoria=${cat.slug}`}
-                className="group flex flex-col items-center justify-center p-8 border-r border-b border-gray-300 last:border-r-0 hover:bg-primary transition-all duration-300"
-              >
-                <p className="text-2xl font-black text-primary group-hover:text-white transition-colors">{cat.count}</p>
-                <p className="text-xs uppercase tracking-widest font-semibold text-dark group-hover:text-white transition-colors mt-1">{cat.label}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* DESTAQUES */}
       <section className="py-20">
