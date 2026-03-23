@@ -110,7 +110,7 @@ router.post('/', requireApiKey, async (req, res) => {
     `, [
       titulo, descricao || '', tipo, categoria, Number(preco),
       Number(area) || 0, Number(quartos) || 0, Number(banheiros) || 0, Number(vagas) || 0,
-      endereco || '', bairro || '', cidade || 'Canela', cep || '',
+      endereco || '', bairro || '', cidade || 'Osasco', cep || '',
       destaque ? true : false,
       JSON.stringify(imagens || []),
       JSON.stringify(diferenciais || []),

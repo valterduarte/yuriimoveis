@@ -11,8 +11,8 @@ export default function SEOHead({
   type = 'website',
   jsonLd,
 }) {
-  const fullTitle = title ? `${title} | Corretor Yuri Imóveis` : 'Corretor Yuri Imóveis — Imóveis em Canela e Região'
-  const fullDescription = description || 'Corretor Yuri Imóveis — Encontre o imóvel dos seus sonhos em Canela e região. Casas, apartamentos, terrenos e imóveis comerciais.'
+  const fullTitle = title ? `${title} | Corretor Yuri Imóveis` : 'Corretor Yuri Imóveis — Imóveis em Osasco e Região'
+  const fullDescription = description || 'Corretor Yuri Imóveis — Encontre o imóvel dos seus sonhos em Osasco e região. Casas, apartamentos, terrenos e imóveis comerciais.'
   const fullUrl = url ? `${SITE_URL}${url}` : SITE_URL
   const fullImage = image || DEFAULT_IMAGE
 

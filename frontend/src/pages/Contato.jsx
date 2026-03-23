@@ -8,7 +8,7 @@ export default function Contato() {
     <div className="min-h-screen pb-16 md:pb-0">
       <SEOHead
         title="Contato"
-        description="Entre em contato com o Corretor Yuri Imóveis. Atendimento via WhatsApp, telefone e e-mail para imóveis em Canela e região."
+        description="Entre em contato com o Corretor Yuri Imóveis. Atendimento via WhatsApp, telefone e e-mail para imóveis em Osasco e região."
         url="/contato"
       />
 

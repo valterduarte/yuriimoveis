@@ -119,7 +119,7 @@ export default function ImovelDetalhe() {
 
   const imovelDescription = imovel.descricao
     ? imovel.descricao.slice(0, 155).replace(/\n/g, ' ')
-    : `${imovel.titulo} em ${imovel.cidade || 'Canela'}, RS. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
+    : `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
 
   return (
     <div className="min-h-screen bg-[#f4f4f4] pb-20 md:pb-0">

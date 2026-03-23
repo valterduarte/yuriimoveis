@@ -75,8 +75,8 @@ export default function Imoveis() {
   return (
     <div className="min-h-screen bg-gray-50">
       <SEOHead
-        title="Imóveis à Venda e Aluguel em Canela"
-        description="Explore o catálogo completo de imóveis em Canela e região. Casas, apartamentos, terrenos, chalés e comerciais disponíveis para venda e aluguel."
+        title="Imóveis à Venda e Aluguel em Osasco"
+        description="Explore o catálogo completo de imóveis em Osasco e região. Casas, apartamentos, terrenos, chalés e comerciais disponíveis para venda e aluguel."
         url="/imoveis"
       />
       {/* Page header */}
