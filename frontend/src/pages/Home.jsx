@@ -76,18 +76,6 @@ export default function Home() {
           <div className="max-w-2xl">
             <SearchBar />
           </div>
-          <div className="flex flex-wrap gap-10 mt-12">
-            {[
-              { value: '10+', label: 'Anos de mercado' },
-              { value: '500+', label: 'Imóveis vendidos' },
-              { value: '1000+', label: 'Famílias atendidas' },
-            ].map(s => (
-              <div key={s.label}>
-                <p className="text-4xl font-black text-white leading-none">{s.value}</p>
-                <p className="text-gray-400 text-xs uppercase tracking-widest mt-1">{s.label}</p>
-              </div>
-            ))}
-          </div>
         </div>
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2">
           <span className="text-gray-400 text-[10px] uppercase tracking-widest">Rolar</span>

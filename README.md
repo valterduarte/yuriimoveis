@@ -1,4 +1,4 @@
-# Canela Force Imóveis
+# Corretor Yuri Imóveis
 
 Site imobiliário completo com frontend React e backend Node.js.
 

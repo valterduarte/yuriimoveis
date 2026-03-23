@@ -1,31 +1,31 @@
 const express = require('express')
 const router = express.Router()
+const rateLimit = require('express-rate-limit')
 const { pool } = require('../database/db')
-const nodemailer = require('nodemailer')
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  family: 4,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
+const contatoLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Limite de mensagens atingido. Tente novamente em 1 hora.' },
 })
 
+function requireApiKey(req, res, next) {
+  const key = req.headers['x-api-key']
+  if (!key || key !== process.env.API_KEY) {
+    return res.status(401).json({ error: 'Não autorizado' })
+  }
+  next()
+}
+
 // POST /api/contato
-router.post('/', async (req, res) => {
+router.post('/', contatoLimiter, async (req, res) => {
   try {
     const { nome, email, telefone, assunto, mensagem, imovel_id } = req.body
 
     if (!nome || !email || !mensagem) {
       return res.status(400).json({ error: 'Campos obrigatórios: nome, email, mensagem' })
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: 'E-mail inválido' })
     }
 
     const { rows } = await pool.query(`
@@ -36,21 +36,6 @@ router.post('/', async (req, res) => {
 
     console.log(`📩 Novo contato: ${nome} <${email}>`)
 
-    transporter.sendMail({
-      from: `"Yuri Imóveis" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
-      subject: `Novo contato: ${assunto || 'Sem assunto'} - ${nome}`,
-      html: `
-        <h2>Novo contato pelo site</h2>
-        <p><strong>Nome:</strong> ${nome}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Telefone:</strong> ${telefone || 'Não informado'}</p>
-        <p><strong>Assunto:</strong> ${assunto || 'Não informado'}</p>
-        <p><strong>Mensagem:</strong><br>${mensagem}</p>
-        ${imovel_id ? `<p><strong>Imóvel ID:</strong> ${imovel_id}</p>` : ''}
-      `,
-    }).catch(err => console.error('Erro ao enviar email:', err))
-
     res.status(201).json({ id: rows[0].id, message: 'Mensagem enviada com sucesso!' })
   } catch (err) {
     console.error(err)
@@ -58,18 +43,28 @@ router.post('/', async (req, res) => {
   }
 })
 
-// GET /api/contato (admin)
-router.get('/', async (_req, res) => {
+// GET /api/contatos (admin)
+router.get('/', requireApiKey, async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM contatos ORDER BY created_at DESC')
-    res.json(rows)
+    const page  = Math.max(1, Number(req.query.page)  || 1)
+    const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20))
+    const offset = (page - 1) * limit
+
+    const countResult = await pool.query('SELECT COUNT(*) as total FROM contatos')
+    const total = parseInt(countResult.rows[0].total)
+
+    const { rows } = await pool.query(
+      'SELECT * FROM contatos ORDER BY created_at DESC LIMIT $1 OFFSET $2',
+      [limit, offset]
+    )
+    res.json({ contatos: rows, total, page, limit, pages: Math.ceil(total / limit) })
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' })
   }
 })
 
 // PATCH /api/contato/:id/lido
-router.patch('/:id/lido', async (req, res) => {
+router.patch('/:id/lido', requireApiKey, async (req, res) => {
   try {
     await pool.query('UPDATE contatos SET lido = true WHERE id = $1', [req.params.id])
     res.json({ message: 'Marcado como lido' })
