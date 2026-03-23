@@ -6,8 +6,7 @@ import { FaWhatsapp, FaInstagram, FaFacebook } from 'react-icons/fa'
 const navLinks = [
   { href: '/', label: 'Início' },
   { href: '/imoveis', label: 'Imóveis' },
-  { href: '/quem-somos', label: 'Quem Somos' },
-  { href: '/contato', label: 'Contato' },
+{ href: '/contato', label: 'Contato' },
 ]
 
 export default function Header() {

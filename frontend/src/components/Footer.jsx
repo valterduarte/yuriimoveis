@@ -50,8 +50,7 @@ export default function Footer() {
                 { href: '/imoveis', label: 'Imóveis' },
                 { href: '/imoveis?tipo=venda', label: 'Imóveis à Venda' },
                 { href: '/imoveis?tipo=aluguel', label: 'Imóveis para Alugar' },
-                { href: '/quem-somos', label: 'Quem Somos' },
-                { href: '/contato', label: 'Contato' },
+{ href: '/contato', label: 'Contato' },
               ].map(link => (
                 <li key={link.href}>
                   <Link to={link.href}

@@ -24,12 +24,6 @@ const diferenciais = [
   { num: '04', title: 'Portfólio Exclusivo', desc: 'Acesso a imóveis exclusivos e oportunidades únicas na região.' },
 ]
 
-const depoimentos = [
-  { nome: 'Ana Paula R.', texto: 'A equipe do Corretor Yuri foi incrível! Encontrei a casa dos sonhos em tempo recorde. Atendimento impecável do início ao fim.', tipo: 'Compra de Casa' },
-  { nome: 'Carlos E. Mendes', texto: 'Processo de aluguel muito tranquilo e transparente. Profissionalismo e agilidade que não encontrei em outros lugares.', tipo: 'Aluguel de Apartamento' },
-  { nome: 'Márcia Fernandes', texto: 'Vendi meu terreno com excelente valorização. Todo o processo foi conduzido com ética e transparência total.', tipo: 'Venda de Terreno' },
-]
-
 export default function Home() {
   const [destaques, setDestaques] = useState([])
   const [loading, setLoading] = useState(true)
@@ -176,33 +170,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* DEPOIMENTOS */}
-      <section className="py-20 bg-gray-100">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-14">
-            <span className="section-label">Depoimentos</span>
-            <h2 className="section-title">O que dizem nossos clientes</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {depoimentos.map(d => (
-              <div key={d.nome} className="bg-white p-8 border-t-4 border-primary">
-                <p className="text-gray-600 text-sm leading-relaxed mb-6 italic">"{d.texto}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-primary flex items-center justify-center text-white font-black text-xs flex-shrink-0">
-                    {d.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                  </div>
-                  <div>
-                    <p className="font-bold text-dark text-sm">{d.nome}</p>
-                    <p className="text-gray-400 text-xs uppercase tracking-wide">{d.tipo}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
+{/* CTA */}
       <section className="py-20 bg-primary">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-black text-white uppercase leading-tight mb-4">

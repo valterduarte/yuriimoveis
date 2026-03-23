@@ -5,7 +5,6 @@ import FloatingContact from './components/FloatingContact'
 import Home from './pages/Home'
 import Imoveis from './pages/Imoveis'
 import ImovelDetalhe from './pages/ImovelDetalhe'
-import QuemSomos from './pages/QuemSomos'
 import Contato from './pages/Contato'
 
 function App() {
@@ -18,8 +17,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/imoveis" element={<Imoveis />} />
             <Route path="/imoveis/:id" element={<ImovelDetalhe />} />
-            <Route path="/quem-somos" element={<QuemSomos />} />
-            <Route path="/contato" element={<Contato />} />
+<Route path="/contato" element={<Contato />} />
           </Routes>
         </main>
         <Footer />
