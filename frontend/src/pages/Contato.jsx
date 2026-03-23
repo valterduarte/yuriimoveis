@@ -1,5 +1,5 @@
 import { FiPhone, FiMail, FiMapPin, FiClock } from 'react-icons/fi'
-import { FaWhatsapp, FaInstagram, FaFacebook } from 'react-icons/fa'
+import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 
 export default function Contato() {
 
@@ -45,13 +45,9 @@ export default function Contato() {
                   className="flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white text-[10px] uppercase tracking-wider font-bold px-3 py-2.5 transition-colors">
                   <FaWhatsapp size={14} /> WhatsApp
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noreferrer"
+                <a href="https://www.instagram.com/valterrduarte/" target="_blank" rel="noreferrer"
                   className="w-9 h-9 border border-gray-200 flex items-center justify-center hover:border-primary hover:text-primary transition-colors">
                   <FaInstagram size={14} />
-                </a>
-                <a href="https://facebook.com" target="_blank" rel="noreferrer"
-                  className="w-9 h-9 border border-gray-200 flex items-center justify-center hover:border-primary hover:text-primary transition-colors">
-                  <FaFacebook size={14} />
                 </a>
               </div>
             </div>

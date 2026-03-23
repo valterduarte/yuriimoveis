@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { FiPhone, FiMail, FiMapPin } from 'react-icons/fi'
-import { FaWhatsapp, FaInstagram, FaFacebook, FaLinkedin } from 'react-icons/fa'
+import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -29,9 +29,7 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               {[
                 { href: 'https://wa.me/5511967147840', icon: FaWhatsapp, hover: 'hover:text-green-400' },
-                { href: 'https://instagram.com', icon: FaInstagram, hover: 'hover:text-pink-400' },
-                { href: 'https://facebook.com', icon: FaFacebook, hover: 'hover:text-blue-400' },
-                { href: 'https://linkedin.com', icon: FaLinkedin, hover: 'hover:text-blue-300' },
+                { href: 'https://www.instagram.com/valterrduarte/', icon: FaInstagram, hover: 'hover:text-pink-400' },
               ].map(({ href, icon: Icon, hover }) => (
                 <a key={href} href={href} target="_blank" rel="noreferrer"
                   className={`w-8 h-8 border border-gray-700 flex items-center justify-center ${hover} hover:border-current transition-all`}>

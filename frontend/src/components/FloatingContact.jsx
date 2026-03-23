@@ -1,4 +1,4 @@
-import { FaWhatsapp, FaInstagram, FaFacebook } from 'react-icons/fa'
+import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import { FiPhone, FiMail } from 'react-icons/fi'
 
 const contacts = [
@@ -23,7 +23,7 @@ const contacts = [
   {
     icon: FaInstagram,
     label: 'Instagram',
-    href: 'https://instagram.com',
+    href: 'https://www.instagram.com/valterrduarte/',
     bg: 'bg-dark hover:bg-primary',
   },
 ]

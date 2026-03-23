@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FiMenu, FiX, FiPhone } from 'react-icons/fi'
-import { FaWhatsapp, FaInstagram, FaFacebook } from 'react-icons/fa'
+import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 
 const navLinks = [
   { href: '/', label: 'Início' },
@@ -64,10 +64,8 @@ export default function Header() {
             <div className="flex items-center gap-3 text-gray-400">
               <a href="https://wa.me/5511967147840" target="_blank" rel="noreferrer"
                 className="hover:text-green-400 transition-colors"><FaWhatsapp size={15} /></a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer"
+              <a href="https://www.instagram.com/valterrduarte/" target="_blank" rel="noreferrer"
                 className="hover:text-pink-400 transition-colors"><FaInstagram size={15} /></a>
-              <a href="https://facebook.com" target="_blank" rel="noreferrer"
-                className="hover:text-blue-400 transition-colors"><FaFacebook size={15} /></a>
             </div>
             <a
               href="https://wa.me/5511967147840"
@@ -108,10 +106,8 @@ export default function Header() {
             <div className="pt-5 flex items-center gap-4">
               <a href="https://wa.me/5511967147840" target="_blank" rel="noreferrer"
                 className="text-gray-400 hover:text-green-400 transition-colors"><FaWhatsapp size={18} /></a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer"
+              <a href="https://www.instagram.com/valterrduarte/" target="_blank" rel="noreferrer"
                 className="text-gray-400 hover:text-pink-400 transition-colors"><FaInstagram size={18} /></a>
-              <a href="https://facebook.com" target="_blank" rel="noreferrer"
-                className="text-gray-400 hover:text-blue-400 transition-colors"><FaFacebook size={18} /></a>
               <a href="tel:5511967147840"
                 className="ml-auto text-gray-400 hover:text-white flex items-center gap-1 text-xs">
                 <FiPhone size={13} /> (11) 96714-7840
