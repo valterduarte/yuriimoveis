@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FiPhone, FiMail, FiMapPin } from 'react-icons/fi'
+import { FiPhone, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 
 export default function Footer() {
@@ -93,11 +93,6 @@ export default function Footer() {
                 <FaWhatsapp className="text-primary flex-shrink-0" size={13} />
                 <a href="https://wa.me/5511967147840" target="_blank" rel="noreferrer"
                   className="hover:text-primary transition-colors">(11) 96714-7840</a>
-              </li>
-              <li className="flex items-center gap-3">
-                <FiMail className="text-primary flex-shrink-0" size={13} />
-                <a href="mailto:contato@corretoryuri.com.br"
-                  className="hover:text-primary transition-colors break-all">contato@corretoryuri.com.br</a>
               </li>
             </ul>
           </div>

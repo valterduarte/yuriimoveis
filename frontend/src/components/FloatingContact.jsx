@@ -1,5 +1,5 @@
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
-import { FiPhone, FiMail } from 'react-icons/fi'
+import { FiPhone } from 'react-icons/fi'
 
 const contacts = [
   {
@@ -12,12 +12,6 @@ const contacts = [
     icon: FiPhone,
     label: 'Ligar',
     href: 'tel:5511967147840',
-    bg: 'bg-dark hover:bg-primary',
-  },
-  {
-    icon: FiMail,
-    label: 'E-mail',
-    href: 'mailto:contato@corretoryuri.com.br',
     bg: 'bg-dark hover:bg-primary',
   },
   {

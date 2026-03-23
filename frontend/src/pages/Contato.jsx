@@ -1,4 +1,4 @@
-import { FiPhone, FiMail, FiMapPin, FiClock } from 'react-icons/fi'
+import { FiPhone, FiMapPin, FiClock } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 
 export default function Contato() {
@@ -25,8 +25,7 @@ export default function Contato() {
               {[
                 { icon: FiMapPin, title: 'Endereço', content: 'Osasco - SP' },
                 { icon: FiPhone, title: 'Telefone', content: '(11) 96714-7840' },
-                { icon: FiMail, title: 'E-mail', content: 'contato@corretoryuri.com.br' },
-                { icon: FiClock, title: 'Horário', content: 'Seg - Sex: 08h às 18h\nSábado: 08h às 12h' },
+{ icon: FiClock, title: 'Horário', content: 'Seg - Sex: 08h às 18h\nSábado: 08h às 12h' },
               ].map(info => (
                 <div key={info.title} className="flex gap-4 p-5 border border-gray-200">
                   <div className="w-8 h-8 bg-primary flex items-center justify-center flex-shrink-0">
