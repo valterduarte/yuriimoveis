@@ -209,7 +209,11 @@ export default function Imoveis() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                {imoveis.map(imovel => <PropertyCard key={imovel.id} imovel={imovel} />)}
+                {imoveis.map((imovel, i) => (
+                  <div key={imovel.id} className="reveal" style={{ transitionDelay: `${(i % 3) * 0.08}s` }}>
+                    <PropertyCard imovel={imovel} />
+                  </div>
+                ))}
               </div>
             )}
 

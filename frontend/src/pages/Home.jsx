@@ -94,7 +94,11 @@ export default function Home() {
             </div>
           ) : destaques.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {destaques.map(imovel => <PropertyCard key={imovel.id} imovel={imovel} />)}
+              {destaques.map((imovel, i) => (
+                <div key={imovel.id} className="reveal" style={{ transitionDelay: `${(i % 3) * 0.08}s` }}>
+                  <PropertyCard imovel={imovel} />
+                </div>
+              ))}
             </div>
           ) : (
             <p className="text-center text-gray-400 py-16">Nenhum imóvel em destaque.</p>

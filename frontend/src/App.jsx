@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import Lenis from 'lenis'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import FloatingContact from './components/FloatingContact'
@@ -8,18 +9,44 @@ import Imoveis from './pages/Imoveis'
 import ImovelDetalhe from './pages/ImovelDetalhe'
 import Contato from './pages/Contato'
 
+function SmoothScroll() {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    })
+    let raf
+    function loop(time) {
+      lenis.raf(time)
+      raf = requestAnimationFrame(loop)
+    }
+    raf = requestAnimationFrame(loop)
+    return () => {
+      cancelAnimationFrame(raf)
+      lenis.destroy()
+    }
+  }, [])
+  return null
+}
+
 function ScrollReveal() {
   const location = useLocation()
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const obs = new IntersectionObserver(
-        entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
-        { threshold: 0.12 }
-      )
-      document.querySelectorAll('.reveal').forEach(el => obs.observe(el))
-      return () => obs.disconnect()
-    }, 80)
-    return () => clearTimeout(timer)
+    const obs = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
+      { threshold: 0.1 }
+    )
+    const observe = () => {
+      document.querySelectorAll('.reveal:not(.visible)').forEach(el => obs.observe(el))
+    }
+    const timer = setTimeout(observe, 80)
+    const mutObs = new MutationObserver(observe)
+    mutObs.observe(document.body, { childList: true, subtree: true })
+    return () => {
+      clearTimeout(timer)
+      obs.disconnect()
+      mutObs.disconnect()
+    }
   }, [location.pathname])
   return null
 }
@@ -27,6 +54,7 @@ function ScrollReveal() {
 function App() {
   return (
     <Router>
+      <SmoothScroll />
       <ScrollReveal />
       <div className="flex flex-col min-h-screen">
         <Header />
