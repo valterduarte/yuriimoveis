@@ -22,6 +22,80 @@ section { scroll-margin-top: 80px; }
 ::-webkit-scrollbar-track { background: #f0f0f0; }
 ::-webkit-scrollbar-thumb { background: #af1e23; border-radius: 3px; }
 
+/* ── Scroll Reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Swiper: Hero ── */
+.hero-swiper { display: block; }
+.hero-swiper .swiper-button-prev,
+.hero-swiper .swiper-button-next {
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  width: 40px;
+  height: 40px;
+  z-index: 30;
+  transition: background 0.25s;
+}
+.hero-swiper .swiper-button-prev:hover,
+.hero-swiper .swiper-button-next:hover { background: #af1e23; }
+.hero-swiper .swiper-button-prev::after,
+.hero-swiper .swiper-button-next::after { font-size: 15px; font-weight: 900; }
+.hero-swiper .swiper-pagination { z-index: 30; bottom: 20px; }
+.hero-swiper .swiper-pagination-bullet {
+  background: white;
+  opacity: 0.5;
+  width: 7px;
+  height: 7px;
+  transition: all 0.3s;
+}
+.hero-swiper .swiper-pagination-bullet-active {
+  background: #af1e23;
+  opacity: 1;
+  width: 22px;
+  border-radius: 4px;
+}
+
+/* ── Swiper: Thumbnails ── */
+.thumbs-swiper .swiper-slide {
+  width: 64px !important;
+  height: 44px !important;
+  opacity: 0.45;
+  cursor: pointer;
+  border: 2px solid transparent;
+  overflow: hidden;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+.thumbs-swiper .swiper-slide-thumb-active {
+  opacity: 1;
+  border-color: #af1e23;
+}
+
+/* ── Swiper: Gallery ── */
+.gallery-swiper .swiper-button-prev,
+.gallery-swiper .swiper-button-next {
+  color: #af1e23;
+  background: transparent;
+  border: 1px solid #af1e23;
+  width: 45px;
+  height: 45px;
+  transition: background 0.25s, color 0.25s;
+}
+.gallery-swiper .swiper-button-prev:hover,
+.gallery-swiper .swiper-button-next:hover {
+  background: #af1e23;
+  color: white;
+}
+.gallery-swiper .swiper-button-prev::after,
+.gallery-swiper .swiper-button-next::after { font-size: 16px; font-weight: 900; }
+
 @layer components {
   .btn-primary {
     @apply text-white uppercase tracking-widest text-xs font-bold py-3 px-8

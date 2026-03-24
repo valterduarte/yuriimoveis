@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Pagination, Thumbs } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/thumbs'
 import {
   FiMaximize, FiMapPin, FiPhone, FiArrowLeft,
   FiCheckCircle, FiCalendar, FiChevronLeft, FiChevronRight
@@ -41,6 +47,7 @@ export default function ImovelDetalhe() {
   const [imovel, setImovel] = useState(null)
   const [loading, setLoading] = useState(true)
   const [activeImg, setActiveImg] = useState(0)
+  const [thumbsSwiper, setThumbsSwiper] = useState(null)
   const [activeTab, setActiveTab] = useState('visao-geral')
   const [lightbox, setLightbox] = useState(null) // index or null
   const [form, setForm] = useState({ nome: '', email: '', telefone: '', mensagem: '' })
@@ -154,16 +161,32 @@ export default function ImovelDetalhe() {
 
       {/* ── HERO ── */}
       <div className="relative bg-[#1a1a1a]" style={{ height: '70vh', minHeight: 420 }}>
-        <img
-          src={images[activeImg]}
-          alt={imovel.titulo}
-          className="w-full h-full object-cover opacity-75 transition-all duration-500"
-          onError={e => { e.target.src = PLACEHOLDER }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+        <Swiper
+          modules={[Navigation, Pagination, Thumbs]}
+          thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+          navigation
+          pagination={{ clickable: true, dynamicBullets: true }}
+          onSlideChange={swiper => setActiveImg(swiper.activeIndex)}
+          speed={600}
+          className="hero-swiper w-full h-full"
+        >
+          {images.map((img, i) => (
+            <SwiperSlide key={i}>
+              <img
+                src={img}
+                alt={imovel.titulo}
+                className="w-full h-full object-cover opacity-75"
+                onError={e => { e.target.src = PLACEHOLDER }}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {/* Gradient — pointer-events-none para não bloquear swipe/nav */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none z-20" />
 
         {/* Badge tipo */}
-        <div className="absolute top-8 left-8">
+        <div className="absolute top-8 left-8 z-30">
           <span className={`text-[10px] uppercase tracking-[0.2em] font-bold px-4 py-2 text-white ${
             imovel.tipo === 'venda' ? 'bg-[#af1e23]' : 'bg-[#1a1a1a]'
           }`}>
@@ -172,7 +195,7 @@ export default function ImovelDetalhe() {
         </div>
 
         {/* Título + local */}
-        <div className="absolute bottom-0 left-0 right-0 px-8 pb-10 md:px-14">
+        <div className="absolute bottom-0 left-0 right-0 px-8 pb-10 md:px-14 z-30 pointer-events-none">
           <div className="max-w-6xl mx-auto">
             <p className="text-[#af1e23] text-[10px] uppercase tracking-[0.25em] font-bold mb-2">
               {imovel.categoria} · Código #{imovel.id}
@@ -186,35 +209,31 @@ export default function ImovelDetalhe() {
             </p>
           </div>
         </div>
-
-        {/* Navegação de thumbnails (setas) */}
-        {images.length > 1 && (
-          <>
-            <button onClick={() => setActiveImg(i => (i - 1 + images.length) % images.length)}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-[#af1e23] text-white p-2 transition-colors">
-              <FiChevronLeft size={22} />
-            </button>
-            <button onClick={() => setActiveImg(i => (i + 1) % images.length)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-[#af1e23] text-white p-2 transition-colors">
-              <FiChevronRight size={22} />
-            </button>
-          </>
-        )}
       </div>
 
       {/* ── THUMBNAILS ── */}
       {images.length > 1 && (
-        <div className="bg-[#1a1a1a] border-t border-white/10">
-          <div className="max-w-6xl mx-auto px-8 py-3 flex gap-2 overflow-x-auto">
-            {images.map((img, i) => (
-              <button key={i} onClick={() => setActiveImg(i)}
-                className={`flex-shrink-0 w-16 h-11 overflow-hidden border-2 transition-all ${
-                  activeImg === i ? 'border-[#af1e23]' : 'border-transparent opacity-50 hover:opacity-100'
-                }`}>
-                <img src={img} alt="" className="w-full h-full object-cover"
-                  onError={e => { e.target.src = PLACEHOLDER }} />
-              </button>
-            ))}
+        <div className="bg-[#1a1a1a] border-t border-white/10 py-3">
+          <div className="max-w-6xl mx-auto px-8">
+            <Swiper
+              modules={[Thumbs]}
+              onSwiper={setThumbsSwiper}
+              slidesPerView="auto"
+              spaceBetween={8}
+              watchSlidesProgress
+              className="thumbs-swiper"
+            >
+              {images.map((img, i) => (
+                <SwiperSlide key={i} style={{ width: 64, height: 44 }}>
+                  <img
+                    src={img}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    onError={e => { e.target.src = PLACEHOLDER }}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
       )}
@@ -367,41 +386,31 @@ export default function ImovelDetalhe() {
           <h2 className="section-title text-white">Fotos do Imóvel</h2>
         </div>
 
-        <div className="relative px-10 md:px-16">
-          {/* Seta esquerda */}
-          <button
-            onClick={() => setLightbox(i => i !== null ? (i - 1 + images.length) % images.length : 0)}
-            className="absolute top-1/2 -translate-y-1/2 z-10 w-[45px] h-[45px] flex items-center justify-center border border-[#af1e23] bg-transparent hover:opacity-70 transition-opacity duration-[400ms]"
-            style={{ left: '6px' }}
-          >
-            <FiChevronLeft size={20} className="text-[#af1e23]" />
-          </button>
-
-          {/* Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: '1%' }}>
-            {images.map((img, i) => (
-              <div key={i} className="overflow-hidden cursor-pointer" onClick={() => setLightbox(i)}>
+        <Swiper
+          modules={[Navigation]}
+          navigation
+          slidesPerView={1.15}
+          spaceBetween={4}
+          breakpoints={{
+            640: { slidesPerView: 2.1 },
+            1024: { slidesPerView: 3, spaceBetween: 4 },
+          }}
+          className="gallery-swiper px-4 md:px-10"
+        >
+          {images.map((img, i) => (
+            <SwiperSlide key={i}>
+              <div className="overflow-hidden cursor-pointer" onClick={() => setLightbox(i)}>
                 <img
-                  src={img} alt=""
-                  className="perspectivas-img w-full object-cover block"
-                  style={{ height: '420px', transition: 'opacity 0.4s ease' }}
-                  onMouseEnter={e => { e.currentTarget.style.opacity = '0.7' }}
-                  onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}
+                  src={img}
+                  alt=""
+                  className="perspectivas-img w-full object-cover block transition-opacity duration-300 hover:opacity-70"
+                  style={{ height: '420px' }}
                   onError={e => { e.target.src = PLACEHOLDER }}
                 />
               </div>
-            ))}
-          </div>
-
-          {/* Seta direita */}
-          <button
-            onClick={() => setLightbox(i => i !== null ? (i + 1) % images.length : 0)}
-            className="absolute top-1/2 -translate-y-1/2 z-10 w-[45px] h-[45px] flex items-center justify-center border border-[#af1e23] bg-transparent hover:opacity-70 transition-opacity duration-[400ms]"
-            style={{ right: '6px' }}
-          >
-            <FiChevronRight size={20} className="text-[#af1e23]" />
-          </button>
-        </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </section>
 
       {/* ── LOCALIZAÇÃO + CONTATO ── */}

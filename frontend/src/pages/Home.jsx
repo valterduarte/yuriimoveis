@@ -79,7 +79,7 @@ export default function Home() {
       {/* DESTAQUES */}
       <section className="py-20">
         <div className="container mx-auto px-6">
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex items-end justify-between mb-12 reveal">
             <div>
               <span className="section-label">Selecionados</span>
               <h2 className="section-title">Imóveis em Destaque</h2>
@@ -126,7 +126,8 @@ export default function Home() {
             <div className="border border-gray-700">
               {diferenciais.map((d, i) => (
                 <div key={d.num}
-                  className={`p-6 flex gap-5 items-start hover:bg-gray-800 transition-colors ${i < diferenciais.length - 1 ? 'border-b border-gray-700' : ''}`}>
+                  className={`p-6 flex gap-5 items-start hover:bg-gray-800 transition-colors reveal ${i < diferenciais.length - 1 ? 'border-b border-gray-700' : ''}`}
+                  style={{ transitionDelay: `${i * 0.1}s` }}>
                   <span className="text-primary font-black text-2xl flex-shrink-0 w-10">{d.num}</span>
                   <div>
                     <h3 className="font-bold text-white text-sm uppercase tracking-wide mb-1">{d.title}</h3>
@@ -141,7 +142,7 @@ export default function Home() {
 
 {/* CTA */}
       <section className="py-20 bg-primary">
-        <div className="container mx-auto px-6 text-center">
+        <div className="container mx-auto px-6 text-center reveal">
           <h2 className="text-4xl md:text-5xl font-black text-white uppercase leading-tight mb-4">
             Pronto para encontrar<br />seu imóvel?
           </h2>
