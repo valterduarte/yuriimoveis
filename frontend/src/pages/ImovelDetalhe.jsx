@@ -207,7 +207,7 @@ export default function ImovelDetalhe() {
             </h1>
             <p className="flex items-center gap-2 text-gray-300 text-sm">
               <FiMapPin size={13} className="text-[#af1e23]" />
-              {imovel.endereco && `${imovel.endereco}, `}{imovel.bairro}, {imovel.cidade} — SP
+              {imovel.bairro}, {imovel.cidade} — SP
             </p>
           </div>
         </div>
@@ -425,9 +425,7 @@ export default function ImovelDetalhe() {
             <p className="flex items-start gap-2.5 text-sm text-gray-600">
               <FiMapPin size={16} className="text-[#af1e23] flex-shrink-0 mt-0.5" />
               <span>
-                {imovel.endereco && `${imovel.endereco}, `}
                 <strong>{imovel.bairro}</strong>, {imovel.cidade} — SP
-                {imovel.cep && ` · CEP: ${imovel.cep}`}
               </span>
             </p>
           </div>
