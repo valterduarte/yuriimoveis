@@ -508,16 +508,21 @@ export default function ImovelDetalhe() {
               </button>
             </>
           )}
-          <img
-            src={images[lightbox]}
-            alt=""
-            className="max-h-[85vh] max-w-[90vw] object-contain"
+          <div
+            className="relative border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.9)]"
             onClick={e => e.stopPropagation()}
-            onError={e => { e.target.src = PLACEHOLDER }}
-          />
-          <p className="absolute bottom-5 text-gray-400 text-xs uppercase tracking-widest">
-            {lightbox + 1} / {images.length}
-          </p>
+          >
+            <img
+              src={images[lightbox]}
+              alt=""
+              className="max-h-[82vh] max-w-[88vw] object-contain block"
+              onError={e => { e.target.src = PLACEHOLDER }}
+            />
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#af1e23]" />
+            <p className="absolute bottom-3 right-4 text-white/50 text-[10px] uppercase tracking-widest">
+              {lightbox + 1} / {images.length}
+            </p>
+          </div>
         </div>
       )}
 
