@@ -8,7 +8,7 @@ import 'swiper/css/pagination'
 import 'swiper/css/thumbs'
 import {
   FiMaximize, FiMapPin, FiPhone, FiArrowLeft,
-  FiCheckCircle, FiCalendar, FiChevronLeft, FiChevronRight
+  FiCheckCircle, FiCalendar
 } from 'react-icons/fi'
 import { FaCar, FaBath, FaWhatsapp } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
@@ -488,40 +488,40 @@ export default function ImovelDetalhe() {
 
       {/* ── LIGHTBOX ── */}
       {lightbox !== null && (
-        <div className="fixed inset-0 bg-black/92 z-50 flex items-center justify-center"
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
           onClick={() => setLightbox(null)}>
           <button onClick={() => setLightbox(null)}
-            className="absolute top-5 right-6 text-white text-3xl font-light hover:text-[#af1e23] transition-colors">
+            className="absolute top-4 right-5 text-white text-3xl font-light hover:text-[#af1e23] transition-colors z-10">
             ×
           </button>
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={e => { e.stopPropagation(); setLightbox(i => (i - 1 + images.length) % images.length) }}
-                className="absolute left-4 text-white bg-black/50 hover:bg-[#af1e23] p-2 transition-colors">
-                <FiChevronLeft size={28} />
-              </button>
-              <button
-                onClick={e => { e.stopPropagation(); setLightbox(i => (i + 1) % images.length) }}
-                className="absolute right-4 text-white bg-black/50 hover:bg-[#af1e23] p-2 transition-colors">
-                <FiChevronRight size={28} />
-              </button>
-            </>
-          )}
-          <div
-            className="relative border-2 border-white/30 shadow-[0_0_120px_20px_rgba(0,0,0,0.95),0_0_40px_rgba(175,30,35,0.15)]"
-            onClick={e => e.stopPropagation()}
-          >
-            <img
-              src={images[lightbox]}
-              alt=""
-              className="max-h-[82vh] max-w-[88vw] object-contain block"
-              onError={e => { e.target.src = PLACEHOLDER }}
-            />
-            <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#af1e23]" />
-            <p className="absolute bottom-3 right-4 text-white/50 text-[10px] uppercase tracking-widest">
-              {lightbox + 1} / {images.length}
-            </p>
+
+          <div className="w-full h-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
+            <Swiper
+              modules={[Navigation, Pagination]}
+              navigation
+              pagination={{ clickable: true, dynamicBullets: true }}
+              initialSlide={lightbox}
+              onSlideChange={swiper => setLightbox(swiper.activeIndex)}
+              className="lightbox-swiper w-full h-full"
+              speed={400}
+            >
+              {images.map((img, i) => (
+                <SwiperSlide key={i} className="flex items-center justify-center">
+                  <div className="relative border-2 border-white/30 shadow-[0_0_120px_20px_rgba(0,0,0,0.95),0_0_40px_rgba(175,30,35,0.15)] mx-auto">
+                    <img
+                      src={img}
+                      alt=""
+                      className="max-h-[82vh] max-w-[88vw] object-contain block"
+                      onError={e => { e.target.src = PLACEHOLDER }}
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#af1e23]" />
+                    <p className="absolute bottom-3 right-4 text-white/50 text-[10px] uppercase tracking-widest">
+                      {i + 1} / {images.length}
+                    </p>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
       )}

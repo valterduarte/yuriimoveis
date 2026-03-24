@@ -97,6 +97,26 @@ section { scroll-margin-top: 80px; }
 .gallery-swiper .swiper-button-prev::after,
 .gallery-swiper .swiper-button-next::after { font-size: 16px; font-weight: 900; }
 
+/* ── Swiper: Lightbox ── */
+.lightbox-swiper { display: flex; align-items: center; }
+.lightbox-swiper .swiper-slide { display: flex; align-items: center; justify-content: center; }
+.lightbox-swiper .swiper-button-prev,
+.lightbox-swiper .swiper-button-next {
+  color: white;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.2);
+  width: 48px;
+  height: 48px;
+  transition: background 0.25s, border-color 0.25s;
+}
+.lightbox-swiper .swiper-button-prev:hover,
+.lightbox-swiper .swiper-button-next:hover { background: #af1e23; border-color: #af1e23; }
+.lightbox-swiper .swiper-button-prev::after,
+.lightbox-swiper .swiper-button-next::after { font-size: 16px; font-weight: 900; }
+.lightbox-swiper .swiper-pagination { bottom: 12px; }
+.lightbox-swiper .swiper-pagination-bullet { background: white; opacity: 0.5; }
+.lightbox-swiper .swiper-pagination-bullet-active { background: #af1e23; opacity: 1; }
+
 /* Frame / borda nos slides da galeria */
 .gallery-swiper .swiper-slide { position: relative; }
 .gallery-swiper .swiper-slide::after {
