@@ -102,19 +102,26 @@ section { scroll-margin-top: 80px; }
 .lightbox-swiper .swiper-slide { display: flex; align-items: center; justify-content: center; }
 .lightbox-swiper .swiper-button-prev,
 .lightbox-swiper .swiper-button-next {
+  display: flex !important;
   color: white;
-  background: rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.2);
-  width: 48px;
-  height: 48px;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.3);
+  width: 44px;
+  height: 44px;
+  margin-top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   transition: background 0.25s, border-color 0.25s;
 }
+.lightbox-swiper .swiper-button-prev { left: 12px; }
+.lightbox-swiper .swiper-button-next { right: 12px; }
 .lightbox-swiper .swiper-button-prev:hover,
 .lightbox-swiper .swiper-button-next:hover { background: #af1e23; border-color: #af1e23; }
 .lightbox-swiper .swiper-button-prev::after,
-.lightbox-swiper .swiper-button-next::after { font-size: 16px; font-weight: 900; }
-.lightbox-swiper .swiper-pagination { bottom: 12px; }
-.lightbox-swiper .swiper-pagination-bullet { background: white; opacity: 0.5; }
+.lightbox-swiper .swiper-button-next::after { font-size: 14px; font-weight: 900; }
+.lightbox-swiper .swiper-button-disabled { opacity: 0.3 !important; }
+.lightbox-swiper .swiper-pagination { bottom: 16px; }
+.lightbox-swiper .swiper-pagination-bullet { background: white; opacity: 0.5; width: 8px; height: 8px; }
 .lightbox-swiper .swiper-pagination-bullet-active { background: #af1e23; opacity: 1; }
 
 /* Frame / borda nos slides da galeria */

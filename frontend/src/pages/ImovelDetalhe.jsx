@@ -498,10 +498,11 @@ export default function ImovelDetalhe() {
           <div className="w-full h-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
             <Swiper
               modules={[Navigation, Pagination]}
-              navigation
+              navigation={{ enabled: true }}
               pagination={{ clickable: true, dynamicBullets: true }}
               initialSlide={lightbox}
-              onSlideChange={swiper => setLightbox(swiper.activeIndex)}
+              loop={images.length > 1}
+              onSlideChange={swiper => setLightbox(swiper.realIndex)}
               className="lightbox-swiper w-full h-full"
               speed={400}
             >
