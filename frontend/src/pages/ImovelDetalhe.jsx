@@ -487,13 +487,6 @@ export default function ImovelDetalhe() {
       {/* ── LIGHTBOX ── */}
       {lightbox !== null && (
         <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
-
-          <button
-            onClick={() => setLightbox(null)}
-            className="absolute top-4 right-5 text-white text-4xl font-light hover:text-[#af1e23] transition-colors z-50 leading-none w-12 h-12 flex items-center justify-center">
-            ×
-          </button>
-
           <Swiper
             modules={[Navigation, Pagination]}
             navigation={{ enabled: true }}
@@ -521,6 +514,14 @@ export default function ImovelDetalhe() {
               </SwiperSlide>
             ))}
           </Swiper>
+
+          {/* X fixo acima do Swiper */}
+          <button
+            onClick={() => setLightbox(null)}
+            style={{ position: 'fixed', top: 16, right: 20, zIndex: 9999 }}
+            className="text-white text-4xl font-light hover:text-[#af1e23] transition-colors leading-none w-12 h-12 flex items-center justify-center">
+            ×
+          </button>
         </div>
       )}
 
