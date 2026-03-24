@@ -509,7 +509,7 @@ export default function ImovelDetalhe() {
             </>
           )}
           <div
-            className="relative border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.9)]"
+            className="relative border-2 border-white/30 shadow-[0_0_120px_20px_rgba(0,0,0,0.95),0_0_40px_rgba(175,30,35,0.15)]"
             onClick={e => e.stopPropagation()}
           >
             <img
@@ -518,7 +518,7 @@ export default function ImovelDetalhe() {
               className="max-h-[82vh] max-w-[88vw] object-contain block"
               onError={e => { e.target.src = PLACEHOLDER }}
             />
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#af1e23]" />
+            <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#af1e23]" />
             <p className="absolute bottom-3 right-4 text-white/50 text-[10px] uppercase tracking-widest">
               {lightbox + 1} / {images.length}
             </p>
