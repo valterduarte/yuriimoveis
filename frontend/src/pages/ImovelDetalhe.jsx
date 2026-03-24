@@ -182,8 +182,10 @@ export default function ImovelDetalhe() {
           ))}
         </Swiper>
 
-        {/* Gradient — pointer-events-none para não bloquear swipe/nav */}
+        {/* Gradient vertical + vinhetas laterais */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none z-20" />
+        <div className="absolute inset-y-0 left-0 w-24 md:w-40 bg-gradient-to-r from-black/50 to-transparent pointer-events-none z-20" />
+        <div className="absolute inset-y-0 right-0 w-24 md:w-40 bg-gradient-to-l from-black/50 to-transparent pointer-events-none z-20" />
 
         {/* Badge tipo */}
         <div className="absolute top-8 left-8 z-30">
@@ -213,18 +215,18 @@ export default function ImovelDetalhe() {
 
       {/* ── THUMBNAILS ── */}
       {images.length > 1 && (
-        <div className="bg-[#1a1a1a] border-t border-white/10 py-3">
+        <div className="bg-[#111] border-t border-white/10 py-4">
           <div className="max-w-6xl mx-auto px-8">
             <Swiper
               modules={[Thumbs]}
               onSwiper={setThumbsSwiper}
               slidesPerView="auto"
-              spaceBetween={8}
+              spaceBetween={10}
               watchSlidesProgress
               className="thumbs-swiper"
             >
               {images.map((img, i) => (
-                <SwiperSlide key={i} style={{ width: 64, height: 44 }}>
+                <SwiperSlide key={i} style={{ width: 80, height: 54 }}>
                   <img
                     src={img}
                     alt=""

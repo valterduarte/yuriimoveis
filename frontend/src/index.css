@@ -64,24 +64,26 @@ section { scroll-margin-top: 80px; }
 
 /* ── Swiper: Thumbnails ── */
 .thumbs-swiper .swiper-slide {
-  width: 64px !important;
-  height: 44px !important;
-  opacity: 0.45;
+  width: 80px !important;
+  height: 54px !important;
+  opacity: 0.4;
   cursor: pointer;
   border: 2px solid transparent;
   overflow: hidden;
-  transition: opacity 0.2s, border-color 0.2s;
+  transition: opacity 0.25s, border-color 0.25s, box-shadow 0.25s;
 }
+.thumbs-swiper .swiper-slide:hover { opacity: 0.75; }
 .thumbs-swiper .swiper-slide-thumb-active {
   opacity: 1;
   border-color: #af1e23;
+  box-shadow: 0 0 0 1px #af1e23;
 }
 
 /* ── Swiper: Gallery ── */
 .gallery-swiper .swiper-button-prev,
 .gallery-swiper .swiper-button-next {
   color: #af1e23;
-  background: transparent;
+  background: rgba(0,0,0,0.6);
   border: 1px solid #af1e23;
   width: 45px;
   height: 45px;
@@ -94,6 +96,22 @@ section { scroll-margin-top: 80px; }
 }
 .gallery-swiper .swiper-button-prev::after,
 .gallery-swiper .swiper-button-next::after { font-size: 16px; font-weight: 900; }
+
+/* Frame / borda nos slides da galeria */
+.gallery-swiper .swiper-slide { position: relative; }
+.gallery-swiper .swiper-slide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+  z-index: 2;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.gallery-swiper .swiper-slide:hover::after {
+  border-color: rgba(175, 30, 35, 0.6);
+  box-shadow: inset 0 0 0 1px rgba(175, 30, 35, 0.25);
+}
 
 @layer components {
   .btn-primary {
