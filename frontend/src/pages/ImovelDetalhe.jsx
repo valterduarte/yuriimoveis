@@ -486,45 +486,53 @@ export default function ImovelDetalhe() {
 
       {/* ── LIGHTBOX ── */}
       {lightbox !== null && (
-        <>
-          <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
-            <Swiper
-              modules={[Navigation, Pagination]}
-              navigation={{ enabled: true }}
-              pagination={{ clickable: true, dynamicBullets: true }}
-              initialSlide={lightbox}
-              loop={images.length > 1}
-              onSlideChange={swiper => setLightbox(swiper.realIndex)}
-              className="lightbox-swiper w-full h-full"
-              speed={400}
-            >
-              {images.map((img, i) => (
-                <SwiperSlide key={i} className="flex items-center justify-center">
-                  <div className="relative border-2 border-white/30 shadow-[0_0_120px_20px_rgba(0,0,0,0.95),0_0_40px_rgba(175,30,35,0.15)] mx-auto">
-                    <img
-                      src={img}
-                      alt=""
-                      className="max-h-[82vh] max-w-[88vw] object-contain block"
-                      onError={e => { e.target.src = PLACEHOLDER }}
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#af1e23]" />
-                    <p className="absolute bottom-3 right-4 text-white/50 text-[10px] uppercase tracking-widest">
-                      {i + 1} / {images.length}
-                    </p>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-
-          {/* X completamente fora do Swiper */}
+        <div className="fixed inset-0 bg-black/95 z-50"
+          onTouchStart={e => { e.currentTarget._touchX = e.touches[0].clientX }}
+          onTouchEnd={e => {
+            const dx = e.changedTouches[0].clientX - e.currentTarget._touchX
+            if (Math.abs(dx) > 50) {
+              if (dx < 0) setLightbox(i => (i + 1) % images.length)
+              else setLightbox(i => (i - 1 + images.length) % images.length)
+            }
+          }}
+        >
+          {/* X */}
           <button
             onClick={() => setLightbox(null)}
-            style={{ position: 'fixed', top: 16, right: 20, zIndex: 9999 }}
-            className="text-white text-4xl font-light hover:text-[#af1e23] transition-colors leading-none w-12 h-12 flex items-center justify-center">
+            className="absolute top-4 right-5 z-10 text-white text-4xl font-light w-12 h-12 flex items-center justify-center hover:text-[#af1e23] transition-colors">
             ×
           </button>
-        </>
+
+          {/* Setas */}
+          {images.length > 1 && (
+            <>
+              <button onClick={() => setLightbox(i => (i - 1 + images.length) % images.length)}
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center bg-black/60 border border-white/20 text-white text-2xl hover:bg-[#af1e23] transition-colors">
+                ‹
+              </button>
+              <button onClick={() => setLightbox(i => (i + 1) % images.length)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center bg-black/60 border border-white/20 text-white text-2xl hover:bg-[#af1e23] transition-colors">
+                ›
+              </button>
+            </>
+          )}
+
+          {/* Imagem */}
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="relative border-2 border-white/30 shadow-[0_0_120px_20px_rgba(0,0,0,0.95),0_0_40px_rgba(175,30,35,0.15)]">
+              <img
+                src={images[lightbox]}
+                alt=""
+                className="max-h-[82vh] max-w-[88vw] object-contain block"
+                onError={e => { e.target.src = PLACEHOLDER }}
+              />
+              <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#af1e23]" />
+              <p className="absolute bottom-3 right-4 text-white/50 text-[10px] uppercase tracking-widest">
+                {lightbox + 1} / {images.length}
+              </p>
+            </div>
+          </div>
+        </div>
       )}
 
     </div>
