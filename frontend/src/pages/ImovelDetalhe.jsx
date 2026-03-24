@@ -490,40 +490,41 @@ export default function ImovelDetalhe() {
       {lightbox !== null && (
         <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
           onClick={() => setLightbox(null)}>
-          <button onClick={() => setLightbox(null)}
-            className="absolute top-4 right-5 text-white text-3xl font-light hover:text-[#af1e23] transition-colors z-10">
+
+          <button
+            onClick={e => { e.stopPropagation(); setLightbox(null) }}
+            className="absolute top-4 right-5 text-white text-4xl font-light hover:text-[#af1e23] transition-colors z-50 leading-none">
             ×
           </button>
 
-          <div className="w-full h-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
-            <Swiper
-              modules={[Navigation, Pagination]}
-              navigation={{ enabled: true }}
-              pagination={{ clickable: true, dynamicBullets: true }}
-              initialSlide={lightbox}
-              loop={images.length > 1}
-              onSlideChange={swiper => setLightbox(swiper.realIndex)}
-              className="lightbox-swiper w-full h-full"
-              speed={400}
-            >
-              {images.map((img, i) => (
-                <SwiperSlide key={i} className="flex items-center justify-center">
-                  <div className="relative border-2 border-white/30 shadow-[0_0_120px_20px_rgba(0,0,0,0.95),0_0_40px_rgba(175,30,35,0.15)] mx-auto">
-                    <img
-                      src={img}
-                      alt=""
-                      className="max-h-[82vh] max-w-[88vw] object-contain block"
-                      onError={e => { e.target.src = PLACEHOLDER }}
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#af1e23]" />
-                    <p className="absolute bottom-3 right-4 text-white/50 text-[10px] uppercase tracking-widest">
-                      {i + 1} / {images.length}
-                    </p>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+          <Swiper
+            modules={[Navigation, Pagination]}
+            navigation={{ enabled: true }}
+            pagination={{ clickable: true, dynamicBullets: true }}
+            initialSlide={lightbox}
+            loop={images.length > 1}
+            onSlideChange={swiper => setLightbox(swiper.realIndex)}
+            onClick={(_swiper, event) => event.stopPropagation()}
+            className="lightbox-swiper w-full h-full"
+            speed={400}
+          >
+            {images.map((img, i) => (
+              <SwiperSlide key={i} className="flex items-center justify-center">
+                <div className="relative border-2 border-white/30 shadow-[0_0_120px_20px_rgba(0,0,0,0.95),0_0_40px_rgba(175,30,35,0.15)] mx-auto">
+                  <img
+                    src={img}
+                    alt=""
+                    className="max-h-[82vh] max-w-[88vw] object-contain block"
+                    onError={e => { e.target.src = PLACEHOLDER }}
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#af1e23]" />
+                  <p className="absolute bottom-3 right-4 text-white/50 text-[10px] uppercase tracking-widest">
+                    {i + 1} / {images.length}
+                  </p>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       )}
 
