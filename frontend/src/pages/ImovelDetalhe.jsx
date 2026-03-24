@@ -46,13 +46,9 @@ export default function ImovelDetalhe() {
   const { id } = useParams()
   const [imovel, setImovel] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [activeImg, setActiveImg] = useState(0)
   const [thumbsSwiper, setThumbsSwiper] = useState(null)
   const [activeTab, setActiveTab] = useState('visao-geral')
-  const [lightbox, setLightbox] = useState(null) // index or null
-  const [form, setForm] = useState({ nome: '', email: '', telefone: '', mensagem: '' })
-  const [formStatus, setFormStatus] = useState(null) // 'ok' | 'erro'
-  const [sending, setSending] = useState(false)
+  const [lightbox, setLightbox] = useState(null)
 
   useEffect(() => {
     axios.get(`${API_URL}/api/imoveis/${id}`)
@@ -94,22 +90,6 @@ export default function ImovelDetalhe() {
     const el = document.getElementById(id)
     if (el) el.scrollIntoView({ behavior: 'smooth' })
     setActiveTab(id)
-  }
-
-  const handleFormChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
-
-  const handleFormSubmit = async e => {
-    e.preventDefault()
-    setSending(true)
-    try {
-      await axios.post(`${API_URL}/api/contatos`, { ...form, imovel_id: id })
-      setFormStatus('ok')
-      setForm({ nome: '', email: '', telefone: '', mensagem: '' })
-    } catch {
-      setFormStatus('erro')
-    } finally {
-      setSending(false)
-    }
   }
 
   if (loading) {
