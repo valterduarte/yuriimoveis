@@ -75,8 +75,8 @@ export default function Imoveis() {
   return (
     <div className="min-h-screen bg-gray-50">
       <SEOHead
-        title="Imóveis à Venda e Aluguel em Osasco"
-        description="Explore o catálogo completo de imóveis em Osasco e região. Casas, apartamentos, terrenos, chalés e comerciais disponíveis para venda e aluguel."
+        title="Imóveis à Venda e para Alugar em Osasco e Região"
+        description="Catálogo completo de imóveis em Osasco. Casas e apartamentos à venda, terrenos, chalés, chácaras e imóveis comerciais. Encontre o imóvel ideal com o Corretor Yuri."
         url="/imoveis"
       />
       {/* Page header */}

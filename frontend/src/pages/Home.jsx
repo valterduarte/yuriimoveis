@@ -31,18 +31,53 @@ export default function Home() {
   return (
     <div className="pb-16 md:pb-0">
       <SEOHead
+        title="Corretor Yuri Imóveis — Imóveis em Osasco e Região"
+        description="Corretor de imóveis em Osasco com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para venda e aluguel. Atendimento personalizado."
         url="/"
-        jsonLd={{
-          '@context': 'https://schema.org',
-          '@type': 'WebSite',
-          name: 'Corretor Yuri Imóveis',
-          url: 'https://yuriimoveis.com.br',
-          potentialAction: {
-            '@type': 'SearchAction',
-            target: 'https://yuriimoveis.com.br/imoveis?busca={search_term_string}',
-            'query-input': 'required name=search_term_string',
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'Corretor Yuri Imóveis',
+            url: 'https://yuriimoveis.com.br',
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: 'https://yuriimoveis.com.br/imoveis?busca={search_term_string}',
+              'query-input': 'required name=search_term_string',
+            },
           },
-        }}
+          {
+            '@context': 'https://schema.org',
+            '@type': ['LocalBusiness', 'RealEstateAgent'],
+            name: 'Corretor Yuri Imóveis',
+            description: 'Especialistas em imóveis residenciais e comerciais em Osasco e região. Mais de 10 anos de experiência, atendimento personalizado e segurança jurídica.',
+            url: 'https://yuriimoveis.com.br',
+            telephone: '+55-11-96714-7840',
+            image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Osasco',
+              addressRegion: 'SP',
+              addressCountry: 'BR',
+            },
+            geo: {
+              '@type': 'GeoCoordinates',
+              latitude: -23.5329,
+              longitude: -46.7917,
+            },
+            openingHoursSpecification: {
+              '@type': 'OpeningHoursSpecification',
+              dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+              opens: '09:00',
+              closes: '18:00',
+            },
+            areaServed: [
+              { '@type': 'City', name: 'Osasco' },
+              { '@type': 'AdministrativeArea', name: 'Grande São Paulo' },
+            ],
+            sameAs: ['https://wa.me/5511967147840'],
+          },
+        ]}
       />
 
       {/* HERO */}

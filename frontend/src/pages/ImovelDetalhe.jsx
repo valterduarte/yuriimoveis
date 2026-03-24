@@ -126,15 +126,33 @@ export default function ImovelDetalhe() {
         type="article"
         jsonLd={{
           '@context': 'https://schema.org',
-          '@type': 'Product',
+          '@type': 'RealEstateListing',
           name: imovel.titulo,
           description: imovelDescription,
           image: images,
+          url: `https://yuriimoveis.com.br/imoveis/${imovel.id}`,
+          datePosted: imovel.created_at ? imovel.created_at.split('T')[0] : undefined,
+          price: imovel.preco ? String(imovel.preco) : undefined,
+          priceCurrency: 'BRL',
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: imovel.cidade || 'Osasco',
+            addressRegion: imovel.estado || 'SP',
+            addressCountry: 'BR',
+          },
+          numberOfRooms: imovel.quartos || undefined,
+          floorSize: imovel.area ? { '@type': 'QuantitativeValue', value: imovel.area, unitCode: 'MTK' } : undefined,
           offers: {
             '@type': 'Offer',
             price: imovel.preco,
             priceCurrency: 'BRL',
             availability: 'https://schema.org/InStock',
+            seller: {
+              '@type': 'RealEstateAgent',
+              name: 'Corretor Yuri Imóveis',
+              telephone: '+55-11-96714-7840',
+              url: 'https://yuriimoveis.com.br',
+            },
           },
         }}
       />
