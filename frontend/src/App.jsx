@@ -1,13 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import Lenis from 'lenis'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import FloatingContact from './components/FloatingContact'
 import Home from './pages/Home'
-import Imoveis from './pages/Imoveis'
-import ImovelDetalhe from './pages/ImovelDetalhe'
-import Contato from './pages/Contato'
+
+const Imoveis = lazy(() => import('./pages/Imoveis'))
+const ImovelDetalhe = lazy(() => import('./pages/ImovelDetalhe'))
+const Contato = lazy(() => import('./pages/Contato'))
 
 function SmoothScroll() {
   useEffect(() => {
@@ -59,12 +60,14 @@ function App() {
       <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-1 pt-16 md:pt-20">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/imoveis" element={<Imoveis />} />
-            <Route path="/imoveis/:id" element={<ImovelDetalhe />} />
-            <Route path="/contato" element={<Contato />} />
-          </Routes>
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-t-2 border-[#af1e23]" /></div>}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/imoveis" element={<Imoveis />} />
+              <Route path="/imoveis/:id" element={<ImovelDetalhe />} />
+              <Route path="/contato" element={<Contato />} />
+            </Routes>
+          </Suspense>
         </main>
         <Footer />
         <FloatingContact />

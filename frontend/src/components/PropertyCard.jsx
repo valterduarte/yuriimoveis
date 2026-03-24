@@ -24,6 +24,8 @@ export default function PropertyCard({ imovel }) {
         <img
           src={img}
           alt={imovel.titulo}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           onError={e => { e.target.src = PLACEHOLDER }}
         />
