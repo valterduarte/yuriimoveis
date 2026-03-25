@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { FiEdit2, FiPlus, FiTrash2 } from 'react-icons/fi'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
@@ -28,9 +29,33 @@ const camposVazios = {
   destaque: false, imagens: '', diferenciais: '',
 }
 
+function imovelParaForm(im) {
+  return {
+    titulo: im.titulo || '',
+    descricao: im.descricao || '',
+    tipo: im.tipo || 'venda',
+    categoria: im.categoria || 'apartamento',
+    preco: im.preco || '',
+    area: im.area || '',
+    quartos: im.quartos || '',
+    banheiros: im.banheiros || '',
+    vagas: im.vagas || '',
+    endereco: im.endereco || '',
+    bairro: im.bairro || '',
+    cidade: im.cidade || 'Osasco',
+    cep: im.cep || '',
+    destaque: im.destaque || false,
+    imagens: Array.isArray(im.imagens) ? im.imagens.join('\n') : '',
+    diferenciais: Array.isArray(im.diferenciais) ? im.diferenciais.join('\n') : '',
+  }
+}
+
 export default function Admin() {
   const [apiKey, setApiKey] = useState('')
   const [autenticado, setAutenticado] = useState(false)
+  const [tela, setTela] = useState('lista') // 'lista' | 'form'
+  const [editandoId, setEditandoId] = useState(null)
+  const [imoveis, setImoveis] = useState([])
   const [form, setForm] = useState(camposVazios)
   const [loading, setLoading] = useState(false)
   const [msg, setMsg] = useState(null)
@@ -41,7 +66,51 @@ export default function Admin() {
     else setMsg({ tipo: 'erro', texto: 'Informe a API Key.' })
   }
 
+  const carregarImoveis = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/imoveis?limit=50&ordem=recente`)
+      setImoveis(res.data.imoveis || [])
+    } catch {
+      setImoveis([])
+    }
+  }
+
+  useEffect(() => {
+    if (autenticado) carregarImoveis()
+  }, [autenticado])
+
   const set = (key, value) => setForm(f => ({ ...f, [key]: value }))
+
+  const abrirNovo = () => {
+    setEditandoId(null)
+    setForm(camposVazios)
+    setMsg(null)
+    setTela('form')
+  }
+
+  const abrirEdicao = async (id) => {
+    setMsg(null)
+    try {
+      const res = await axios.get(`${API_URL}/api/imoveis/${id}`)
+      setForm(imovelParaForm(res.data))
+      setEditandoId(id)
+      setTela('form')
+    } catch {
+      setMsg({ tipo: 'erro', texto: 'Erro ao carregar imóvel.' })
+    }
+  }
+
+  const desativar = async (id) => {
+    if (!confirm('Desativar este imóvel?')) return
+    try {
+      await axios.put(`${API_URL}/api/imoveis/${id}`, { ativo: false }, {
+        headers: { 'x-api-key': apiKey },
+      })
+      carregarImoveis()
+    } catch {
+      alert('Erro ao desativar.')
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -58,13 +127,22 @@ export default function Admin() {
         imagens: form.imagens ? form.imagens.split('\n').map(s => s.trim()).filter(Boolean) : [],
         diferenciais: form.diferenciais ? form.diferenciais.split('\n').map(s => s.trim()).filter(Boolean) : [],
       }
-      const res = await axios.post(`${API_URL}/api/imoveis`, payload, {
-        headers: { 'x-api-key': apiKey },
-      })
-      setMsg({ tipo: 'ok', texto: `Imóvel cadastrado com sucesso! ID: ${res.data.id}` })
-      setForm(camposVazios)
+      if (editandoId) {
+        await axios.put(`${API_URL}/api/imoveis/${editandoId}`, payload, {
+          headers: { 'x-api-key': apiKey },
+        })
+        setMsg({ tipo: 'ok', texto: 'Imóvel atualizado com sucesso!' })
+      } else {
+        const res = await axios.post(`${API_URL}/api/imoveis`, payload, {
+          headers: { 'x-api-key': apiKey },
+        })
+        setMsg({ tipo: 'ok', texto: `Imóvel cadastrado com sucesso! ID: ${res.data.id}` })
+        setForm(camposVazios)
+        setEditandoId(null)
+      }
+      carregarImoveis()
     } catch (err) {
-      setMsg({ tipo: 'erro', texto: err.response?.data?.error || 'Erro ao cadastrar.' })
+      setMsg({ tipo: 'erro', texto: err.response?.data?.error || 'Erro ao salvar.' })
     } finally {
       setLoading(false)
     }
@@ -76,13 +154,9 @@ export default function Admin() {
         <div className="bg-white border border-gray-200 p-8 w-full max-w-sm">
           <h1 className="text-sm font-bold uppercase tracking-widest text-dark mb-6">Acesso Admin</h1>
           <form onSubmit={autenticar} className="space-y-4">
-            <input
-              type="password"
-              placeholder="API Key"
-              value={apiKey}
+            <input type="password" placeholder="API Key" value={apiKey}
               onChange={e => setApiKey(e.target.value)}
-              className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
-            />
+              className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
             {msg && <p className="text-xs text-red-500">{msg.texto}</p>}
             <button type="submit" className="w-full btn-primary py-3 text-xs">Entrar</button>
           </form>
@@ -94,9 +168,23 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-dark text-white py-10">
-        <div className="container mx-auto px-6">
-          <span className="section-label">Admin</span>
-          <h1 className="text-3xl font-black uppercase text-white">Cadastrar Imóvel</h1>
+        <div className="container mx-auto px-6 flex items-center justify-between">
+          <div>
+            <span className="section-label">Admin</span>
+            <h1 className="text-3xl font-black uppercase text-white">
+              {tela === 'lista' ? 'Imóveis Cadastrados' : editandoId ? 'Editar Imóvel' : 'Novo Imóvel'}
+            </h1>
+          </div>
+          {tela === 'lista' ? (
+            <button onClick={abrirNovo} className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs">
+              <FiPlus size={14} /> Novo Imóvel
+            </button>
+          ) : (
+            <button onClick={() => { setTela('lista'); setMsg(null) }}
+              className="text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
+              ← Voltar
+            </button>
+          )}
         </div>
       </div>
 
@@ -107,147 +195,171 @@ export default function Admin() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-
-          {/* Informações básicas */}
-          <div className="bg-white border border-gray-200 p-6">
-            <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-5">Informações Básicas</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Título *</label>
-                <input value={form.titulo} onChange={e => set('titulo', e.target.value)} required
-                  className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+        {/* Lista */}
+        {tela === 'lista' && (
+          <div className="space-y-3">
+            {imoveis.length === 0 ? (
+              <div className="bg-white border border-gray-200 p-8 text-center text-sm text-gray-400">
+                Nenhum imóvel cadastrado.
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
+            ) : imoveis.map(im => (
+              <div key={im.id} className="bg-white border border-gray-200 px-5 py-4 flex items-center justify-between gap-4">
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Finalidade *</label>
-                  <select value={form.tipo} onChange={e => set('tipo', e.target.value)}
-                    className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary">
-                    <option value="venda">Venda</option>
-                    <option value="aluguel">Aluguel</option>
-                  </select>
+                  <p className="text-sm font-bold text-dark">{im.titulo}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    {im.categoria} · {im.tipo} · ID {im.id}
+                  </p>
                 </div>
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Categoria *</label>
-                  <select value={form.categoria} onChange={e => set('categoria', e.target.value)}
-                    className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary">
-                    <option value="apartamento">Apartamento</option>
-                    <option value="casa">Casa</option>
-                    <option value="terreno">Terreno</option>
-                    <option value="chale">Chalé</option>
-                    <option value="comercial">Comercial</option>
-                    <option value="chacara">Chácara</option>
-                  </select>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <button onClick={() => abrirEdicao(im.id)}
+                    className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-primary hover:underline">
+                    <FiEdit2 size={12} /> Editar
+                  </button>
+                  <button onClick={() => desativar(im.id)}
+                    className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-red-400 hover:underline">
+                    <FiTrash2 size={12} /> Desativar
+                  </button>
                 </div>
               </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Preço (R$) *</label>
-                  <input type="number" value={form.preco} onChange={e => set('preco', e.target.value)} required
-                    className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Área (m²)</label>
-                  <input type="number" value={form.area} onChange={e => set('area', e.target.value)}
-                    className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Quartos</label>
-                  <input type="number" value={form.quartos} onChange={e => set('quartos', e.target.value)}
-                    className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Banheiros</label>
-                  <input type="number" value={form.banheiros} onChange={e => set('banheiros', e.target.value)}
-                    className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Vagas</label>
-                  <input type="number" value={form.vagas} onChange={e => set('vagas', e.target.value)}
-                    className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <input type="checkbox" id="destaque" checked={form.destaque} onChange={e => set('destaque', e.target.checked)}
-                  className="w-4 h-4 accent-primary" />
-                <label htmlFor="destaque" className="text-xs text-gray-600 uppercase tracking-widest font-bold">Imóvel em destaque</label>
-              </div>
-            </div>
+            ))}
           </div>
+        )}
 
-          {/* Localização */}
-          <div className="bg-white border border-gray-200 p-6">
-            <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-5">Localização</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Endereço</label>
-                <input value={form.endereco} onChange={e => set('endereco', e.target.value)}
-                  className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
+        {/* Formulário */}
+        {tela === 'form' && (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Informações básicas */}
+            <div className="bg-white border border-gray-200 p-6">
+              <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-5">Informações Básicas</h2>
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Bairro</label>
-                  <input value={form.bairro} onChange={e => set('bairro', e.target.value)}
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Título *</label>
+                  <input value={form.titulo} onChange={e => set('titulo', e.target.value)} required
                     className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
                 </div>
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Cidade</label>
-                  <input value={form.cidade} onChange={e => set('cidade', e.target.value)}
-                    className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Finalidade *</label>
+                    <select value={form.tipo} onChange={e => set('tipo', e.target.value)}
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary">
+                      <option value="venda">Venda</option>
+                      <option value="aluguel">Aluguel</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Categoria *</label>
+                    <select value={form.categoria} onChange={e => set('categoria', e.target.value)}
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary">
+                      <option value="apartamento">Apartamento</option>
+                      <option value="casa">Casa</option>
+                      <option value="terreno">Terreno</option>
+                      <option value="chale">Chalé</option>
+                      <option value="comercial">Comercial</option>
+                      <option value="chacara">Chácara</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Preço (R$) *</label>
+                    <input type="number" value={form.preco} onChange={e => set('preco', e.target.value)} required
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Área (m²)</label>
+                    <input type="number" value={form.area} onChange={e => set('area', e.target.value)}
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Quartos</label>
+                    <input type="number" value={form.quartos} onChange={e => set('quartos', e.target.value)}
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Banheiros</label>
+                    <input type="number" value={form.banheiros} onChange={e => set('banheiros', e.target.value)}
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Vagas</label>
+                    <input type="number" value={form.vagas} onChange={e => set('vagas', e.target.value)}
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" id="destaque" checked={form.destaque} onChange={e => set('destaque', e.target.checked)}
+                    className="w-4 h-4 accent-primary" />
+                  <label htmlFor="destaque" className="text-xs text-gray-600 uppercase tracking-widest font-bold">Imóvel em destaque</label>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Descrição */}
-          <div className="bg-white border border-gray-200 p-6">
-            <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Descrição</h2>
-            <p className="text-[10px] text-gray-400 mb-3">Use o template abaixo como base. Cada linha vira uma linha na página.</p>
-            <div className="bg-gray-50 border border-dashed border-gray-300 p-4 mb-3 text-xs text-gray-500 font-mono leading-relaxed whitespace-pre-line">
-              {DESCRICAO_TEMPLATE}
+            {/* Localização */}
+            <div className="bg-white border border-gray-200 p-6">
+              <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-5">Localização</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Endereço</label>
+                  <input value={form.endereco} onChange={e => set('endereco', e.target.value)}
+                    className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Bairro</label>
+                    <input value={form.bairro} onChange={e => set('bairro', e.target.value)}
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Cidade</label>
+                    <input value={form.cidade} onChange={e => set('cidade', e.target.value)}
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+                  </div>
+                </div>
+              </div>
             </div>
-            <textarea
-              value={form.descricao}
-              onChange={e => set('descricao', e.target.value)}
-              rows={14}
-              placeholder="Cole o template acima e edite..."
-              className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary resize-y font-mono"
-            />
-            <button type="button" onClick={() => set('descricao', DESCRICAO_TEMPLATE)}
-              className="mt-2 text-[10px] uppercase tracking-widest text-primary font-bold hover:underline">
-              Preencher com template
+
+            {/* Descrição */}
+            <div className="bg-white border border-gray-200 p-6">
+              <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Descrição</h2>
+              <p className="text-[10px] text-gray-400 mb-3">Use o template abaixo como base. Cada linha vira uma linha na página.</p>
+              <div className="bg-gray-50 border border-dashed border-gray-300 p-4 mb-3 text-xs text-gray-500 font-mono leading-relaxed whitespace-pre-line">
+                {DESCRICAO_TEMPLATE}
+              </div>
+              <textarea value={form.descricao} onChange={e => set('descricao', e.target.value)}
+                rows={14} placeholder="Cole o template acima e edite..."
+                className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary resize-y font-mono" />
+              <button type="button" onClick={() => set('descricao', DESCRICAO_TEMPLATE)}
+                className="mt-2 text-[10px] uppercase tracking-widest text-primary font-bold hover:underline">
+                Preencher com template
+              </button>
+            </div>
+
+            {/* Diferenciais */}
+            <div className="bg-white border border-gray-200 p-6">
+              <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Diferenciais</h2>
+              <p className="text-[10px] text-gray-400 mb-3">Um item por linha. Ex: Piscina aquecida</p>
+              <textarea value={form.diferenciais} onChange={e => set('diferenciais', e.target.value)}
+                rows={5} placeholder={"Piscina aquecida\nPortaria 24h\nAcademia"}
+                className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary resize-y" />
+            </div>
+
+            {/* Imagens */}
+            <div className="bg-white border border-gray-200 p-6">
+              <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Imagens</h2>
+              <p className="text-[10px] text-gray-400 mb-3">Uma URL por linha.</p>
+              <textarea value={form.imagens} onChange={e => set('imagens', e.target.value)}
+                rows={5} placeholder={"https://exemplo.com/foto1.jpg\nhttps://exemplo.com/foto2.jpg"}
+                className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary resize-y" />
+            </div>
+
+            <button type="submit" disabled={loading}
+              className="w-full btn-primary py-4 text-sm uppercase tracking-widest font-bold disabled:opacity-50">
+              {loading ? 'Salvando...' : editandoId ? 'Salvar Alterações' : 'Cadastrar Imóvel'}
             </button>
-          </div>
-
-          {/* Diferenciais */}
-          <div className="bg-white border border-gray-200 p-6">
-            <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Diferenciais</h2>
-            <p className="text-[10px] text-gray-400 mb-3">Um item por linha. Ex: Piscina aquecida</p>
-            <textarea value={form.diferenciais} onChange={e => set('diferenciais', e.target.value)}
-              rows={5} placeholder={"Piscina aquecida\nPortaria 24h\nAcademia"}
-              className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary resize-y" />
-          </div>
-
-          {/* Imagens */}
-          <div className="bg-white border border-gray-200 p-6">
-            <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Imagens</h2>
-            <p className="text-[10px] text-gray-400 mb-3">Uma URL por linha.</p>
-            <textarea value={form.imagens} onChange={e => set('imagens', e.target.value)}
-              rows={5} placeholder={"https://exemplo.com/foto1.jpg\nhttps://exemplo.com/foto2.jpg"}
-              className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary resize-y" />
-          </div>
-
-          <button type="submit" disabled={loading}
-            className="w-full btn-primary py-4 text-sm uppercase tracking-widest font-bold disabled:opacity-50">
-            {loading ? 'Cadastrando...' : 'Cadastrar Imóvel'}
-          </button>
-        </form>
+          </form>
+        )}
       </div>
     </div>
   )
