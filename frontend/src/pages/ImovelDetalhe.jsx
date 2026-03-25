@@ -8,7 +8,7 @@ import 'swiper/css/pagination'
 import 'swiper/css/thumbs'
 import {
   FiMaximize, FiMapPin, FiPhone, FiArrowLeft,
-  FiCheckCircle, FiCalendar
+  FiCheckCircle, FiCalendar, FiHome, FiTool, FiFileText
 } from 'react-icons/fi'
 import { FaCar, FaBath, FaWhatsapp } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
@@ -307,10 +307,29 @@ export default function ImovelDetalhe() {
                   </div>
                 )}
                 {imovel.area > 0 && (
-                  <div className="flex flex-col items-center justify-center py-7 px-4 text-center">
+                  <div className="flex flex-col items-center justify-center py-7 px-4 border-r border-gray-200 text-center">
                     <FiMaximize className="text-[#af1e23] mb-3" size={24} />
                     <span className="font-black text-[#1a1a1a] text-2xl leading-none">{imovel.area}</span>
                     <span className="text-[10px] uppercase tracking-[0.15em] text-gray-400 mt-1.5">m²</span>
+                  </div>
+                )}
+                {imovel.status && (
+                  <div className="flex flex-col items-center justify-center py-7 px-4 text-center">
+                    {imovel.status === 'pronto'
+                      ? <FiHome className="text-green-600 mb-3" size={24} />
+                      : imovel.status === 'construcao'
+                      ? <FiTool className="text-amber-500 mb-3" size={24} />
+                      : <FiFileText className="text-blue-600 mb-3" size={24} />
+                    }
+                    <span className={`text-[10px] uppercase tracking-[0.15em] font-bold mt-1.5 ${
+                      imovel.status === 'pronto' ? 'text-green-600'
+                      : imovel.status === 'construcao' ? 'text-amber-500'
+                      : 'text-blue-600'
+                    }`}>
+                      {imovel.status === 'pronto' ? 'Pronto para Morar'
+                      : imovel.status === 'construcao' ? 'Em Construção'
+                      : 'Na Planta'}
+                    </span>
                   </div>
                 )}
               </div>
