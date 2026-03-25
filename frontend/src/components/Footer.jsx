@@ -65,12 +65,19 @@ export default function Footer() {
           <div>
             <h4 className="text-white text-xs uppercase tracking-widest font-bold mb-6">Tipos de Imóveis</h4>
             <ul className="space-y-3">
-              {['Casas', 'Apartamentos', 'Terrenos', 'Chalés', 'Comercial', 'Chácaras'].map(tipo => (
-                <li key={tipo}>
-                  <Link to={`/imoveis?categoria=${tipo.toLowerCase()}`}
+              {[
+                { label: 'Casas', value: 'casa' },
+                { label: 'Apartamentos', value: 'apartamento' },
+                { label: 'Terrenos', value: 'terreno' },
+                { label: 'Chalés', value: 'chale' },
+                { label: 'Comercial', value: 'comercial' },
+                { label: 'Chácaras', value: 'chacara' },
+              ].map(({ label, value }) => (
+                <li key={value}>
+                  <Link to={`/imoveis?categoria=${value}`}
                     className="text-xs hover:text-primary transition-colors flex items-center gap-2">
                     <span className="w-3 h-px bg-gray-600 inline-block" />
-                    {tipo}
+                    {label}
                   </Link>
                 </li>
               ))}
