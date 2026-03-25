@@ -209,9 +209,6 @@ export default function ImovelDetalhe() {
                   : 'Pronto para Morar'}
                 </span>
               )}
-              <p className="text-[#af1e23] text-[10px] uppercase tracking-[0.25em] font-bold">
-                {imovel.categoria} · Código #{imovel.id}
-              </p>
             </div>
             <h1 className="text-3xl md:text-5xl font-black text-white uppercase leading-tight mb-3">
               {imovel.titulo}
