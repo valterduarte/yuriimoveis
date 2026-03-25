@@ -197,9 +197,22 @@ export default function ImovelDetalhe() {
         {/* Título + local */}
         <div className="absolute bottom-0 left-0 right-0 px-8 pb-10 md:px-14 z-30 pointer-events-none">
           <div className="max-w-6xl mx-auto">
-            <p className="text-[#af1e23] text-[10px] uppercase tracking-[0.25em] font-bold mb-2">
-              {imovel.categoria} · Código #{imovel.id}
-            </p>
+            <div className="flex items-center gap-3 mb-2">
+              <p className="text-[#af1e23] text-[10px] uppercase tracking-[0.25em] font-bold">
+                {imovel.categoria} · Código #{imovel.id}
+              </p>
+              {imovel.status && (
+                <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${
+                  imovel.status === 'planta' ? 'bg-blue-600'
+                  : imovel.status === 'construcao' ? 'bg-amber-500'
+                  : 'bg-green-600'
+                }`}>
+                  {imovel.status === 'planta' ? 'Na Planta'
+                  : imovel.status === 'construcao' ? 'Em Construção'
+                  : 'Pronto para Morar'}
+                </span>
+              )}
+            </div>
             <h1 className="text-3xl md:text-5xl font-black text-white uppercase leading-tight mb-3">
               {imovel.titulo}
             </h1>
