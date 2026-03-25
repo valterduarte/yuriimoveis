@@ -18,6 +18,7 @@ app.use(helmet())
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'x-api-key'],
 }))
 
 const globalLimiter = rateLimit({
