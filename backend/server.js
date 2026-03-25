@@ -15,8 +15,14 @@ const PORT = process.env.PORT || 3001
 
 app.use(helmet())
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://yuriimoveis-frontend.onrender.com',
+  process.env.FRONTEND_URL,
+].filter(Boolean)
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, cb) => cb(null, !origin || allowedOrigins.includes(origin)),
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'x-api-key'],
 }))
