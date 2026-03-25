@@ -26,6 +26,7 @@ A partir de *R$ 000.000`
 
 const camposVazios = {
   titulo: '', descricao: '', tipo: 'venda', categoria: 'apartamento',
+  status: 'pronto',
   preco: '', area: '', quartos: '', banheiros: '', vagas: '',
   endereco: '', bairro: '', cidade: 'Osasco', cep: '',
   destaque: false, imagens: '', diferenciais: '',
@@ -37,6 +38,7 @@ function imovelParaForm(im) {
     descricao: im.descricao || '',
     tipo: im.tipo || 'venda',
     categoria: im.categoria || 'apartamento',
+    status: im.status || 'pronto',
     preco: im.preco || '',
     area: im.area || '',
     quartos: im.quartos || '',
@@ -272,7 +274,7 @@ export default function Admin() {
                   <input value={form.titulo} onChange={e => set('titulo', e.target.value)} required
                     className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Finalidade *</label>
                     <select value={form.tipo} onChange={e => set('tipo', e.target.value)}
@@ -291,6 +293,15 @@ export default function Admin() {
                       <option value="chale">Chalé</option>
                       <option value="comercial">Comercial</option>
                       <option value="chacara">Chácara</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Status</label>
+                    <select value={form.status} onChange={e => set('status', e.target.value)}
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary">
+                      <option value="pronto">Pronto para morar</option>
+                      <option value="construcao">Em construção</option>
+                      <option value="planta">Na planta</option>
                     </select>
                   </div>
                 </div>

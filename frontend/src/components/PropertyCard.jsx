@@ -46,12 +46,19 @@ export default function PropertyCard({ imovel }) {
         </div>
 
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex gap-1.5">
+        <div className="absolute top-3 left-3 flex gap-1.5 flex-wrap">
           <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${
             imovel.tipo === 'venda' ? 'bg-primary' : 'bg-dark'
           }`}>
             {imovel.tipo === 'venda' ? 'Venda' : 'Aluguel'}
           </span>
+          {imovel.status && imovel.status !== 'pronto' && (
+            <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${
+              imovel.status === 'planta' ? 'bg-blue-600' : 'bg-amber-500'
+            }`}>
+              {imovel.status === 'planta' ? 'Na Planta' : 'Em Construção'}
+            </span>
+          )}
           {imovel.destaque && (
             <span className="text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-dark bg-white">
               Destaque
