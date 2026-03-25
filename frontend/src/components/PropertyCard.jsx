@@ -52,11 +52,15 @@ export default function PropertyCard({ imovel }) {
           }`}>
             {imovel.tipo === 'venda' ? 'Venda' : 'Aluguel'}
           </span>
-          {imovel.status && imovel.status !== 'pronto' && (
+          {imovel.status && (
             <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${
-              imovel.status === 'planta' ? 'bg-blue-600' : 'bg-amber-500'
+              imovel.status === 'planta' ? 'bg-blue-600'
+              : imovel.status === 'construcao' ? 'bg-amber-500'
+              : 'bg-green-600'
             }`}>
-              {imovel.status === 'planta' ? 'Na Planta' : 'Em Construção'}
+              {imovel.status === 'planta' ? 'Na Planta'
+              : imovel.status === 'construcao' ? 'Em Construção'
+              : 'Pronto para Morar'}
             </span>
           )}
           {imovel.destaque && (
