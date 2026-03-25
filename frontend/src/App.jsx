@@ -30,6 +30,14 @@ function SmoothScroll() {
   return null
 }
 
+function ScrollToTop() {
+  const location = useLocation()
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [location.pathname])
+  return null
+}
+
 function ScrollReveal() {
   const location = useLocation()
   useEffect(() => {
@@ -56,6 +64,7 @@ function App() {
   return (
     <Router>
       <SmoothScroll />
+      <ScrollToTop />
       <ScrollReveal />
       <div className="flex flex-col min-h-screen">
         <Header />
