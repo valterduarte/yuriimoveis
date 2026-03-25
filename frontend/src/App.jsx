@@ -9,6 +9,7 @@ import Home from './pages/Home'
 const Imoveis = lazy(() => import('./pages/Imoveis'))
 const ImovelDetalhe = lazy(() => import('./pages/ImovelDetalhe'))
 const Contato = lazy(() => import('./pages/Contato'))
+const Admin = lazy(() => import('./pages/Admin'))
 
 function SmoothScroll() {
   useEffect(() => {
@@ -75,6 +76,7 @@ function App() {
               <Route path="/imoveis" element={<Imoveis />} />
               <Route path="/imoveis/:id" element={<ImovelDetalhe />} />
               <Route path="/contato" element={<Contato />} />
+              <Route path="/admin" element={<Admin />} />
             </Routes>
           </Suspense>
         </main>
