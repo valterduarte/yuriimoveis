@@ -23,38 +23,26 @@ export default function Imoveis() {
   const [page, setPage] = useState(1)
   const limit = 9
 
-  const [filters, setFilters] = useState({
-    tipo: searchParams.get('tipo') || '',
-    categoria: searchParams.get('categoria') || '',
-    cidade: searchParams.get('cidade') || '',
-    precoMin: '',
-    precoMax: searchParams.get('precoMax') || '',
-    quartos: '',
-    ordem: 'recente',
-  })
-
-  useEffect(() => {
-    setFilters(f => ({
-      ...f,
-      tipo: searchParams.get('tipo') || '',
-      categoria: searchParams.get('categoria') || '',
-      cidade: searchParams.get('cidade') || '',
-      precoMax: searchParams.get('precoMax') || '',
-    }))
-    setPage(1)
-  }, [searchParams])
+  // Todos os filtros derivados diretamente da URL — fonte única de verdade
+  const tipo     = searchParams.get('tipo')     || ''
+  const categoria= searchParams.get('categoria')|| ''
+  const cidade   = searchParams.get('cidade')   || ''
+  const precoMin = searchParams.get('precoMin') || ''
+  const precoMax = searchParams.get('precoMax') || ''
+  const quartos  = searchParams.get('quartos')  || ''
+  const ordem    = searchParams.get('ordem')    || 'recente'
 
   const fetchImoveis = useCallback(async () => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
-      if (filters.tipo) params.set('tipo', filters.tipo)
-      if (filters.categoria) params.set('categoria', filters.categoria)
-      if (filters.cidade) params.set('cidade', filters.cidade)
-      if (filters.precoMin) params.set('precoMin', filters.precoMin)
-      if (filters.precoMax) params.set('precoMax', filters.precoMax)
-      if (filters.quartos) params.set('quartos', filters.quartos)
-      params.set('ordem', filters.ordem)
+      if (tipo)     params.set('tipo', tipo)
+      if (categoria)params.set('categoria', categoria)
+      if (cidade)   params.set('cidade', cidade)
+      if (precoMin) params.set('precoMin', precoMin)
+      if (precoMax) params.set('precoMax', precoMax)
+      if (quartos)  params.set('quartos', quartos)
+      params.set('ordem', ordem)
       params.set('page', page)
       params.set('limit', limit)
       const res = await axios.get(`${API_URL}/api/imoveis?${params.toString()}`)
@@ -65,23 +53,27 @@ export default function Imoveis() {
     } finally {
       setLoading(false)
     }
-  }, [filters, page])
+  }, [tipo, categoria, cidade, precoMin, precoMax, quartos, ordem, page])
 
   useEffect(() => { fetchImoveis() }, [fetchImoveis])
 
   const updateFilter = (key, value) => {
-    setFilters(f => ({ ...f, [key]: value }))
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev)
+      if (value) next.set(key, value)
+      else next.delete(key)
+      return next
+    }, { replace: true })
     setPage(1)
   }
 
   const clearFilters = () => {
-    setFilters({ tipo: '', categoria: '', cidade: '', precoMin: '', precoMax: '', quartos: '', ordem: 'recente' })
     setSearchParams({})
     setPage(1)
   }
 
   const totalPages = Math.ceil(total / limit)
-  const activeCount = Object.entries(filters).filter(([k, v]) => v && k !== 'ordem').length
+  const activeCount = [tipo, categoria, cidade, precoMin, precoMax, quartos].filter(Boolean).length
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -122,7 +114,7 @@ export default function Imoveis() {
                     {[{ v: '', l: 'Todos' }, { v: 'venda', l: 'Venda' }, { v: 'aluguel', l: 'Aluguel' }].map(t => (
                       <button key={t.v} onClick={() => updateFilter('tipo', t.v)}
                         className={`flex-1 py-2 text-[10px] uppercase tracking-wider font-bold transition-colors ${
-                          filters.tipo === t.v ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          tipo === t.v ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                         }`}>
                         {t.l}
                       </button>
@@ -133,7 +125,7 @@ export default function Imoveis() {
                 {/* Categoria */}
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Tipo</label>
-                  <select value={filters.categoria} onChange={e => updateFilter('categoria', e.target.value)}
+                  <select value={categoria} onChange={e => updateFilter('categoria', e.target.value)}
                     className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary">
                     <option value="">Todos</option>
                     <option value="casa">Casa</option>
@@ -148,7 +140,7 @@ export default function Imoveis() {
                 {/* Cidade */}
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Cidade</label>
-                  <select value={filters.cidade} onChange={e => updateFilter('cidade', e.target.value)}
+                  <select value={cidade} onChange={e => updateFilter('cidade', e.target.value)}
                     className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary">
                     <option value="">Todas</option>
                     <option value="Osasco">Osasco</option>
@@ -158,10 +150,10 @@ export default function Imoveis() {
                 {/* Preço */}
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Faixa de Preço</label>
-                  <input type="number" placeholder="Mínimo (R$)" value={filters.precoMin}
+                  <input type="number" placeholder="Mínimo (R$)" value={precoMin}
                     onChange={e => updateFilter('precoMin', e.target.value)}
                     className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary mb-2" />
-                  <input type="number" placeholder="Máximo (R$)" value={filters.precoMax}
+                  <input type="number" placeholder="Máximo (R$)" value={precoMax}
                     onChange={e => updateFilter('precoMax', e.target.value)}
                     className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
                 </div>
@@ -173,7 +165,7 @@ export default function Imoveis() {
                     {['', '1', '2', '3', '4+'].map(q => (
                       <button key={q} onClick={() => updateFilter('quartos', q)}
                         className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                          filters.quartos === q ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          quartos === q ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                         }`}>
                         {q || 'Td'}
                       </button>
@@ -201,7 +193,7 @@ export default function Imoveis() {
                   {loading ? 'Buscando...' : `${total} imóvel${total !== 1 ? 'is' : ''}`}
                 </p>
               </div>
-              <select value={filters.ordem} onChange={e => updateFilter('ordem', e.target.value)}
+              <select value={ordem} onChange={e => updateFilter('ordem', e.target.value)}
                 className="text-xs border border-gray-200 px-3 py-2 focus:outline-none focus:border-primary">
                 {ordemOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
