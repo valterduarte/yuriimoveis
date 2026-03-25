@@ -33,6 +33,17 @@ export default function Imoveis() {
     ordem: 'recente',
   })
 
+  useEffect(() => {
+    setFilters(f => ({
+      ...f,
+      tipo: searchParams.get('tipo') || '',
+      categoria: searchParams.get('categoria') || '',
+      cidade: searchParams.get('cidade') || '',
+      precoMax: searchParams.get('precoMax') || '',
+    }))
+    setPage(1)
+  }, [searchParams])
+
   const fetchImoveis = useCallback(async () => {
     setLoading(true)
     try {
