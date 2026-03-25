@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react'
-import { FiEdit2, FiPlus, FiTrash2 } from 'react-icons/fi'
+import { useState, useEffect, useRef } from 'react'
+import { FiEdit2, FiPlus, FiTrash2, FiUpload, FiX } from 'react-icons/fi'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const CLOUDINARY_CLOUD = 'dfl3eskr9'
+const CLOUDINARY_PRESET = 'Yuri-upload'
 
 const DESCRICAO_TEMPLATE = `🏢 NOME DO EMPREENDIMENTO – CIDADE
 
@@ -59,6 +61,9 @@ export default function Admin() {
   const [form, setForm] = useState(camposVazios)
   const [loading, setLoading] = useState(false)
   const [msg, setMsg] = useState(null)
+  const [uploadando, setUploadando] = useState(false)
+  const [imagensUrls, setImagensUrls] = useState([])
+  const inputFileRef = useRef(null)
 
   const autenticar = (e) => {
     e.preventDefault()
@@ -84,6 +89,7 @@ export default function Admin() {
   const abrirNovo = () => {
     setEditandoId(null)
     setForm(camposVazios)
+    setImagensUrls([])
     setMsg(null)
     setTela('form')
   }
@@ -93,11 +99,40 @@ export default function Admin() {
     try {
       const res = await axios.get(`${API_URL}/api/imoveis/${id}`)
       setForm(imovelParaForm(res.data))
+      setImagensUrls(Array.isArray(res.data.imagens) ? res.data.imagens : [])
       setEditandoId(id)
       setTela('form')
     } catch {
       setMsg({ tipo: 'erro', texto: 'Erro ao carregar imóvel.' })
     }
+  }
+
+  const handleUpload = async (e) => {
+    const files = Array.from(e.target.files)
+    if (!files.length) return
+    setUploadando(true)
+    try {
+      const uploads = await Promise.all(files.map(async (file) => {
+        const data = new FormData()
+        data.append('file', file)
+        data.append('upload_preset', CLOUDINARY_PRESET)
+        const res = await axios.post(
+          `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,
+          data
+        )
+        return res.data.secure_url
+      }))
+      setImagensUrls(prev => [...prev, ...uploads])
+    } catch {
+      setMsg({ tipo: 'erro', texto: 'Erro ao fazer upload das imagens.' })
+    } finally {
+      setUploadando(false)
+      e.target.value = ''
+    }
+  }
+
+  const removerImagem = (url) => {
+    setImagensUrls(prev => prev.filter(u => u !== url))
   }
 
   const desativar = async (id) => {
@@ -124,7 +159,7 @@ export default function Admin() {
         quartos: Number(form.quartos) || 0,
         banheiros: Number(form.banheiros) || 0,
         vagas: Number(form.vagas) || 0,
-        imagens: form.imagens ? form.imagens.split('\n').map(s => s.trim()).filter(Boolean) : [],
+        imagens: imagensUrls,
         diferenciais: form.diferenciais ? form.diferenciais.split('\n').map(s => s.trim()).filter(Boolean) : [],
       }
       if (editandoId) {
@@ -348,10 +383,28 @@ export default function Admin() {
             {/* Imagens */}
             <div className="bg-white border border-gray-200 p-6">
               <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Imagens</h2>
-              <p className="text-[10px] text-gray-400 mb-3">Uma URL por linha.</p>
-              <textarea value={form.imagens} onChange={e => set('imagens', e.target.value)}
-                rows={5} placeholder={"https://exemplo.com/foto1.jpg\nhttps://exemplo.com/foto2.jpg"}
-                className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary resize-y" />
+              <p className="text-[10px] text-gray-400 mb-4">Selecione uma ou mais fotos do seu computador.</p>
+
+              <input ref={inputFileRef} type="file" accept="image/*" multiple onChange={handleUpload} className="hidden" />
+              <button type="button" onClick={() => inputFileRef.current.click()} disabled={uploadando}
+                className="flex items-center gap-2 border border-dashed border-gray-300 px-4 py-3 text-xs text-gray-500 hover:border-primary hover:text-primary transition-colors disabled:opacity-50 w-full justify-center">
+                <FiUpload size={14} />
+                {uploadando ? 'Enviando...' : 'Selecionar fotos'}
+              </button>
+
+              {imagensUrls.length > 0 && (
+                <div className="grid grid-cols-3 gap-3 mt-4">
+                  {imagensUrls.map((url, i) => (
+                    <div key={i} className="relative group">
+                      <img src={url} alt="" className="w-full h-24 object-cover border border-gray-200" />
+                      <button type="button" onClick={() => removerImagem(url)}
+                        className="absolute top-1 right-1 bg-red-500 text-white p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <FiX size={12} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <button type="submit" disabled={loading}
