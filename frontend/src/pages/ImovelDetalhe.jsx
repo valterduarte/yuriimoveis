@@ -281,7 +281,24 @@ export default function ImovelDetalhe() {
             <section id="visao-geral">
               <span className="section-label">Visão Geral</span>
               <h2 className="section-title mb-2">{imovel.subtitulo || 'Conheça este imóvel'}</h2>
-              <p className="text-gray-500 text-sm mb-8">{imovel.cidade} — {imovel.bairro}</p>
+              <p className="text-gray-500 text-sm mb-3">{imovel.cidade} — {imovel.bairro}</p>
+              {imovel.status && (
+                <div className={`inline-flex items-center gap-2 px-4 py-2 mb-8 font-bold text-xs uppercase tracking-[0.15em] ${
+                  imovel.status === 'pronto' ? 'bg-green-50 text-green-700 border border-green-200'
+                  : imovel.status === 'construcao' ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                  : 'bg-blue-50 text-blue-700 border border-blue-200'
+                }`}>
+                  {imovel.status === 'pronto'
+                    ? <FiHome size={14} />
+                    : imovel.status === 'construcao'
+                    ? <FiTool size={14} />
+                    : <FiFileText size={14} />
+                  }
+                  {imovel.status === 'pronto' ? 'Pronto para Morar'
+                  : imovel.status === 'construcao' ? 'Em Construção'
+                  : 'Na Planta'}
+                </div>
+              )}
 
               {/* Destaques */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-0 bg-white border border-gray-200 mb-8">
@@ -307,29 +324,10 @@ export default function ImovelDetalhe() {
                   </div>
                 )}
                 {imovel.area > 0 && (
-                  <div className="flex flex-col items-center justify-center py-7 px-4 border-r border-gray-200 text-center">
+                  <div className="flex flex-col items-center justify-center py-7 px-4 text-center">
                     <FiMaximize className="text-[#af1e23] mb-3" size={24} />
                     <span className="font-black text-[#1a1a1a] text-2xl leading-none">{imovel.area}</span>
                     <span className="text-[10px] uppercase tracking-[0.15em] text-gray-400 mt-1.5">m²</span>
-                  </div>
-                )}
-                {imovel.status && (
-                  <div className="flex flex-col items-center justify-center py-7 px-4 text-center">
-                    {imovel.status === 'pronto'
-                      ? <FiHome className="text-green-600 mb-3" size={24} />
-                      : imovel.status === 'construcao'
-                      ? <FiTool className="text-amber-500 mb-3" size={24} />
-                      : <FiFileText className="text-blue-600 mb-3" size={24} />
-                    }
-                    <span className={`text-[10px] uppercase tracking-[0.15em] font-bold mt-1.5 ${
-                      imovel.status === 'pronto' ? 'text-green-600'
-                      : imovel.status === 'construcao' ? 'text-amber-500'
-                      : 'text-blue-600'
-                    }`}>
-                      {imovel.status === 'pronto' ? 'Pronto para Morar'
-                      : imovel.status === 'construcao' ? 'Em Construção'
-                      : 'Na Planta'}
-                    </span>
                   </div>
                 )}
               </div>
