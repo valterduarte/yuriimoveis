@@ -16,24 +16,10 @@ export default function Logo({ className = '' }) {
       {/* Linha divisória */}
       <line x1="62" y1="8" x2="62" y2="44" stroke="#af1e23" strokeWidth="1.5" />
 
-      {/* CORRETOR — label pequeno */}
-      <text
-        x="72"
-        y="22"
-        fontFamily="'Arial', sans-serif"
-        fontWeight="600"
-        fontSize="10"
-        letterSpacing="4"
-        fill="#9ca3af"
-        textAnchor="start"
-      >
-        CORRETOR
-      </text>
-
       {/* YURI — nome principal grande */}
       <text
         x="70"
-        y="44"
+        y="30"
         fontFamily="'Arial', sans-serif"
         fontWeight="900"
         fontSize="24"
@@ -42,6 +28,20 @@ export default function Logo({ className = '' }) {
         textAnchor="start"
       >
         YURI
+      </text>
+
+      {/* CORRETOR — label pequeno abaixo */}
+      <text
+        x="72"
+        y="44"
+        fontFamily="'Arial', sans-serif"
+        fontWeight="600"
+        fontSize="10"
+        letterSpacing="4"
+        fill="#9ca3af"
+        textAnchor="start"
+      >
+        CORRETOR
       </text>
     </svg>
   )
