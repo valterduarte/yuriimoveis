@@ -10,12 +10,6 @@ import axios from 'axios'
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
 
-const diferenciais = [
-  { num: '01', title: 'Atendimento Personalizado', desc: 'Cada cliente recebe atenção exclusiva e dedicada às suas necessidades específicas.' },
-  { num: '02', title: 'Segurança Jurídica', desc: 'Todos os processos conduzidos com total transparência e segurança jurídica.' },
-  { num: '03', title: 'Experiência Regional', desc: 'Mais de 10 anos no mercado de Osasco e região com profundo conhecimento local.' },
-  { num: '04', title: 'Portfólio Exclusivo', desc: 'Acesso a imóveis exclusivos e oportunidades únicas na região.' },
-]
 
 export default function Home() {
   const [destaques, setDestaques] = useState([])
@@ -146,38 +140,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* DIFERENCIAIS */}
-      <section className="py-20 bg-dark text-white">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <span className="section-label">Por que nos escolher</span>
-              <h2 className="text-4xl font-black text-white uppercase leading-tight mb-6">
-                Nossos<br />Diferenciais
-              </h2>
-              <p className="text-gray-400 leading-relaxed mb-8 text-sm">
-                Somos referência no mercado imobiliário de Osasco e região com atendimento personalizado, transparência e segurança em cada negócio.
-              </p>
-              <Link to="/imoveis" className="btn-primary inline-flex items-center gap-2">
-                Ver imóveis <FiArrowRight size={14} />
-              </Link>
-            </div>
-            <div className="border border-gray-700">
-              {diferenciais.map((d, i) => (
-                <div key={d.num}
-                  className={`p-6 flex gap-5 items-start hover:bg-gray-800 transition-colors reveal ${i < diferenciais.length - 1 ? 'border-b border-gray-700' : ''}`}
-                  style={{ transitionDelay: `${i * 0.1}s` }}>
-                  <span className="text-primary font-black text-2xl flex-shrink-0 w-10">{d.num}</span>
-                  <div>
-                    <h3 className="font-bold text-white text-sm uppercase tracking-wide mb-1">{d.title}</h3>
-                    <p className="text-gray-400 text-xs leading-relaxed">{d.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
 {/* CTA */}
       <section className="py-20 bg-primary">
