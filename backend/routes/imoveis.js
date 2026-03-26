@@ -19,7 +19,8 @@ router.get('/', async (req, res) => {
       ordem = 'recente', page = 1, limit = 9,
     } = req.query
 
-    const conditions = ['ativo = true']
+    const { todos } = req.query
+    const conditions = todos === 'true' ? [] : ['ativo = true']
     const params = []
     let idx = 1
 
@@ -39,7 +40,7 @@ router.get('/', async (req, res) => {
       }
     }
 
-    const whereClause = `WHERE ${conditions.join(' AND ')}`
+    const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : ''
     const orderMap = {
       recente:     'created_at DESC',
       menor_preco: 'preco ASC',

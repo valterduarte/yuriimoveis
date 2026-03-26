@@ -85,7 +85,7 @@ export default function Admin() {
 
   const carregarImoveis = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/imoveis?limit=50&ordem=recente`)
+      const res = await axios.get(`${API_URL}/api/imoveis?limit=50&ordem=recente&todos=true`)
       setImoveis(res.data.imoveis || [])
     } catch {
       setImoveis([])
@@ -162,6 +162,17 @@ export default function Admin() {
       carregarImoveis()
     } catch {
       alert('Erro ao desativar.')
+    }
+  }
+
+  const reativar = async (id) => {
+    try {
+      await axios.put(`${API_URL}/api/imoveis/${id}`, { ativo: true }, {
+        headers: { 'x-api-key': apiKey },
+      })
+      carregarImoveis()
+    } catch {
+      alert('Erro ao reativar.')
     }
   }
 
@@ -256,22 +267,32 @@ export default function Admin() {
                 Nenhum imóvel cadastrado.
               </div>
             ) : imoveis.map(im => (
-              <div key={im.id} className="bg-white border border-gray-200 px-5 py-4 flex items-center justify-between gap-4">
+              <div key={im.id} className={`bg-white border px-5 py-4 flex items-center justify-between gap-4 ${im.ativo ? 'border-gray-200' : 'border-gray-200 opacity-50'}`}>
                 <div>
                   <p className="text-sm font-bold text-dark">{im.titulo}</p>
                   <p className="text-xs text-gray-400 mt-0.5">
                     {im.categoria} · {im.tipo} · ID {im.id}
+                    {!im.ativo && <span className="ml-2 text-red-400 font-bold">· Inativo</span>}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <button onClick={() => abrirEdicao(im.id)}
-                    className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-primary hover:underline">
-                    <FiEdit2 size={12} /> Editar
-                  </button>
-                  <button onClick={() => desativar(im.id)}
-                    className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-red-400 hover:underline">
-                    <FiTrash2 size={12} /> Desativar
-                  </button>
+                  {im.ativo && (
+                    <button onClick={() => abrirEdicao(im.id)}
+                      className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-primary hover:underline">
+                      <FiEdit2 size={12} /> Editar
+                    </button>
+                  )}
+                  {im.ativo ? (
+                    <button onClick={() => desativar(im.id)}
+                      className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-red-400 hover:underline">
+                      <FiTrash2 size={12} /> Desativar
+                    </button>
+                  ) : (
+                    <button onClick={() => reativar(im.id)}
+                      className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-green-500 hover:underline">
+                      <FiPlus size={12} /> Reativar
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
