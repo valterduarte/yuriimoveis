@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FiMenu, FiX, FiPhone } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
+import Logo from './Logo'
 
 const navLinks = [
   { href: '/', label: 'Início' },
@@ -30,16 +31,8 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 md:h-20">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-primary flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-black text-sm">CY</span>
-            </div>
-            <div>
-              <span className="text-white font-bold text-base tracking-wider uppercase leading-none block">
-                Corretor Yuri
-              </span>
-              <span className="text-primary text-[10px] tracking-widest uppercase">Imóveis</span>
-            </div>
+          <Link to="/">
+            <Logo className="h-9 w-auto" />
           </Link>
 
           {/* Desktop nav */}
