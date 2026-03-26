@@ -66,6 +66,7 @@ router.get('/', async (req, res) => {
       diferenciais: JSON.parse(row.diferenciais || '[]'),
     }))
 
+    res.set('Cache-Control', 'public, max-age=60')
     res.json({ imoveis, total, page: pageNum, limit: limitNum, pages: Math.ceil(total / limitNum) })
   } catch (err) {
     console.error(err)
@@ -79,6 +80,7 @@ router.get('/:id', async (req, res) => {
     const { rows } = await pool.query('SELECT * FROM imoveis WHERE id = $1 AND ativo = true', [req.params.id])
     if (!rows[0]) return res.status(404).json({ error: 'Imóvel não encontrado' })
     const row = rows[0]
+    res.set('Cache-Control', 'public, max-age=300')
     res.json({
       ...row,
       imagens:      JSON.parse(row.imagens      || '[]'),

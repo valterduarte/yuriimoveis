@@ -3,8 +3,8 @@ import { FiEdit2, FiPlus, FiTrash2, FiUpload, FiX } from 'react-icons/fi'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-const CLOUDINARY_CLOUD = 'dfl3eskr9'
-const CLOUDINARY_PRESET = 'Yuri-upload'
+const CLOUDINARY_CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD || 'dfl3eskr9'
+const CLOUDINARY_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET || 'Yuri-upload'
 
 const DESCRICAO_TEMPLATE = `🏢 NOME DO EMPREENDIMENTO – CIDADE
 

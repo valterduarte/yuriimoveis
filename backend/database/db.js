@@ -40,6 +40,14 @@ async function initDB() {
   await pool.query(`ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'pronto'`)
   await pool.query(`ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS parcela_display TEXT DEFAULT ''`)
 
+  // Índices para melhorar performance nas buscas
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_imoveis_ativo ON imoveis (ativo)`)
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_imoveis_tipo ON imoveis (tipo)`)
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_imoveis_categoria ON imoveis (categoria)`)
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_imoveis_cidade ON imoveis (cidade)`)
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_imoveis_destaque ON imoveis (destaque)`)
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_imoveis_preco ON imoveis (preco)`)
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS contatos (
       id SERIAL PRIMARY KEY,

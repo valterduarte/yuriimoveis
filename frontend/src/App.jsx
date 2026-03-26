@@ -4,6 +4,7 @@ import Lenis from 'lenis'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import FloatingContact from './components/FloatingContact'
+import ErrorBoundary from './components/ErrorBoundary'
 import Home from './pages/Home'
 
 const Imoveis = lazy(() => import('./pages/Imoveis'))
@@ -70,15 +71,17 @@ function App() {
       <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-1 pt-16 md:pt-20">
-          <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-t-2 border-[#af1e23]" /></div>}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/imoveis" element={<Imoveis />} />
-              <Route path="/imoveis/:id" element={<ImovelDetalhe />} />
-              <Route path="/contato" element={<Contato />} />
-              <Route path="/admin" element={<Admin />} />
-            </Routes>
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-t-2 border-[#af1e23]" /></div>}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/imoveis" element={<Imoveis />} />
+                <Route path="/imoveis/:id" element={<ImovelDetalhe />} />
+                <Route path="/contato" element={<Contato />} />
+                <Route path="/admin" element={<Admin />} />
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
         </main>
         <Footer />
         <FloatingContact />

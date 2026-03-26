@@ -5,6 +5,7 @@ import { FaWhatsapp } from 'react-icons/fa'
 import SearchBar from '../components/SearchBar'
 import SEOHead from '../components/SEOHead'
 import PropertyCard from '../components/PropertyCard'
+import SkeletonCard from '../components/SkeletonCard'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
@@ -119,7 +120,7 @@ export default function Home() {
           </div>
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {[...Array(6)].map((_, i) => <div key={i} className="bg-gray-100 h-80 animate-pulse" />)}
+              {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
             </div>
           ) : destaques.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

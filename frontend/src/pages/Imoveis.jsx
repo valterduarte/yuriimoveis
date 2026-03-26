@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { FiFilter, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import PropertyCard from '../components/PropertyCard'
+import SkeletonCard from '../components/SkeletonCard'
 import axios from 'axios'
 import SEOHead from '../components/SEOHead'
 
@@ -201,7 +202,7 @@ export default function Imoveis() {
 
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                {[...Array(6)].map((_, i) => <div key={i} className="bg-gray-100 h-72 animate-pulse" />)}
+                {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
               </div>
             ) : imoveis.length === 0 ? (
               <div className="text-center py-20 bg-white border border-gray-200">

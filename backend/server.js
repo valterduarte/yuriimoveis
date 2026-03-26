@@ -3,17 +3,20 @@ const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 const rateLimit = require('express-rate-limit')
+const compression = require('compression')
 const path = require('path')
-const { initDB } = require('./database/db')
+const { initDB, pool } = require('./database/db')
 const seed = require('./database/seed')
 
 const imoveisRouter = require('./routes/imoveis')
 const contatoRouter = require('./routes/contato')
+const uploadRouter = require('./routes/upload')
 
 const app = express()
 const PORT = process.env.PORT || 3001
 
 app.use(helmet())
+app.use(compression())
 
 const allowedOrigins = [
   'http://localhost:5173',
@@ -42,12 +45,13 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 app.use('/api/imoveis', imoveisRouter)
 app.use('/api/contatos', contatoRouter)
+app.use('/api/upload', uploadRouter)
 
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
-app.get('/sitemap.xml', async (req, res) => {
+app.get('/sitemap.xml', async (_req, res) => {
   try {
     const { rows } = await pool.query(
       `SELECT id, updated_at FROM imoveis WHERE ativo = true ORDER BY id`
@@ -72,11 +76,11 @@ app.get('/sitemap.xml', async (req, res) => {
   }
 })
 
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({ error: 'Rota não encontrada' })
 })
 
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
   console.error(err.stack)
   res.status(500).json({ error: 'Erro interno do servidor' })
 })
