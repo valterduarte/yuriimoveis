@@ -25,6 +25,8 @@ async function initDB() {
       cep TEXT DEFAULT '',
       lat NUMERIC,
       lng NUMERIC,
+      status TEXT DEFAULT 'pronto',
+      parcela_display TEXT DEFAULT '',
       destaque BOOLEAN DEFAULT false,
       ativo BOOLEAN DEFAULT true,
       imagens TEXT DEFAULT '[]',
@@ -33,6 +35,10 @@ async function initDB() {
       updated_at TIMESTAMP DEFAULT NOW()
     )
   `)
+
+  // Migrations: adiciona colunas se não existirem
+  await pool.query(`ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'pronto'`)
+  await pool.query(`ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS parcela_display TEXT DEFAULT ''`)
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS contatos (

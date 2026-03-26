@@ -96,7 +96,7 @@ router.post('/', requireApiKey, async (req, res) => {
     const {
       titulo, descricao, tipo, categoria, preco, area,
       quartos, banheiros, vagas, endereco, bairro, cidade,
-      cep, destaque, imagens, diferenciais,
+      cep, destaque, imagens, diferenciais, status, parcela_display,
     } = req.body
 
     if (!titulo || !tipo || !categoria || !preco) {
@@ -104,8 +104,8 @@ router.post('/', requireApiKey, async (req, res) => {
     }
 
     const { rows } = await pool.query(`
-      INSERT INTO imoveis (titulo, descricao, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
+      INSERT INTO imoveis (titulo, descricao, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, parcela_display)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
       RETURNING id
     `, [
       titulo, descricao || '', tipo, categoria, Number(preco),
@@ -114,6 +114,8 @@ router.post('/', requireApiKey, async (req, res) => {
       destaque ? true : false,
       JSON.stringify(imagens || []),
       JSON.stringify(diferenciais || []),
+      status || 'pronto',
+      parcela_display || '',
     ])
 
     res.status(201).json({ id: rows[0].id, message: 'Imóvel criado com sucesso' })
@@ -132,30 +134,32 @@ router.put('/:id', requireApiKey, async (req, res) => {
     const {
       titulo, descricao, tipo, categoria, preco, area,
       quartos, banheiros, vagas, endereco, bairro, cidade,
-      cep, destaque, imagens, diferenciais, ativo,
+      cep, destaque, imagens, diferenciais, ativo, status, parcela_display,
     } = req.body
 
     await pool.query(`
       UPDATE imoveis SET
-        titulo       = COALESCE($1,  titulo),
-        descricao    = COALESCE($2,  descricao),
-        tipo         = COALESCE($3,  tipo),
-        categoria    = COALESCE($4,  categoria),
-        preco        = COALESCE($5,  preco),
-        area         = COALESCE($6,  area),
-        quartos      = COALESCE($7,  quartos),
-        banheiros    = COALESCE($8,  banheiros),
-        vagas        = COALESCE($9,  vagas),
-        endereco     = COALESCE($10, endereco),
-        bairro       = COALESCE($11, bairro),
-        cidade       = COALESCE($12, cidade),
-        cep          = COALESCE($13, cep),
-        destaque     = COALESCE($14, destaque),
-        imagens      = COALESCE($15, imagens),
-        diferenciais = COALESCE($16, diferenciais),
-        ativo        = COALESCE($17, ativo),
-        updated_at   = NOW()
-      WHERE id = $18
+        titulo          = COALESCE($1,  titulo),
+        descricao       = COALESCE($2,  descricao),
+        tipo            = COALESCE($3,  tipo),
+        categoria       = COALESCE($4,  categoria),
+        preco           = COALESCE($5,  preco),
+        area            = COALESCE($6,  area),
+        quartos         = COALESCE($7,  quartos),
+        banheiros       = COALESCE($8,  banheiros),
+        vagas           = COALESCE($9,  vagas),
+        endereco        = COALESCE($10, endereco),
+        bairro          = COALESCE($11, bairro),
+        cidade          = COALESCE($12, cidade),
+        cep             = COALESCE($13, cep),
+        destaque        = COALESCE($14, destaque),
+        imagens         = COALESCE($15, imagens),
+        diferenciais    = COALESCE($16, diferenciais),
+        ativo           = COALESCE($17, ativo),
+        status          = COALESCE($18, status),
+        parcela_display = COALESCE($19, parcela_display),
+        updated_at      = NOW()
+      WHERE id = $20
     `, [
       titulo, descricao, tipo, categoria,
       preco != null ? Number(preco) : null,
@@ -168,6 +172,8 @@ router.put('/:id', requireApiKey, async (req, res) => {
       imagens      ? JSON.stringify(imagens)      : null,
       diferenciais ? JSON.stringify(diferenciais) : null,
       ativo != null ? Boolean(ativo) : null,
+      status || null,
+      parcela_display || null,
       req.params.id,
     ])
 
