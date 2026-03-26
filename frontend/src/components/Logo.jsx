@@ -1,47 +1,44 @@
 export default function Logo({ className = '' }) {
   return (
     <svg
-      viewBox="0 0 220 52"
+      viewBox="0 0 200 52"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-label="Corretor Yuri"
     >
-      {/* Marca: quadrado com Y estilizado */}
+      {/* Marca: quadrado vermelho com Y */}
       <rect width="52" height="52" fill="#af1e23" />
+      <line x1="14" y1="13" x2="26" y2="27" stroke="white" strokeWidth="4" strokeLinecap="round" />
+      <line x1="38" y1="13" x2="26" y2="27" stroke="white" strokeWidth="4" strokeLinecap="round" />
+      <line x1="26" y1="27" x2="26" y2="40" stroke="white" strokeWidth="4" strokeLinecap="round" />
 
-      {/* Y — dois braços diagonais */}
-      <line x1="14" y1="14" x2="26" y2="28" stroke="white" strokeWidth="4" strokeLinecap="round" />
-      <line x1="38" y1="14" x2="26" y2="28" stroke="white" strokeWidth="4" strokeLinecap="round" />
-      {/* Y — haste vertical */}
-      <line x1="26" y1="28" x2="26" y2="40" stroke="white" strokeWidth="4" strokeLinecap="round" />
+      {/* Linha divisória */}
+      <line x1="62" y1="8" x2="62" y2="44" stroke="#af1e23" strokeWidth="1.5" />
 
-      {/* Linha divisória vertical */}
-      <line x1="64" y1="8" x2="64" y2="44" stroke="#af1e23" strokeWidth="1.5" />
-
-      {/* CORRETOR */}
+      {/* CORRETOR — label pequeno */}
       <text
-        x="74"
-        y="24"
+        x="72"
+        y="22"
         fontFamily="'Arial', sans-serif"
-        fontWeight="800"
-        fontSize="13"
-        letterSpacing="3"
-        fill="white"
+        fontWeight="600"
+        fontSize="10"
+        letterSpacing="4"
+        fill="#9ca3af"
         textAnchor="start"
       >
         CORRETOR
       </text>
 
-      {/* YURI */}
+      {/* YURI — nome principal grande */}
       <text
-        x="75"
-        y="41"
+        x="70"
+        y="44"
         fontFamily="'Arial', sans-serif"
-        fontWeight="700"
-        fontSize="15"
-        letterSpacing="5"
-        fill="#af1e23"
+        fontWeight="900"
+        fontSize="24"
+        letterSpacing="3"
+        fill="white"
         textAnchor="start"
       >
         YURI
