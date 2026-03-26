@@ -24,10 +24,19 @@ Conforto, segurança e lazer completo para você e sua família.
 X dormitórios — XXm²
 A partir de *R$ 000.000`
 
+function calcParcela(preco) {
+  const financiado = preco * 0.8
+  const taxa = preco < 264000 ? 0.055 : 0.0816
+  const r = taxa / 12
+  const n = 360
+  const parcela = financiado * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(parcela)
+}
+
 const camposVazios = {
   titulo: '', descricao: '', tipo: 'venda', categoria: 'apartamento',
   status: 'pronto',
-  preco: '', area: '', quartos: '', banheiros: '', vagas: '',
+  preco: '', parcela_display: '', area: '', quartos: '', banheiros: '', vagas: '',
   endereco: '', bairro: '', cidade: 'Osasco', cep: '',
   destaque: false, imagens: '', diferenciais: '',
 }
@@ -40,6 +49,7 @@ function imovelParaForm(im) {
     categoria: im.categoria || 'apartamento',
     status: im.status || 'pronto',
     preco: im.preco || '',
+    parcela_display: im.parcela_display || '',
     area: im.area || '',
     quartos: im.quartos || '',
     banheiros: im.banheiros || '',
@@ -85,6 +95,12 @@ export default function Admin() {
   useEffect(() => {
     if (autenticado) carregarImoveis()
   }, [autenticado])
+
+  useEffect(() => {
+    if (form.preco) {
+      setForm(f => ({ ...f, parcela_display: calcParcela(Number(f.preco)) }))
+    }
+  }, [form.preco])
 
   const set = (key, value) => setForm(f => ({ ...f, [key]: value }))
 
@@ -305,12 +321,24 @@ export default function Admin() {
                     </select>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Preço (R$) *</label>
-                    <input type="number" value={form.preco} onChange={e => set('preco', e.target.value)} required
+                    <input type="number" value={form.preco}
+                      onChange={e => {
+                        const v = e.target.value
+                        setForm(f => ({ ...f, preco: v, parcela_display: v ? calcParcela(Number(v)) : '' }))
+                      }} required
                       className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
                   </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Parcela display</label>
+                    <input value={form.parcela_display} onChange={e => set('parcela_display', e.target.value)}
+                      placeholder="Auto-calculado ao preencher preço"
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Área (m²)</label>
                     <input type="number" value={form.area} onChange={e => set('area', e.target.value)}
