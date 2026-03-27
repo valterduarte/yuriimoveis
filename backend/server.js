@@ -47,6 +47,59 @@ app.use('/api/imoveis', imoveisRouter)
 app.use('/api/contatos', contatoRouter)
 app.use('/api/upload', uploadRouter)
 
+const FRONTEND_BASE = process.env.FRONTEND_URL || 'https://yuriimoveis-frontend.onrender.com'
+
+// Rota de preview social — retorna HTML com OG tags corretas para WhatsApp/redes sociais
+app.get('/share/:id', async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, titulo, descricao, cidade, bairro, preco, tipo, imagens FROM imoveis WHERE id = $1 AND ativo = true`,
+      [req.params.id]
+    )
+    if (!rows.length) return res.redirect(`${FRONTEND_BASE}/imoveis`)
+
+    const im = rows[0]
+    const imagens = JSON.parse(im.imagens || '[]')
+    const image = imagens[0] || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80'
+    const description = im.descricao
+      ? im.descricao.slice(0, 155).replace(/\n/g, ' ')
+      : `${im.titulo} em ${im.cidade || 'Osasco'}, SP.`
+    const title = `${im.titulo} | Corretor Yuri Imóveis`
+    const url = `${FRONTEND_BASE}/imoveis/${im.id}`
+
+    res.set('Content-Type', 'text/html; charset=utf-8')
+    res.set('Cache-Control', 'public, max-age=3600')
+    res.send(`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>${title}</title>
+<meta name="description" content="${description}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="${url}">
+<meta property="og:title" content="${title}">
+<meta property="og:description" content="${description}">
+<meta property="og:image" content="${image}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="800">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Corretor Yuri Imóveis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${title}">
+<meta name="twitter:description" content="${description}">
+<meta name="twitter:image" content="${image}">
+<meta http-equiv="refresh" content="0;url=${url}">
+</head>
+<body>
+<script>window.location.replace("${url}")</script>
+</body>
+</html>`)
+  } catch (err) {
+    console.error('Share route error:', err)
+    res.redirect(`${FRONTEND_BASE}/imoveis`)
+  }
+})
+
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })

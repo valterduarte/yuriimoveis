@@ -116,13 +116,14 @@ export default function ImovelDetalhe() {
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER]
   const whatsMsg = encodeURIComponent(`Olá! Tenho interesse no imóvel: ${imovel.titulo} — Código #${imovel.id}`)
   const pageUrl = `https://yuriimoveis.com.br/imoveis/${imovel.id}`
+  const shareUrl = `${import.meta.env.VITE_API_URL || 'https://yuriimoveis-backend.onrender.com'}/share/${imovel.id}`
   const imovelDescription = imovel.descricao
     ? imovel.descricao.slice(0, 155).replace(/\n/g, ' ')
     : `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
 
   const handleShare = () => {
     if (navigator.share) {
-      navigator.share({ title: imovel.titulo, text: imovelDescription, url: pageUrl })
+      navigator.share({ title: imovel.titulo, text: imovelDescription, url: shareUrl })
     } else {
       setShareOpen(prev => !prev)
     }
@@ -224,7 +225,7 @@ export default function ImovelDetalhe() {
           {shareOpen && (
             <div className="absolute right-0 top-full mt-2 bg-[#1a1a1a] border border-white/10 min-w-[180px] shadow-xl">
               <a
-                href={`https://wa.me/?text=${encodeURIComponent(`${imovel.titulo}\n${pageUrl}`)}`}
+                href={`https://wa.me/?text=${encodeURIComponent(`${imovel.titulo}\n${shareUrl}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setShareOpen(false)}
