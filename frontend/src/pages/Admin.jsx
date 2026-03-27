@@ -28,7 +28,7 @@ A partir de *R$ 000.000`
 const camposVazios = {
   titulo: '', descricao: '', tipo: 'venda', categoria: 'apartamento',
   status: 'pronto',
-  preco: '', parcela_display: '', area: '', quartos: '', banheiros: '', vagas: '',
+  preco: '', parcela_display: '', parcela_label: '', area: '', quartos: '', banheiros: '', vagas: '',
   endereco: '', bairro: '', cidade: 'Osasco', cep: '',
   destaque: false, imagens: '', diferenciais: '',
 }
@@ -42,6 +42,7 @@ function imovelParaForm(im) {
     status: im.status || 'pronto',
     preco: im.preco || '',
     parcela_display: im.parcela_display || '',
+    parcela_label: im.parcela_label || '',
     area: im.area || '',
     quartos: im.quartos || '',
     banheiros: im.banheiros || '',
@@ -348,6 +349,12 @@ export default function Admin() {
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Parcela display</label>
                     <input value={form.parcela_display} onChange={e => set('parcela_display', e.target.value)}
                       placeholder="Auto-calculado ao preencher preço"
+                      className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Label da parcela</label>
+                    <input value={form.parcela_label} onChange={e => set('parcela_label', e.target.value)}
+                      placeholder="Ex: Período Obras"
                       className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
                   </div>
                 </div>

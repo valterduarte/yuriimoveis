@@ -39,6 +39,7 @@ async function initDB() {
   // Migrations: adiciona colunas se não existirem
   await pool.query(`ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'pronto'`)
   await pool.query(`ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS parcela_display TEXT DEFAULT ''`)
+  await pool.query(`ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS parcela_label TEXT DEFAULT ''`)
 
   // Índices para melhorar performance nas buscas
   await pool.query(`CREATE INDEX IF NOT EXISTS idx_imoveis_ativo ON imoveis (ativo)`)

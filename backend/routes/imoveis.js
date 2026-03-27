@@ -92,7 +92,7 @@ router.post('/', requireApiKey, async (req, res) => {
     const {
       titulo, descricao, tipo, categoria, preco, area,
       quartos, banheiros, vagas, endereco, bairro, cidade,
-      cep, destaque, imagens, diferenciais, status, parcela_display,
+      cep, destaque, imagens, diferenciais, status, parcela_display, parcela_label,
     } = req.body
 
     if (!titulo || !tipo || !categoria || !preco) {
@@ -100,8 +100,8 @@ router.post('/', requireApiKey, async (req, res) => {
     }
 
     const { rows } = await pool.query(`
-      INSERT INTO imoveis (titulo, descricao, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, parcela_display)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+      INSERT INTO imoveis (titulo, descricao, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, parcela_display, parcela_label)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)
       RETURNING id
     `, [
       titulo, descricao || '', tipo, categoria, Number(preco),
@@ -112,6 +112,7 @@ router.post('/', requireApiKey, async (req, res) => {
       JSON.stringify(diferenciais || []),
       status || 'pronto',
       parcela_display || '',
+      parcela_label || '',
     ])
 
     res.status(201).json({ id: rows[0].id, message: 'Imóvel criado com sucesso' })
@@ -130,7 +131,7 @@ router.put('/:id', requireApiKey, async (req, res) => {
     const {
       titulo, descricao, tipo, categoria, preco, area,
       quartos, banheiros, vagas, endereco, bairro, cidade,
-      cep, destaque, imagens, diferenciais, ativo, status, parcela_display,
+      cep, destaque, imagens, diferenciais, ativo, status, parcela_display, parcela_label,
     } = req.body
 
     await pool.query(`
@@ -154,8 +155,9 @@ router.put('/:id', requireApiKey, async (req, res) => {
         ativo           = COALESCE($17, ativo),
         status          = COALESCE($18, status),
         parcela_display = COALESCE($19, parcela_display),
+        parcela_label   = COALESCE($20, parcela_label),
         updated_at      = NOW()
-      WHERE id = $20
+      WHERE id = $21
     `, [
       titulo, descricao, tipo, categoria,
       preco != null ? Number(preco) : null,
@@ -170,6 +172,7 @@ router.put('/:id', requireApiKey, async (req, res) => {
       ativo != null ? Boolean(ativo) : null,
       status || null,
       parcela_display || null,
+      parcela_label || null,
       req.params.id,
     ])
 
