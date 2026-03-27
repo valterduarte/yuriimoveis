@@ -18,6 +18,8 @@ export default function PropertyCard({ imovel }) {
           alt={imovel.titulo}
           loading="lazy"
           decoding="async"
+          width={600}
+          height={260}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           onError={e => { e.target.src = PLACEHOLDER }}
         />

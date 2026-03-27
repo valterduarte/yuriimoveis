@@ -176,6 +176,11 @@ export default function ImovelDetalhe() {
               <img
                 src={img}
                 alt={imovel.titulo}
+                width={1920}
+                height={1080}
+                fetchPriority={i === 0 ? 'high' : 'low'}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding={i === 0 ? 'sync' : 'async'}
                 className="w-full h-full object-cover opacity-75"
                 onError={e => { e.target.src = PLACEHOLDER }}
               />
@@ -271,6 +276,10 @@ export default function ImovelDetalhe() {
                   <img
                     src={img}
                     alt={`${imovel.titulo} – foto ${i + 1} de ${images.length}`}
+                    width={80}
+                    height={54}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                     onError={e => { e.target.src = PLACEHOLDER }}
                   />
@@ -463,6 +472,10 @@ export default function ImovelDetalhe() {
                 <img
                   src={img}
                   alt={`${imovel.titulo} em ${imovel.cidade || 'Osasco'} – foto ${i + 1} de ${images.length}`}
+                  width={800}
+                  height={420}
+                  loading="lazy"
+                  decoding="async"
                   className="perspectivas-img w-full object-cover block transition-opacity duration-300 hover:opacity-70"
                   style={{ height: '420px' }}
                   onError={e => { e.target.src = PLACEHOLDER }}
