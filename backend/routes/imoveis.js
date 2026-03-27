@@ -1,14 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { pool } = require('../database/db')
-
-function requireApiKey(req, res, next) {
-  const key = req.headers['x-api-key']
-  if (!key || key !== process.env.API_KEY) {
-    return res.status(401).json({ error: 'Não autorizado' })
-  }
-  next()
-}
+const { requireApiKey } = require('../middleware/auth')
 
 // GET /api/imoveis - list with filters and pagination
 router.get('/', async (req, res) => {

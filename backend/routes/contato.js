@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const rateLimit = require('express-rate-limit')
 const { pool } = require('../database/db')
+const { requireApiKey } = require('../middleware/auth')
 
 const contatoLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
@@ -10,14 +11,6 @@ const contatoLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Limite de mensagens atingido. Tente novamente em 1 hora.' },
 })
-
-function requireApiKey(req, res, next) {
-  const key = req.headers['x-api-key']
-  if (!key || key !== process.env.API_KEY) {
-    return res.status(401).json({ error: 'Não autorizado' })
-  }
-  next()
-}
 
 // POST /api/contato
 router.post('/', contatoLimiter, async (req, res) => {

@@ -8,6 +8,7 @@ const path = require('path')
 const os = require('os')
 
 const router = express.Router()
+const { requireApiKey } = require('../middleware/auth')
 
 const uploadImages = multer({
   storage: multer.memoryStorage(),
@@ -30,13 +31,6 @@ const uploadPdf = multer({
     cb(null, true)
   },
 })
-
-function verifyApiKey(req, res, next) {
-  if (req.headers['x-api-key'] !== process.env.API_KEY) {
-    return res.status(401).json({ error: 'Não autorizado' })
-  }
-  next()
-}
 
 function uploadToCloudinary(buffer) {
   return new Promise((resolve, reject) => {
@@ -70,7 +64,7 @@ function extractPdfPages(pdfPath, outputDir) {
 }
 
 // POST /api/upload — recebe até 10 imagens e envia para o Cloudinary
-router.post('/', verifyApiKey, uploadImages.array('images', 10), async (req, res) => {
+router.post('/', requireApiKey, uploadImages.array('images', 10), async (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ error: 'Nenhuma imagem enviada' })
   }
@@ -84,7 +78,7 @@ router.post('/', verifyApiKey, uploadImages.array('images', 10), async (req, res
 })
 
 // POST /api/upload/pdf — recebe um PDF, extrai páginas como PNG e sobe para o Cloudinary
-router.post('/pdf', verifyApiKey, uploadPdf.single('pdf'), async (req, res) => {
+router.post('/pdf', requireApiKey, uploadPdf.single('pdf'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'Nenhum PDF enviado' })
   }

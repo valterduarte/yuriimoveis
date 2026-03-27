@@ -2,17 +2,9 @@ import { Link } from 'react-router-dom'
 import { FiMapPin, FiMaximize } from 'react-icons/fi'
 import { FaCar, FaBath } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
+import { formatPrice } from '../utils/imovelUtils'
 
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80'
-
-function formatPrice(price, tipo) {
-  const formatted = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    maximumFractionDigits: 0,
-  }).format(price)
-  return tipo === 'aluguel' ? `${formatted}/mês` : formatted
-}
 
 export default function PropertyCard({ imovel }) {
   const img = imovel.imagens?.[0] || PLACEHOLDER

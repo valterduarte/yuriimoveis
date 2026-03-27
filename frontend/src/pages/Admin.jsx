@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { FiEdit2, FiPlus, FiTrash2, FiUpload, FiX } from 'react-icons/fi'
 import axios from 'axios'
+import { calcParcela } from '../utils/imovelUtils'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 const CLOUDINARY_CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD || 'dfl3eskr9'
@@ -23,15 +24,6 @@ Conforto, segurança e lazer completo para você e sua família.
 📐 Plantas disponíveis:
 X dormitórios — XXm²
 A partir de *R$ 000.000`
-
-function calcParcela(preco) {
-  const financiado = preco * 0.8
-  const taxa = preco < 264000 ? 0.055 : 0.0816
-  const r = taxa / 12
-  const n = 360
-  const parcela = financiado * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
-  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(parcela)
-}
 
 const camposVazios = {
   titulo: '', descricao: '', tipo: 'venda', categoria: 'apartamento',

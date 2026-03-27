@@ -15,6 +15,7 @@ import { FaCar, FaBath, FaWhatsapp } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
 import axios from 'axios'
 import SEOHead from '../components/SEOHead'
+import { formatPrice, calcParcela } from '../utils/imovelUtils'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80'
@@ -25,24 +26,6 @@ const TABS = [
   { id: 'localizacao', label: 'Localização' },
   { id: 'contato', label: 'Contato' },
 ]
-
-function formatPrice(price, tipo) {
-  const formatted = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    maximumFractionDigits: 0,
-  }).format(price)
-  return tipo === 'aluguel' ? `${formatted}/mês` : formatted
-}
-
-function calcParcela(preco) {
-  const financiado = preco * 0.8
-  const taxa = preco < 264000 ? 0.055 : 0.0816
-  const r = taxa / 12
-  const n = 360
-  const parcela = financiado * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
-  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(parcela)
-}
 
 export default function ImovelDetalhe() {
   const { id } = useParams()
