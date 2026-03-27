@@ -238,7 +238,7 @@ export default function ImovelDetalhe() {
                 <SwiperSlide key={i} style={{ width: 80, height: 54 }}>
                   <img
                     src={img}
-                    alt=""
+                    alt={`${imovel.titulo} – foto ${i + 1} de ${images.length}`}
                     className="w-full h-full object-cover"
                     onError={e => { e.target.src = PLACEHOLDER }}
                   />
@@ -430,7 +430,7 @@ export default function ImovelDetalhe() {
               <div className="overflow-hidden cursor-pointer" onClick={() => setLightbox(i)}>
                 <img
                   src={img}
-                  alt=""
+                  alt={`${imovel.titulo} em ${imovel.cidade || 'Osasco'} – foto ${i + 1} de ${images.length}`}
                   className="perspectivas-img w-full object-cover block transition-opacity duration-300 hover:opacity-70"
                   style={{ height: '420px' }}
                   onError={e => { e.target.src = PLACEHOLDER }}
@@ -548,7 +548,7 @@ export default function ImovelDetalhe() {
             <div className="relative border-2 border-white/30 shadow-[0_0_120px_20px_rgba(0,0,0,0.95),0_0_40px_rgba(175,30,35,0.15)]">
               <img
                 src={images[lightbox]}
-                alt=""
+                alt={`${imovel.titulo} em ${imovel.cidade || 'Osasco'} – foto ${lightbox + 1} de ${images.length}`}
                 className="max-h-[82vh] max-w-[88vw] object-contain block"
                 onError={e => { e.target.src = PLACEHOLDER }}
               />
