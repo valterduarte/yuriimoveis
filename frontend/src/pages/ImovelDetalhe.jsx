@@ -116,6 +116,9 @@ export default function ImovelDetalhe() {
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER]
   const whatsMsg = encodeURIComponent(`Olá! Tenho interesse no imóvel: ${imovel.titulo} — Código #${imovel.id}`)
   const pageUrl = `https://yuriimoveis.com.br/imoveis/${imovel.id}`
+  const imovelDescription = imovel.descricao
+    ? imovel.descricao.slice(0, 155).replace(/\n/g, ' ')
+    : `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
 
   const handleShare = () => {
     if (navigator.share) {
@@ -131,10 +134,6 @@ export default function ImovelDetalhe() {
       setTimeout(() => { setCopied(false); setShareOpen(false) }, 2000)
     })
   }
-
-  const imovelDescription = imovel.descricao
-    ? imovel.descricao.slice(0, 155).replace(/\n/g, ' ')
-    : `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
 
   return (
     <div className="min-h-screen bg-[#f4f4f4] pb-20 md:pb-0">
