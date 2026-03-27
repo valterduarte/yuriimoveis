@@ -8,7 +8,8 @@ import 'swiper/css/pagination'
 import 'swiper/css/thumbs'
 import {
   FiMaximize, FiMapPin, FiPhone, FiArrowLeft,
-  FiCheckCircle, FiCalendar, FiHome, FiTool, FiFileText
+  FiCheckCircle, FiCalendar, FiHome, FiTool, FiFileText,
+  FiShare2, FiLink, FiCheck
 } from 'react-icons/fi'
 import { FaCar, FaBath, FaWhatsapp } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
@@ -48,6 +49,8 @@ export default function ImovelDetalhe() {
   const [imovel, setImovel] = useState(null)
   const [loading, setLoading] = useState(true)
   const [thumbsSwiper, setThumbsSwiper] = useState(null)
+  const [shareOpen, setShareOpen] = useState(false)
+  const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('visao-geral')
   const [lightbox, setLightbox] = useState(null)
 
@@ -112,6 +115,22 @@ export default function ImovelDetalhe() {
 
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER]
   const whatsMsg = encodeURIComponent(`Olá! Tenho interesse no imóvel: ${imovel.titulo} — Código #${imovel.id}`)
+  const pageUrl = `https://yuriimoveis.com.br/imoveis/${imovel.id}`
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({ title: imovel.titulo, text: imovelDescription, url: pageUrl })
+    } else {
+      setShareOpen(prev => !prev)
+    }
+  }
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(pageUrl).then(() => {
+      setCopied(true)
+      setTimeout(() => { setCopied(false); setShareOpen(false) }, 2000)
+    })
+  }
 
   const imovelDescription = imovel.descricao
     ? imovel.descricao.slice(0, 155).replace(/\n/g, ' ')
@@ -193,6 +212,36 @@ export default function ImovelDetalhe() {
           }`}>
             {imovel.tipo === 'venda' ? 'Venda' : 'Aluguel'}
           </span>
+        </div>
+
+        {/* Botão compartilhar */}
+        <div className="absolute top-8 right-8 z-30">
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-2 bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white px-4 py-2 text-[10px] uppercase tracking-[0.2em] font-bold transition-colors"
+          >
+            <FiShare2 size={13} /> Compartilhar
+          </button>
+          {shareOpen && (
+            <div className="absolute right-0 top-full mt-2 bg-[#1a1a1a] border border-white/10 min-w-[180px] shadow-xl">
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(`${imovel.titulo}\n${pageUrl}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setShareOpen(false)}
+                className="flex items-center gap-3 px-5 py-3.5 text-[11px] uppercase tracking-widest font-bold text-white hover:bg-white/10 transition-colors border-b border-white/10"
+              >
+                <FaWhatsapp size={14} className="text-green-400" /> WhatsApp
+              </a>
+              <button
+                onClick={handleCopyLink}
+                className="flex items-center gap-3 px-5 py-3.5 text-[11px] uppercase tracking-widest font-bold text-white hover:bg-white/10 transition-colors w-full text-left"
+              >
+                {copied ? <FiCheck size={14} className="text-green-400" /> : <FiLink size={14} />}
+                {copied ? 'Copiado!' : 'Copiar link'}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Título + local */}
