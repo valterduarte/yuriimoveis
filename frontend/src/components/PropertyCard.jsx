@@ -57,16 +57,18 @@ export default function PropertyCard({ imovel }) {
           </div>
         )}
 
-        {/* Badge status — faixa no rodapé da imagem */}
+        {/* Badge status — abaixo do destaque, topo direito */}
         {imovel.status && (
-          <div className={`absolute bottom-0 left-0 right-0 py-1.5 text-center text-[10px] uppercase tracking-widest font-bold text-white ${
-            imovel.status === 'planta' ? 'bg-blue-600/90'
-            : imovel.status === 'construcao' ? 'bg-amber-500/90'
-            : 'bg-green-600/90'
-          }`}>
-            {imovel.status === 'planta' ? 'Na Planta'
-            : imovel.status === 'construcao' ? 'Em Construção'
-            : 'Pronto para Morar'}
+          <div className={`absolute ${imovel.destaque ? 'top-9' : 'top-3'} right-3`}>
+            <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${
+              imovel.status === 'planta' ? 'bg-blue-600'
+              : imovel.status === 'construcao' ? 'bg-amber-500'
+              : 'bg-green-600'
+            }`}>
+              {imovel.status === 'planta' ? 'Na Planta'
+              : imovel.status === 'construcao' ? 'Em Construção'
+              : 'Pronto para Morar'}
+            </span>
           </div>
         )}
       </div>
