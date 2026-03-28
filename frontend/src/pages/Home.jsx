@@ -16,10 +16,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    axios.get(`${API_URL}/api/imoveis?destaque=1&limit=6`)
+    const controller = new AbortController()
+    axios.get(`${API_URL}/api/imoveis?destaque=1&limit=6`, { signal: controller.signal })
       .then(res => setDestaques(res.data.imoveis || []))
-      .catch(() => setDestaques([]))
+      .catch(err => { if (!axios.isCancel(err)) setDestaques([]) })
       .finally(() => setLoading(false))
+    return () => controller.abort()
   }, [])
 
   return (

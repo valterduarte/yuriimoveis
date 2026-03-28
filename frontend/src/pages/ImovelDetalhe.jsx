@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Thumbs } from 'swiper/modules'
@@ -36,12 +36,15 @@ export default function ImovelDetalhe() {
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('visao-geral')
   const [lightbox, setLightbox] = useState(null)
+  const lightboxCloseRef = useRef(null)
 
   useEffect(() => {
-    axios.get(`${API_URL}/api/imoveis/${id}`)
+    const controller = new AbortController()
+    axios.get(`${API_URL}/api/imoveis/${id}`, { signal: controller.signal })
       .then(res => setImovel(res.data))
-      .catch(err => setFetchError(err.response?.status === 404 ? '404' : '500'))
+      .catch(err => { if (!axios.isCancel(err)) setFetchError(err.response?.status === 404 ? '404' : '500') })
       .finally(() => setLoading(false))
+    return () => controller.abort()
   }, [id])
 
   // Intersection observer para destacar tab ativa ao rolar
@@ -60,13 +63,22 @@ export default function ImovelDetalhe() {
     return () => observers.forEach(o => o.disconnect())
   }, [imovel])
 
-  // Fechar lightbox com ESC
+  // Fechar lightbox com ESC + foco e trap de TAB
   useEffect(() => {
+    if (lightbox === null) return
+    lightboxCloseRef.current?.focus()
     const onKey = e => {
-      if (e.key === 'Escape') setLightbox(null)
-      if (lightbox !== null) {
-        if (e.key === 'ArrowRight') setLightbox(i => (i + 1) % images.length)
-        if (e.key === 'ArrowLeft') setLightbox(i => (i - 1 + images.length) % images.length)
+      if (e.key === 'Escape') { setLightbox(null); return }
+      if (e.key === 'ArrowRight') setLightbox(i => (i + 1) % images.length)
+      if (e.key === 'ArrowLeft') setLightbox(i => (i - 1 + images.length) % images.length)
+      if (e.key === 'Tab') {
+        const focusable = document.querySelectorAll('[data-lightbox] button')
+        if (!focusable.length) return
+        const first = focusable[0], last = focusable[focusable.length - 1]
+        if (e.shiftKey ? document.activeElement === first : document.activeElement === last) {
+          e.preventDefault()
+          ;(e.shiftKey ? last : first).focus()
+        }
       }
     }
     window.addEventListener('keydown', onKey)
@@ -580,7 +592,7 @@ export default function ImovelDetalhe() {
 
       {/* ── LIGHTBOX ── */}
       {lightbox !== null && (
-        <div className="fixed inset-0 bg-black/95 z-50"
+        <div data-lightbox className="fixed inset-0 bg-black/95 z-50" role="dialog" aria-modal="true" aria-label="Galeria de fotos"
           onTouchStart={e => { e.currentTarget._touchX = e.touches[0].clientX }}
           onTouchEnd={e => {
             const dx = e.changedTouches[0].clientX - e.currentTarget._touchX
@@ -592,6 +604,7 @@ export default function ImovelDetalhe() {
         >
           {/* X */}
           <button
+            ref={lightboxCloseRef}
             onClick={() => setLightbox(null)}
             aria-label="Fechar galeria"
             className="absolute top-4 right-5 z-10 text-white text-4xl font-light w-12 h-12 flex items-center justify-center hover:text-[#af1e23] transition-colors">

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { FiFilter, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import PropertyCard from '../components/PropertyCard'
@@ -33,30 +33,25 @@ export default function Imoveis() {
   const quartos  = searchParams.get('quartos')  || ''
   const ordem    = searchParams.get('ordem')    || 'recente'
 
-  const fetchImoveis = useCallback(async () => {
+  useEffect(() => {
+    const controller = new AbortController()
     setLoading(true)
-    try {
-      const params = new URLSearchParams()
-      if (tipo)     params.set('tipo', tipo)
-      if (categoria)params.set('categoria', categoria)
-      if (cidade)   params.set('cidade', cidade)
-      if (precoMin) params.set('precoMin', precoMin)
-      if (precoMax) params.set('precoMax', precoMax)
-      if (quartos)  params.set('quartos', quartos)
-      params.set('ordem', ordem)
-      params.set('page', page)
-      params.set('limit', limit)
-      const res = await axios.get(`${API_URL}/api/imoveis?${params.toString()}`)
-      setImoveis(res.data.imoveis || [])
-      setTotal(res.data.total || 0)
-    } catch {
-      setImoveis([])
-    } finally {
-      setLoading(false)
-    }
+    const params = new URLSearchParams()
+    if (tipo)     params.set('tipo', tipo)
+    if (categoria)params.set('categoria', categoria)
+    if (cidade)   params.set('cidade', cidade)
+    if (precoMin) params.set('precoMin', precoMin)
+    if (precoMax) params.set('precoMax', precoMax)
+    if (quartos)  params.set('quartos', quartos)
+    params.set('ordem', ordem)
+    params.set('page', page)
+    params.set('limit', limit)
+    axios.get(`${API_URL}/api/imoveis?${params.toString()}`, { signal: controller.signal })
+      .then(res => { setImoveis(res.data.imoveis || []); setTotal(res.data.total || 0) })
+      .catch(err => { if (!axios.isCancel(err)) setImoveis([]) })
+      .finally(() => setLoading(false))
+    return () => controller.abort()
   }, [tipo, categoria, cidade, precoMin, precoMax, quartos, ordem, page])
-
-  useEffect(() => { fetchImoveis() }, [fetchImoveis])
 
   const updateFilter = (key, value) => {
     setSearchParams(prev => {
@@ -218,7 +213,7 @@ export default function Imoveis() {
               </div>
             ) : imoveis.length === 0 ? (
               <div className="text-center py-20 bg-white border border-gray-200 px-6">
-                <div className="text-5xl mb-4">🏠</div>
+                <div className="text-5xl mb-4" aria-hidden="true">🏠</div>
                 <h3 className="text-lg font-bold text-dark mb-2 uppercase tracking-wide">Nenhum imóvel encontrado</h3>
                 <p className="text-gray-500 text-sm mb-6">Tente ajustar os filtros ou fale com o corretor para encontrar o imóvel ideal.</p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
