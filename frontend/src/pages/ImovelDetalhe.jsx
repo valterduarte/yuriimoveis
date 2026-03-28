@@ -222,14 +222,10 @@ export default function ImovelDetalhe() {
       />
 
       {/* ── BREADCRUMB ── */}
-      <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 md:px-8 py-3 flex items-center gap-2 text-xs text-gray-500">
-          <Link to="/" className="hover:text-primary transition-colors">Início</Link>
-          <span>/</span>
-          <Link to="/imoveis" className="hover:text-primary transition-colors">Imóveis</Link>
-          <span>/</span>
-          <span className="text-dark font-medium truncate max-w-[200px] md:max-w-none">{imovel.titulo}</span>
-        </div>
+      <nav aria-label="Breadcrumb" className="sr-only">
+        <Link to="/">Início</Link>
+        <Link to="/imoveis">Imóveis</Link>
+        <span>{imovel.titulo}</span>
       </nav>
 
       {/* ── HERO ── */}
