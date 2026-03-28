@@ -7,7 +7,7 @@ import SEOHead from '../components/SEOHead'
 import PropertyCard from '../components/PropertyCard'
 import SkeletonCard from '../components/SkeletonCard'
 import axios from 'axios'
-import { API_URL } from '../config'
+import { API_URL, PHONE_WA, PHONE_STRUCTURED } from '../config'
 
 
 
@@ -46,7 +46,7 @@ export default function Home() {
             name: 'Corretor Yuri Imóveis',
             description: 'Especialistas em imóveis residenciais e comerciais em Osasco e região. Mais de 10 anos de experiência, atendimento personalizado e segurança jurídica.',
             url: 'https://yuriimoveis.com.br',
-            telephone: '+55-11-96714-7840',
+            telephone: PHONE_STRUCTURED,
             image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80',
             address: {
               '@type': 'PostalAddress',
@@ -69,7 +69,7 @@ export default function Home() {
               { '@type': 'City', name: 'Osasco' },
               { '@type': 'AdministrativeArea', name: 'Grande São Paulo' },
             ],
-            sameAs: ['https://wa.me/5511967147840'],
+            sameAs: [PHONE_WA],
           },
         ]}
       />
@@ -151,7 +151,7 @@ export default function Home() {
             Fale com nossa equipe agora mesmo e dê o primeiro passo para realizar o sonho do imóvel perfeito.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="https://wa.me/5511967147840" target="_blank" rel="noreferrer"
+            <a href={PHONE_WA} target="_blank" rel="noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-white text-primary font-bold uppercase tracking-widest text-xs py-4 px-8 hover:bg-gray-100 transition-colors">
               <FaWhatsapp size={16} /> Falar pelo WhatsApp
             </a>

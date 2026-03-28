@@ -65,7 +65,7 @@ export default function Contato() {
                 <p className="text-sm text-gray-500 mb-8">Entre em contato diretamente pelo WhatsApp ou telefone. Atendemos de seg a sáb.</p>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <a href="https://wa.me/5511967147840?text=Olá! Gostaria de mais informações sobre imóveis."
+                  <a href={`${PHONE_WA}?text=${encodeURIComponent('Olá! Gostaria de mais informações sobre imóveis.')}`}
                     target="_blank" rel="noreferrer"
                     className="flex-1 flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
                     <FaWhatsapp size={22} /> WhatsApp

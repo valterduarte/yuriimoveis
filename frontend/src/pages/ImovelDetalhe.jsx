@@ -16,7 +16,7 @@ import { LuBed } from 'react-icons/lu'
 import axios from 'axios'
 import SEOHead from '../components/SEOHead'
 import { formatPrice, calcParcela } from '../utils/imovelUtils'
-import { API_URL, PHONE_WA, PHONE_TEL, PHONE_DISPLAY } from '../config'
+import { API_URL, PHONE_WA, PHONE_TEL, PHONE_DISPLAY, PHONE_STRUCTURED } from '../config'
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80'
 
 const TABS = [
@@ -163,7 +163,7 @@ export default function ImovelDetalhe() {
             seller: {
               '@type': 'RealEstateAgent',
               name: 'Corretor Yuri Imóveis',
-              telephone: '+55-11-96714-7840',
+              telephone: PHONE_STRUCTURED,
               url: 'https://yuriimoveis.com.br',
             },
           },
