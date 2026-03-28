@@ -32,7 +32,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 md:h-20">
 
           {/* Logo */}
-          <Link to="/">
+          <Link to="/" aria-label="Página inicial — Corretor Yuri Imóveis">
             <Logo className="h-9 w-auto" />
           </Link>
 

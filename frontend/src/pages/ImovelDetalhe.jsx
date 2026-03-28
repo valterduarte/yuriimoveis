@@ -188,7 +188,6 @@ export default function ImovelDetalhe() {
           thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
           navigation
           pagination={{ clickable: true, dynamicBullets: true }}
-          onSlideChange={swiper => setActiveImg(swiper.activeIndex)}
           speed={600}
           className="hero-swiper w-full h-full"
         >
@@ -316,6 +315,8 @@ export default function ImovelDetalhe() {
         <div className="max-w-6xl mx-auto px-8 flex overflow-x-auto">
           {TABS.map(tab => (
             <button key={tab.id} onClick={() => scrollToSection(tab.id)}
+              aria-selected={activeTab === tab.id}
+              aria-controls={tab.id}
               className={`py-4 px-6 text-[10px] uppercase tracking-[0.2em] font-bold whitespace-nowrap transition-all border-b-2 ${
                 activeTab === tab.id
                   ? 'border-[#af1e23] text-white'
@@ -558,7 +559,7 @@ export default function ImovelDetalhe() {
       </div>
 
       {/* ── BARRA FLUTUANTE MOBILE ── */}
-      <div className="fixed bottom-14 left-0 right-0 md:hidden z-40 grid grid-cols-3" role="navigation" aria-label="Contato rápido">
+      <nav className="fixed bottom-14 left-0 right-0 md:hidden z-40 grid grid-cols-3" aria-label="Contato rápido">
         <a href={`${PHONE_WA}?text=${whatsMsg}`}
           target="_blank" rel="noreferrer" aria-label="Contato via WhatsApp"
           className="flex flex-col items-center justify-center gap-1 bg-green-500 text-white py-3">
@@ -575,7 +576,7 @@ export default function ImovelDetalhe() {
           <FiCalendar size={18} />
           <span className="text-[9px] uppercase tracking-widest font-bold">Visita</span>
         </button>
-      </div>
+      </nav>
 
       {/* ── LIGHTBOX ── */}
       {lightbox !== null && (
@@ -592,6 +593,7 @@ export default function ImovelDetalhe() {
           {/* X */}
           <button
             onClick={() => setLightbox(null)}
+            aria-label="Fechar galeria"
             className="absolute top-4 right-5 z-10 text-white text-4xl font-light w-12 h-12 flex items-center justify-center hover:text-[#af1e23] transition-colors">
             ×
           </button>
@@ -600,10 +602,12 @@ export default function ImovelDetalhe() {
           {images.length > 1 && (
             <>
               <button onClick={() => setLightbox(i => (i - 1 + images.length) % images.length)}
+                aria-label="Foto anterior"
                 className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center bg-black/60 border border-white/20 text-white text-2xl hover:bg-[#af1e23] transition-colors">
                 ‹
               </button>
               <button onClick={() => setLightbox(i => (i + 1) % images.length)}
+                aria-label="Próxima foto"
                 className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center bg-black/60 border border-white/20 text-white text-2xl hover:bg-[#af1e23] transition-colors">
                 ›
               </button>

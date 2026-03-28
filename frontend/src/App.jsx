@@ -5,8 +5,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import FloatingContact from './components/FloatingContact'
 import ErrorBoundary from './components/ErrorBoundary'
-import Home from './pages/Home'
-
+const Home = lazy(() => import('./pages/Home'))
 const Imoveis = lazy(() => import('./pages/Imoveis'))
 const ImovelDetalhe = lazy(() => import('./pages/ImovelDetalhe'))
 const Contato = lazy(() => import('./pages/Contato'))

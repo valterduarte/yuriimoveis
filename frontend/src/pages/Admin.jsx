@@ -65,6 +65,7 @@ export default function Admin() {
   const [msg, setMsg] = useState(null)
   const [uploadando, setUploadando] = useState(false)
   const [imagensUrls, setImagensUrls] = useState([])
+  const [confirmandoId, setConfirmandoId] = useState(null)
   const inputFileRef = useRef(null)
 
   const autenticar = (e) => {
@@ -144,14 +145,14 @@ export default function Admin() {
   }
 
   const desativar = async (id) => {
-    if (!confirm('Desativar este imóvel?')) return
+    setConfirmandoId(null)
     try {
       await axios.put(`${API_URL}/api/imoveis/${id}`, { ativo: false }, {
         headers: { 'x-api-key': apiKey },
       })
       carregarImoveis()
     } catch {
-      alert('Erro ao desativar.')
+      setMsg({ tipo: 'erro', texto: 'Erro ao desativar.' })
     }
   }
 
@@ -162,7 +163,7 @@ export default function Admin() {
       })
       carregarImoveis()
     } catch {
-      alert('Erro ao reativar.')
+      setMsg({ tipo: 'erro', texto: 'Erro ao reativar.' })
     }
   }
 
@@ -244,7 +245,7 @@ export default function Admin() {
 
       <div className="container mx-auto px-6 py-10 max-w-3xl">
         {msg && (
-          <div className={`mb-6 px-4 py-3 text-sm border ${msg.tipo === 'ok' ? 'border-green-300 bg-green-50 text-green-700' : 'border-red-300 bg-red-50 text-red-600'}`}>
+          <div role="alert" aria-live="polite" className={`mb-6 px-4 py-3 text-sm border ${msg.tipo === 'ok' ? 'border-green-300 bg-green-50 text-green-700' : 'border-red-300 bg-red-50 text-red-600'}`}>
             {msg.texto}
           </div>
         )}
@@ -273,10 +274,20 @@ export default function Admin() {
                     </button>
                   )}
                   {im.ativo ? (
-                    <button onClick={() => desativar(im.id)}
-                      className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-red-400 hover:underline">
-                      <FiTrash2 size={12} /> Desativar
-                    </button>
+                    confirmandoId === im.id ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-gray-500">Confirmar?</span>
+                        <button onClick={() => desativar(im.id)}
+                          className="text-[10px] uppercase tracking-widest font-bold text-red-500 hover:underline">Sim</button>
+                        <button onClick={() => setConfirmandoId(null)}
+                          className="text-[10px] uppercase tracking-widest font-bold text-gray-400 hover:underline">Não</button>
+                      </div>
+                    ) : (
+                      <button onClick={() => setConfirmandoId(im.id)}
+                        className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-red-400 hover:underline">
+                        <FiTrash2 size={12} /> Desativar
+                      </button>
+                    )
                   ) : (
                     <button onClick={() => reativar(im.id)}
                       className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-green-500 hover:underline">
