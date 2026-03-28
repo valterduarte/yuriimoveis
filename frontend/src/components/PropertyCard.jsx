@@ -15,7 +15,7 @@ export default function PropertyCard({ imovel }) {
       <div className="relative overflow-hidden" style={{ height: '260px' }}>
         <img
           src={img}
-          alt={imovel.titulo}
+          alt={`${imovel.titulo} — ${imovel.categoria} para ${imovel.tipo} em ${imovel.bairro || imovel.cidade}`}
           loading="lazy"
           decoding="async"
           width={600}

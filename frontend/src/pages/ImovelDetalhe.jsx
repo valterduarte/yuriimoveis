@@ -30,6 +30,7 @@ export default function ImovelDetalhe() {
   const { id } = useParams()
   const [imovel, setImovel] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [fetchError, setFetchError] = useState(null)
   const [thumbsSwiper, setThumbsSwiper] = useState(null)
   const [shareOpen, setShareOpen] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -39,7 +40,7 @@ export default function ImovelDetalhe() {
   useEffect(() => {
     axios.get(`${API_URL}/api/imoveis/${id}`)
       .then(res => setImovel(res.data))
-      .catch(() => setImovel(null))
+      .catch(err => setFetchError(err.response?.status === 404 ? '404' : '500'))
       .finally(() => setLoading(false))
   }, [id])
 
@@ -86,10 +87,20 @@ export default function ImovelDetalhe() {
     )
   }
 
-  if (!imovel) {
+  if (fetchError) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
-        <h2 className="text-2xl font-bold uppercase">Imóvel não encontrado</h2>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4 text-center px-6">
+        {fetchError === '404' ? (
+          <>
+            <h2 className="text-2xl font-bold uppercase">Imóvel não encontrado</h2>
+            <p className="text-gray-500 text-sm">O imóvel que você procura não existe ou foi removido.</p>
+          </>
+        ) : (
+          <>
+            <h2 className="text-2xl font-bold uppercase">Erro ao carregar</h2>
+            <p className="text-gray-500 text-sm">Não foi possível conectar ao servidor. Tente novamente em instantes.</p>
+          </>
+        )}
         <Link to="/imoveis" className="btn-primary">Ver todos os imóveis</Link>
       </div>
     )
@@ -158,6 +169,17 @@ export default function ImovelDetalhe() {
           },
         }}
       />
+
+      {/* ── BREADCRUMB ── */}
+      <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-100">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-3 flex items-center gap-2 text-xs text-gray-500">
+          <Link to="/" className="hover:text-primary transition-colors">Início</Link>
+          <span>/</span>
+          <Link to="/imoveis" className="hover:text-primary transition-colors">Imóveis</Link>
+          <span>/</span>
+          <span className="text-dark font-medium truncate max-w-[200px] md:max-w-none">{imovel.titulo}</span>
+        </div>
+      </nav>
 
       {/* ── HERO ── */}
       <div className="relative bg-[#1a1a1a]" style={{ height: '70vh', minHeight: 420 }}>

@@ -5,7 +5,8 @@ import PropertyCard from '../components/PropertyCard'
 import SkeletonCard from '../components/SkeletonCard'
 import axios from 'axios'
 import SEOHead from '../components/SEOHead'
-import { API_URL } from '../config'
+import { API_URL, PHONE_WA } from '../config'
+import { FaWhatsapp } from 'react-icons/fa'
 
 const ordemOptions = [
   { value: 'recente', label: 'Mais recente' },
@@ -199,16 +200,35 @@ export default function Imoveis() {
               </select>
             </div>
 
+            {/* Tags de filtros ativos */}
+            {activeCount > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {tipo && <span className="flex items-center gap-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">{tipo === 'venda' ? 'Venda' : 'Aluguel'}<button onClick={() => updateFilter('tipo', '')} aria-label="Remover filtro"><FiX size={10} /></button></span>}
+                {categoria && <span className="flex items-center gap-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">{categoria}<button onClick={() => updateFilter('categoria', '')} aria-label="Remover filtro"><FiX size={10} /></button></span>}
+                {cidade && <span className="flex items-center gap-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">{cidade}<button onClick={() => updateFilter('cidade', '')} aria-label="Remover filtro"><FiX size={10} /></button></span>}
+                {precoMin && <span className="flex items-center gap-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">Mín R$ {Number(precoMin).toLocaleString('pt-BR')}<button onClick={() => updateFilter('precoMin', '')} aria-label="Remover filtro"><FiX size={10} /></button></span>}
+                {precoMax && <span className="flex items-center gap-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">Máx R$ {Number(precoMax).toLocaleString('pt-BR')}<button onClick={() => updateFilter('precoMax', '')} aria-label="Remover filtro"><FiX size={10} /></button></span>}
+                {quartos && <span className="flex items-center gap-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">{quartos === '4+' ? '4+ quartos' : `${quartos} quarto${quartos !== '1' ? 's' : ''}`}<button onClick={() => updateFilter('quartos', '')} aria-label="Remover filtro"><FiX size={10} /></button></span>}
+              </div>
+            )}
+
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                 {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
               </div>
             ) : imoveis.length === 0 ? (
-              <div className="text-center py-20 bg-white border border-gray-200">
+              <div className="text-center py-20 bg-white border border-gray-200 px-6">
                 <div className="text-5xl mb-4">🏠</div>
                 <h3 className="text-lg font-bold text-dark mb-2 uppercase tracking-wide">Nenhum imóvel encontrado</h3>
-                <p className="text-gray-500 text-sm mb-5">Tente ajustar os filtros</p>
-                <button onClick={clearFilters} className="btn-primary">Limpar filtros</button>
+                <p className="text-gray-500 text-sm mb-6">Tente ajustar os filtros ou fale com o corretor para encontrar o imóvel ideal.</p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  {activeCount > 0 && <button onClick={clearFilters} className="btn-primary">Limpar filtros</button>}
+                  <a href={`${PHONE_WA}?text=${encodeURIComponent('Olá! Não encontrei o imóvel que procuro no site. Pode me ajudar?')}`}
+                    target="_blank" rel="noreferrer"
+                    className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-widest text-xs py-3 px-6 transition-colors">
+                    <FaWhatsapp size={14} /> Falar com o Corretor
+                  </a>
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">

@@ -1,4 +1,6 @@
-export default function Logo({ className = '' }) {
+import { memo } from 'react'
+
+function Logo({ className = '' }) {
   return (
     <svg
       viewBox="0 0 200 52"
@@ -46,3 +48,5 @@ export default function Logo({ className = '' }) {
     </svg>
   )
 }
+
+export default memo(Logo)
