@@ -67,10 +67,11 @@ export default function ImovelDetalhe() {
   useEffect(() => {
     if (lightbox === null) return
     lightboxCloseRef.current?.focus()
+    const imagesArr = imovel?.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER]
     const onKey = e => {
       if (e.key === 'Escape') { setLightbox(null); return }
-      if (e.key === 'ArrowRight') setLightbox(i => (i + 1) % images.length)
-      if (e.key === 'ArrowLeft') setLightbox(i => (i - 1 + images.length) % images.length)
+      if (e.key === 'ArrowRight') setLightbox(i => (i + 1) % imagesArr.length)
+      if (e.key === 'ArrowLeft') setLightbox(i => (i - 1 + imagesArr.length) % imagesArr.length)
       if (e.key === 'Tab') {
         const focusable = document.querySelectorAll('[data-lightbox] button')
         if (!focusable.length) return
@@ -83,7 +84,7 @@ export default function ImovelDetalhe() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [lightbox])
+  }, [lightbox, imovel])
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id)
