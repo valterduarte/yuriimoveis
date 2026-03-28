@@ -22,6 +22,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
+      - run: npm test
       - run: npm run build
         env:
           VITE_API_URL: http://localhost:3001
@@ -42,3 +43,4 @@ jobs:
       - run: npm ci
       - name: Syntax check
         run: node --check server.js routes/imoveis.js routes/contato.js routes/upload.js routes/auth.js middleware/auth.js utils/logger.js database/db.js
+      - run: npm test
