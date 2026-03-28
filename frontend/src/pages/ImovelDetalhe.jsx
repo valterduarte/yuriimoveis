@@ -151,7 +151,17 @@ export default function ImovelDetalhe() {
         image={images[0] !== PLACEHOLDER ? images[0] : undefined}
         url={`/imoveis/${imovelSlug(imovel)}`}
         type="article"
-        jsonLd={{
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
+              { '@type': 'ListItem', position: 2, name: 'Imóveis', item: `${SITE_URL}/imoveis` },
+              { '@type': 'ListItem', position: 3, name: imovel.titulo, item: `${SITE_URL}/imoveis/${imovelSlug(imovel)}` },
+            ],
+          },
+          {
           '@context': 'https://schema.org',
           '@type': 'RealEstateListing',
           name: imovel.titulo,
@@ -181,7 +191,8 @@ export default function ImovelDetalhe() {
               url: SITE_URL,
             },
           },
-        }}
+          },
+        ]}
       />
 
       {/* ── BREADCRUMB ── */}

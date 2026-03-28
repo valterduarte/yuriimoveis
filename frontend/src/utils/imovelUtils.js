@@ -1,3 +1,10 @@
+// Adiciona f_auto,q_auto nas URLs do Cloudinary → WebP automático + compressão
+export function optimizeCloudinaryUrl(url, width) {
+  if (!url || !url.includes('res.cloudinary.com')) return url
+  const transforms = width ? `f_auto,q_auto,w_${width}` : 'f_auto,q_auto'
+  return url.replace('/upload/', `/upload/${transforms}/`)
+}
+
 export function slugify(text) {
   return String(text)
     .toLowerCase()
