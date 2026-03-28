@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { FiFilter, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import PropertyCard from '../components/PropertyCard'
@@ -30,6 +30,11 @@ export default function Imoveis() {
   const cidade   = searchParams.get('cidade')   || ''
   const precoMin = searchParams.get('precoMin') || ''
   const precoMax = searchParams.get('precoMax') || ''
+
+  // Estado local para inputs de preço (evita requisição a cada tecla)
+  const [precoMinInput, setPrecoMinInput] = useState(precoMin)
+  const [precoMaxInput, setPrecoMaxInput] = useState(precoMax)
+  const debounceRef = useRef(null)
   const quartos  = searchParams.get('quartos')  || ''
   const ordem    = searchParams.get('ordem')    || 'recente'
 
@@ -61,6 +66,16 @@ export default function Imoveis() {
       return next
     }, { replace: true })
     setPage(1)
+  }
+
+  // Sincroniza inputs locais quando URL muda externamente (ex: limpar filtros)
+  useEffect(() => { setPrecoMinInput(precoMin) }, [precoMin])
+  useEffect(() => { setPrecoMaxInput(precoMax) }, [precoMax])
+
+  const updatePreco = (key, value, setter) => {
+    setter(value)
+    clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => updateFilter(key, value), 600)
   }
 
   const clearFilters = () => {
@@ -146,11 +161,11 @@ export default function Imoveis() {
                 {/* Preço */}
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Faixa de Preço</label>
-                  <input type="number" placeholder="Mínimo (R$)" value={precoMin}
-                    onChange={e => updateFilter('precoMin', e.target.value)}
+                  <input type="number" placeholder="Mínimo (R$)" value={precoMinInput}
+                    onChange={e => updatePreco('precoMin', e.target.value, setPrecoMinInput)}
                     className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary mb-2" />
-                  <input type="number" placeholder="Máximo (R$)" value={precoMax}
-                    onChange={e => updateFilter('precoMax', e.target.value)}
+                  <input type="number" placeholder="Máximo (R$)" value={precoMaxInput}
+                    onChange={e => updatePreco('precoMax', e.target.value, setPrecoMaxInput)}
                     className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
                 </div>
 
