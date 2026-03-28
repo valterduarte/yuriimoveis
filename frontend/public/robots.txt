@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /api/
 
-Sitemap: https://yuriimoveis.com.br/sitemap.xml
+Sitemap: https://corretoryuri.com.br/sitemap.xml

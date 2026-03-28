@@ -135,7 +135,7 @@ app.get('/sitemap.xml', async (_req, res) => {
     const { rows } = await pool.query(
       `SELECT id, titulo, updated_at FROM imoveis WHERE ativo = true ORDER BY id`
     )
-    const SITE = 'https://yuriimoveis.com.br'
+    const SITE = 'https://corretoryuri.com.br'
     const today = new Date().toISOString().split('T')[0]
     const urls = [
       `<url><loc>${SITE}/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>`,

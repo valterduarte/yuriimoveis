@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation, useParams } from 'react-router-dom'
 import Lenis from 'lenis'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -8,8 +8,16 @@ import ErrorBoundary from './components/ErrorBoundary'
 const Home = lazy(() => import('./pages/Home'))
 const Imoveis = lazy(() => import('./pages/Imoveis'))
 const ImovelDetalhe = lazy(() => import('./pages/ImovelDetalhe'))
+const BairroPage = lazy(() => import('./pages/BairroPage'))
 const Contato = lazy(() => import('./pages/Contato'))
 const Admin = lazy(() => import('./pages/Admin'))
+
+// Property slugs always end with -<number> (e.g. play-condominio-18)
+// Bairro slugs never end with a number (e.g. jardim-roberto)
+function ImovelRouter() {
+  const { slug } = useParams()
+  return /-\d+$/.test(slug) ? <ImovelDetalhe /> : <BairroPage key={slug} />
+}
 
 function SmoothScroll() {
   useEffect(() => {
@@ -80,7 +88,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/imoveis" element={<Imoveis />} />
-                <Route path="/imoveis/:slug" element={<ImovelDetalhe />} />
+                <Route path="/imoveis/:slug" element={<ImovelRouter />} />
                 <Route path="/contato" element={<Contato />} />
                 <Route path="/admin" element={<Admin />} />
               </Routes>

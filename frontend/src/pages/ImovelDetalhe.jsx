@@ -162,6 +162,27 @@ export default function ImovelDetalhe() {
             ],
           },
           {
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: imovel.titulo,
+            description: imovelDescription,
+            image: images,
+            url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
+            offers: {
+              '@type': 'Offer',
+              price: imovel.preco,
+              priceCurrency: 'BRL',
+              availability: 'https://schema.org/InStock',
+              url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
+              seller: {
+                '@type': 'RealEstateAgent',
+                name: 'Corretor Yuri Imóveis',
+                telephone: PHONE_STRUCTURED,
+                url: SITE_URL,
+              },
+            },
+          },
+          {
           '@context': 'https://schema.org',
           '@type': 'RealEstateListing',
           name: imovel.titulo,
@@ -173,10 +194,15 @@ export default function ImovelDetalhe() {
           priceCurrency: 'BRL',
           address: {
             '@type': 'PostalAddress',
+            streetAddress: imovel.endereco || undefined,
             addressLocality: imovel.cidade || 'Osasco',
             addressRegion: imovel.estado || 'SP',
+            postalCode: imovel.cep || undefined,
             addressCountry: 'BR',
           },
+          ...(imovel.lat && imovel.lng ? {
+            geo: { '@type': 'GeoCoordinates', latitude: imovel.lat, longitude: imovel.lng },
+          } : {}),
           numberOfRooms: imovel.quartos || undefined,
           floorSize: imovel.area ? { '@type': 'QuantitativeValue', value: imovel.area, unitCode: 'MTK' } : undefined,
           offers: {

@@ -5,7 +5,8 @@ import PropertyCard from '../components/PropertyCard'
 import SkeletonCard from '../components/SkeletonCard'
 import axios from 'axios'
 import SEOHead from '../components/SEOHead'
-import { API_URL, PHONE_WA } from '../config'
+import { API_URL, PHONE_WA, SITE_URL } from '../config'
+import { imovelSlug } from '../utils/imovelUtils'
 import { FaWhatsapp } from 'react-icons/fa'
 
 const ordemOptions = [
@@ -92,6 +93,19 @@ export default function Imoveis() {
         title="Imóveis à Venda e para Alugar em Osasco e Região"
         description="Catálogo completo de imóveis em Osasco. Casas e apartamentos à venda, terrenos, chalés, chácaras e imóveis comerciais. Encontre o imóvel ideal com o Corretor Yuri."
         url="/imoveis"
+        jsonLd={imoveis.length > 0 ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'Imóveis disponíveis — Corretor Yuri Imóveis',
+          url: `${SITE_URL}/imoveis`,
+          numberOfItems: total,
+          itemListElement: imoveis.map((im, i) => ({
+            '@type': 'ListItem',
+            position: (page - 1) * limit + i + 1,
+            url: `${SITE_URL}/imoveis/${imovelSlug(im)}`,
+            name: im.titulo,
+          })),
+        } : undefined}
       />
       {/* Page header */}
       <div className="bg-dark text-white py-12">
