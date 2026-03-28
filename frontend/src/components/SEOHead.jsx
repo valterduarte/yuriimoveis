@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async'
-
-const SITE_URL = 'https://yuriimoveis.com.br'
+import { SITE_URL } from '../config'
 const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80'
 
 export default function SEOHead({

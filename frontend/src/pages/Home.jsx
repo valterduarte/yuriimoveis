@@ -7,7 +7,7 @@ import SEOHead from '../components/SEOHead'
 import PropertyCard from '../components/PropertyCard'
 import SkeletonCard from '../components/SkeletonCard'
 import axios from 'axios'
-import { API_URL, PHONE_WA, PHONE_STRUCTURED } from '../config'
+import { API_URL, PHONE_WA, PHONE_STRUCTURED, SITE_URL } from '../config'
 
 
 
@@ -35,10 +35,10 @@ export default function Home() {
             '@context': 'https://schema.org',
             '@type': 'WebSite',
             name: 'Corretor Yuri Imóveis',
-            url: 'https://yuriimoveis.com.br',
+            url: SITE_URL,
             potentialAction: {
               '@type': 'SearchAction',
-              target: 'https://yuriimoveis.com.br/imoveis?busca={search_term_string}',
+              target: `${SITE_URL}/imoveis?busca={search_term_string}`,
               'query-input': 'required name=search_term_string',
             },
           },
@@ -47,7 +47,7 @@ export default function Home() {
             '@type': ['LocalBusiness', 'RealEstateAgent'],
             name: 'Corretor Yuri Imóveis',
             description: 'Especialistas em imóveis residenciais e comerciais em Osasco e região. Mais de 10 anos de experiência, atendimento personalizado e segurança jurídica.',
-            url: 'https://yuriimoveis.com.br',
+            url: SITE_URL,
             telephone: PHONE_STRUCTURED,
             image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80',
             address: {

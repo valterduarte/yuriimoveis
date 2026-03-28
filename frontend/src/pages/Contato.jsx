@@ -1,7 +1,7 @@
 import { FiPhone, FiMapPin, FiClock } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import SEOHead from '../components/SEOHead'
-import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, PHONE_STRUCTURED } from '../config'
+import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, PHONE_STRUCTURED, SITE_URL } from '../config'
 
 export default function Contato() {
 
@@ -15,12 +15,12 @@ export default function Contato() {
           '@context': 'https://schema.org',
           '@type': 'ContactPage',
           name: 'Contato — Corretor Yuri Imóveis',
-          url: 'https://yuriimoveis.com.br/contato',
+          url: `${SITE_URL}/contato`,
           mainEntity: {
             '@type': 'RealEstateAgent',
             name: 'Corretor Yuri Imóveis',
             telephone: PHONE_STRUCTURED,
-            url: 'https://yuriimoveis.com.br',
+            url: SITE_URL,
             sameAs: [PHONE_WA, INSTAGRAM_URL],
             address: {
               '@type': 'PostalAddress',

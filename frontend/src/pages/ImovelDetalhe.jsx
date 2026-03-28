@@ -16,7 +16,7 @@ import { LuBed } from 'react-icons/lu'
 import axios from 'axios'
 import SEOHead from '../components/SEOHead'
 import { formatPrice, calcParcela } from '../utils/imovelUtils'
-import { API_URL, PHONE_WA, PHONE_TEL, PHONE_DISPLAY, PHONE_STRUCTURED } from '../config'
+import { API_URL, PHONE_WA, PHONE_TEL, PHONE_DISPLAY, PHONE_STRUCTURED, SITE_URL } from '../config'
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80'
 
 const TABS = [
@@ -120,7 +120,7 @@ export default function ImovelDetalhe() {
 
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER]
   const whatsMsg = encodeURIComponent(`Olá! Tenho interesse no imóvel: ${imovel.titulo} — Código #${imovel.id}`)
-  const pageUrl = `https://yuriimoveis.com.br/imoveis/${imovel.id}`
+  const pageUrl = `${SITE_URL}/imoveis/${imovel.id}`
   const shareUrl = `${API_URL}/share/${imovel.id}`
   const imovelDescription = imovel.descricao
     ? imovel.descricao.slice(0, 155).replace(/\n/g, ' ')
@@ -155,7 +155,7 @@ export default function ImovelDetalhe() {
           name: imovel.titulo,
           description: imovelDescription,
           image: images,
-          url: `https://yuriimoveis.com.br/imoveis/${imovel.id}`,
+          url: `${SITE_URL}/imoveis/${imovel.id}`,
           datePosted: imovel.created_at ? imovel.created_at.split('T')[0] : undefined,
           price: imovel.preco ? String(imovel.preco) : undefined,
           priceCurrency: 'BRL',
@@ -176,7 +176,7 @@ export default function ImovelDetalhe() {
               '@type': 'RealEstateAgent',
               name: 'Corretor Yuri Imóveis',
               telephone: PHONE_STRUCTURED,
-              url: 'https://yuriimoveis.com.br',
+              url: SITE_URL,
             },
           },
         }}
