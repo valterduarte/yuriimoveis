@@ -4,8 +4,13 @@ import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const SITE = 'https://yuriimoveis.com.br'
+const SITE = 'https://corretoryuri.com.br'
 const API_URL = process.env.VITE_API_URL || 'https://yuriimoveis-backend.onrender.com'
+
+function slugify(text) {
+  return String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')
+}
 
 async function generate() {
   let propertyUrls = ''
@@ -15,7 +20,7 @@ async function generate() {
       const data = await res.json()
       const today = new Date().toISOString().split('T')[0]
       propertyUrls = (data.imoveis || []).map(im =>
-        `<url><loc>${SITE}/imoveis/${im.id}</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>`
+        `<url><loc>${SITE}/imoveis/${slugify(im.titulo)}-${im.id}</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>`
       ).join('')
       console.log(`[sitemap] ${data.imoveis?.length || 0} imóveis incluídos`)
     } else {
@@ -25,7 +30,6 @@ async function generate() {
     console.warn('[sitemap] Erro ao buscar imóveis:', e.message)
   }
 
-  const today = new Date().toISOString().split('T')[0]
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE}/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>

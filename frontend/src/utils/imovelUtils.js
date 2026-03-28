@@ -1,3 +1,25 @@
+// Adiciona f_auto,q_auto nas URLs do Cloudinary → WebP automático + compressão
+export function optimizeCloudinaryUrl(url, width) {
+  if (!url || !url.includes('res.cloudinary.com')) return url
+  const transforms = width ? `f_auto,q_auto,w_${width}` : 'f_auto,q_auto'
+  return url.replace('/upload/', `/upload/${transforms}/`)
+}
+
+export function slugify(text) {
+  return String(text)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+}
+
+export function imovelSlug(imovel) {
+  return `${slugify(imovel.titulo)}-${imovel.id}`
+}
+
 export function formatPrice(price, tipo) {
   const formatted = new Intl.NumberFormat('pt-BR', {
     style: 'currency',

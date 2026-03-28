@@ -3,12 +3,17 @@ const fs = require('fs')
 const path = require('path')
 const { pool } = require('../database/db')
 
-const SITE_URL = 'https://yuriimoveis.com.br'
+const SITE_URL = 'https://corretoryuri.com.br'
 const OUTPUT   = path.join(__dirname, '../../frontend/public/sitemap.xml')
+
+function slugify(text) {
+  return String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')
+}
 
 async function generate() {
   const { rows } = await pool.query(
-    'SELECT id, updated_at FROM imoveis WHERE ativo = true ORDER BY id'
+    'SELECT id, titulo, updated_at FROM imoveis WHERE ativo = true ORDER BY id'
   )
 
   const staticPages = [
@@ -26,7 +31,7 @@ async function generate() {
   </url>`),
     ...rows.map(r => `
   <url>
-    <loc>${SITE_URL}/imoveis/${r.id}</loc>
+    <loc>${SITE_URL}/imoveis/${slugify(r.titulo)}-${r.id}</loc>
     <lastmod>${new Date(r.updated_at).toISOString().slice(0, 10)}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

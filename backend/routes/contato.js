@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const rateLimit = require('express-rate-limit')
 const { pool } = require('../database/db')
-const { requireApiKey } = require('../middleware/auth')
+const { requireAuth } = require('../middleware/auth')
 
 const contatoLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
@@ -37,7 +37,7 @@ router.post('/', contatoLimiter, async (req, res) => {
 })
 
 // GET /api/contatos (admin)
-router.get('/', requireApiKey, async (req, res) => {
+router.get('/', requireAuth, async (req, res) => {
   try {
     const page  = Math.max(1, Number(req.query.page)  || 1)
     const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20))
@@ -57,7 +57,7 @@ router.get('/', requireApiKey, async (req, res) => {
 })
 
 // PATCH /api/contato/:id/lido
-router.patch('/:id/lido', requireApiKey, async (req, res) => {
+router.patch('/:id/lido', requireAuth, async (req, res) => {
   try {
     await pool.query('UPDATE contatos SET lido = true WHERE id = $1', [req.params.id])
     res.json({ message: 'Marcado como lido' })

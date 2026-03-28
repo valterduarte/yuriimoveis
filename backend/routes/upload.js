@@ -8,7 +8,7 @@ const path = require('path')
 const os = require('os')
 
 const router = express.Router()
-const { requireApiKey } = require('../middleware/auth')
+const { requireAuth } = require('../middleware/auth')
 
 const uploadImages = multer({
   storage: multer.memoryStorage(),
@@ -64,7 +64,7 @@ function extractPdfPages(pdfPath, outputDir) {
 }
 
 // POST /api/upload — recebe até 10 imagens e envia para o Cloudinary
-router.post('/', requireApiKey, uploadImages.array('images', 10), async (req, res) => {
+router.post('/', requireAuth, uploadImages.array('images', 10), async (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ error: 'Nenhuma imagem enviada' })
   }
@@ -78,7 +78,7 @@ router.post('/', requireApiKey, uploadImages.array('images', 10), async (req, re
 })
 
 // POST /api/upload/pdf — recebe um PDF, extrai páginas como PNG e sobe para o Cloudinary
-router.post('/pdf', requireApiKey, uploadPdf.single('pdf'), async (req, res) => {
+router.post('/pdf', requireAuth, uploadPdf.single('pdf'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'Nenhum PDF enviado' })
   }
@@ -93,6 +93,10 @@ router.post('/pdf', requireApiKey, uploadPdf.single('pdf'), async (req, res) => 
 
     if (pagePaths.length === 0) {
       return res.status(422).json({ error: 'Nenhuma página encontrada no PDF' })
+    }
+
+    if (pagePaths.length > 30) {
+      return res.status(422).json({ error: 'O PDF excede o limite de 30 páginas' })
     }
 
     const urls = await Promise.all(

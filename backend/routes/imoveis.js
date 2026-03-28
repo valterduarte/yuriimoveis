@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { pool } = require('../database/db')
-const { requireApiKey } = require('../middleware/auth')
+const { requireAuth } = require('../middleware/auth')
 
 // GET /api/imoveis - list with filters and pagination
 router.get('/', async (req, res) => {
@@ -87,7 +87,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // POST /api/imoveis
-router.post('/', requireApiKey, async (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   try {
     const {
       titulo, descricao, tipo, categoria, preco, area,
@@ -123,7 +123,7 @@ router.post('/', requireApiKey, async (req, res) => {
 })
 
 // PUT /api/imoveis/:id
-router.put('/:id', requireApiKey, async (req, res) => {
+router.put('/:id', requireAuth, async (req, res) => {
   try {
     const existing = await pool.query('SELECT id FROM imoveis WHERE id = $1', [req.params.id])
     if (!existing.rows[0]) return res.status(404).json({ error: 'Imóvel não encontrado' })
@@ -184,7 +184,7 @@ router.put('/:id', requireApiKey, async (req, res) => {
 })
 
 // DELETE /api/imoveis/:id (soft delete)
-router.delete('/:id', requireApiKey, async (req, res) => {
+router.delete('/:id', requireAuth, async (req, res) => {
   try {
     const result = await pool.query(
       'UPDATE imoveis SET ativo = false, updated_at = NOW() WHERE id = $1',

@@ -55,8 +55,10 @@ function imovelParaForm(im) {
 }
 
 export default function Admin() {
-  const [apiKey, setApiKey] = useState('')
-  const [autenticado, setAutenticado] = useState(false)
+  const [usuario, setUsuario] = useState('')
+  const [senha, setSenha] = useState('')
+  const [token, setToken] = useState(() => sessionStorage.getItem('admin_token') || '')
+  const [autenticado, setAutenticado] = useState(() => !!sessionStorage.getItem('admin_token'))
   const [tela, setTela] = useState('lista') // 'lista' | 'form'
   const [editandoId, setEditandoId] = useState(null)
   const [imoveis, setImoveis] = useState([])
@@ -68,10 +70,31 @@ export default function Admin() {
   const [confirmandoId, setConfirmandoId] = useState(null)
   const inputFileRef = useRef(null)
 
-  const autenticar = (e) => {
+  const authHeader = () => ({ Authorization: `Bearer ${token}` })
+
+  const autenticar = async (e) => {
     e.preventDefault()
-    if (apiKey.trim()) setAutenticado(true)
-    else setMsg({ tipo: 'erro', texto: 'Informe a API Key.' })
+    setLoading(true)
+    setMsg(null)
+    try {
+      const res = await axios.post(`${API_URL}/api/auth/login`, { usuario, senha })
+      const { token: novoToken } = res.data
+      sessionStorage.setItem('admin_token', novoToken)
+      setToken(novoToken)
+      setAutenticado(true)
+    } catch (err) {
+      setMsg({ tipo: 'erro', texto: err.response?.data?.error || 'Erro ao autenticar.' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const sair = () => {
+    sessionStorage.removeItem('admin_token')
+    setToken('')
+    setAutenticado(false)
+    setUsuario('')
+    setSenha('')
   }
 
   const carregarImoveis = async () => {
@@ -148,22 +171,24 @@ export default function Admin() {
     setConfirmandoId(null)
     try {
       await axios.put(`${API_URL}/api/imoveis/${id}`, { ativo: false }, {
-        headers: { 'x-api-key': apiKey },
+        headers: authHeader(),
       })
       carregarImoveis()
-    } catch {
-      setMsg({ tipo: 'erro', texto: 'Erro ao desativar.' })
+    } catch (err) {
+      if (err.response?.status === 401) sair()
+      else setMsg({ tipo: 'erro', texto: 'Erro ao desativar.' })
     }
   }
 
   const reativar = async (id) => {
     try {
       await axios.put(`${API_URL}/api/imoveis/${id}`, { ativo: true }, {
-        headers: { 'x-api-key': apiKey },
+        headers: authHeader(),
       })
       carregarImoveis()
-    } catch {
-      setMsg({ tipo: 'erro', texto: 'Erro ao reativar.' })
+    } catch (err) {
+      if (err.response?.status === 401) sair()
+      else setMsg({ tipo: 'erro', texto: 'Erro ao reativar.' })
     }
   }
 
@@ -184,12 +209,12 @@ export default function Admin() {
       }
       if (editandoId) {
         await axios.put(`${API_URL}/api/imoveis/${editandoId}`, payload, {
-          headers: { 'x-api-key': apiKey },
+          headers: authHeader(),
         })
         setMsg({ tipo: 'ok', texto: 'Imóvel atualizado com sucesso!' })
       } else {
         const res = await axios.post(`${API_URL}/api/imoveis`, payload, {
-          headers: { 'x-api-key': apiKey },
+          headers: authHeader(),
         })
         setMsg({ tipo: 'ok', texto: `Imóvel cadastrado com sucesso! ID: ${res.data.id}` })
         setForm(camposVazios)
@@ -197,7 +222,8 @@ export default function Admin() {
       }
       carregarImoveis()
     } catch (err) {
-      setMsg({ tipo: 'erro', texto: err.response?.data?.error || 'Erro ao salvar.' })
+      if (err.response?.status === 401) sair()
+      else setMsg({ tipo: 'erro', texto: err.response?.data?.error || 'Erro ao salvar.' })
     } finally {
       setLoading(false)
     }
@@ -209,11 +235,28 @@ export default function Admin() {
         <div className="bg-white border border-gray-200 p-8 w-full max-w-sm">
           <h1 className="text-sm font-bold uppercase tracking-widest text-dark mb-6">Acesso Admin</h1>
           <form onSubmit={autenticar} className="space-y-4">
-            <input type="password" placeholder="API Key" value={apiKey}
-              onChange={e => setApiKey(e.target.value)}
-              className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+            <input
+              type="text"
+              placeholder="Usuário"
+              value={usuario}
+              onChange={e => setUsuario(e.target.value)}
+              autoComplete="username"
+              required
+              className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
+            />
+            <input
+              type="password"
+              placeholder="Senha"
+              value={senha}
+              onChange={e => setSenha(e.target.value)}
+              autoComplete="current-password"
+              required
+              className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
+            />
             {msg && <p className="text-xs text-red-500">{msg.texto}</p>}
-            <button type="submit" className="w-full btn-primary py-3 text-xs">Entrar</button>
+            <button type="submit" disabled={loading} className="w-full btn-primary py-3 text-xs disabled:opacity-50">
+              {loading ? 'Entrando...' : 'Entrar'}
+            </button>
           </form>
         </div>
       </div>
@@ -230,16 +273,21 @@ export default function Admin() {
               {tela === 'lista' ? 'Imóveis Cadastrados' : editandoId ? 'Editar Imóvel' : 'Novo Imóvel'}
             </h1>
           </div>
-          {tela === 'lista' ? (
-            <button onClick={abrirNovo} className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs">
-              <FiPlus size={14} /> Novo Imóvel
+          <div className="flex items-center gap-4">
+            {tela === 'lista' ? (
+              <button onClick={abrirNovo} className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs">
+                <FiPlus size={14} /> Novo Imóvel
+              </button>
+            ) : (
+              <button onClick={() => { setTela('lista'); setMsg(null) }}
+                className="text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
+                ← Voltar
+              </button>
+            )}
+            <button onClick={sair} className="text-xs uppercase tracking-widest text-gray-400 hover:text-white transition-colors">
+              Sair
             </button>
-          ) : (
-            <button onClick={() => { setTela('lista'); setMsg(null) }}
-              className="text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
-              ← Voltar
-            </button>
-          )}
+          </div>
         </div>
       </div>
 

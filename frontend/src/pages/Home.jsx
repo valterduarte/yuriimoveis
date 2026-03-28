@@ -44,6 +44,32 @@ export default function Home() {
           },
           {
             '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'Quais tipos de imóveis o Corretor Yuri oferece em Osasco?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Casas, apartamentos, terrenos, chalés, chácaras e imóveis comerciais para venda e aluguel em Osasco e Grande São Paulo.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Como funciona o financiamento imobiliário em Osasco?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Financiamento de até 80% do valor em até 360 meses via Caixa ou bancos privados. Imóveis até R$ 264.000 podem se enquadrar no Minha Casa Minha Vida com taxas a partir de 5,5% ao ano.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Quais são os melhores bairros para morar em Osasco?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Jardim Roberto, Km 18, Presidente Altino e Vila Yolanda se destacam pela infraestrutura, transporte e acesso à Grande São Paulo.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Como entrar em contato com o Corretor Yuri?',
+                acceptedAnswer: { '@type': 'Answer', text: 'WhatsApp (11) 96714-7840 ou Instagram @valterrduarte. Atendimento de segunda a sexta das 9h às 18h.' },
+              },
+            ],
+          },
+          {
+            '@context': 'https://schema.org',
             '@type': ['LocalBusiness', 'RealEstateAgent'],
             name: 'Corretor Yuri Imóveis',
             description: 'Especialistas em imóveis residenciais e comerciais em Osasco e região. Mais de 10 anos de experiência, atendimento personalizado e segurança jurídica.',

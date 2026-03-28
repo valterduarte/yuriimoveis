@@ -2,15 +2,15 @@ import { Link } from 'react-router-dom'
 import { FiMapPin, FiMaximize } from 'react-icons/fi'
 import { FaCar, FaBath } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
-import { formatPrice } from '../utils/imovelUtils'
+import { formatPrice, imovelSlug, optimizeCloudinaryUrl } from '../utils/imovelUtils'
 
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80'
 
 export default function PropertyCard({ imovel }) {
-  const img = imovel.imagens?.[0] || PLACEHOLDER
+  const img = optimizeCloudinaryUrl(imovel.imagens?.[0], 600) || PLACEHOLDER
 
   return (
-    <Link to={`/imoveis/${imovel.id}`} className="group block bg-white overflow-hidden">
+    <Link to={`/imoveis/${imovelSlug(imovel)}`} className="group block bg-white overflow-hidden">
       {/* Image */}
       <div className="relative overflow-hidden" style={{ height: '260px' }}>
         <img

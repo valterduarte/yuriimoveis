@@ -15,7 +15,7 @@ import { FaCar, FaBath, FaWhatsapp } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
 import axios from 'axios'
 import SEOHead from '../components/SEOHead'
-import { formatPrice, calcParcela } from '../utils/imovelUtils'
+import { formatPrice, calcParcela, imovelSlug } from '../utils/imovelUtils'
 import { API_URL, PHONE_WA, PHONE_TEL, PHONE_DISPLAY, PHONE_STRUCTURED, SITE_URL } from '../config'
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80'
 
@@ -27,7 +27,8 @@ const TABS = [
 ]
 
 export default function ImovelDetalhe() {
-  const { id } = useParams()
+  const { slug } = useParams()
+  const id = slug.split('-').pop()
   const [imovel, setImovel] = useState(null)
   const [loading, setLoading] = useState(true)
   const [fetchError, setFetchError] = useState(null)
@@ -67,10 +68,11 @@ export default function ImovelDetalhe() {
   useEffect(() => {
     if (lightbox === null) return
     lightboxCloseRef.current?.focus()
+    const imagesArr = imovel?.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER]
     const onKey = e => {
       if (e.key === 'Escape') { setLightbox(null); return }
-      if (e.key === 'ArrowRight') setLightbox(i => (i + 1) % images.length)
-      if (e.key === 'ArrowLeft') setLightbox(i => (i - 1 + images.length) % images.length)
+      if (e.key === 'ArrowRight') setLightbox(i => (i + 1) % imagesArr.length)
+      if (e.key === 'ArrowLeft') setLightbox(i => (i - 1 + imagesArr.length) % imagesArr.length)
       if (e.key === 'Tab') {
         const focusable = document.querySelectorAll('[data-lightbox] button')
         if (!focusable.length) return
@@ -83,7 +85,7 @@ export default function ImovelDetalhe() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [lightbox])
+  }, [lightbox, imovel])
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id)
@@ -120,7 +122,7 @@ export default function ImovelDetalhe() {
 
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER]
   const whatsMsg = encodeURIComponent(`Olá! Tenho interesse no imóvel: ${imovel.titulo} — Código #${imovel.id}`)
-  const pageUrl = `${SITE_URL}/imoveis/${imovel.id}`
+  const pageUrl = `${SITE_URL}/imoveis/${imovelSlug(imovel)}`
   const shareUrl = `${API_URL}/share/${imovel.id}`
   const imovelDescription = imovel.descricao
     ? imovel.descricao.slice(0, 155).replace(/\n/g, ' ')
@@ -147,24 +149,60 @@ export default function ImovelDetalhe() {
         title={imovel.titulo}
         description={imovelDescription}
         image={images[0] !== PLACEHOLDER ? images[0] : undefined}
-        url={`/imoveis/${imovel.id}`}
+        url={`/imoveis/${imovelSlug(imovel)}`}
         type="article"
-        jsonLd={{
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
+              { '@type': 'ListItem', position: 2, name: 'Imóveis', item: `${SITE_URL}/imoveis` },
+              { '@type': 'ListItem', position: 3, name: imovel.titulo, item: `${SITE_URL}/imoveis/${imovelSlug(imovel)}` },
+            ],
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: imovel.titulo,
+            description: imovelDescription,
+            image: images,
+            url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
+            offers: {
+              '@type': 'Offer',
+              price: imovel.preco,
+              priceCurrency: 'BRL',
+              availability: 'https://schema.org/InStock',
+              url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
+              seller: {
+                '@type': 'RealEstateAgent',
+                name: 'Corretor Yuri Imóveis',
+                telephone: PHONE_STRUCTURED,
+                url: SITE_URL,
+              },
+            },
+          },
+          {
           '@context': 'https://schema.org',
           '@type': 'RealEstateListing',
           name: imovel.titulo,
           description: imovelDescription,
           image: images,
-          url: `${SITE_URL}/imoveis/${imovel.id}`,
+          url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
           datePosted: imovel.created_at ? imovel.created_at.split('T')[0] : undefined,
           price: imovel.preco ? String(imovel.preco) : undefined,
           priceCurrency: 'BRL',
           address: {
             '@type': 'PostalAddress',
+            streetAddress: imovel.endereco || undefined,
             addressLocality: imovel.cidade || 'Osasco',
             addressRegion: imovel.estado || 'SP',
+            postalCode: imovel.cep || undefined,
             addressCountry: 'BR',
           },
+          ...(imovel.lat && imovel.lng ? {
+            geo: { '@type': 'GeoCoordinates', latitude: imovel.lat, longitude: imovel.lng },
+          } : {}),
           numberOfRooms: imovel.quartos || undefined,
           floorSize: imovel.area ? { '@type': 'QuantitativeValue', value: imovel.area, unitCode: 'MTK' } : undefined,
           offers: {
@@ -179,7 +217,8 @@ export default function ImovelDetalhe() {
               url: SITE_URL,
             },
           },
-        }}
+          },
+        ]}
       />
 
       {/* ── BREADCRUMB ── */}

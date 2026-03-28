@@ -1,5 +1,5 @@
 // Configurações centralizadas — edite aqui para refletir em todo o site
-export const SITE_URL = 'https://yuriimoveis-frontend.onrender.com'
+export const SITE_URL = 'https://corretoryuri.com.br'
 export const PHONE_NUMBER     = '5511967147840'
 export const PHONE_DISPLAY    = '(11) 96714-7840'
 export const PHONE_STRUCTURED = '+55-11-96714-7840'
