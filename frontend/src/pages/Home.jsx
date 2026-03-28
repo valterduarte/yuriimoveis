@@ -64,7 +64,7 @@ export default function Home() {
               {
                 '@type': 'Question',
                 name: 'Como entrar em contato com o Corretor Yuri?',
-                acceptedAnswer: { '@type': 'Answer', text: 'WhatsApp (11) 96714-7840 ou Instagram @valterrduarte. Atendimento de segunda a sexta das 9h às 18h.' },
+                acceptedAnswer: { '@type': 'Answer', text: 'WhatsApp (11) 97256-3420 ou Instagram @valterrduarte. Atendimento de segunda a sexta das 9h às 18h.' },
               },
             ],
           },
