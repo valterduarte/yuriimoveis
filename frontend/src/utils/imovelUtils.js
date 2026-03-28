@@ -1,3 +1,18 @@
+export function slugify(text) {
+  return String(text)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+}
+
+export function imovelSlug(imovel) {
+  return `${slugify(imovel.titulo)}-${imovel.id}`
+}
+
 export function formatPrice(price, tipo) {
   const formatted = new Intl.NumberFormat('pt-BR', {
     style: 'currency',

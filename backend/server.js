@@ -52,6 +52,17 @@ app.use('/api/imoveis',  imoveisRouter)
 app.use('/api/contatos', contatoRouter)
 app.use('/api/upload',   uploadRouter)
 
+function slugify(text) {
+  return String(text)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+}
+
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -122,7 +133,7 @@ app.get('/api/health', (_req, res) => {
 app.get('/sitemap.xml', async (_req, res) => {
   try {
     const { rows } = await pool.query(
-      `SELECT id, updated_at FROM imoveis WHERE ativo = true ORDER BY id`
+      `SELECT id, titulo, updated_at FROM imoveis WHERE ativo = true ORDER BY id`
     )
     const SITE = 'https://yuriimoveis.com.br'
     const today = new Date().toISOString().split('T')[0]
@@ -132,7 +143,8 @@ app.get('/sitemap.xml', async (_req, res) => {
       `<url><loc>${SITE}/contato</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>`,
       ...rows.map(r => {
         const lastmod = r.updated_at ? r.updated_at.toISOString().split('T')[0] : today
-        return `<url><loc>${SITE}/imoveis/${r.id}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>`
+        const slug = `${slugify(r.titulo)}-${r.id}`
+        return `<url><loc>${SITE}/imoveis/${slug}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>`
       }),
     ]
     res.set('Content-Type', 'application/xml')
