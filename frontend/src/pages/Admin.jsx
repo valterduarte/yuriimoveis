@@ -2,10 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { FiEdit2, FiPlus, FiTrash2, FiUpload, FiX } from 'react-icons/fi'
 import axios from 'axios'
 import { calcParcela } from '../utils/imovelUtils'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-const CLOUDINARY_CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD || 'dfl3eskr9'
-const CLOUDINARY_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET || 'Yuri-upload'
+import { API_URL, CLOUDINARY_CLOUD, CLOUDINARY_PRESET } from '../config'
 
 const DESCRICAO_TEMPLATE = `🏢 NOME DO EMPREENDIMENTO – CIDADE
 

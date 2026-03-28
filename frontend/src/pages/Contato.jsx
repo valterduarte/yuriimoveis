@@ -1,6 +1,7 @@
 import { FiPhone, FiMapPin, FiClock } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import SEOHead from '../components/SEOHead'
+import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL } from '../config'
 
 export default function Contato() {
 
@@ -30,7 +31,7 @@ export default function Contato() {
 
               {[
                 { icon: FiMapPin, title: 'Endereço', content: 'Osasco - SP' },
-                { icon: FiPhone, title: 'Telefone', content: '(11) 96714-7840' },
+                { icon: FiPhone, title: 'Telefone', content: PHONE_DISPLAY },
 { icon: FiClock, title: 'Horário', content: 'Seg - Sex: 08h às 18h\nSábado: 08h às 12h' },
               ].map(info => (
                 <div key={info.title} className="flex gap-4 p-5 border border-gray-200">
@@ -46,11 +47,11 @@ export default function Contato() {
 
               {/* Social */}
               <div className="flex gap-2 pt-2">
-                <a href="https://wa.me/5511967147840" target="_blank" rel="noreferrer"
+                <a href={PHONE_WA} target="_blank" rel="noreferrer"
                   className="flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white text-[10px] uppercase tracking-wider font-bold px-3 py-2.5 transition-colors">
                   <FaWhatsapp size={14} /> WhatsApp
                 </a>
-                <a href="https://www.instagram.com/valterrduarte/" target="_blank" rel="noreferrer"
+                <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer"
                   className="w-9 h-9 border border-gray-200 flex items-center justify-center hover:border-primary hover:text-primary transition-colors">
                   <FaInstagram size={14} />
                 </a>
@@ -69,9 +70,9 @@ export default function Contato() {
                     className="flex-1 flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
                     <FaWhatsapp size={22} /> WhatsApp
                   </a>
-                  <a href="tel:5511967147840"
+                  <a href={PHONE_TEL}
                     className="flex-1 flex items-center justify-center gap-3 bg-[#1a1a1a] hover:bg-[#af1e23] text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
-                    <FiPhone size={20} /> (11) 96714-7840
+                    <FiPhone size={20} /> {PHONE_DISPLAY}
                   </a>
                 </div>
               </div>

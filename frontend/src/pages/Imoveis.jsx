@@ -5,8 +5,7 @@ import PropertyCard from '../components/PropertyCard'
 import SkeletonCard from '../components/SkeletonCard'
 import axios from 'axios'
 import SEOHead from '../components/SEOHead'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+import { API_URL } from '../config'
 
 const ordemOptions = [
   { value: 'recente', label: 'Mais recente' },
@@ -224,19 +223,19 @@ export default function Imoveis() {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex items-center justify-center gap-1 mt-10">
-                <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                <button onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }} disabled={page === 1}
                   className="w-9 h-9 border border-gray-300 flex items-center justify-center disabled:opacity-40 hover:border-primary hover:text-primary transition-colors">
                   <FiChevronLeft size={16} />
                 </button>
                 {[...Array(totalPages)].map((_, i) => (
-                  <button key={i + 1} onClick={() => setPage(i + 1)}
+                  <button key={i + 1} onClick={() => { setPage(i + 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
                     className={`w-9 h-9 text-xs font-bold transition-colors ${
                       page === i + 1 ? 'bg-primary text-white' : 'border border-gray-300 hover:border-primary hover:text-primary'
                     }`}>
                     {i + 1}
                   </button>
                 ))}
-                <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
+                <button onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }} disabled={page === totalPages}
                   className="w-9 h-9 border border-gray-300 flex items-center justify-center disabled:opacity-40 hover:border-primary hover:text-primary transition-colors">
                   <FiChevronRight size={16} />
                 </button>

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { FiMenu, FiX, FiPhone } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import Logo from './Logo'
+import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL } from '../config'
 
 const navLinks = [
   { href: '/', label: 'Início' },
@@ -55,13 +56,13 @@ export default function Header() {
           {/* Right */}
           <div className="hidden md:flex items-center gap-5">
             <div className="flex items-center gap-3 text-gray-400">
-              <a href="https://wa.me/5511967147840" target="_blank" rel="noreferrer"
+              <a href={PHONE_WA} target="_blank" rel="noreferrer" aria-label="WhatsApp"
                 className="hover:text-green-400 transition-colors"><FaWhatsapp size={15} /></a>
-              <a href="https://www.instagram.com/valterrduarte/" target="_blank" rel="noreferrer"
+              <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram"
                 className="hover:text-pink-400 transition-colors"><FaInstagram size={15} /></a>
             </div>
             <a
-              href="https://wa.me/5511967147840"
+              href={PHONE_WA}
               target="_blank"
               rel="noreferrer"
               className="btn-primary flex items-center gap-2 py-2.5 px-5 text-[10px]"
@@ -74,6 +75,7 @@ export default function Header() {
           {/* Mobile toggle */}
           <button
             className="md:hidden text-white p-2"
+            aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
@@ -82,33 +84,31 @@ export default function Header() {
       </div>
 
       {/* Mobile menu */}
-      {menuOpen && (
-        <div className="md:hidden bg-dark border-t border-gray-800">
-          <nav className="flex flex-col py-4 container mx-auto px-6">
-            {navLinks.map(link => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`py-3 text-xs uppercase tracking-widest font-semibold border-b border-gray-800 transition-colors ${
-                  location.pathname === link.href ? 'text-primary' : 'text-gray-300'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <div className="pt-5 flex items-center gap-4">
-              <a href="https://wa.me/5511967147840" target="_blank" rel="noreferrer"
-                className="text-gray-400 hover:text-green-400 transition-colors"><FaWhatsapp size={18} /></a>
-              <a href="https://www.instagram.com/valterrduarte/" target="_blank" rel="noreferrer"
-                className="text-gray-400 hover:text-pink-400 transition-colors"><FaInstagram size={18} /></a>
-              <a href="tel:5511967147840"
-                className="ml-auto text-gray-400 hover:text-white flex items-center gap-1 text-xs">
-                <FiPhone size={13} /> (11) 96714-7840
-              </a>
-            </div>
-          </nav>
-        </div>
-      )}
+      <div className={`md:hidden bg-dark border-t border-gray-800 overflow-hidden transition-all duration-200 ${menuOpen ? 'max-h-96' : 'max-h-0'}`}>
+        <nav className="flex flex-col py-4 container mx-auto px-6">
+          {navLinks.map(link => (
+            <Link
+              key={link.href}
+              to={link.href}
+              className={`py-3 text-xs uppercase tracking-widest font-semibold border-b border-gray-800 transition-colors ${
+                location.pathname === link.href ? 'text-primary' : 'text-gray-300'
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div className="pt-5 flex items-center gap-4">
+            <a href={PHONE_WA} target="_blank" rel="noreferrer" aria-label="WhatsApp"
+              className="text-gray-400 hover:text-green-400 transition-colors"><FaWhatsapp size={18} /></a>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram"
+              className="text-gray-400 hover:text-pink-400 transition-colors"><FaInstagram size={18} /></a>
+            <a href={PHONE_TEL} aria-label={`Ligar para ${PHONE_DISPLAY}`}
+              className="ml-auto text-gray-400 hover:text-white flex items-center gap-1 text-xs">
+              <FiPhone size={13} /> {PHONE_DISPLAY}
+            </a>
+          </div>
+        </nav>
+      </div>
     </header>
   )
 }

@@ -1,25 +1,11 @@
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import { FiPhone } from 'react-icons/fi'
+import { PHONE_WA, PHONE_TEL, INSTAGRAM_URL } from '../config'
 
 const contacts = [
-  {
-    icon: FaWhatsapp,
-    label: 'WhatsApp',
-    href: 'https://wa.me/5511967147840',
-    bg: 'bg-dark hover:bg-primary',
-  },
-  {
-    icon: FiPhone,
-    label: 'Ligar',
-    href: 'tel:5511967147840',
-    bg: 'bg-dark hover:bg-primary',
-  },
-  {
-    icon: FaInstagram,
-    label: 'Instagram',
-    href: 'https://www.instagram.com/valterrduarte/',
-    bg: 'bg-dark hover:bg-primary',
-  },
+  { icon: FaWhatsapp, label: 'WhatsApp', href: PHONE_WA,      bg: 'bg-dark hover:bg-primary' },
+  { icon: FiPhone,    label: 'Ligar',    href: PHONE_TEL,     bg: 'bg-dark hover:bg-primary' },
+  { icon: FaInstagram,label: 'Instagram',href: INSTAGRAM_URL, bg: 'bg-dark hover:bg-primary' },
 ]
 
 export default function FloatingContact() {

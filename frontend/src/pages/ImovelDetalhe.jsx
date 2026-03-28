@@ -16,8 +16,7 @@ import { LuBed } from 'react-icons/lu'
 import axios from 'axios'
 import SEOHead from '../components/SEOHead'
 import { formatPrice, calcParcela } from '../utils/imovelUtils'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+import { API_URL, PHONE_WA, PHONE_TEL, PHONE_DISPLAY } from '../config'
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80'
 
 const TABS = [
@@ -99,7 +98,7 @@ export default function ImovelDetalhe() {
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER]
   const whatsMsg = encodeURIComponent(`Olá! Tenho interesse no imóvel: ${imovel.titulo} — Código #${imovel.id}`)
   const pageUrl = `https://yuriimoveis.com.br/imoveis/${imovel.id}`
-  const shareUrl = `${import.meta.env.VITE_API_URL || 'https://yuriimoveis-backend.onrender.com'}/share/${imovel.id}`
+  const shareUrl = `${API_URL}/share/${imovel.id}`
   const imovelDescription = imovel.descricao
     ? imovel.descricao.slice(0, 155).replace(/\n/g, ' ')
     : `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
@@ -413,7 +412,7 @@ export default function ImovelDetalhe() {
                 )}
               </div>
               <div className="p-7 space-y-3">
-                <a href={`https://wa.me/5511967147840?text=${encodeURIComponent(`Olá! Gostaria de fazer uma simulação de financiamento para o imóvel: ${imovel.titulo} — Código #${imovel.id}`)}`}
+                <a href={`${PHONE_WA}?text=${encodeURIComponent(`Olá! Gostaria de fazer uma simulação de financiamento para o imóvel: ${imovel.titulo} — Código #${imovel.id}`)}`}
                   target="_blank" rel="noreferrer"
                   className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors">
                   <FaWhatsapp size={16} /> Faça Sua Simulação
@@ -462,6 +461,7 @@ export default function ImovelDetalhe() {
           spaceBetween={4}
           breakpoints={{
             640: { slidesPerView: 2.1 },
+            768: { slidesPerView: 2.5 },
             1024: { slidesPerView: 3, spaceBetween: 4 },
           }}
           className="gallery-swiper px-4 md:px-10"
@@ -521,14 +521,14 @@ export default function ImovelDetalhe() {
           <p className="text-gray-500 text-sm mb-8">Fale agora com o corretor e descubra como sair do aluguel ainda este ano.</p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <a href={`https://wa.me/5511967147840?text=${whatsMsg}`}
+            <a href={`${PHONE_WA}?text=${whatsMsg}`}
               target="_blank" rel="noreferrer"
               className="flex-1 flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
               <FaWhatsapp size={22} /> WhatsApp
             </a>
-            <a href="tel:5511967147840"
+            <a href={PHONE_TEL}
               className="flex-1 flex items-center justify-center gap-3 bg-[#1a1a1a] hover:bg-[#af1e23] text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
-              <FiPhone size={20} /> (11) 96714-7840
+              <FiPhone size={20} /> {PHONE_DISPLAY}
             </a>
           </div>
         </section>
@@ -536,14 +536,14 @@ export default function ImovelDetalhe() {
       </div>
 
       {/* ── BARRA FLUTUANTE MOBILE ── */}
-      <div className="fixed bottom-14 left-0 right-0 md:hidden z-40 grid grid-cols-3">
-        <a href={`https://wa.me/5511967147840?text=${whatsMsg}`}
-          target="_blank" rel="noreferrer"
+      <div className="fixed bottom-14 left-0 right-0 md:hidden z-40 grid grid-cols-3" role="navigation" aria-label="Contato rápido">
+        <a href={`${PHONE_WA}?text=${whatsMsg}`}
+          target="_blank" rel="noreferrer" aria-label="Contato via WhatsApp"
           className="flex flex-col items-center justify-center gap-1 bg-green-500 text-white py-3">
           <FaWhatsapp size={18} />
           <span className="text-[9px] uppercase tracking-widest font-bold">WhatsApp</span>
         </a>
-        <a href="tel:5511967147840"
+        <a href={PHONE_TEL} aria-label={`Ligar para ${PHONE_DISPLAY}`}
           className="flex flex-col items-center justify-center gap-1 bg-[#af1e23] text-white py-3">
           <FiPhone size={18} />
           <span className="text-[9px] uppercase tracking-widest font-bold">Ligar</span>

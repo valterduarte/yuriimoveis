@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { FiPhone, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
+import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI } from '../config'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -28,10 +29,10 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-3">
               {[
-                { href: 'https://wa.me/5511967147840', icon: FaWhatsapp, hover: 'hover:text-green-400' },
-                { href: 'https://www.instagram.com/valterrduarte/', icon: FaInstagram, hover: 'hover:text-pink-400' },
-              ].map(({ href, icon: Icon, hover }) => (
-                <a key={href} href={href} target="_blank" rel="noreferrer"
+                { href: PHONE_WA,      icon: FaWhatsapp,  hover: 'hover:text-green-400', label: 'WhatsApp' },
+                { href: INSTAGRAM_URL, icon: FaInstagram, hover: 'hover:text-pink-400', label: 'Instagram' },
+              ].map(({ href, icon: Icon, hover, label }) => (
+                <a key={href} href={href} target="_blank" rel="noreferrer" aria-label={label}
                   className={`w-8 h-8 border border-gray-700 flex items-center justify-center ${hover} hover:border-current transition-all`}>
                   <Icon size={13} />
                 </a>
@@ -94,12 +95,12 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <FiPhone className="text-primary flex-shrink-0" size={13} />
-                <a href="tel:5511967147840" className="hover:text-primary transition-colors">(11) 96714-7840</a>
+                <a href={PHONE_TEL} className="hover:text-primary transition-colors">{PHONE_DISPLAY}</a>
               </li>
               <li className="flex items-center gap-3">
                 <FaWhatsapp className="text-primary flex-shrink-0" size={13} />
-                <a href="https://wa.me/5511967147840" target="_blank" rel="noreferrer"
-                  className="hover:text-primary transition-colors">(11) 96714-7840</a>
+                <a href={PHONE_WA} target="_blank" rel="noreferrer"
+                  className="hover:text-primary transition-colors">{PHONE_DISPLAY}</a>
               </li>
             </ul>
           </div>
@@ -109,7 +110,7 @@ export default function Footer() {
       <div className="border-t border-gray-800">
         <div className="container mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-600">
           <p>© {year} Corretor Yuri Imóveis — Todos os direitos reservados.</p>
-          <p>CRECI-SP: 235509</p>
+          <p>CRECI-SP: {CRECI}</p>
         </div>
       </div>
     </footer>
