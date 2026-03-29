@@ -100,14 +100,18 @@ export default function Home() {
         ]}
       />
 
-      <section
-        className="relative min-h-screen flex items-center -mt-16 md:-mt-20"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&h=1080&fit=crop&q=60&fm=webp')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
+      <section className="relative min-h-screen flex items-center -mt-16 md:-mt-20 overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&q=60&fm=webp"
+          srcSet="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop&q=60&fm=webp 800w, https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&q=60&fm=webp 1200w, https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&h=1080&fit=crop&q=60&fm=webp 1920w"
+          sizes="100vw"
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          loading="eager"
+          decoding="sync"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
         <div className="absolute inset-0 bg-dark/75" />
         <div className="relative container mx-auto px-6 pt-32 pb-24">
           <div className="max-w-2xl mb-12">
@@ -170,7 +174,7 @@ export default function Home() {
           <h2 className="text-4xl md:text-5xl font-black text-white uppercase leading-tight mb-4">
             Pronto para encontrar<br />seu imóvel?
           </h2>
-          <p className="text-white/70 text-sm mb-10 max-w-lg mx-auto">
+          <p className="text-white/90 text-sm mb-10 max-w-lg mx-auto">
             Fale com nossa equipe agora mesmo e dê o primeiro passo para realizar o sonho do imóvel perfeito.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

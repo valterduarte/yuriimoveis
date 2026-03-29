@@ -31,7 +31,7 @@ export default function SearchBar() {
             className={`flex-1 py-4 text-xs uppercase tracking-widest font-bold transition-all duration-200 border-b-2 ${
               tipo === t.value
                 ? 'bg-primary text-white border-primary'
-                : 'text-gray-500 hover:text-dark bg-white border-gray-200'
+                : 'text-gray-600 hover:text-dark bg-white border-gray-200'
             }`}
           >
             {t.label}
@@ -41,7 +41,7 @@ export default function SearchBar() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200">
         <div className="p-5">
-          <label htmlFor="sb-categoria" className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">
+          <label htmlFor="sb-categoria" className="block text-[10px] font-bold uppercase tracking-widest text-gray-600 mb-2">
             Tipo de Imóvel
           </label>
           <select id="sb-categoria" value={categoria} onChange={e => setCategoria(e.target.value)}
@@ -53,7 +53,7 @@ export default function SearchBar() {
           </select>
         </div>
         <div className="p-5">
-          <label htmlFor="sb-cidade" className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">
+          <label htmlFor="sb-cidade" className="block text-[10px] font-bold uppercase tracking-widest text-gray-600 mb-2">
             Cidade
           </label>
           <select id="sb-cidade" value={cidade} onChange={e => setCidade(e.target.value)}
@@ -63,7 +63,7 @@ export default function SearchBar() {
           </select>
         </div>
         <div className="p-5">
-          <label htmlFor="sb-preco" className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">
+          <label htmlFor="sb-preco" className="block text-[10px] font-bold uppercase tracking-widest text-gray-600 mb-2">
             Preço Máximo
           </label>
           <select id="sb-preco" value={precoMax} onChange={e => setPrecoMax(e.target.value)}
