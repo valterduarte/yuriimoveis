@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { FiUpload, FiX } from 'react-icons/fi'
 import axios from 'axios'
 import { calcParcela } from '../../utils/imovelUtils'
-import { API_URL, CLOUDINARY_CLOUD, CLOUDINARY_PRESET } from '../../lib/config'
+import { CLOUDINARY_CLOUD, CLOUDINARY_PRESET } from '../../lib/config'
 import { PROPERTY_CATEGORIES } from '../../lib/constants'
 
 const DESCRIPTION_TEMPLATE = `🏢 NOME DO EMPREENDIMENTO – CIDADE
@@ -66,7 +66,7 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
 
   useEffect(() => {
     if (!editingId) return
-    axios.get(`${API_URL}/api/imoveis/${editingId}`)
+    axios.get(`/api/imoveis/${editingId}`)
       .then(res => {
         setForm(propertyToForm(res.data))
         setImageUrls(Array.isArray(res.data.imagens) ? res.data.imagens : [])
@@ -124,10 +124,10 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
           : [],
       }
       if (editingId) {
-        await axios.put(`${API_URL}/api/imoveis/${editingId}`, payload, { headers: authHeader() })
+        await axios.put(`/api/imoveis/${editingId}`, payload, { headers: authHeader() })
         onSuccess('Imóvel atualizado com sucesso!')
       } else {
-        const res = await axios.post(`${API_URL}/api/imoveis`, payload, { headers: authHeader() })
+        const res = await axios.post(`/api/imoveis`, payload, { headers: authHeader() })
         onSuccess(`Imóvel cadastrado com sucesso! ID: ${res.data.id}`)
       }
     } catch (err) {

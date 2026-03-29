@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import axios from 'axios'
-import { API_URL } from '../lib/config'
 
 export function useAdminAuth() {
   const [username, setUsername] = useState('')
@@ -23,7 +22,7 @@ export function useAdminAuth() {
     setLoading(true)
     setError(null)
     try {
-      const res = await axios.post(`${API_URL}/api/auth/login`, { usuario: username, senha: password })
+      const res = await axios.post('/api/auth/login', { usuario: username, senha: password })
       const newToken = res.data.token
       sessionStorage.setItem('admin_token', newToken)
       setToken(newToken)

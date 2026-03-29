@@ -23,8 +23,10 @@ app.use(compression())
 app.use(pinoHttp({ logger, autoLogging: { ignore: (req) => req.url === '/api/health' } }))
 
 const allowedOrigins = [
+  'http://localhost:3000',
   'http://localhost:5173',
   'https://yuriimoveis-frontend.onrender.com',
+  'https://corretoryuri.com.br',
   process.env.FRONTEND_URL,
 ].filter(Boolean)
 

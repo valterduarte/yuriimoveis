@@ -26,10 +26,11 @@ export default function ScrollReveal() {
     const mutObs = new MutationObserver(mutations => {
       if (mutations.some(m => m.addedNodes.length > 0)) {
         clearTimeout(debounce)
-        debounce = setTimeout(observeNew, 50)
+        debounce = setTimeout(observeNew, 100)
       }
     })
-    mutObs.observe(document.body, { childList: true, subtree: true })
+    const main = document.querySelector('main') || document.body
+    mutObs.observe(main, { childList: true, subtree: true })
 
     return () => {
       clearTimeout(timer)

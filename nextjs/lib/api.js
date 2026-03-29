@@ -2,10 +2,7 @@ import { API_URL } from './config'
 
 export async function fetchFeaturedProperties() {
   try {
-    const res = await fetch(`${API_URL}/api/imoveis?destaque=1&limit=6`, {
-      next: { revalidate: 3600 },
-    })
-    if (!res.ok) return []
+    const res = await fetch(`${API_URL}/api/imoveis?destaque=1&limit=6`, { cache: 'no-store' })
     const data = await res.json()
     return data.imoveis || []
   } catch {
