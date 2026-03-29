@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { FiArrowRight, FiArrowUpRight } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import SearchBar from '../components/SearchBar'
@@ -127,14 +126,15 @@ export default async function Home() {
       ))}
 
       <section className="relative min-h-screen flex items-center -mt-16 md:-mt-20 overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&h=1080&fit=crop&q=60&fm=webp"
-          alt="Imóvel residencial em Osasco"
-          fill
-          priority
+        <img
+          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&q=60&fm=webp"
+          srcSet="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop&q=60&fm=webp 800w, https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&q=60&fm=webp 1200w, https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&h=1080&fit=crop&q=60&fm=webp 1920w"
           sizes="100vw"
-          className="object-cover object-center"
-          quality={60}
+          alt="Imóvel residencial em Osasco"
+          fetchPriority="high"
+          loading="eager"
+          decoding="sync"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-dark/75" />
         <div className="relative container mx-auto px-6 pt-32 pb-24">
