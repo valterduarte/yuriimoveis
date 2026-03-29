@@ -49,3 +49,14 @@ export const SCROLL_THRESHOLD = 60
 export const CARD_IMAGE_HEIGHT = 260
 
 export const ADMIN_PROPERTIES_LIMIT = 50
+
+export const SORT_OPTIONS = [
+  { value: 'recente',     label: 'Mais recente'  },
+  { value: 'menor_preco', label: 'Menor preço'   },
+  { value: 'maior_preco', label: 'Maior preço'   },
+  { value: 'maior_area',  label: 'Maior área'    },
+]
+
+export const BEDROOM_OPTIONS = ['', '1', '2', '3', '4+']
+
+export const DEBOUNCE_DELAY = 600
