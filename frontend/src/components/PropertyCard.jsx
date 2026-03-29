@@ -71,30 +71,30 @@ export default function PropertyCard({ imovel }) {
         <h3 className="font-semibold text-dark text-sm mb-2 line-clamp-1 group-hover:text-primary transition-colors">
           {imovel.titulo}
         </h3>
-        <p className="flex items-center gap-1 text-gray-500 text-xs mb-3">
+        <p className="flex items-center gap-1 text-gray-600 text-xs mb-3">
           <FiMapPin size={11} className="text-primary flex-shrink-0" />
           {imovel.bairro}, {imovel.cidade}
         </p>
 
-        <div className="flex items-center gap-4 text-xs text-gray-500 pt-3 border-t border-gray-100">
+        <div className="flex items-center gap-4 text-xs text-gray-600 pt-3 border-t border-gray-100">
           {imovel.quartos > 0 && (
             <span className="flex items-center gap-1">
-              <LuBed size={13} className="text-gray-400" /> {imovel.quartos}
+              <LuBed size={13} className="text-gray-500" /> {imovel.quartos}
             </span>
           )}
           {imovel.banheiros > 0 && (
             <span className="flex items-center gap-1">
-              <FaBath size={11} className="text-gray-400" /> {imovel.banheiros}
+              <FaBath size={11} className="text-gray-500" /> {imovel.banheiros}
             </span>
           )}
           {imovel.vagas > 0 && (
             <span className="flex items-center gap-1">
-              <FaCar size={12} className="text-gray-400" /> {imovel.vagas}
+              <FaCar size={12} className="text-gray-500" /> {imovel.vagas}
             </span>
           )}
           {imovel.area > 0 && (
             <span className="flex items-center gap-1 ml-auto">
-              <FiMaximize size={11} className="text-gray-400" /> {imovel.area}m²
+              <FiMaximize size={11} className="text-gray-500" /> {imovel.area}m²
             </span>
           )}
         </div>

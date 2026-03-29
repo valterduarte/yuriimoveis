@@ -36,7 +36,7 @@ export default function PropertyOverview({ imovel }) {
           <div className="flex flex-col items-center justify-center py-7 px-4 border-r border-gray-200 text-center">
             <LuBed className="text-[#af1e23] mb-3" size={26} />
             <span className="font-black text-[#1a1a1a] text-2xl leading-none">{imovel.quartos}</span>
-            <span className="text-[10px] uppercase tracking-[0.15em] text-gray-400 mt-1.5">
+            <span className="text-[10px] uppercase tracking-[0.15em] text-gray-500 mt-1.5">
               {imovel.quartos === 1 ? 'Quarto' : 'Quartos'}
             </span>
           </div>
@@ -45,7 +45,7 @@ export default function PropertyOverview({ imovel }) {
           <div className="flex flex-col items-center justify-center py-7 px-4 border-r border-gray-200 text-center">
             <FaBath className="text-[#af1e23] mb-3" size={24} />
             <span className="font-black text-[#1a1a1a] text-2xl leading-none">{imovel.banheiros}</span>
-            <span className="text-[10px] uppercase tracking-[0.15em] text-gray-400 mt-1.5">
+            <span className="text-[10px] uppercase tracking-[0.15em] text-gray-500 mt-1.5">
               {imovel.banheiros === 1 ? 'Banheiro' : 'Banheiros'}
             </span>
           </div>
@@ -54,7 +54,7 @@ export default function PropertyOverview({ imovel }) {
           <div className="flex flex-col items-center justify-center py-7 px-4 border-r border-gray-200 text-center">
             <FaCar className="text-[#af1e23] mb-3" size={24} />
             <span className="font-black text-[#1a1a1a] text-2xl leading-none">{imovel.vagas}</span>
-            <span className="text-[10px] uppercase tracking-[0.15em] text-gray-400 mt-1.5">
+            <span className="text-[10px] uppercase tracking-[0.15em] text-gray-500 mt-1.5">
               {imovel.vagas === 1 ? 'Vaga' : 'Vagas'}
             </span>
           </div>
@@ -63,7 +63,7 @@ export default function PropertyOverview({ imovel }) {
           <div className="flex flex-col items-center justify-center py-7 px-4 text-center">
             <FiMaximize className="text-[#af1e23] mb-3" size={24} />
             <span className="font-black text-[#1a1a1a] text-2xl leading-none">{imovel.area}</span>
-            <span className="text-[10px] uppercase tracking-[0.15em] text-gray-400 mt-1.5">m²</span>
+            <span className="text-[10px] uppercase tracking-[0.15em] text-gray-500 mt-1.5">m²</span>
           </div>
         )}
       </div>

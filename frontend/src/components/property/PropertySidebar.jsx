@@ -25,11 +25,11 @@ export default function PropertySidebar({ imovel, onScheduleVisit }) {
   return (
     <div className="bg-white border border-gray-200 sticky top-36">
       <div className="bg-[#1a1a1a] p-7">
-        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400 mb-1">Código #{imovel.id}</p>
+        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-300 mb-1">Código #{imovel.id}</p>
         <p className="text-3xl font-black text-[#af1e23] leading-tight">
           {formatPrice(imovel.preco, imovel.tipo)}
         </p>
-        <p className="text-[10px] text-gray-400 uppercase tracking-wider mt-1">
+        <p className="text-[10px] text-gray-300 uppercase tracking-wider mt-1">
           {imovel.tipo === 'venda' ? 'Valor de venda' : 'Valor mensal'}
         </p>
         {imovel.tipo === 'venda' && (
@@ -60,11 +60,11 @@ export default function PropertySidebar({ imovel, onScheduleVisit }) {
       </div>
 
       <div className="border-t border-gray-100 px-7 pb-7">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 py-5">Informações</p>
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 py-5">Informações</p>
         <div className="space-y-3">
           {infoItems.map(item => (
             <div key={item.label} className="flex justify-between text-xs">
-              <span className="text-gray-400 capitalize">{item.label}</span>
+              <span className="text-gray-500 capitalize">{item.label}</span>
               <span className="font-semibold text-[#1a1a1a] capitalize">{item.value}</span>
             </div>
           ))}

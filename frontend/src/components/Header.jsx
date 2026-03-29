@@ -49,7 +49,7 @@ export default function Header() {
 
           <div className="hidden md:flex items-center gap-5">
             <div className="flex items-center gap-3 text-gray-400">
-              <a href={PHONE_WA} target="_blank" rel="noreferrer" aria-label="WhatsApp"
+              <a href={PHONE_WA} target="_blank" rel="noreferrer" aria-label="WhatsApp — ícone"
                 className="hover:text-green-400 transition-colors"><FaWhatsapp size={15} /></a>
               <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram"
                 className="hover:text-pink-400 transition-colors"><FaInstagram size={15} /></a>
@@ -89,7 +89,7 @@ export default function Header() {
             </Link>
           ))}
           <div className="pt-5 flex items-center gap-4">
-            <a href={PHONE_WA} target="_blank" rel="noreferrer" aria-label="WhatsApp"
+            <a href={PHONE_WA} target="_blank" rel="noreferrer" aria-label="WhatsApp — ícone"
               className="text-gray-400 hover:text-green-400 transition-colors"><FaWhatsapp size={18} /></a>
             <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram"
               className="text-gray-400 hover:text-pink-400 transition-colors"><FaInstagram size={18} /></a>
