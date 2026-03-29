@@ -31,7 +31,7 @@ export default function PropertyFilters({
 
       <div className="space-y-6">
         <div>
-          <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Finalidade</label>
+          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Finalidade</label>
           <div className="flex gap-1">
             {TRANSACTION_TYPE_OPTIONS.map(option => (
               <button
@@ -48,7 +48,7 @@ export default function PropertyFilters({
         </div>
 
         <div>
-          <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Tipo</label>
+          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Tipo</label>
           <select
             value={categoria}
             onChange={e => onUpdateFilter('categoria', e.target.value)}
@@ -62,7 +62,7 @@ export default function PropertyFilters({
         </div>
 
         <div>
-          <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Cidade</label>
+          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Cidade</label>
           <select
             value={cidade}
             onChange={e => onUpdateFilter('cidade', e.target.value)}
@@ -74,7 +74,7 @@ export default function PropertyFilters({
         </div>
 
         <div>
-          <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Faixa de Preço</label>
+          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Faixa de Preço</label>
           <input
             type="number"
             placeholder="Mínimo (R$)"
@@ -92,7 +92,7 @@ export default function PropertyFilters({
         </div>
 
         <div>
-          <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Quartos</label>
+          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Quartos</label>
           <div className="flex gap-1">
             {BEDROOM_OPTIONS.map(option => (
               <button

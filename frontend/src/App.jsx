@@ -1,6 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation, useParams } from 'react-router-dom'
-import Lenis from 'lenis'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import FloatingContact from './components/FloatingContact'
@@ -17,27 +16,6 @@ const Admin = lazy(() => import('./pages/Admin'))
 function ImovelRouter() {
   const { slug } = useParams()
   return /-\d+$/.test(slug) ? <ImovelDetalhe /> : <BairroPage key={slug} />
-}
-
-function SmoothScroll() {
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    })
-    let raf
-    function loop(time) {
-      lenis.raf(time)
-      raf = requestAnimationFrame(loop)
-    }
-    raf = requestAnimationFrame(loop)
-    return () => {
-      cancelAnimationFrame(raf)
-      lenis.destroy()
-    }
-  }, [])
-  return null
 }
 
 function ScrollToTop() {
@@ -59,16 +37,12 @@ function ScrollReveal() {
       entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
       { threshold: 0.1 }
     )
-    const observe = () => {
+    const timer = setTimeout(() => {
       document.querySelectorAll('.reveal:not(.visible)').forEach(el => obs.observe(el))
-    }
-    const timer = setTimeout(observe, 80)
-    const mutObs = new MutationObserver(observe)
-    mutObs.observe(document.body, { childList: true, subtree: true })
+    }, 80)
     return () => {
       clearTimeout(timer)
       obs.disconnect()
-      mutObs.disconnect()
     }
   }, [location.pathname])
   return null
@@ -77,7 +51,6 @@ function ScrollReveal() {
 function App() {
   return (
     <Router>
-      <SmoothScroll />
       <ScrollToTop />
       <ScrollReveal />
       <div className="flex flex-col min-h-screen">

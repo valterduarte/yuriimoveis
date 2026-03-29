@@ -56,7 +56,7 @@ export default function Contato() {
                     <info.icon className="text-white" size={14} />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">{info.title}</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-gray-600 mb-1">{info.title}</p>
                     <p className="text-sm text-dark whitespace-pre-line leading-relaxed">{info.content}</p>
                   </div>
                 </div>
