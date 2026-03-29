@@ -3,16 +3,15 @@ import { FiMapPin, FiMaximize } from 'react-icons/fi'
 import { FaCar, FaBath } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
 import { formatPrice, imovelSlug, optimizeCloudinaryUrl } from '../utils/imovelUtils'
-
-const PLACEHOLDER = 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80'
+import { PLACEHOLDER_IMAGE, PROPERTY_STATUSES, CARD_IMAGE_HEIGHT } from '../constants'
 
 export default function PropertyCard({ imovel }) {
-  const img = optimizeCloudinaryUrl(imovel.imagens?.[0], 600) || PLACEHOLDER
+  const img = optimizeCloudinaryUrl(imovel.imagens?.[0], 600) || PLACEHOLDER_IMAGE
 
   return (
     <Link to={`/imoveis/${imovelSlug(imovel)}`} className="group block bg-white overflow-hidden">
       {/* Image */}
-      <div className="relative overflow-hidden" style={{ height: '260px' }}>
+      <div className="relative overflow-hidden" style={{ height: CARD_IMAGE_HEIGHT }}>
         <img
           src={img}
           alt={`${imovel.titulo} — ${imovel.categoria} para ${imovel.tipo} em ${imovel.bairro || imovel.cidade}`}
@@ -21,7 +20,7 @@ export default function PropertyCard({ imovel }) {
           width={600}
           height={260}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          onError={e => { e.target.src = PLACEHOLDER }}
+          onError={e => { e.target.src = PLACEHOLDER_IMAGE }}
         />
 
         {/* Hover overlay */}
@@ -58,19 +57,16 @@ export default function PropertyCard({ imovel }) {
         )}
 
         {/* Badge status — abaixo do destaque, topo direito */}
-        {imovel.status && (
-          <div className={`absolute ${imovel.destaque ? 'top-9' : 'top-3'} right-3`}>
-            <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${
-              imovel.status === 'planta' ? 'bg-blue-600'
-              : imovel.status === 'construcao' ? 'bg-amber-500'
-              : 'bg-green-600'
-            }`}>
-              {imovel.status === 'planta' ? 'Na Planta'
-              : imovel.status === 'construcao' ? 'Em Construção'
-              : 'Pronto para Morar'}
-            </span>
-          </div>
-        )}
+        {imovel.status && (() => {
+          const status = PROPERTY_STATUSES.find(s => s.value === imovel.status)
+          return status ? (
+            <div className={`absolute ${imovel.destaque ? 'top-9' : 'top-3'} right-3`}>
+              <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${status.color}`}>
+                {status.label}
+              </span>
+            </div>
+          ) : null
+        })()}
       </div>
 
       {/* Content */}

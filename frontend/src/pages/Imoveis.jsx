@@ -8,6 +8,7 @@ import SEOHead from '../components/SEOHead'
 import { API_URL, PHONE_WA, SITE_URL } from '../config'
 import { imovelSlug } from '../utils/imovelUtils'
 import { FaWhatsapp } from 'react-icons/fa'
+import { PROPERTY_CATEGORIES, ITEMS_PER_PAGE } from '../constants'
 
 const ordemOptions = [
   { value: 'recente', label: 'Mais recente' },
@@ -23,7 +24,7 @@ export default function Imoveis() {
   const [loading, setLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
   const [page, setPage] = useState(1)
-  const limit = 9
+  const limit = ITEMS_PER_PAGE
 
   // Todos os filtros derivados diretamente da URL — fonte única de verdade
   const tipo     = searchParams.get('tipo')     || ''
@@ -153,12 +154,9 @@ export default function Imoveis() {
                   <select value={categoria} onChange={e => updateFilter('categoria', e.target.value)}
                     className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary">
                     <option value="">Todos</option>
-                    <option value="casa">Casa</option>
-                    <option value="apartamento">Apartamento</option>
-                    <option value="terreno">Terreno</option>
-                    <option value="chale">Chalé</option>
-                    <option value="comercial">Comercial</option>
-                    <option value="chacara">Chácara</option>
+                    {PROPERTY_CATEGORIES.map(c => (
+                      <option key={c.value} value={c.value}>{c.label}</option>
+                    ))}
                   </select>
                 </div>
 

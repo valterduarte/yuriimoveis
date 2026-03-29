@@ -17,7 +17,7 @@ import axios from 'axios'
 import SEOHead from '../components/SEOHead'
 import { formatPrice, calcParcela, imovelSlug } from '../utils/imovelUtils'
 import { API_URL, PHONE_WA, PHONE_TEL, PHONE_DISPLAY, PHONE_STRUCTURED, SITE_URL } from '../config'
-const PLACEHOLDER = 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80'
+import { PLACEHOLDER_IMAGE, PROPERTY_STATUSES } from '../constants'
 
 const TABS = [
   { id: 'visao-geral', label: 'Visão Geral' },
@@ -68,7 +68,7 @@ export default function ImovelDetalhe() {
   useEffect(() => {
     if (lightbox === null) return
     lightboxCloseRef.current?.focus()
-    const imagesArr = imovel?.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER]
+    const imagesArr = imovel?.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
     const onKey = e => {
       if (e.key === 'Escape') { setLightbox(null); return }
       if (e.key === 'ArrowRight') setLightbox(i => (i + 1) % imagesArr.length)
@@ -120,7 +120,7 @@ export default function ImovelDetalhe() {
     )
   }
 
-  const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER]
+  const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
   const whatsMsg = encodeURIComponent(`Olá! Tenho interesse no imóvel: ${imovel.titulo} — Código #${imovel.id}`)
   const pageUrl = `${SITE_URL}/imoveis/${imovelSlug(imovel)}`
   const shareUrl = `${API_URL}/share/${imovel.id}`
@@ -148,7 +148,7 @@ export default function ImovelDetalhe() {
       <SEOHead
         title={imovel.titulo}
         description={imovelDescription}
-        image={images[0] !== PLACEHOLDER ? images[0] : undefined}
+        image={images[0] !== PLACEHOLDER_IMAGE ? images[0] : undefined}
         url={`/imoveis/${imovelSlug(imovel)}`}
         type="article"
         jsonLd={[
@@ -249,7 +249,7 @@ export default function ImovelDetalhe() {
                 loading={i === 0 ? 'eager' : 'lazy'}
                 decoding={i === 0 ? 'sync' : 'async'}
                 className="w-full h-full object-cover opacity-75"
-                onError={e => { e.target.src = PLACEHOLDER }}
+                onError={e => { e.target.src = PLACEHOLDER_IMAGE }}
               />
             </SwiperSlide>
           ))}
@@ -303,17 +303,14 @@ export default function ImovelDetalhe() {
         <div className="absolute bottom-0 left-0 right-0 px-8 pb-10 md:px-14 z-30 pointer-events-none">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center gap-3 mb-2">
-              {imovel.status && (
-                <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${
-                  imovel.status === 'planta' ? 'bg-blue-600'
-                  : imovel.status === 'construcao' ? 'bg-amber-500'
-                  : 'bg-green-600'
-                }`}>
-                  {imovel.status === 'planta' ? 'Na Planta'
-                  : imovel.status === 'construcao' ? 'Em Construção'
-                  : 'Pronto para Morar'}
-                </span>
-              )}
+              {imovel.status && (() => {
+                const status = PROPERTY_STATUSES.find(s => s.value === imovel.status)
+                return status ? (
+                  <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${status.color}`}>
+                    {status.label}
+                  </span>
+                ) : null
+              })()}
             </div>
             <h1 className="text-3xl md:text-5xl font-black text-white uppercase leading-tight mb-3">
               {imovel.titulo}
@@ -348,7 +345,7 @@ export default function ImovelDetalhe() {
                     loading="lazy"
                     decoding="async"
                     className="w-full h-full object-cover"
-                    onError={e => { e.target.src = PLACEHOLDER }}
+                    onError={e => { e.target.src = PLACEHOLDER_IMAGE }}
                   />
                 </SwiperSlide>
               ))}
@@ -548,7 +545,7 @@ export default function ImovelDetalhe() {
                   decoding="async"
                   className="perspectivas-img w-full object-cover block transition-opacity duration-300 hover:opacity-70"
                   style={{ height: '420px' }}
-                  onError={e => { e.target.src = PLACEHOLDER }}
+                  onError={e => { e.target.src = PLACEHOLDER_IMAGE }}
                 />
               </div>
             </SwiperSlide>
@@ -669,7 +666,7 @@ export default function ImovelDetalhe() {
                 src={images[lightbox]}
                 alt={`${imovel.titulo} em ${imovel.cidade || 'Osasco'} – foto ${lightbox + 1} de ${images.length}`}
                 className="max-h-[82vh] max-w-[88vw] object-contain block"
-                onError={e => { e.target.src = PLACEHOLDER }}
+                onError={e => { e.target.src = PLACEHOLDER_IMAGE }}
               />
               <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#af1e23]" />
               <p className="absolute bottom-3 right-4 text-white/50 text-[10px] uppercase tracking-widest">

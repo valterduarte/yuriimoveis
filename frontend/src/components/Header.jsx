@@ -4,12 +4,7 @@ import { FiMenu, FiX, FiPhone } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import Logo from './Logo'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL } from '../config'
-
-const navLinks = [
-  { href: '/', label: 'Início' },
-  { href: '/imoveis', label: 'Imóveis' },
-{ href: '/contato', label: 'Contato' },
-]
+import { NAVIGATION_LINKS, SCROLL_THRESHOLD } from '../constants'
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -17,7 +12,7 @@ export default function Header() {
   const location = useLocation()
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 60)
+    const handleScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -39,7 +34,7 @@ export default function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map(link => (
+            {NAVIGATION_LINKS.map(link => (
               <Link
                 key={link.href}
                 to={link.href}
@@ -87,7 +82,7 @@ export default function Header() {
       {/* Mobile menu */}
       <div className={`md:hidden bg-dark border-t border-gray-800 overflow-hidden transition-all duration-200 ${menuOpen ? 'max-h-96' : 'max-h-0'}`}>
         <nav className="flex flex-col py-4 container mx-auto px-6">
-          {navLinks.map(link => (
+          {NAVIGATION_LINKS.map(link => (
             <Link
               key={link.href}
               to={link.href}

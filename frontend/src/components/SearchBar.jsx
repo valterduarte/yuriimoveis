@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FiSearch } from 'react-icons/fi'
+import { PROPERTY_CATEGORIES, TRANSACTION_TYPES, SALE_PRICE_OPTIONS, RENT_PRICE_OPTIONS } from '../constants'
 
 export default function SearchBar() {
   const navigate = useNavigate()
@@ -23,10 +24,7 @@ export default function SearchBar() {
     <form onSubmit={handleSearch} className="bg-white shadow-2xl">
       {/* Tipo tabs */}
       <div className="flex">
-        {[
-          { value: 'venda', label: 'Comprar' },
-          { value: 'aluguel', label: 'Alugar' },
-        ].map(t => (
+        {TRANSACTION_TYPES.map(t => (
           <button
             key={t.value}
             type="button"
@@ -50,12 +48,9 @@ export default function SearchBar() {
           <select id="sb-categoria" value={categoria} onChange={e => setCategoria(e.target.value)}
             className="w-full text-sm text-dark focus:outline-none bg-white">
             <option value="">Todos os tipos</option>
-            <option value="casa">Casa</option>
-            <option value="apartamento">Apartamento</option>
-            <option value="terreno">Terreno</option>
-            <option value="chale">Chalé</option>
-            <option value="comercial">Comercial</option>
-            <option value="chacara">Chácara</option>
+            {PROPERTY_CATEGORIES.map(c => (
+              <option key={c.value} value={c.value}>{c.label}</option>
+            ))}
           </select>
         </div>
         <div className="p-5">
@@ -75,23 +70,9 @@ export default function SearchBar() {
           <select id="sb-preco" value={precoMax} onChange={e => setPrecoMax(e.target.value)}
             className="w-full text-sm text-dark focus:outline-none bg-white">
             <option value="">Sem limite</option>
-            {tipo === 'venda' ? (
-              <>
-                <option value="200000">R$ 200.000</option>
-                <option value="400000">R$ 400.000</option>
-                <option value="600000">R$ 600.000</option>
-                <option value="800000">R$ 800.000</option>
-                <option value="1000000">R$ 1.000.000</option>
-                <option value="2000000">R$ 2.000.000+</option>
-              </>
-            ) : (
-              <>
-                <option value="1000">R$ 1.000/mês</option>
-                <option value="2000">R$ 2.000/mês</option>
-                <option value="3000">R$ 3.000/mês</option>
-                <option value="5000">R$ 5.000/mês</option>
-              </>
-            )}
+            {(tipo === 'venda' ? SALE_PRICE_OPTIONS : RENT_PRICE_OPTIONS).map(p => (
+              <option key={p.value} value={p.value}>{p.label}</option>
+            ))}
           </select>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { FiPhone, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI } from '../config'
+import { NAVIGATION_LINKS, PROPERTY_CATEGORIES } from '../constants'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -45,11 +46,9 @@ export default function Footer() {
             <h4 className="text-white text-xs uppercase tracking-widest font-bold mb-6">Navegação</h4>
             <ul className="space-y-3">
               {[
-                { href: '/', label: 'Início' },
-                { href: '/imoveis', label: 'Imóveis' },
-                { href: '/imoveis?tipo=venda', label: 'Imóveis à Venda' },
-                { href: '/imoveis?tipo=aluguel', label: 'Imóveis para Alugar' },
-{ href: '/contato', label: 'Contato' },
+                ...NAVIGATION_LINKS,
+                { href: '/imoveis?tipo=venda',   label: 'Imóveis à Venda'      },
+                { href: '/imoveis?tipo=aluguel', label: 'Imóveis para Alugar'  },
               ].map(link => (
                 <li key={link.href}>
                   <Link to={link.href}
@@ -66,14 +65,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white text-xs uppercase tracking-widest font-bold mb-6">Tipos de Imóveis</h4>
             <ul className="space-y-3">
-              {[
-                { label: 'Casas', value: 'casa' },
-                { label: 'Apartamentos', value: 'apartamento' },
-                { label: 'Terrenos', value: 'terreno' },
-                { label: 'Chalés', value: 'chale' },
-                { label: 'Comercial', value: 'comercial' },
-                { label: 'Chácaras', value: 'chacara' },
-              ].map(({ label, value }) => (
+              {PROPERTY_CATEGORIES.map(({ label, value }) => (
                 <li key={value}>
                   <Link to={`/imoveis?categoria=${value}`}
                     className="text-xs hover:text-primary transition-colors flex items-center gap-2">

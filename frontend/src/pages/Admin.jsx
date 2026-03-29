@@ -3,6 +3,7 @@ import { FiEdit2, FiPlus, FiTrash2, FiUpload, FiX } from 'react-icons/fi'
 import axios from 'axios'
 import { calcParcela } from '../utils/imovelUtils'
 import { API_URL, CLOUDINARY_CLOUD, CLOUDINARY_PRESET } from '../config'
+import { PROPERTY_CATEGORIES } from '../constants'
 
 const DESCRICAO_TEMPLATE = `🏢 NOME DO EMPREENDIMENTO – CIDADE
 
@@ -373,12 +374,9 @@ export default function Admin() {
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Categoria *</label>
                     <select value={form.categoria} onChange={e => set('categoria', e.target.value)}
                       className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary">
-                      <option value="apartamento">Apartamento</option>
-                      <option value="casa">Casa</option>
-                      <option value="terreno">Terreno</option>
-                      <option value="chale">Chalé</option>
-                      <option value="comercial">Comercial</option>
-                      <option value="chacara">Chácara</option>
+                      {PROPERTY_CATEGORIES.map(c => (
+                        <option key={c.value} value={c.value}>{c.label}</option>
+                      ))}
                     </select>
                   </div>
                   <div>
