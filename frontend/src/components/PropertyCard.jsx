@@ -10,7 +10,6 @@ export default function PropertyCard({ imovel }) {
 
   return (
     <Link to={`/imoveis/${imovelSlug(imovel)}`} className="group block bg-white overflow-hidden">
-      {/* Image */}
       <div className="relative overflow-hidden" style={{ height: CARD_IMAGE_HEIGHT }}>
         <img
           src={img}
@@ -23,7 +22,6 @@ export default function PropertyCard({ imovel }) {
           onError={e => { e.target.src = PLACEHOLDER_IMAGE }}
         />
 
-        {/* Hover overlay */}
         <div className="absolute inset-0 bg-dark/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-5">
           <p className="text-primary text-[10px] uppercase tracking-widest mb-1 font-bold">
             {imovel.categoria}
@@ -38,7 +36,6 @@ export default function PropertyCard({ imovel }) {
           </span>
         </div>
 
-        {/* Badge tipo — topo esquerdo */}
         <div className="absolute top-3 left-3">
           <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${
             imovel.tipo === 'venda' ? 'bg-primary' : 'bg-dark'
@@ -47,7 +44,6 @@ export default function PropertyCard({ imovel }) {
           </span>
         </div>
 
-        {/* Badge destaque — topo direito */}
         {imovel.destaque && (
           <div className="absolute top-3 right-3">
             <span className="text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-dark bg-white">
@@ -56,7 +52,6 @@ export default function PropertyCard({ imovel }) {
           </div>
         )}
 
-        {/* Badge status — abaixo do destaque, topo direito */}
         {imovel.status && (() => {
           const status = PROPERTY_STATUSES.find(s => s.value === imovel.status)
           return status ? (
@@ -69,7 +64,6 @@ export default function PropertyCard({ imovel }) {
         })()}
       </div>
 
-      {/* Content */}
       <div className="p-5 border border-gray-200 border-t-0 group-hover:border-primary transition-colors duration-300">
         <p className="text-primary font-bold text-lg mb-1">
           {formatPrice(imovel.preco, imovel.tipo)}

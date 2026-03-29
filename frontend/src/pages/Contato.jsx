@@ -32,7 +32,6 @@ export default function Contato() {
         }}
       />
 
-      {/* Hero */}
       <section className="py-24 bg-dark text-white">
         <div className="container mx-auto px-6">
           <span className="section-label">Fale Conosco</span>
@@ -44,7 +43,6 @@ export default function Contato() {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-            {/* Info */}
             <div className="space-y-5">
               <h2 className="text-xs font-bold uppercase tracking-widest text-dark mb-6">Informações</h2>
 
@@ -64,7 +62,6 @@ export default function Contato() {
                 </div>
               ))}
 
-              {/* Social */}
               <div className="flex gap-2 pt-2">
                 <a href={PHONE_WA} target="_blank" rel="noreferrer"
                   className="flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white text-[10px] uppercase tracking-wider font-bold px-3 py-2.5 transition-colors">
@@ -77,7 +74,6 @@ export default function Contato() {
               </div>
             </div>
 
-            {/* Contato direto */}
             <div className="lg:col-span-2">
               <div className="bg-white border border-gray-200 p-8">
                 <h2 className="text-xs font-bold uppercase tracking-widest text-dark mb-3">Fale Agora</h2>

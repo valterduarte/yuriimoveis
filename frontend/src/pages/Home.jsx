@@ -9,17 +9,15 @@ import SkeletonCard from '../components/SkeletonCard'
 import axios from 'axios'
 import { API_URL, PHONE_WA, PHONE_STRUCTURED, SITE_URL } from '../config'
 
-
-
 export default function Home() {
-  const [destaques, setDestaques] = useState([])
+  const [featuredProperties, setFeaturedProperties] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const controller = new AbortController()
     axios.get(`${API_URL}/api/imoveis?destaque=1&limit=6`, { signal: controller.signal })
-      .then(res => setDestaques(res.data.imoveis || []))
-      .catch(err => { if (!axios.isCancel(err)) setDestaques([]) })
+      .then(res => setFeaturedProperties(res.data.imoveis || []))
+      .catch(err => { if (!axios.isCancel(err)) setFeaturedProperties([]) })
       .finally(() => setLoading(false))
     return () => controller.abort()
   }, [])
@@ -102,7 +100,6 @@ export default function Home() {
         ]}
       />
 
-      {/* HERO */}
       <section
         className="relative min-h-screen flex items-center -mt-16 md:-mt-20"
         style={{
@@ -133,7 +130,6 @@ export default function Home() {
       </section>
 
 
-      {/* DESTAQUES */}
       <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="flex items-end justify-between mb-12 reveal">
@@ -149,11 +145,11 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
             </div>
-          ) : destaques.length > 0 ? (
+          ) : featuredProperties.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {destaques.map((imovel, i) => (
-                <div key={imovel.id} className="reveal" style={{ transitionDelay: `${(i % 3) * 0.08}s` }}>
-                  <PropertyCard imovel={imovel} />
+              {featuredProperties.map((property, i) => (
+                <div key={property.id} className="reveal" style={{ transitionDelay: `${(i % 3) * 0.08}s` }}>
+                  <PropertyCard imovel={property} />
                 </div>
               ))}
             </div>
@@ -169,7 +165,6 @@ export default function Home() {
       </section>
 
 
-{/* CTA */}
       <section className="py-20 bg-primary">
         <div className="container mx-auto px-6 text-center reveal">
           <h2 className="text-4xl md:text-5xl font-black text-white uppercase leading-tight mb-4">

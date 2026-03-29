@@ -27,12 +27,10 @@ export default function Header() {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
 
-          {/* Logo */}
           <Link to="/" aria-label="Página inicial — Corretor Yuri Imóveis">
             <Logo className="h-9 w-auto" />
           </Link>
 
-          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8">
             {NAVIGATION_LINKS.map(link => (
               <Link
@@ -49,7 +47,6 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Right */}
           <div className="hidden md:flex items-center gap-5">
             <div className="flex items-center gap-3 text-gray-400">
               <a href={PHONE_WA} target="_blank" rel="noreferrer" aria-label="WhatsApp"
@@ -68,7 +65,6 @@ export default function Header() {
             </a>
           </div>
 
-          {/* Mobile toggle */}
           <button
             className="md:hidden text-white p-2"
             aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
@@ -79,7 +75,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <div className={`md:hidden bg-dark border-t border-gray-800 overflow-hidden transition-all duration-200 ${menuOpen ? 'max-h-96' : 'max-h-0'}`}>
         <nav className="flex flex-col py-4 container mx-auto px-6">
           {NAVIGATION_LINKS.map(link => (

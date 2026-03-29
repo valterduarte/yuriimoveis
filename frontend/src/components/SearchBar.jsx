@@ -22,7 +22,6 @@ export default function SearchBar() {
 
   return (
     <form onSubmit={handleSearch} className="bg-white shadow-2xl">
-      {/* Tipo tabs */}
       <div className="flex">
         {TRANSACTION_TYPES.map(t => (
           <button

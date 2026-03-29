@@ -9,16 +9,13 @@ function Logo({ className = '' }) {
       className={className}
       aria-label="Corretor Yuri"
     >
-      {/* Marca: quadrado vermelho com Y */}
       <rect width="52" height="52" fill="#af1e23" />
       <line x1="14" y1="13" x2="26" y2="27" stroke="white" strokeWidth="4" strokeLinecap="round" />
       <line x1="38" y1="13" x2="26" y2="27" stroke="white" strokeWidth="4" strokeLinecap="round" />
       <line x1="26" y1="27" x2="26" y2="40" stroke="white" strokeWidth="4" strokeLinecap="round" />
 
-      {/* Linha divisória */}
       <line x1="62" y1="8" x2="62" y2="44" stroke="#af1e23" strokeWidth="1.5" />
 
-      {/* YURI — nome principal grande */}
       <text
         x="70"
         y="30"
@@ -32,7 +29,6 @@ function Logo({ className = '' }) {
         YURI
       </text>
 
-      {/* CORRETOR — label pequeno abaixo */}
       <text
         x="72"
         y="44"
