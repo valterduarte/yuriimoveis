@@ -26,7 +26,7 @@ X dormitórios — XXm²
 A partir de *R$ 000.000`
 
 const EMPTY_FORM = {
-  titulo: '', descricao: '', tipo: 'venda', categoria: 'apartamento',
+  titulo: '', descricao: '', descricao_seo: '', tipo: 'venda', categoria: 'apartamento',
   status: 'pronto',
   preco: '', parcela_display: '', parcela_label: '', area: '', quartos: '', banheiros: '', vagas: '',
   endereco: '', bairro: '', cidade: 'Osasco', cep: '',
@@ -37,6 +37,7 @@ function propertyToForm(property) {
   return {
     titulo:          property.titulo          || '',
     descricao:       property.descricao       || '',
+    descricao_seo:   property.descricao_seo   || '',
     tipo:            property.tipo            || 'venda',
     categoria:       property.categoria       || 'apartamento',
     status:          property.status          || 'pronto',
@@ -113,6 +114,7 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
     try {
       const payload = {
         ...form,
+        descricao_seo: form.descricao_seo || '',
         preco:      Number(form.preco),
         area:       Number(form.area)      || 0,
         quartos:    Number(form.quartos)   || 0,
@@ -270,7 +272,7 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
 
       <div className="bg-white border border-gray-200 p-6">
         <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Descrição</h2>
-        <p className="text-[10px] text-gray-400 mb-3">Use o template abaixo como base.</p>
+        <p className="text-[10px] text-gray-400 mb-3">Use o template abaixo como base. Pode usar emojis e formatação livre.</p>
         <div className="bg-gray-50 border border-dashed border-gray-300 p-4 mb-3 text-xs text-gray-500 font-mono leading-relaxed whitespace-pre-line">
           {DESCRIPTION_TEMPLATE}
         </div>
@@ -281,6 +283,26 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
           className="mt-2 text-[10px] uppercase tracking-widest text-primary font-bold hover:underline">
           Preencher com template
         </button>
+      </div>
+
+      <div className="bg-white border border-gray-200 p-6">
+        <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Descrição SEO</h2>
+        <p className="text-[10px] text-gray-400 mb-3">
+          Texto corrido para o Google. Sem emojis. Mencione: tipo, bairro, cidade, características principais. 150–300 palavras.
+        </p>
+        <div className="bg-amber-50 border border-amber-200 px-3 py-2 mb-3 text-[10px] text-amber-700 leading-relaxed">
+          Exemplo: "Apartamento 2 dormitórios com terraço gourmet à venda no Rochdale, Osasco SP. Condomínio LOOK com piscina, academia e 392 unidades. Financiamento disponível. Atendimento com o Corretor Yuri — (11) 97256-3420."
+        </div>
+        <textarea
+          value={form.descricao_seo}
+          onChange={e => updateField('descricao_seo', e.target.value)}
+          rows={6}
+          placeholder="Escreva um texto corrido, sem emojis, focado em palavras-chave de busca..."
+          className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary resize-y"
+        />
+        <p className="mt-1.5 text-[10px] text-gray-400">
+          {form.descricao_seo.length} caracteres {form.descricao_seo.length > 0 && form.descricao_seo.length < 150 ? '— recomendado: mínimo 150' : ''}
+        </p>
       </div>
 
       <div className="bg-white border border-gray-200 p-6">

@@ -90,7 +90,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', requireAuth, async (req, res) => {
   try {
     const {
-      titulo, descricao, tipo, categoria, preco, area,
+      titulo, descricao, descricao_seo, tipo, categoria, preco, area,
       quartos, banheiros, vagas, endereco, bairro, cidade,
       cep, destaque, imagens, diferenciais, status, parcela_display, parcela_label,
     } = req.body
@@ -100,11 +100,11 @@ router.post('/', requireAuth, async (req, res) => {
     }
 
     const { rows } = await pool.query(`
-      INSERT INTO imoveis (titulo, descricao, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, parcela_display, parcela_label)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)
+      INSERT INTO imoveis (titulo, descricao, descricao_seo, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, parcela_display, parcela_label)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
       RETURNING id
     `, [
-      titulo, descricao || '', tipo, categoria, Number(preco),
+      titulo, descricao || '', descricao_seo || '', tipo, categoria, Number(preco),
       Number(area) || 0, Number(quartos) || 0, Number(banheiros) || 0, Number(vagas) || 0,
       endereco || '', bairro || '', cidade || 'Osasco', cep || '',
       destaque ? true : false,
@@ -129,7 +129,7 @@ router.put('/:id', requireAuth, async (req, res) => {
     if (!existing.rows[0]) return res.status(404).json({ error: 'Imóvel não encontrado' })
 
     const {
-      titulo, descricao, tipo, categoria, preco, area,
+      titulo, descricao, descricao_seo, tipo, categoria, preco, area,
       quartos, banheiros, vagas, endereco, bairro, cidade,
       cep, destaque, imagens, diferenciais, ativo, status, parcela_display, parcela_label,
     } = req.body
@@ -138,28 +138,29 @@ router.put('/:id', requireAuth, async (req, res) => {
       UPDATE imoveis SET
         titulo          = COALESCE($1,  titulo),
         descricao       = COALESCE($2,  descricao),
-        tipo            = COALESCE($3,  tipo),
-        categoria       = COALESCE($4,  categoria),
-        preco           = COALESCE($5,  preco),
-        area            = COALESCE($6,  area),
-        quartos         = COALESCE($7,  quartos),
-        banheiros       = COALESCE($8,  banheiros),
-        vagas           = COALESCE($9,  vagas),
-        endereco        = COALESCE($10, endereco),
-        bairro          = COALESCE($11, bairro),
-        cidade          = COALESCE($12, cidade),
-        cep             = COALESCE($13, cep),
-        destaque        = COALESCE($14, destaque),
-        imagens         = COALESCE($15, imagens),
-        diferenciais    = COALESCE($16, diferenciais),
-        ativo           = COALESCE($17, ativo),
-        status          = COALESCE($18, status),
-        parcela_display = COALESCE($19, parcela_display),
-        parcela_label   = COALESCE($20, parcela_label),
+        descricao_seo   = COALESCE($3,  descricao_seo),
+        tipo            = COALESCE($4,  tipo),
+        categoria       = COALESCE($5,  categoria),
+        preco           = COALESCE($6,  preco),
+        area            = COALESCE($7,  area),
+        quartos         = COALESCE($8,  quartos),
+        banheiros       = COALESCE($9,  banheiros),
+        vagas           = COALESCE($10, vagas),
+        endereco        = COALESCE($11, endereco),
+        bairro          = COALESCE($12, bairro),
+        cidade          = COALESCE($13, cidade),
+        cep             = COALESCE($14, cep),
+        destaque        = COALESCE($15, destaque),
+        imagens         = COALESCE($16, imagens),
+        diferenciais    = COALESCE($17, diferenciais),
+        ativo           = COALESCE($18, ativo),
+        status          = COALESCE($19, status),
+        parcela_display = COALESCE($20, parcela_display),
+        parcela_label   = COALESCE($21, parcela_label),
         updated_at      = NOW()
-      WHERE id = $21
+      WHERE id = $22
     `, [
-      titulo, descricao, tipo, categoria,
+      titulo, descricao, descricao_seo || null, tipo, categoria,
       preco != null ? Number(preco) : null,
       area  != null ? Number(area)  : null,
       quartos   != null ? Number(quartos)   : null,

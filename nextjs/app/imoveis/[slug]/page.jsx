@@ -39,9 +39,11 @@ export async function generateMetadata({ params }) {
     const imovel = await fetchImovel(id)
     if (!imovel) return { title: 'Imóvel não encontrado' }
 
-    const description = imovel.descricao
-      ? imovel.descricao.slice(0, 155).replace(/\n/g, ' ')
-      : `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
+    const description = imovel.descricao_seo
+      ? imovel.descricao_seo.slice(0, 155)
+      : imovel.descricao
+        ? imovel.descricao.replace(/[\u{1F000}-\u{1FFFF}]|[\u2600-\u27FF]/gu, '').replace(/\n/g, ' ').slice(0, 155).trim()
+        : `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
 
     const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
 
@@ -89,9 +91,11 @@ async function ImovelDetalhePage({ slug }) {
   if (!imovel) notFound()
 
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
-  const imovelDescription = imovel.descricao
-    ? imovel.descricao.slice(0, 155).replace(/\n/g, ' ')
-    : `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
+  const imovelDescription = imovel.descricao_seo
+    ? imovel.descricao_seo.slice(0, 155)
+    : imovel.descricao
+      ? imovel.descricao.replace(/[\u{1F000}-\u{1FFFF}]|[\u2600-\u27FF]/gu, '').replace(/\n/g, ' ').slice(0, 155).trim()
+      : `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
 
   const jsonLd = [
     {
