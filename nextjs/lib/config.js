@@ -1,4 +1,5 @@
-export const SITE_URL = 'https://corretoryuri.com.br'
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://corretoryuri.com.br'
 export const PHONE_NUMBER     = '5511972563420'
 export const PHONE_DISPLAY    = '(11) 97256-3420'
 export const PHONE_STRUCTURED = '+55-11-97256-3420'
