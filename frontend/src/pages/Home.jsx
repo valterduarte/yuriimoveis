@@ -124,8 +124,8 @@ export default function Home() {
           </div>
         </div>
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2">
-          <span className="text-gray-400 text-[10px] uppercase tracking-widest">Rolar</span>
-          <div className="w-px h-10 bg-gradient-to-b from-gray-400 to-transparent" />
+          <span className="text-gray-300 text-[10px] uppercase tracking-widest">Rolar</span>
+          <div className="w-px h-10 bg-gradient-to-b from-gray-300 to-transparent" />
         </div>
       </section>
 
@@ -154,7 +154,7 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <p className="text-center text-gray-400 py-16">Nenhum imóvel em destaque.</p>
+            <p className="text-center text-gray-500 py-16">Nenhum imóvel em destaque.</p>
           )}
           <div className="text-center mt-10">
             <Link to="/imoveis" className="btn-outline inline-flex items-center gap-2">

@@ -41,7 +41,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white text-xs uppercase tracking-widest font-bold mb-6">Navegação</h4>
+            <h2 className="text-white text-xs uppercase tracking-widest font-bold mb-6">Navegação</h2>
             <ul className="space-y-3">
               {[
                 ...NAVIGATION_LINKS,
@@ -60,7 +60,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white text-xs uppercase tracking-widest font-bold mb-6">Tipos de Imóveis</h4>
+            <h2 className="text-white text-xs uppercase tracking-widest font-bold mb-6">Tipos de Imóveis</h2>
             <ul className="space-y-3">
               {PROPERTY_CATEGORIES.map(({ label, value }) => (
                 <li key={value}>
@@ -75,7 +75,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white text-xs uppercase tracking-widest font-bold mb-6">Contato</h4>
+            <h2 className="text-white text-xs uppercase tracking-widest font-bold mb-6">Contato</h2>
             <ul className="space-y-4 text-xs">
               <li className="flex items-start gap-3">
                 <FiMapPin className="text-primary mt-0.5 flex-shrink-0" size={13} />
@@ -87,7 +87,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <FaWhatsapp className="text-primary flex-shrink-0" size={13} />
-                <a href={PHONE_WA} target="_blank" rel="noreferrer"
+                <a href={PHONE_WA} target="_blank" rel="noreferrer" aria-label="WhatsApp"
                   className="hover:text-primary transition-colors">{PHONE_DISPLAY}</a>
               </li>
             </ul>
