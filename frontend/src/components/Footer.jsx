@@ -33,7 +33,7 @@ export default function Footer() {
                 { href: INSTAGRAM_URL, icon: FaInstagram, hover: 'hover:text-pink-400', label: 'Instagram' },
               ].map(({ href, icon: Icon, hover, label }) => (
                 <a key={href} href={href} target="_blank" rel="noreferrer" aria-label={label}
-                  className={`w-8 h-8 border border-gray-700 flex items-center justify-center ${hover} hover:border-current transition-all`}>
+                  className={`w-12 h-12 border border-gray-700 flex items-center justify-center ${hover} hover:border-current transition-all`}>
                   <Icon size={13} />
                 </a>
               ))}

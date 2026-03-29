@@ -37,12 +37,27 @@ function ScrollReveal() {
       entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
       { threshold: 0.1 }
     )
-    const timer = setTimeout(() => {
+    const observeNew = () =>
       document.querySelectorAll('.reveal:not(.visible)').forEach(el => obs.observe(el))
-    }, 80)
+
+    const timer = setTimeout(observeNew, 80)
+
+    // Re-observe when async content (e.g. API-loaded property cards) is added to the DOM.
+    // Only fires on node additions (not attribute/text changes) to keep it cheap.
+    let debounce
+    const mutObs = new MutationObserver(mutations => {
+      if (mutations.some(m => m.addedNodes.length > 0)) {
+        clearTimeout(debounce)
+        debounce = setTimeout(observeNew, 50)
+      }
+    })
+    mutObs.observe(document.body, { childList: true, subtree: true })
+
     return () => {
       clearTimeout(timer)
+      clearTimeout(debounce)
       obs.disconnect()
+      mutObs.disconnect()
     }
   }, [location.pathname])
   return null

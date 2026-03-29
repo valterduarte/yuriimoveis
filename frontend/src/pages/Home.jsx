@@ -127,7 +127,7 @@ export default function Home() {
           </div>
         </div>
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2">
-          <span className="text-gray-300 text-[10px] uppercase tracking-widest">Rolar</span>
+          <span className="text-gray-300 text-xs uppercase tracking-widest">Rolar</span>
           <div className="w-px h-10 bg-gradient-to-b from-gray-300 to-transparent" />
         </div>
       </section>

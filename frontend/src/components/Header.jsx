@@ -48,17 +48,17 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center gap-5">
-            <div className="flex items-center gap-3 text-gray-400">
+            <div className="flex items-center gap-1 text-gray-400">
               <a href={PHONE_WA} target="_blank" rel="noreferrer" aria-label="WhatsApp — ícone"
-                className="hover:text-green-400 transition-colors"><FaWhatsapp size={15} /></a>
+                className="w-10 h-10 flex items-center justify-center hover:text-green-400 transition-colors"><FaWhatsapp size={15} /></a>
               <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram"
-                className="hover:text-pink-400 transition-colors"><FaInstagram size={15} /></a>
+                className="w-10 h-10 flex items-center justify-center hover:text-pink-400 transition-colors"><FaInstagram size={15} /></a>
             </div>
             <a
               href={PHONE_WA}
               target="_blank"
               rel="noreferrer"
-              className="btn-primary flex items-center gap-2 py-2.5 px-5 text-[10px]"
+              className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs"
             >
               <FaWhatsapp size={13} />
               Fale Conosco

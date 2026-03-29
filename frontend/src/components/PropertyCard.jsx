@@ -23,7 +23,7 @@ export default function PropertyCard({ imovel }) {
         />
 
         <div className="absolute inset-0 bg-dark/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-5">
-          <p className="text-primary text-[10px] uppercase tracking-widest mb-1 font-bold">
+          <p className="text-primary text-xs uppercase tracking-widest mb-1 font-bold">
             {imovel.categoria}
           </p>
           <h3 className="text-white font-bold text-sm leading-snug mb-2">{imovel.titulo}</h3>
@@ -31,13 +31,13 @@ export default function PropertyCard({ imovel }) {
             <FiMapPin size={11} className="text-primary" />
             {imovel.bairro}, {imovel.cidade}
           </div>
-          <span className="inline-block text-[10px] uppercase tracking-widest font-bold bg-primary text-white px-3 py-1.5 w-fit">
+          <span className="inline-block text-xs uppercase tracking-widest font-bold bg-primary text-white px-3 py-1.5 w-fit">
             Ver Detalhes
           </span>
         </div>
 
         <div className="absolute top-3 left-3">
-          <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${
+          <span className={`text-xs uppercase tracking-wider font-bold px-2.5 py-1 text-white ${
             imovel.tipo === 'venda' ? 'bg-primary' : 'bg-dark'
           }`}>
             {imovel.tipo === 'venda' ? 'Venda' : 'Aluguel'}
@@ -46,7 +46,7 @@ export default function PropertyCard({ imovel }) {
 
         {imovel.destaque && (
           <div className="absolute top-3 right-3">
-            <span className="text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-dark bg-white">
+            <span className="text-xs uppercase tracking-wider font-bold px-2.5 py-1 text-dark bg-white">
               Destaque
             </span>
           </div>
@@ -56,7 +56,7 @@ export default function PropertyCard({ imovel }) {
           const status = PROPERTY_STATUSES.find(s => s.value === imovel.status)
           return status ? (
             <div className={`absolute ${imovel.destaque ? 'top-9' : 'top-3'} right-3`}>
-              <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 text-white ${status.color}`}>
+              <span className={`text-xs uppercase tracking-wider font-bold px-2.5 py-1 text-white ${status.color}`}>
                 {status.label}
               </span>
             </div>
