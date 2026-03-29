@@ -11,12 +11,14 @@ export const metadata = {
   title: 'Corretor Yuri Imóveis — Imóveis em Osasco e Região',
   description:
     'Corretor de imóveis em Osasco com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para venda e aluguel. Atendimento personalizado.',
-  alternates: { canonical: '/' },
+  alternates: { canonical: SITE_URL },
   openGraph: {
     title: 'Corretor Yuri Imóveis — Imóveis em Osasco e Região',
     description:
       'Corretor de imóveis em Osasco com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para venda e aluguel.',
-    url: '/',
+    url: SITE_URL,
+    siteName: 'Corretor Yuri Imóveis',
+    locale: 'pt_BR',
     images: [
       {
         url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=630&fit=crop&q=80',

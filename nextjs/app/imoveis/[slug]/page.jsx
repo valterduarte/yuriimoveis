@@ -45,14 +45,17 @@ export async function generateMetadata({ params }) {
 
     const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
 
+    const pageUrl = `${SITE_URL}/imoveis/${imovelSlug(imovel)}`
     return {
-      title: imovel.titulo,
+      title: `${imovel.titulo} — Corretor Yuri Imóveis`,
       description,
-      alternates: { canonical: `/imoveis/${imovelSlug(imovel)}` },
+      alternates: { canonical: pageUrl },
       openGraph: {
-        title: imovel.titulo,
+        title: `${imovel.titulo} — Corretor Yuri Imóveis`,
         description,
-        url: `/imoveis/${imovelSlug(imovel)}`,
+        url: pageUrl,
+        siteName: 'Corretor Yuri Imóveis',
+        locale: 'pt_BR',
         type: 'article',
         images: images[0] !== PLACEHOLDER_IMAGE
           ? [{ url: images[0], width: 1200, height: 800, alt: imovel.titulo }]
@@ -64,9 +67,16 @@ export async function generateMetadata({ params }) {
   // Bairro page
   const neighborhoodName = formatNeighborhoodName(slug)
   return {
-    title: `Imóveis em ${neighborhoodName}, Osasco SP`,
+    title: `Imóveis em ${neighborhoodName}, Osasco SP — Corretor Yuri`,
     description: `Veja todos os imóveis disponíveis no ${neighborhoodName} em Osasco, SP. Casas, apartamentos e terrenos à venda e para alugar. Atendimento com o Corretor Yuri.`,
-    alternates: { canonical: `/imoveis/${slug}` },
+    alternates: { canonical: `${SITE_URL}/imoveis/${slug}` },
+    openGraph: {
+      title: `Imóveis em ${neighborhoodName}, Osasco SP`,
+      description: `Im\u00f3veis dispon\u00edveis no ${neighborhoodName} em Osasco, SP.`,
+      url: `${SITE_URL}/imoveis/${slug}`,
+      siteName: 'Corretor Yuri Im\u00f3veis',
+      locale: 'pt_BR',
+    },
   }
 }
 
