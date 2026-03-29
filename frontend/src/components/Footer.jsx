@@ -24,7 +24,7 @@ export default function Footer() {
                 <span className="text-primary text-[10px] tracking-widest uppercase">Imóveis</span>
               </div>
             </Link>
-            <p className="text-xs leading-relaxed text-gray-500 mb-6">
+            <p className="text-xs leading-relaxed text-gray-400 mb-6">
               Sua imobiliária de confiança em Osasco e região. Realizando o sonho da casa própria há mais de 10 anos.
             </p>
             <div className="flex items-center gap-3">
@@ -96,7 +96,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-gray-800">
-        <div className="container mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-600">
+        <div className="container mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-400">
           <p>© {year} Corretor Yuri Imóveis — Todos os direitos reservados.</p>
           <p>CRECI-SP: {CRECI}</p>
         </div>
