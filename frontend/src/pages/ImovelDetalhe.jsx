@@ -50,12 +50,12 @@ export default function ImovelDetalhe() {
       <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4 text-center px-6">
         {fetchError === '404' ? (
           <>
-            <h2 className="text-2xl font-bold uppercase">Imóvel não encontrado</h2>
+            <h1 className="text-2xl font-bold uppercase">Imóvel não encontrado</h1>
             <p className="text-gray-500 text-sm">O imóvel que você procura não existe ou foi removido.</p>
           </>
         ) : (
           <>
-            <h2 className="text-2xl font-bold uppercase">Erro ao carregar</h2>
+            <h1 className="text-2xl font-bold uppercase">Erro ao carregar</h1>
             <p className="text-gray-500 text-sm">Não foi possível conectar ao servidor. Tente novamente em instantes.</p>
           </>
         )}
@@ -150,10 +150,11 @@ export default function ImovelDetalhe() {
       <PropertyHero imovel={imovel} images={images} shareUrl={shareUrl} />
 
       <div className="bg-[#1a1a1a] sticky top-16 md:top-20 z-30 border-b border-white/10">
-        <div className="max-w-6xl mx-auto px-8 flex overflow-x-auto">
+        <div role="tablist" aria-label="Seções do imóvel" className="max-w-6xl mx-auto px-8 flex overflow-x-auto">
           {TABS.map(tab => (
             <button
               key={tab.id}
+              role="tab"
               onClick={() => scrollToSection(tab.id)}
               aria-selected={activeSection === tab.id}
               aria-controls={tab.id}
@@ -260,6 +261,7 @@ export default function ImovelDetalhe() {
         </a>
         <button
           onClick={() => scrollToSection('contato')}
+          aria-label="Agendar visita"
           className="flex flex-col items-center justify-center gap-1 bg-[#1a1a1a] text-white py-3"
         >
           <FiCalendar size={18} />

@@ -103,7 +103,7 @@ export default function Home() {
       <section
         className="relative min-h-screen flex items-center -mt-16 md:-mt-20"
         style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80')`,
+          backgroundImage: `url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&h=1080&fit=crop&q=60&fm=webp')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

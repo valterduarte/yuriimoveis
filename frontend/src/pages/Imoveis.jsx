@@ -179,7 +179,7 @@ export default function Imoveis() {
             ) : properties.length === 0 ? (
               <div className="text-center py-20 bg-white border border-gray-200 px-6">
                 <div className="text-5xl mb-4" aria-hidden="true">🏠</div>
-                <h3 className="text-lg font-bold text-dark mb-2 uppercase tracking-wide">Nenhum imóvel encontrado</h3>
+                <h2 className="text-lg font-bold text-dark mb-2 uppercase tracking-wide">Nenhum imóvel encontrado</h2>
                 <p className="text-gray-500 text-sm mb-6">Tente ajustar os filtros ou fale com o corretor para encontrar o imóvel ideal.</p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   {activeFilterCount > 0 && (
