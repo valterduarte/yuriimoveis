@@ -105,8 +105,7 @@ export default function Home() {
           src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&q=60&fm=webp"
           srcSet="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop&q=60&fm=webp 800w, https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&q=60&fm=webp 1200w, https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&h=1080&fit=crop&q=60&fm=webp 1920w"
           sizes="100vw"
-          alt=""
-          aria-hidden="true"
+          alt="Imóvel residencial em Osasco"
           fetchPriority="high"
           loading="eager"
           decoding="sync"
@@ -115,7 +114,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-dark/75" />
         <div className="relative container mx-auto px-6 pt-32 pb-24">
           <div className="max-w-2xl mb-12">
-            <span className="section-label">Corretor Yuri Imóveis</span>
+            <span className="section-label !text-gray-300">Corretor Yuri Imóveis</span>
             <h1 className="text-5xl md:text-7xl font-black text-white leading-none mb-6 uppercase tracking-tight">
               Encontre o<br />Imóvel <span className="text-primary">Ideal</span>
             </h1>
