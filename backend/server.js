@@ -26,6 +26,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
   'https://yuriimoveis-frontend.onrender.com',
+  'https://yuriimoveis-a8p5uzpit-valterduartes-projects.vercel.app',
   'https://corretoryuri.com.br',
   process.env.FRONTEND_URL,
 ].filter(Boolean)
