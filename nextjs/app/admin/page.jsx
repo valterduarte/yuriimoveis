@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import axios from 'axios'
 import { ADMIN_PROPERTIES_LIMIT } from '../../lib/constants'
+import { API_URL } from '../../lib/config'
 import { useAdminAuth } from '../../hooks/useAdminAuth'
 import AdminLogin from '../../components/admin/AdminLogin'
 import AdminPropertyList from '../../components/admin/AdminPropertyList'
@@ -23,7 +24,7 @@ export default function AdminPage() {
 
   const loadProperties = async () => {
     try {
-      const res = await axios.get(`/api/imoveis?limit=${ADMIN_PROPERTIES_LIMIT}&ordem=recente&todos=true`)
+      const res = await axios.get(`${API_URL}/api/imoveis?limit=${ADMIN_PROPERTIES_LIMIT}&ordem=recente&todos=true`)
       setProperties(res.data.imoveis || [])
     } catch {
       setProperties([])
@@ -54,7 +55,7 @@ export default function AdminPage() {
 
   const handleDeactivate = async (id) => {
     try {
-      await axios.put(`/api/imoveis/${id}`, { ativo: false }, { headers: authHeader() })
+      await axios.put(`${API_URL}/api/imoveis/${id}`, { ativo: false }, { headers: authHeader() })
       loadProperties()
     } catch (err) {
       if (err.response?.status === 401) handleLogout()
@@ -64,7 +65,7 @@ export default function AdminPage() {
 
   const handleReactivate = async (id) => {
     try {
-      await axios.put(`/api/imoveis/${id}`, { ativo: true }, { headers: authHeader() })
+      await axios.put(`${API_URL}/api/imoveis/${id}`, { ativo: true }, { headers: authHeader() })
       loadProperties()
     } catch (err) {
       if (err.response?.status === 401) handleLogout()

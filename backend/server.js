@@ -32,7 +32,12 @@ const allowedOrigins = [
 ].filter(Boolean)
 
 app.use(cors({
-  origin: (origin, cb) => cb(null, !origin || allowedOrigins.includes(origin)),
+  origin: (origin, cb) => {
+    const allowed = !origin
+      || allowedOrigins.includes(origin)
+      || /\.vercel\.app$/.test(origin)
+    cb(null, allowed)
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }))

@@ -7,7 +7,7 @@ import axios from 'axios'
 import PropertyCard from '../../components/PropertyCard'
 import SkeletonCard from '../../components/SkeletonCard'
 import PropertyFilters from '../../components/property/PropertyFilters'
-import { PHONE_WA, SITE_URL } from '../../lib/config'
+import { PHONE_WA, SITE_URL, API_URL } from '../../lib/config'
 import { imovelSlug } from '../../utils/imovelUtils'
 import { ITEMS_PER_PAGE, SORT_OPTIONS } from '../../lib/constants'
 import { usePropertyFilters } from '../../hooks/usePropertyFilters'
@@ -41,7 +41,7 @@ function ImoveisContent() {
     params.set('page',  page)
     params.set('limit', ITEMS_PER_PAGE)
     axios
-      .get(`/api/imoveis?${params.toString()}`, { signal: controller.signal })
+      .get(`${API_URL}/api/imoveis?${params.toString()}`, { signal: controller.signal })
       .then(res => { setProperties(res.data.imoveis || []); setTotal(res.data.total || 0) })
       .catch(err => { if (!axios.isCancel(err)) setProperties([]) })
       .finally(() => setLoading(false))
