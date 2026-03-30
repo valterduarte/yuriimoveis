@@ -1,8 +1,17 @@
 import { API_URL } from './config'
 
+const TIMEOUT_MS = 8000
+
+function withTimeout(ms) {
+  return { signal: AbortSignal.timeout(ms) }
+}
+
 export async function fetchFeaturedProperties() {
   try {
-    const res = await fetch(`${API_URL}/api/imoveis?destaque=1&limit=6`, { cache: 'no-store' })
+    const res = await fetch(`${API_URL}/api/imoveis?destaque=1&limit=6`, {
+      cache: 'no-store',
+      ...withTimeout(TIMEOUT_MS),
+    })
     const data = await res.json()
     return data.imoveis || []
   } catch {
@@ -14,6 +23,7 @@ export async function fetchImovel(id) {
   try {
     const res = await fetch(`${API_URL}/api/imoveis/${id}`, {
       next: { revalidate: 3600 },
+      ...withTimeout(TIMEOUT_MS),
     })
     if (res.status === 404) return null
     if (!res.ok) throw new Error('fetch failed')
@@ -27,7 +37,7 @@ export async function fetchPropertiesByBairro(bairroName) {
   try {
     const res = await fetch(
       `${API_URL}/api/imoveis?bairro=${encodeURIComponent(bairroName)}&limit=50`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 3600 }, ...withTimeout(TIMEOUT_MS) }
     )
     if (!res.ok) return { imoveis: [], total: 0 }
     return res.json()
@@ -40,6 +50,7 @@ export async function fetchAllPropertySlugs() {
   try {
     const res = await fetch(`${API_URL}/api/imoveis?limit=1000&ordem=recente`, {
       next: { revalidate: 3600 },
+      ...withTimeout(TIMEOUT_MS),
     })
     if (!res.ok) return []
     const data = await res.json()
