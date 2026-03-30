@@ -28,6 +28,7 @@ const allowedOrigins = [
   'https://yuriimoveis-frontend.onrender.com',
   'https://yuriimoveis-a8p5uzpit-valterduartes-projects.vercel.app',
   'https://corretoryuri.com.br',
+  'https://www.corretoryuri.com.br',
   process.env.FRONTEND_URL,
 ].filter(Boolean)
 
