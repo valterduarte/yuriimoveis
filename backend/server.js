@@ -7,6 +7,7 @@ const compression = require('compression')
 const path = require('path')
 const pinoHttp = require('pino-http')
 const logger = require('./utils/logger')
+const { slugify } = require('./utils/slugify')
 const { initDB, pool } = require('./database/db')
 const seed = require('./database/seed')
 
@@ -58,17 +59,6 @@ app.use('/api/auth',     authRouter)
 app.use('/api/imoveis',  imoveisRouter)
 app.use('/api/contatos', contatoRouter)
 app.use('/api/upload',   uploadRouter)
-
-function slugify(text) {
-  return String(text)
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-}
 
 function escapeHtml(str) {
   return String(str)

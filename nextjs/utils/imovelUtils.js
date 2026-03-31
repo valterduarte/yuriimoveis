@@ -28,11 +28,21 @@ export function formatPrice(price, tipo) {
   return tipo === 'aluguel' ? `${formatted}/mês` : formatted
 }
 
+// Financiamento: Caixa Econômica Federal
+// MCMV (Minha Casa Minha Vida): imóveis até R$264.000 — taxa 5,5% a.a.
+// Demais imóveis: taxa 8,16% a.a. (SBPE)
+// Entrada mínima: 20% (financia 80%), prazo: 360 meses
+const FINANCING_DOWN_PAYMENT = 0.8
+const MCMV_PRICE_LIMIT = 264000
+const MCMV_ANNUAL_RATE = 0.055
+const STANDARD_ANNUAL_RATE = 0.0816
+const FINANCING_MONTHS = 360
+
 export function calcParcela(preco) {
-  const financiado = preco * 0.8
-  const taxa = preco < 264000 ? 0.055 : 0.0816
+  const financiado = preco * FINANCING_DOWN_PAYMENT
+  const taxa = preco < MCMV_PRICE_LIMIT ? MCMV_ANNUAL_RATE : STANDARD_ANNUAL_RATE
   const r = taxa / 12
-  const n = 360
+  const n = FINANCING_MONTHS
   const parcela = financiado * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
