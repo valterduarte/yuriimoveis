@@ -3,6 +3,7 @@ const router = express.Router()
 const { pool } = require('../database/db')
 const { requireAuth } = require('../middleware/auth')
 const logger = require('../utils/logger')
+const { imovelCreateSchema, imovelUpdateSchema } = require('../utils/schemas')
 
 // GET /api/imoveis - list with filters and pagination
 router.get('/', async (req, res) => {
@@ -89,33 +90,25 @@ router.get('/:id', async (req, res) => {
 
 // POST /api/imoveis
 router.post('/', requireAuth, async (req, res) => {
+  const parsed = imovelCreateSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.errors[0].message })
+  }
+  const d = parsed.data
   try {
-    const {
-      titulo, descricao, descricao_seo, tipo, categoria, preco, area,
-      quartos, banheiros, vagas, endereco, bairro, cidade,
-      cep, destaque, imagens, diferenciais, status, parcela_display, parcela_label,
-    } = req.body
-
-    if (!titulo || !tipo || !categoria || !preco) {
-      return res.status(400).json({ error: 'Campos obrigatórios: titulo, tipo, categoria, preco' })
-    }
-
     const { rows } = await pool.query(`
       INSERT INTO imoveis (titulo, descricao, descricao_seo, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, parcela_display, parcela_label)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
       RETURNING id
     `, [
-      titulo, descricao || '', descricao_seo || '', tipo, categoria, Number(preco),
-      Number(area) || 0, Number(quartos) || 0, Number(banheiros) || 0, Number(vagas) || 0,
-      endereco || '', bairro || '', cidade || 'Osasco', cep || '',
-      destaque ? true : false,
-      JSON.stringify(imagens || []),
-      JSON.stringify(diferenciais || []),
-      status || 'pronto',
-      parcela_display || '',
-      parcela_label || '',
+      d.titulo, d.descricao, d.descricao_seo, d.tipo, d.categoria, d.preco,
+      d.area, d.quartos, d.banheiros, d.vagas,
+      d.endereco, d.bairro, d.cidade, d.cep,
+      d.destaque,
+      JSON.stringify(d.imagens),
+      JSON.stringify(d.diferenciais),
+      d.status, d.parcela_display, d.parcela_label,
     ])
-
     res.status(201).json({ id: rows[0].id, message: 'Imóvel criado com sucesso' })
   } catch (err) {
     logger.error({ err }, 'imoveis route error')
@@ -125,15 +118,14 @@ router.post('/', requireAuth, async (req, res) => {
 
 // PUT /api/imoveis/:id
 router.put('/:id', requireAuth, async (req, res) => {
+  const parsed = imovelUpdateSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.errors[0].message })
+  }
+  const d = parsed.data
   try {
     const existing = await pool.query('SELECT id FROM imoveis WHERE id = $1', [req.params.id])
     if (!existing.rows[0]) return res.status(404).json({ error: 'Imóvel não encontrado' })
-
-    const {
-      titulo, descricao, descricao_seo, tipo, categoria, preco, area,
-      quartos, banheiros, vagas, endereco, bairro, cidade,
-      cep, destaque, imagens, diferenciais, ativo, status, parcela_display, parcela_label,
-    } = req.body
 
     await pool.query(`
       UPDATE imoveis SET
@@ -161,20 +153,27 @@ router.put('/:id', requireAuth, async (req, res) => {
         updated_at      = NOW()
       WHERE id = $22
     `, [
-      titulo, descricao, descricao_seo || null, tipo, categoria,
-      preco != null ? Number(preco) : null,
-      area  != null ? Number(area)  : null,
-      quartos   != null ? Number(quartos)   : null,
-      banheiros != null ? Number(banheiros) : null,
-      vagas     != null ? Number(vagas)     : null,
-      endereco, bairro, cidade, cep,
-      destaque  != null ? Boolean(destaque)  : null,
-      imagens      ? JSON.stringify(imagens)      : null,
-      diferenciais ? JSON.stringify(diferenciais) : null,
-      ativo != null ? Boolean(ativo) : null,
-      status || null,
-      parcela_display || null,
-      parcela_label || null,
+      d.titulo        ?? null,
+      d.descricao     ?? null,
+      d.descricao_seo ?? null,
+      d.tipo          ?? null,
+      d.categoria     ?? null,
+      d.preco         ?? null,
+      d.area          ?? null,
+      d.quartos       ?? null,
+      d.banheiros     ?? null,
+      d.vagas         ?? null,
+      d.endereco      ?? null,
+      d.bairro        ?? null,
+      d.cidade        ?? null,
+      d.cep           ?? null,
+      d.destaque      ?? null,
+      d.imagens      ? JSON.stringify(d.imagens)      : null,
+      d.diferenciais ? JSON.stringify(d.diferenciais) : null,
+      d.ativo         ?? null,
+      d.status        ?? null,
+      d.parcela_display ?? null,
+      d.parcela_label   ?? null,
       req.params.id,
     ])
 

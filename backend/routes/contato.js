@@ -4,6 +4,7 @@ const rateLimit = require('express-rate-limit')
 const { pool } = require('../database/db')
 const { requireAuth } = require('../middleware/auth')
 const logger = require('../utils/logger')
+const { contatoSchema } = require('../utils/schemas')
 
 const contatoLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
@@ -15,18 +16,17 @@ const contatoLimiter = rateLimit({
 
 // POST /api/contato
 router.post('/', contatoLimiter, async (req, res) => {
+  const parsed = contatoSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.errors[0].message })
+  }
+  const { nome, email, telefone, assunto, mensagem, imovel_id } = parsed.data
   try {
-    const { nome, email, telefone, assunto, mensagem, imovel_id } = req.body
-
-    if (!nome || !email || !mensagem) {
-      return res.status(400).json({ error: 'Campos obrigatórios: nome, email, mensagem' })
-    }
-
     const { rows } = await pool.query(`
       INSERT INTO contatos (nome, email, telefone, assunto, mensagem, imovel_id)
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING id
-    `, [nome, email, telefone || '', assunto || '', mensagem, imovel_id || null])
+    `, [nome, email, telefone, assunto, mensagem, imovel_id ?? null])
 
     logger.info({ nome, email }, 'novo contato recebido')
 
