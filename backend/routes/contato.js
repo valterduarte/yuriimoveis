@@ -18,7 +18,7 @@ const contatoLimiter = rateLimit({
 router.post('/', contatoLimiter, async (req, res) => {
   const parsed = contatoSchema.safeParse(req.body)
   if (!parsed.success) {
-    return res.status(400).json({ error: parsed.error.errors[0].message })
+    return res.status(400).json({ error: parsed.error.issues[0].message })
   }
   const { nome, email, telefone, assunto, mensagem, imovel_id } = parsed.data
   try {

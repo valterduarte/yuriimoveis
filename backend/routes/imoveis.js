@@ -92,7 +92,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', requireAuth, async (req, res) => {
   const parsed = imovelCreateSchema.safeParse(req.body)
   if (!parsed.success) {
-    return res.status(400).json({ error: parsed.error.errors[0].message })
+    return res.status(400).json({ error: parsed.error.issues[0].message })
   }
   const d = parsed.data
   try {
@@ -120,7 +120,7 @@ router.post('/', requireAuth, async (req, res) => {
 router.put('/:id', requireAuth, async (req, res) => {
   const parsed = imovelUpdateSchema.safeParse(req.body)
   if (!parsed.success) {
-    return res.status(400).json({ error: parsed.error.errors[0].message })
+    return res.status(400).json({ error: parsed.error.issues[0].message })
   }
   const d = parsed.data
   try {
