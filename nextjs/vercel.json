@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.corretoryuri.com.br" }],
+      "destination": "https://corretoryuri.com.br/$1",
+      "permanent": true
+    }
+  ]
+}
