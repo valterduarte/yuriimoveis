@@ -3,6 +3,7 @@ const router = express.Router()
 const rateLimit = require('express-rate-limit')
 const { pool } = require('../database/db')
 const { requireAuth } = require('../middleware/auth')
+const logger = require('../utils/logger')
 
 const contatoLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
@@ -27,11 +28,11 @@ router.post('/', contatoLimiter, async (req, res) => {
       RETURNING id
     `, [nome, email, telefone || '', assunto || '', mensagem, imovel_id || null])
 
-    console.log(`📩 Novo contato: ${nome} <${email}>`)
+    logger.info({ nome, email }, 'novo contato recebido')
 
     res.status(201).json({ id: rows[0].id, message: 'Mensagem enviada com sucesso!' })
   } catch (err) {
-    console.error(err)
+    logger.error({ err }, 'contato route error')
     res.status(500).json({ error: 'Erro ao processar mensagem' })
   }
 })

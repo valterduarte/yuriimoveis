@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { pool } = require('../database/db')
 const { requireAuth } = require('../middleware/auth')
+const logger = require('../utils/logger')
 
 // GET /api/imoveis - list with filters and pagination
 router.get('/', async (req, res) => {
@@ -63,7 +64,7 @@ router.get('/', async (req, res) => {
     res.set('Cache-Control', 'public, max-age=60')
     res.json({ imoveis, total, page: pageNum, limit: limitNum, pages: Math.ceil(total / limitNum) })
   } catch (err) {
-    console.error(err)
+    logger.error({ err }, 'imoveis route error')
     res.status(500).json({ error: 'Erro interno do servidor' })
   }
 })
@@ -81,7 +82,7 @@ router.get('/:id', async (req, res) => {
       diferenciais: JSON.parse(row.diferenciais || '[]'),
     })
   } catch (err) {
-    console.error(err)
+    logger.error({ err }, 'imoveis route error')
     res.status(500).json({ error: 'Erro interno do servidor' })
   }
 })
@@ -117,7 +118,7 @@ router.post('/', requireAuth, async (req, res) => {
 
     res.status(201).json({ id: rows[0].id, message: 'Imóvel criado com sucesso' })
   } catch (err) {
-    console.error(err)
+    logger.error({ err }, 'imoveis route error')
     res.status(500).json({ error: 'Erro ao criar imóvel' })
   }
 })
@@ -179,7 +180,7 @@ router.put('/:id', requireAuth, async (req, res) => {
 
     res.json({ message: 'Imóvel atualizado com sucesso' })
   } catch (err) {
-    console.error(err)
+    logger.error({ err }, 'imoveis route error')
     res.status(500).json({ error: 'Erro ao atualizar imóvel' })
   }
 })
@@ -194,7 +195,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
     if (result.rowCount === 0) return res.status(404).json({ error: 'Imóvel não encontrado' })
     res.json({ message: 'Imóvel removido com sucesso' })
   } catch (err) {
-    console.error(err)
+    logger.error({ err }, 'imoveis route error')
     res.status(500).json({ error: 'Erro ao remover imóvel' })
   }
 })

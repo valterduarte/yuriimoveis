@@ -9,6 +9,7 @@ const os = require('os')
 
 const router = express.Router()
 const { requireAuth } = require('../middleware/auth')
+const logger = require('../utils/logger')
 
 const uploadImages = multer({
   storage: multer.memoryStorage(),
@@ -72,7 +73,7 @@ router.post('/', requireAuth, uploadImages.array('images', 10), async (req, res)
     const urls = await Promise.all(req.files.map(f => uploadToCloudinary(f.buffer)))
     res.json({ urls })
   } catch (err) {
-    console.error('Cloudinary upload error:', err)
+    logger.error({ err }, 'cloudinary upload error')
     res.status(500).json({ error: 'Erro ao fazer upload das imagens' })
   }
 })
@@ -105,7 +106,7 @@ router.post('/pdf', requireAuth, uploadPdf.single('pdf'), async (req, res) => {
 
     res.json({ urls, total: urls.length })
   } catch (err) {
-    console.error('PDF extraction error:', err)
+    logger.error({ err }, 'pdf extraction error')
     res.status(500).json({ error: 'Erro ao processar o PDF' })
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true })

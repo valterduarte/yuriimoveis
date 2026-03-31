@@ -26,7 +26,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
   'https://yuriimoveis-frontend.onrender.com',
-  'https://yuriimoveis-a8p5uzpit-valterduartes-projects.vercel.app',
+  'https://yuriimoveis.vercel.app',
   'https://corretoryuri.com.br',
   'https://www.corretoryuri.com.br',
   process.env.FRONTEND_URL,
@@ -34,9 +34,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, cb) => {
-    const allowed = !origin
-      || allowedOrigins.includes(origin)
-      || /\.vercel\.app$/.test(origin)
+    const allowed = !origin || allowedOrigins.includes(origin)
     cb(null, allowed)
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
