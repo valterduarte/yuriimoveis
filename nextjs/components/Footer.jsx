@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { FiPhone, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
+import Logo from './Logo'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI } from '../lib/config'
 import { NAVIGATION_LINKS, PROPERTY_CATEGORIES } from '../lib/constants'
 
@@ -13,16 +14,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
 
           <div>
-            <Link href="/" className="flex items-center gap-3 mb-5">
-              <div className="w-9 h-9 bg-primary flex items-center justify-center flex-shrink-0">
-                <span className="text-white font-black text-sm">CY</span>
-              </div>
-              <div>
-                <span className="text-white font-bold uppercase tracking-wider text-sm leading-none block">
-                  Corretor Yuri
-                </span>
-                <span className="text-primary text-[10px] tracking-widest uppercase">Imóveis</span>
-              </div>
+            <Link href="/" className="mb-5 inline-block" aria-label="Página inicial — Corretor Yuri Imóveis">
+              <Logo className="h-9 w-auto" />
             </Link>
             <p className="text-xs leading-relaxed text-gray-400 mb-6">
               Sua imobiliária de confiança em Osasco e região. Realizando o sonho da casa própria há mais de 10 anos.
