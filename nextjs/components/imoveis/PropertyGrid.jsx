@@ -2,18 +2,9 @@
 
 import { FaWhatsapp } from 'react-icons/fa'
 import PropertyCard from '../PropertyCard'
-import SkeletonCard from '../SkeletonCard'
 import { PHONE_WA } from '../../lib/config'
 
-export default function PropertyGrid({ properties, loading, activeFilterCount, onClearFilters }) {
-  if (loading) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-        {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
-      </div>
-    )
-  }
-
+export default function PropertyGrid({ properties, activeFilterCount, onClearFilters }) {
   if (properties.length === 0) {
     return (
       <div className="text-center py-20 bg-white border border-gray-200 px-6">

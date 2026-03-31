@@ -3,7 +3,7 @@
 import { FiFilter } from 'react-icons/fi'
 import { SORT_OPTIONS } from '../../lib/constants'
 
-export default function SortBar({ total, loading, ordem, activeFilterCount, showFilters, onToggleFilters, onSortChange }) {
+export default function SortBar({ total, ordem, activeFilterCount, showFilters, onToggleFilters, onSortChange }) {
   return (
     <div className="flex items-center justify-between mb-6 bg-white border border-gray-200 px-4 py-3">
       <div className="flex items-center gap-3">
@@ -20,7 +20,7 @@ export default function SortBar({ total, loading, ordem, activeFilterCount, show
           )}
         </button>
         <p className="text-xs text-gray-500">
-          {loading ? 'Buscando...' : `${total} imóvel${total !== 1 ? 'is' : ''}`}
+          {`${total} imóvel${total !== 1 ? 'is' : ''}`}
         </p>
       </div>
       <select
