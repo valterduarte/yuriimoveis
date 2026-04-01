@@ -4,11 +4,10 @@ import { useState } from 'react'
 import PropertyFilters from '../property/PropertyFilters'
 import SortBar from './SortBar'
 import ActiveFilters from './ActiveFilters'
-import PropertyGrid from './PropertyGrid'
 import Pagination from './Pagination'
 import { usePropertyFilters } from '../../hooks/usePropertyFilters'
 
-export default function ImoveisControls({ properties, total, currentPage, totalPages }) {
+export default function ImoveisControls({ total, currentPage, totalPages, children }) {
   const [showFilters, setShowFilters] = useState(false)
   const {
     tipo, categoria, cidade, precoMin, precoMax, quartos, ordem,
@@ -59,11 +58,7 @@ export default function ImoveisControls({ properties, total, currentPage, totalP
           quartos={quartos}
           onRemove={key => updateFilter(key, '')}
         />
-        <PropertyGrid
-          properties={properties}
-          activeFilterCount={activeFilterCount}
-          onClearFilters={clearFilters}
-        />
+        {children}
         <Pagination page={currentPage} totalPages={totalPages} onPageChange={goToPage} />
       </div>
     </div>

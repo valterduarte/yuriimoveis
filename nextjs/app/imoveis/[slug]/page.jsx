@@ -25,7 +25,8 @@ function isPropertySlug(slug) {
 // ── static params ─────────────────────────────────────────────────────────────
 
 export async function generateStaticParams() {
-  return []
+  const imoveis = await fetchAllPropertySlugs()
+  return imoveis.map(imovel => ({ slug: imovelSlug(imovel) }))
 }
 
 // ── metadata ──────────────────────────────────────────────────────────────────

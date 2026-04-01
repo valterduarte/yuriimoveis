@@ -1,10 +1,9 @@
-'use client'
-
+import Link from 'next/link'
 import { FaWhatsapp } from 'react-icons/fa'
 import PropertyCard from '../PropertyCard'
 import { PHONE_WA } from '../../lib/config'
 
-export default function PropertyGrid({ properties, activeFilterCount, onClearFilters }) {
+export default function PropertyGrid({ properties, activeFilterCount }) {
   if (properties.length === 0) {
     return (
       <div className="text-center py-20 bg-white border border-gray-200 px-6">
@@ -13,7 +12,7 @@ export default function PropertyGrid({ properties, activeFilterCount, onClearFil
         <p className="text-gray-500 text-sm mb-6">Tente ajustar os filtros ou fale com o corretor para encontrar o imóvel ideal.</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {activeFilterCount > 0 && (
-            <button onClick={onClearFilters} className="btn-primary">Limpar filtros</button>
+            <Link href="/imoveis" className="btn-primary">Limpar filtros</Link>
           )}
           <a
             href={`${PHONE_WA}?text=${encodeURIComponent('Olá! Não encontrei o imóvel que procuro no site. Pode me ajudar?')}`}
