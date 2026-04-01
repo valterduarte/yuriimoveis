@@ -27,8 +27,28 @@ export const imovelCreateSchema = z.object({
   parcela_label:   z.string().max(50).optional().default(''),
 })
 
-export const imovelUpdateSchema = imovelCreateSchema.partial().extend({
-  ativo: z.coerce.boolean().optional(),
+export const imovelUpdateSchema = z.object({
+  titulo:          z.string().min(3).max(200).optional(),
+  tipo:            z.enum(TIPOS).optional(),
+  categoria:       z.enum(CATEGORIAS).optional(),
+  preco:           z.coerce.number().positive().optional(),
+  descricao:       z.string().max(5000).optional(),
+  descricao_seo:   z.string().max(300).optional(),
+  area:            z.coerce.number().min(0).optional(),
+  quartos:         z.coerce.number().int().min(0).optional(),
+  banheiros:       z.coerce.number().int().min(0).optional(),
+  vagas:           z.coerce.number().int().min(0).optional(),
+  endereco:        z.string().max(300).optional(),
+  bairro:          z.string().max(100).optional(),
+  cidade:          z.string().max(100).optional(),
+  cep:             z.string().max(10).optional(),
+  status:          z.enum(STATUSES).optional(),
+  destaque:        z.coerce.boolean().optional(),
+  ativo:           z.coerce.boolean().optional(),
+  imagens:         z.array(z.string().url()).optional(),
+  diferenciais:    z.array(z.string().max(100)).optional(),
+  parcela_display: z.string().max(50).optional(),
+  parcela_label:   z.string().max(50).optional(),
 })
 
 export const contatoSchema = z.object({
