@@ -8,6 +8,7 @@ node_modules/
 # Env
 .env.local
 .env*.local
+.env.loca
 
 # Misc
 .DS_Store

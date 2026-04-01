@@ -1,19 +1,19 @@
-import { API_URL } from './config'
+import { getDb } from './db'
 
-const TIMEOUT_MS = 8000
-
-function withTimeout(ms) {
-  return { signal: AbortSignal.timeout(ms) }
+function parseImovel(row) {
+  return {
+    ...row,
+    imagens:      JSON.parse(row.imagens      || '[]'),
+    diferenciais: JSON.parse(row.diferenciais || '[]'),
+  }
 }
 
 export async function fetchFeaturedProperties() {
   try {
-    const res = await fetch(`${API_URL}/api/imoveis?destaque=1&limit=6`, {
-      cache: 'no-store',
-      ...withTimeout(TIMEOUT_MS),
-    })
-    const data = await res.json()
-    return data.imoveis || []
+    const result = await getDb().query(
+      `SELECT * FROM imoveis WHERE ativo = true AND destaque = true ORDER BY destaque DESC, created_at DESC LIMIT 6`
+    )
+    return result.rows.map(parseImovel)
   } catch {
     return []
   }
@@ -21,13 +21,12 @@ export async function fetchFeaturedProperties() {
 
 export async function fetchImovel(id) {
   try {
-    const res = await fetch(`${API_URL}/api/imoveis/${id}`, {
-      next: { revalidate: 3600 },
-      ...withTimeout(TIMEOUT_MS),
-    })
-    if (res.status === 404) return null
-    if (!res.ok) throw new Error('fetch failed')
-    return res.json()
+    const result = await getDb().query(
+      'SELECT * FROM imoveis WHERE id = $1 AND ativo = true',
+      [id]
+    )
+    if (!result.rows[0]) return null
+    return parseImovel(result.rows[0])
   } catch {
     return null
   }
@@ -35,12 +34,12 @@ export async function fetchImovel(id) {
 
 export async function fetchPropertiesByBairro(bairroName) {
   try {
-    const res = await fetch(
-      `${API_URL}/api/imoveis?bairro=${encodeURIComponent(bairroName)}&limit=50`,
-      { next: { revalidate: 3600 }, ...withTimeout(TIMEOUT_MS) }
+    const result = await getDb().query(
+      `SELECT * FROM imoveis WHERE ativo = true AND bairro ILIKE $1 ORDER BY created_at DESC LIMIT 50`,
+      [`%${bairroName}%`]
     )
-    if (!res.ok) return { imoveis: [], total: 0 }
-    return res.json()
+    const imoveis = result.rows.map(parseImovel)
+    return { imoveis, total: imoveis.length }
   } catch {
     return { imoveis: [], total: 0 }
   }
@@ -48,13 +47,10 @@ export async function fetchPropertiesByBairro(bairroName) {
 
 export async function fetchAllPropertySlugs() {
   try {
-    const res = await fetch(`${API_URL}/api/imoveis?limit=1000&ordem=recente`, {
-      next: { revalidate: 3600 },
-      ...withTimeout(TIMEOUT_MS),
-    })
-    if (!res.ok) return []
-    const data = await res.json()
-    return data.imoveis || []
+    const result = await getDb().query(
+      `SELECT * FROM imoveis WHERE ativo = true ORDER BY created_at DESC LIMIT 1000`
+    )
+    return result.rows.map(parseImovel)
   } catch {
     return []
   }

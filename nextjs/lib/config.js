@@ -9,7 +9,7 @@ export const INSTAGRAM_URL    = 'https://www.instagram.com/valterrduarte/'
 export const CRECI            = '235509'
 
 export const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+  process.env.NEXT_PUBLIC_API_URL || ''
 
 export const CLOUDINARY_CLOUD =
   process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD || 'dfl3eskr9'
