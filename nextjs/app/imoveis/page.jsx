@@ -1,5 +1,6 @@
 import ImoveisControls from '../../components/imoveis/ImoveisControls'
 import PropertyGrid from '../../components/imoveis/PropertyGrid'
+import { fetchProperties } from '../../lib/api'
 import { ITEMS_PER_PAGE } from '../../lib/constants'
 import { SITE_URL } from '../../lib/config'
 
@@ -19,26 +20,14 @@ export const metadata = {
   },
 }
 
-async function getProperties(searchParams) {
-  const p = new URLSearchParams()
-  FILTER_KEYS.forEach(k => { if (searchParams[k]) p.set(k, searchParams[k]) })
-  p.set('ordem', searchParams.ordem || 'recente')
-  p.set('page',  searchParams.page  || '1')
-  p.set('limit', String(ITEMS_PER_PAGE))
-
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
-  try {
-    const res = await fetch(`${baseUrl}/api/imoveis?${p.toString()}`, { cache: 'no-store' })
-    if (!res.ok) return { imoveis: [], total: 0 }
-    return res.json()
-  } catch {
-    return { imoveis: [], total: 0 }
-  }
-}
-
 export default async function ImoveisPage({ searchParams }) {
   const params = await searchParams
-  const { imoveis, total } = await getProperties(params)
+  const { imoveis, total } = await fetchProperties({
+    ...Object.fromEntries(FILTER_KEYS.filter(k => params[k]).map(k => [k, params[k]])),
+    ordem: params.ordem || 'recente',
+    page:  params.page  || 1,
+    limit: ITEMS_PER_PAGE,
+  })
   const currentPage = Number(params.page || 1)
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE)
   const activeFilterCount = FILTER_KEYS.filter(k => params[k]).length

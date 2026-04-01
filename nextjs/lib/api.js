@@ -45,6 +45,43 @@ export async function fetchPropertiesByBairro(bairroName) {
   }
 }
 
+export async function fetchProperties({ tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, destaque, todos, ordem = 'recente', page = 1, limit = 9 } = {}) {
+  try {
+    const conditions = todos ? [] : ['ativo = true']
+    const params = []
+    let idx = 1
+
+    if (tipo)     { conditions.push(`tipo = $${idx++}`);       params.push(tipo) }
+    if (categoria){ conditions.push(`categoria = $${idx++}`);  params.push(categoria) }
+    if (cidade)   { conditions.push(`cidade = $${idx++}`);     params.push(cidade) }
+    if (bairro)   { conditions.push(`bairro ILIKE $${idx++}`); params.push(`%${bairro}%`) }
+    if (precoMin) { conditions.push(`preco >= $${idx++}`);     params.push(Number(precoMin)) }
+    if (precoMax) { conditions.push(`preco <= $${idx++}`);     params.push(Number(precoMax)) }
+    if (destaque) { conditions.push('destaque = true') }
+    if (quartos) {
+      if (quartos === '4+') { conditions.push('quartos >= 4') }
+      else { conditions.push(`quartos >= $${idx++}`); params.push(Number(quartos)) }
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : ''
+    const orderMap = { recente: 'created_at DESC', menor_preco: 'preco ASC', maior_preco: 'preco DESC', maior_area: 'area DESC' }
+    const order = `ORDER BY destaque DESC, ${orderMap[ordem] || orderMap.recente}`
+    const pageNum  = Math.max(1, Number(page))
+    const limitNum = Math.min(50, Math.max(1, Number(limit)))
+    const offset   = (pageNum - 1) * limitNum
+
+    const countResult = await getDb().query(`SELECT COUNT(*) as total FROM imoveis ${where}`, params)
+    const total = parseInt(countResult.rows[0].total)
+    const dataResult = await getDb().query(
+      `SELECT * FROM imoveis ${where} ${order} LIMIT $${idx} OFFSET $${idx + 1}`,
+      [...params, limitNum, offset]
+    )
+    return { imoveis: dataResult.rows.map(parseImovel), total, page: pageNum, limit: limitNum, pages: Math.ceil(total / limitNum) }
+  } catch {
+    return { imoveis: [], total: 0, page: 1, limit: 9, pages: 0 }
+  }
+}
+
 export async function fetchAllPropertySlugs() {
   try {
     const result = await getDb().query(
