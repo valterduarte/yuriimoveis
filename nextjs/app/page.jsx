@@ -88,7 +88,7 @@ const jsonLd = [
       'Especialistas em imóveis residenciais e comerciais em Osasco e região. Mais de 10 anos de experiência, atendimento personalizado e segurança jurídica.',
     url: SITE_URL,
     telephone: PHONE_STRUCTURED,
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80',
+    image: 'https://res.cloudinary.com/dfl3eskr9/image/upload/v1775083889/po3gf0daisooo1t7run5.jpg',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Osasco',
@@ -129,10 +129,10 @@ export default async function Home() {
 
       <section className="relative min-h-screen flex items-center -mt-16 md:-mt-20 overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&q=60&fm=webp"
-          srcSet="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop&q=60&fm=webp 800w, https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=800&fit=crop&q=60&fm=webp 1200w, https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&h=1080&fit=crop&q=60&fm=webp 1920w"
+          src="https://res.cloudinary.com/dfl3eskr9/image/upload/w_1280,q_80,f_webp/v1775083889/po3gf0daisooo1t7run5.jpg"
+          srcSet="https://res.cloudinary.com/dfl3eskr9/image/upload/w_800,q_70,f_webp/v1775083889/po3gf0daisooo1t7run5.jpg 800w, https://res.cloudinary.com/dfl3eskr9/image/upload/w_1280,q_80,f_webp/v1775083889/po3gf0daisooo1t7run5.jpg 1280w"
           sizes="100vw"
-          alt="Imóvel residencial em Osasco"
+          alt="Ponte Metálica de Osasco — cartão postal da cidade"
           fetchPriority="high"
           loading="eager"
           decoding="sync"
