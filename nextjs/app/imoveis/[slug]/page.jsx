@@ -14,7 +14,7 @@ import { imovelSlug, formatNeighborhoodName } from '../../../utils/imovelUtils'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
 import { SITE_URL, PHONE_WA, PHONE_STRUCTURED } from '../../../lib/config'
 
-export const revalidate = 3600
+export const revalidate = 60
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
