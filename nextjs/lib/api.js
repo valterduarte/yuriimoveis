@@ -82,6 +82,15 @@ export async function fetchProperties({ tipo, categoria, cidade, bairro, precoMi
   }
 }
 
+export async function fetchSiteConfig(key) {
+  try {
+    const result = await getDb().query('SELECT value FROM site_config WHERE key = $1', [key])
+    return result.rows[0]?.value ?? null
+  } catch {
+    return null
+  }
+}
+
 export async function fetchAllPropertySlugs() {
   try {
     const result = await getDb().query(

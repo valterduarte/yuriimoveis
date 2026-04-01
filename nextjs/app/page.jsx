@@ -4,8 +4,10 @@ import { FaWhatsapp } from 'react-icons/fa'
 import SearchBar from '../components/SearchBar'
 import PropertyCard from '../components/PropertyCard'
 import SkeletonCard from '../components/SkeletonCard'
-import { fetchFeaturedProperties } from '../lib/api'
+import { fetchFeaturedProperties, fetchSiteConfig } from '../lib/api'
 import { PHONE_WA, PHONE_STRUCTURED, SITE_URL } from '../lib/config'
+
+const FALLBACK_HERO = 'https://res.cloudinary.com/dfl3eskr9/image/upload/v1775083889/po3gf0daisooo1t7run5.jpg'
 
 export const metadata = {
   title: 'Corretor Yuri Imóveis — Imóveis em Osasco e Região',
@@ -88,7 +90,7 @@ const jsonLd = [
       'Especialistas em imóveis residenciais e comerciais em Osasco e região. Mais de 10 anos de experiência, atendimento personalizado e segurança jurídica.',
     url: SITE_URL,
     telephone: PHONE_STRUCTURED,
-    image: 'https://res.cloudinary.com/dfl3eskr9/image/upload/v1775083889/po3gf0daisooo1t7run5.jpg',
+    image: FALLBACK_HERO,
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Osasco',
@@ -115,7 +117,11 @@ const jsonLd = [
 ]
 
 export default async function Home() {
-  const featuredProperties = await fetchFeaturedProperties()
+  const [featuredProperties, heroImageUrl] = await Promise.all([
+    fetchFeaturedProperties(),
+    fetchSiteConfig('hero_image_url'),
+  ])
+  const hero = heroImageUrl || FALLBACK_HERO
 
   return (
     <div className="pb-16 md:pb-0">
@@ -129,8 +135,8 @@ export default async function Home() {
 
       <section className="relative min-h-screen flex items-center -mt-16 md:-mt-20 overflow-hidden">
         <img
-          src="https://res.cloudinary.com/dfl3eskr9/image/upload/w_1280,q_80,f_webp/v1775083889/po3gf0daisooo1t7run5.jpg"
-          srcSet="https://res.cloudinary.com/dfl3eskr9/image/upload/w_800,q_70,f_webp/v1775083889/po3gf0daisooo1t7run5.jpg 800w, https://res.cloudinary.com/dfl3eskr9/image/upload/w_1280,q_80,f_webp/v1775083889/po3gf0daisooo1t7run5.jpg 1280w"
+          src={hero.replace('/upload/', '/upload/w_1280,q_80,f_webp/')}
+          srcSet={`${hero.replace('/upload/', '/upload/w_800,q_70,f_webp/')} 800w, ${hero.replace('/upload/', '/upload/w_1280,q_80,f_webp/')} 1280w`}
           sizes="100vw"
           alt="Ponte Metálica de Osasco — cartão postal da cidade"
           fetchPriority="high"
