@@ -130,7 +130,7 @@ async function ImovelDetalhePage({ slug }) {
       description: imovelDescription,
       image: images,
       url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
-      datePosted: imovel.created_at ? imovel.created_at.split('T')[0] : undefined,
+      datePosted: imovel.created_at ? new Date(imovel.created_at).toISOString().split('T')[0] : undefined,
       price: imovel.preco ? String(imovel.preco) : undefined,
       priceCurrency: 'BRL',
       address: {
