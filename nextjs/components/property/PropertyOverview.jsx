@@ -68,13 +68,6 @@ export default function PropertyOverview({ imovel }) {
         )}
       </div>
 
-      {imovel.descricao_seo && (
-        <div className="bg-white border border-gray-200 p-8 mb-6">
-          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#1a1a1a] mb-4">Sobre este imóvel</h3>
-          <p className="text-gray-600 text-sm leading-relaxed">{imovel.descricao_seo}</p>
-        </div>
-      )}
-
       {imovel.descricao && (
         <div className="bg-white border border-gray-200 p-8 mb-6">
           <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#1a1a1a] mb-4">Descrição</h3>
