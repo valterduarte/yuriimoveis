@@ -1,0 +1,12 @@
+name: Keep Render backend alive
+
+on:
+  schedule:
+    - cron: '*/14 * * * *'
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping backend
+        run: curl -sf https://corretoryuri.com.br/api/keepalive || echo "ping failed"
