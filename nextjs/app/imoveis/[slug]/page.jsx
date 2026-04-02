@@ -9,8 +9,10 @@ import {
   fetchImovel,
   fetchAllPropertySlugs,
   fetchPropertiesByBairro,
+  fetchDistinctBairros,
 } from '../../../lib/api'
-import { imovelSlug, formatNeighborhoodName } from '../../../utils/imovelUtils'
+import { imovelSlug, slugify, formatNeighborhoodName, buildSeoDescription } from '../../../utils/imovelUtils'
+import { getBairroBySlug } from '../../../data/bairros'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
 import { SITE_URL, PHONE_WA, PHONE_STRUCTURED } from '../../../lib/config'
 
@@ -25,8 +27,13 @@ function isPropertySlug(slug) {
 // ── static params ─────────────────────────────────────────────────────────────
 
 export async function generateStaticParams() {
-  const imoveis = await fetchAllPropertySlugs()
-  return imoveis.map(imovel => ({ slug: imovelSlug(imovel) }))
+  const [imoveis, bairros] = await Promise.all([
+    fetchAllPropertySlugs(),
+    fetchDistinctBairros(),
+  ])
+  const propertyParams = imoveis.map(imovel => ({ slug: imovelSlug(imovel) }))
+  const bairroParams = bairros.map(b => ({ slug: slugify(b) }))
+  return [...propertyParams, ...bairroParams]
 }
 
 // ── metadata ──────────────────────────────────────────────────────────────────
@@ -39,11 +46,7 @@ export async function generateMetadata({ params }) {
     const imovel = await fetchImovel(id)
     if (!imovel) return { title: 'Imóvel não encontrado' }
 
-    const description = imovel.descricao_seo
-      ? imovel.descricao_seo.slice(0, 155)
-      : imovel.descricao
-        ? imovel.descricao.replace(/[\u{1F000}-\u{1FFFF}]|[\u2600-\u27FF]/gu, '').replace(/\n/g, ' ').slice(0, 155).trim()
-        : `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
+    const description = buildSeoDescription(imovel)
 
     const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
 
@@ -67,16 +70,20 @@ export async function generateMetadata({ params }) {
   }
 
   // Bairro page
-  const neighborhoodName = formatNeighborhoodName(slug)
+  const bairroData = getBairroBySlug(slug)
+  const neighborhoodName = bairroData?.nome || formatNeighborhoodName(slug)
+  const title = bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP — Corretor Yuri`
+  const description = bairroData?.descricaoMeta || `Veja todos os imóveis disponíveis no ${neighborhoodName} em Osasco, SP. Casas, apartamentos e terrenos à venda e para alugar. Atendimento com o Corretor Yuri.`
+
   return {
-    title: `Imóveis em ${neighborhoodName}, Osasco SP — Corretor Yuri`,
-    description: `Veja todos os imóveis disponíveis no ${neighborhoodName} em Osasco, SP. Casas, apartamentos e terrenos à venda e para alugar. Atendimento com o Corretor Yuri.`,
+    title,
+    description,
     alternates: { canonical: `${SITE_URL}/imoveis/${slug}` },
     openGraph: {
-      title: `Imóveis em ${neighborhoodName}, Osasco SP`,
-      description: `Im\u00f3veis dispon\u00edveis no ${neighborhoodName} em Osasco, SP.`,
+      title: bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP`,
+      description,
       url: `${SITE_URL}/imoveis/${slug}`,
-      siteName: 'Corretor Yuri Im\u00f3veis',
+      siteName: 'Corretor Yuri Imóveis',
       locale: 'pt_BR',
     },
   }
@@ -91,11 +98,7 @@ async function ImovelDetalhePage({ slug }) {
   if (!imovel) notFound()
 
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
-  const imovelDescription = imovel.descricao_seo
-    ? imovel.descricao_seo.slice(0, 155)
-    : imovel.descricao
-      ? imovel.descricao.replace(/[\u{1F000}-\u{1FFFF}]|[\u2600-\u27FF]/gu, '').replace(/\n/g, ' ').slice(0, 155).trim()
-      : `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
+  const imovelDescription = buildSeoDescription(imovel)
 
   const jsonLd = [
     {
@@ -175,9 +178,10 @@ async function ImovelDetalhePage({ slug }) {
 // ── neighborhood page ─────────────────────────────────────────────────────────
 
 async function BairroPage({ slug }) {
-  const neighborhoodName = formatNeighborhoodName(slug)
+  const bairroData = getBairroBySlug(slug)
+  const neighborhoodName = bairroData?.nome || formatNeighborhoodName(slug)
   const { imoveis: properties, total } = await fetchPropertiesByBairro(neighborhoodName)
-  const notFound_ = properties.length === 0
+  const hasProperties = properties.length > 0
 
   const jsonLd = [
     {
@@ -189,19 +193,35 @@ async function BairroPage({ slug }) {
         { '@type': 'ListItem', position: 3, name: neighborhoodName, item: `${SITE_URL}/imoveis/${slug}` },
       ],
     },
-    ...(!notFound_ ? [{
+    ...(hasProperties ? [{
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
       name: `Imóveis em ${neighborhoodName}, Osasco SP`,
       url: `${SITE_URL}/imoveis/${slug}`,
       numberOfItems: total,
-      description: `Imóveis disponíveis no bairro ${neighborhoodName} em Osasco, SP.`,
+      description: bairroData?.descricaoMeta || `Imóveis disponíveis no bairro ${neighborhoodName} em Osasco, SP.`,
       itemListElement: properties.map((p, i) => ({
         '@type': 'ListItem',
         position: i + 1,
         url: `${SITE_URL}/imoveis/${imovelSlug(p)}`,
         name: p.titulo,
       })),
+    }] : []),
+    ...(bairroData ? [{
+      '@context': 'https://schema.org',
+      '@type': 'Place',
+      name: neighborhoodName,
+      description: bairroData.conteudo.sobre,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Osasco',
+        addressRegion: 'SP',
+        addressCountry: 'BR',
+      },
+      containedInPlace: {
+        '@type': 'City',
+        name: 'Osasco',
+      },
     }] : []),
   ]
 
@@ -226,7 +246,7 @@ async function BairroPage({ slug }) {
           </nav>
           <span className="section-label">Bairro</span>
           <h1 className="text-4xl font-black uppercase text-white">{neighborhoodName}</h1>
-          {!notFound_ && (
+          {hasProperties && (
             <p className="text-gray-400 text-sm mt-2">
               {total} imóvel{total !== 1 ? 'is' : ''} disponível{total !== 1 ? 'is' : ''} em Osasco, SP
             </p>
@@ -234,14 +254,39 @@ async function BairroPage({ slug }) {
         </div>
       </div>
 
+      {bairroData && (
+        <section className="container mx-auto px-6 pt-10 pb-2">
+          <div className="bg-white border border-gray-200 p-6 md:p-8">
+            <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">
+              Sobre o bairro {neighborhoodName}
+            </h2>
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.sobre}</p>
+
+            <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Infraestrutura</h3>
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.infraestrutura}</p>
+
+            <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Transporte e Acesso</h3>
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.transporte}</p>
+
+            <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Educação</h3>
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.educacao}</p>
+
+            <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">
+              Por que morar no {neighborhoodName}?
+            </h3>
+            <p className="text-gray-700 text-sm leading-relaxed">{bairroData.conteudo.porqueMorar}</p>
+          </div>
+        </section>
+      )}
+
       <div className="container mx-auto px-6 py-10">
         <div className="mb-6">
           <Link href="/imoveis" className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
-            <FiArrowLeft size={13} /> Ver todos os bairros
+            <FiArrowLeft size={13} /> Ver todos os imóveis
           </Link>
         </div>
 
-        {notFound_ ? (
+        {!hasProperties ? (
           <div className="text-center py-20 bg-white border border-gray-200 px-6">
             <div className="text-5xl mb-4" aria-hidden="true">🏠</div>
             <h2 className="text-lg font-bold text-dark mb-2 uppercase tracking-wide">Nenhum imóvel em {neighborhoodName}</h2>

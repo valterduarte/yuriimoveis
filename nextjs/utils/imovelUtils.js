@@ -51,6 +51,18 @@ export function calcParcela(preco) {
   }).format(parcela)
 }
 
+export function buildSeoDescription(imovel) {
+  if (imovel.descricao_seo) return imovel.descricao_seo.slice(0, 155)
+  if (imovel.descricao) {
+    return imovel.descricao
+      .replace(/[\u{1F000}-\u{1FFFF}]|[\u2600-\u27FF]/gu, '')
+      .replace(/\n/g, ' ')
+      .slice(0, 155)
+      .trim()
+  }
+  return `${imovel.titulo} em ${imovel.cidade || 'Osasco'}, SP. ${imovel.tipo === 'aluguel' ? 'Aluguel' : 'Venda'}.`
+}
+
 export function formatNeighborhoodName(slug) {
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }

@@ -91,6 +91,17 @@ export async function fetchSiteConfig(key) {
   }
 }
 
+export async function fetchDistinctBairros() {
+  try {
+    const result = await getDb().query(
+      `SELECT DISTINCT bairro FROM imoveis WHERE ativo = true AND bairro IS NOT NULL AND bairro != '' ORDER BY bairro`
+    )
+    return result.rows.map(r => r.bairro)
+  } catch {
+    return []
+  }
+}
+
 export async function fetchAllPropertySlugs() {
   try {
     const result = await getDb().query(

@@ -1,15 +1,25 @@
-import { fetchAllPropertySlugs } from '../lib/api'
-import { imovelSlug } from '../utils/imovelUtils'
+import { fetchAllPropertySlugs, fetchDistinctBairros } from '../lib/api'
+import { imovelSlug, slugify } from '../utils/imovelUtils'
 import { SITE_URL } from '../lib/config'
 
 export default async function sitemap() {
-  const properties = await fetchAllPropertySlugs()
+  const [properties, bairros] = await Promise.all([
+    fetchAllPropertySlugs(),
+    fetchDistinctBairros(),
+  ])
 
   const propertyUrls = properties.map(p => ({
     url: `${SITE_URL}/imoveis/${imovelSlug(p)}`,
     lastModified: p.updated_at ? new Date(p.updated_at) : new Date(),
     changeFrequency: 'weekly',
     priority: 0.8,
+  }))
+
+  const bairroUrls = bairros.map(b => ({
+    url: `${SITE_URL}/imoveis/${slugify(b)}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.7,
   }))
 
   return [
@@ -31,6 +41,7 @@ export default async function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    ...bairroUrls,
     ...propertyUrls,
   ]
 }
