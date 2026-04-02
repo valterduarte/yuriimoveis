@@ -53,15 +53,16 @@ export async function GET(request) {
     const limitNum = Math.min(50, Math.max(1, Number(limit)))
     const offset   = (pageNum - 1) * limitNum
 
-    const countResult = await getDb().query(`SELECT COUNT(*) as total FROM imoveis ${whereClause}`, params)
-    const total = parseInt(countResult.rows[0].total)
-
     const dataResult = await getDb().query(
-      `SELECT * FROM imoveis ${whereClause} ${orderClause} LIMIT $${idx} OFFSET $${idx + 1}`,
+      `SELECT *, COUNT(*) OVER() as total FROM imoveis ${whereClause} ${orderClause} LIMIT $${idx} OFFSET $${idx + 1}`,
       [...params, limitNum, offset]
     )
 
-    const imoveis = dataResult.rows.map(parseImovel)
+    const total = dataResult.rows.length > 0 ? parseInt(dataResult.rows[0].total) : 0
+    const imoveis = dataResult.rows.map(row => {
+      const { total: _total, ...rest } = row
+      return parseImovel(rest)
+    })
 
     return NextResponse.json(
       { imoveis, total, page: pageNum, limit: limitNum, pages: Math.ceil(total / limitNum) },

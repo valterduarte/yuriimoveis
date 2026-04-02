@@ -1,21 +1,17 @@
+import Image from 'next/image'
 import SearchBar from '../SearchBar'
-import { cloudinaryUrl } from '../../utils/cloudinary'
 
 export default function HeroSection({ imageUrl }) {
   return (
     <section className="relative min-h-screen flex items-center -mt-16 md:-mt-20 overflow-hidden">
-      <img
-        src={cloudinaryUrl(imageUrl, { width: 1280, quality: 80 })}
-        srcSet={[
-          `${cloudinaryUrl(imageUrl, { width: 800,  quality: 70 })} 800w`,
-          `${cloudinaryUrl(imageUrl, { width: 1280, quality: 80 })} 1280w`,
-        ].join(', ')}
-        sizes="100vw"
+      <Image
+        src={imageUrl}
         alt="Ponte Metálica de Osasco — cartão postal da cidade"
-        fetchPriority="high"
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 w-full h-full object-cover object-center"
+        fill
+        priority
+        quality={80}
+        sizes="100vw"
+        className="object-cover object-center"
       />
       <div className="absolute inset-0 bg-dark/75" />
       <div className="relative container mx-auto px-6 pt-32 pb-24">

@@ -70,13 +70,16 @@ export async function fetchProperties({ tipo, categoria, cidade, bairro, precoMi
     const limitNum = Math.min(50, Math.max(1, Number(limit)))
     const offset   = (pageNum - 1) * limitNum
 
-    const countResult = await getDb().query(`SELECT COUNT(*) as total FROM imoveis ${where}`, params)
-    const total = parseInt(countResult.rows[0].total)
     const dataResult = await getDb().query(
-      `SELECT * FROM imoveis ${where} ${order} LIMIT $${idx} OFFSET $${idx + 1}`,
+      `SELECT *, COUNT(*) OVER() as total FROM imoveis ${where} ${order} LIMIT $${idx} OFFSET $${idx + 1}`,
       [...params, limitNum, offset]
     )
-    return { imoveis: dataResult.rows.map(parseImovel), total, page: pageNum, limit: limitNum, pages: Math.ceil(total / limitNum) }
+    const total = dataResult.rows.length > 0 ? parseInt(dataResult.rows[0].total) : 0
+    const imoveis = dataResult.rows.map(row => {
+      const { total: _total, ...rest } = row
+      return parseImovel(rest)
+    })
+    return { imoveis, total, page: pageNum, limit: limitNum, pages: Math.ceil(total / limitNum) }
   } catch {
     return { imoveis: [], total: 0, page: 1, limit: 9, pages: 0 }
   }
@@ -105,9 +108,9 @@ export async function fetchDistinctBairros() {
 export async function fetchAllPropertySlugs() {
   try {
     const result = await getDb().query(
-      `SELECT * FROM imoveis WHERE ativo = true ORDER BY created_at DESC LIMIT 1000`
+      `SELECT id, titulo, updated_at FROM imoveis WHERE ativo = true ORDER BY created_at DESC LIMIT 1000`
     )
-    return result.rows.map(parseImovel)
+    return result.rows
   } catch {
     return []
   }

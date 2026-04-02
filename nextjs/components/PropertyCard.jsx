@@ -1,27 +1,30 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
 import { FiMapPin, FiMaximize } from 'react-icons/fi'
 import { FaCar, FaBath } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
-import { formatPrice, imovelSlug, optimizeCloudinaryUrl } from '../utils/imovelUtils'
+import { formatPrice, imovelSlug } from '../utils/imovelUtils'
 import { PLACEHOLDER_IMAGE, PROPERTY_STATUSES, CARD_IMAGE_HEIGHT } from '../lib/constants'
 
 export default function PropertyCard({ imovel }) {
-  const img = optimizeCloudinaryUrl(imovel.imagens?.[0], 600) || PLACEHOLDER_IMAGE
+  const [imgSrc, setImgSrc] = useState(imovel.imagens?.[0] || PLACEHOLDER_IMAGE)
 
   return (
     <Link href={`/imoveis/${imovelSlug(imovel)}`} className="group block bg-white overflow-hidden">
       <div className="relative overflow-hidden" style={{ height: CARD_IMAGE_HEIGHT }}>
-        <img
-          src={img}
+        <Image
+          src={imgSrc}
           alt={`${imovel.titulo} — ${imovel.categoria} para ${imovel.tipo} em ${imovel.bairro || imovel.cidade}`}
-          loading="lazy"
-          decoding="async"
           width={600}
           height={260}
+          loading="lazy"
+          quality={80}
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          onError={e => { e.target.src = PLACEHOLDER_IMAGE }}
+          onError={() => setImgSrc(PLACEHOLDER_IMAGE)}
         />
 
         <div className="absolute inset-0 bg-dark/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-5">

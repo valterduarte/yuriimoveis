@@ -10,6 +10,18 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.re9.com.br',
+      },
+      {
+        protocol: 'https',
+        hostname: 'valterduarte.github.io',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.oceanosasco.com.br',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
   },
