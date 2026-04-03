@@ -1,12 +1,27 @@
 import { FiPhone, FiMapPin, FiClock } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
-import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, PHONE_STRUCTURED, SITE_URL } from '../../lib/config'
+import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, PHONE_STRUCTURED, SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 
 export const metadata = {
   title: 'Contato — Imóveis em Osasco SP',
   description:
     'Entre em contato com o Corretor Yuri Imóveis. Atendimento via WhatsApp, telefone e e-mail para imóveis em Osasco e região.',
-  alternates: { canonical: '/contato' },
+  alternates: { canonical: `${SITE_URL}/contato` },
+  openGraph: {
+    title: 'Contato — Corretor Yuri Imóveis',
+    description: 'Fale com o Corretor Yuri via WhatsApp, telefone ou e-mail. Atendimento personalizado para imóveis em Osasco e região.',
+    url: `${SITE_URL}/contato`,
+    siteName: 'Corretor Yuri Imóveis',
+    locale: 'pt_BR',
+    type: 'website',
+    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: 'Contato — Corretor Yuri Imóveis' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contato — Corretor Yuri Imóveis',
+    description: 'Fale com o Corretor Yuri via WhatsApp, telefone ou e-mail. Atendimento personalizado para imóveis em Osasco e região.',
+    images: [OG_DEFAULT_IMAGE],
+  },
 }
 
 const jsonLd = {

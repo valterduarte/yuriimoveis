@@ -11,10 +11,10 @@ import {
   fetchPropertiesByBairro,
   fetchDistinctBairros,
 } from '../../../lib/api'
-import { imovelSlug, slugify, formatNeighborhoodName, buildSeoDescription } from '../../../utils/imovelUtils'
+import { imovelSlug, slugify, formatNeighborhoodName, buildSeoDescription, ogImageUrl } from '../../../utils/imovelUtils'
 import { getBairroBySlug } from '../../../data/bairros'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
-import { SITE_URL, PHONE_WA, PHONE_STRUCTURED } from '../../../lib/config'
+import { SITE_URL, PHONE_WA, PHONE_STRUCTURED, OG_DEFAULT_IMAGE } from '../../../lib/config'
 
 export const revalidate = 60
 
@@ -47,10 +47,10 @@ export async function generateMetadata({ params }) {
     if (!imovel) return { title: 'Imóvel não encontrado' }
 
     const description = buildSeoDescription(imovel)
-
-    const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
-
     const pageUrl = `${SITE_URL}/imoveis/${imovelSlug(imovel)}`
+    const rawImage = imovel.imagens?.[0] ?? PLACEHOLDER_IMAGE
+    const socialImage = ogImageUrl(rawImage)
+
     return {
       title: `${imovel.titulo} — Corretor Yuri Imóveis`,
       description,
@@ -62,9 +62,13 @@ export async function generateMetadata({ params }) {
         siteName: 'Corretor Yuri Imóveis',
         locale: 'pt_BR',
         type: 'article',
-        images: images[0] !== PLACEHOLDER_IMAGE
-          ? [{ url: images[0], width: 1200, height: 800, alt: imovel.titulo }]
-          : [],
+        images: [{ url: socialImage, width: 1200, height: 630, alt: imovel.titulo, type: 'image/jpeg' }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: imovel.titulo,
+        description,
+        images: [socialImage],
       },
     }
   }
@@ -74,6 +78,10 @@ export async function generateMetadata({ params }) {
   const neighborhoodName = bairroData?.nome || formatNeighborhoodName(slug)
   const title = bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP — Corretor Yuri`
   const description = bairroData?.descricaoMeta || `Veja todos os imóveis disponíveis no ${neighborhoodName} em Osasco, SP. Casas, apartamentos e terrenos à venda e para alugar. Atendimento com o Corretor Yuri.`
+
+  const bairroImage = bairroData?.imagem
+    ? ogImageUrl(bairroData.imagem)
+    : OG_DEFAULT_IMAGE
 
   return {
     title,
@@ -85,6 +93,14 @@ export async function generateMetadata({ params }) {
       url: `${SITE_URL}/imoveis/${slug}`,
       siteName: 'Corretor Yuri Imóveis',
       locale: 'pt_BR',
+      type: 'website',
+      images: [{ url: bairroImage, width: 1200, height: 630, alt: `Imóveis em ${neighborhoodName}` }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP`,
+      description,
+      images: [bairroImage],
     },
   }
 }

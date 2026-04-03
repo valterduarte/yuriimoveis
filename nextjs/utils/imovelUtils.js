@@ -66,3 +66,8 @@ export function buildSeoDescription(imovel) {
 export function formatNeighborhoodName(slug) {
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
+
+export function ogImageUrl(url) {
+  if (!url || !url.includes('res.cloudinary.com')) return url
+  return url.replace('/upload/', '/upload/f_jpg,q_80,w_1200,h_630,c_fill/')
+}

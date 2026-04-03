@@ -1,13 +1,18 @@
+import { SITE_URL } from '../../lib/config'
+
 export const metadata = {
   title: 'Imóveis em Osasco e Região — Corretor Yuri',
   description:
     'Encontre casas, apartamentos, terrenos e comerciais para venda e aluguel em Osasco e região. Filtros por preço, bairro e tipo. Atendimento com o Corretor Yuri.',
-  alternates: { canonical: '/imoveis' },
+  alternates: { canonical: `${SITE_URL}/imoveis` },
   openGraph: {
     title: 'Imóveis em Osasco e Região — Corretor Yuri',
     description:
       'Casas, apartamentos, terrenos e comerciais para venda e aluguel em Osasco e região.',
-    url: '/imoveis',
+    url: `${SITE_URL}/imoveis`,
+    siteName: 'Corretor Yuri Imóveis',
+    locale: 'pt_BR',
+    type: 'website',
   },
 }
 

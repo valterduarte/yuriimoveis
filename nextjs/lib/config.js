@@ -11,6 +11,9 @@ export const CRECI            = '235509'
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL || ''
 
+export const OG_DEFAULT_IMAGE =
+  'https://res.cloudinary.com/dfl3eskr9/image/upload/f_jpg,q_80,w_1200,h_630,c_fill/v1775083889/po3gf0daisooo1t7run5.jpg'
+
 export const CLOUDINARY_CLOUD =
   process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD || 'dfl3eskr9'
 

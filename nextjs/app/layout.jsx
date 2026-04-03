@@ -23,7 +23,11 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
+    url: SITE_URL,
     siteName: 'Corretor Yuri Imóveis',
+  },
+  twitter: {
+    card: 'summary_large_image',
   },
   robots: {
     index: true,

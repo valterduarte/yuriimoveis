@@ -2,7 +2,7 @@ import ImoveisControls from '../../components/imoveis/ImoveisControls'
 import PropertyGrid from '../../components/imoveis/PropertyGrid'
 import { fetchProperties } from '../../lib/api'
 import { ITEMS_PER_PAGE } from '../../lib/constants'
-import { SITE_URL } from '../../lib/config'
+import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 
 const FILTER_KEYS = ['tipo', 'categoria', 'cidade', 'precoMin', 'precoMax', 'quartos']
 
@@ -17,6 +17,13 @@ export const metadata = {
     siteName: 'Corretor Yuri Imóveis',
     locale: 'pt_BR',
     type: 'website',
+    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: 'Imóveis em Osasco e Região' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Imóveis Disponíveis em Osasco SP — Corretor Yuri',
+    description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco e região.',
+    images: [OG_DEFAULT_IMAGE],
   },
 }
 

@@ -21,6 +21,13 @@ export const metadata = {
     locale: 'pt_BR',
     images: [{ url: FALLBACK_HERO, width: 1280, height: 853, alt: 'Ponte Metálica de Osasco' }],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Corretor Yuri Imóveis — Imóveis em Osasco e Região',
+    description:
+      'Corretor de imóveis em Osasco com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para venda e aluguel.',
+    images: [FALLBACK_HERO],
+  },
 }
 
 export default async function Home() {
