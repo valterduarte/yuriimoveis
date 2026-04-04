@@ -2,8 +2,8 @@
 
 import { FiX } from 'react-icons/fi'
 
-export default function ActiveFilters({ tipo, categoria, cidade, precoMin, precoMax, quartos, onRemove }) {
-  if (!tipo && !categoria && !cidade && !precoMin && !precoMax && !quartos) return null
+export default function ActiveFilters({ tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, onRemove }) {
+  if (!tipo && !categoria && !cidade && !bairro && !precoMin && !precoMax && !quartos) return null
 
   return (
     <div className="flex flex-wrap gap-2 mb-4">
@@ -15,6 +15,9 @@ export default function ActiveFilters({ tipo, categoria, cidade, precoMin, preco
       )}
       {cidade && (
         <FilterTag label={cidade} onRemove={() => onRemove('cidade')} />
+      )}
+      {bairro && (
+        <FilterTag label={bairro} onRemove={() => onRemove('bairro')} />
       )}
       {precoMin && (
         <FilterTag label={`Mín R$ ${Number(precoMin).toLocaleString('pt-BR')}`} onRemove={() => onRemove('precoMin')} />

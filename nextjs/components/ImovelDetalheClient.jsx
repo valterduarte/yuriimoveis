@@ -35,10 +35,10 @@ export default function ImovelDetalheClient({ imovel }) {
   const shareUrl = `${API_URL}/share/${imovel.id}`
 
   return (
-    <div className="min-h-screen bg-[#f4f4f4] pb-20 md:pb-0">
+    <div className="min-h-screen bg-gray-100 pb-20 md:pb-0">
       <PropertyHero imovel={imovel} images={images} shareUrl={shareUrl} />
 
-      <div className="bg-[#1a1a1a] sticky top-16 md:top-20 z-30 border-b border-white/10">
+      <div className="bg-dark sticky top-16 md:top-20 z-30 border-b border-white/10">
         <div role="tablist" aria-label="Seções do imóvel" className="max-w-6xl mx-auto px-8 flex overflow-x-auto">
           {TABS.map(tab => (
             <button
@@ -49,7 +49,7 @@ export default function ImovelDetalheClient({ imovel }) {
               aria-controls={tab.id}
               className={`py-4 px-6 text-[10px] uppercase tracking-[0.2em] font-bold whitespace-nowrap transition-all border-b-2 ${
                 activeSection === tab.id
-                  ? 'border-[#af1e23] text-white'
+                  ? 'border-primary text-white'
                   : 'border-transparent text-gray-400 hover:text-white'
               }`}
             >
@@ -62,7 +62,7 @@ export default function ImovelDetalheClient({ imovel }) {
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-10">
         <Link
           href="/imoveis"
-          className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-gray-500 hover:text-[#af1e23] transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-gray-500 hover:text-primary transition-colors mb-8"
         >
           <FiArrowLeft size={13} /> Voltar aos imóveis
         </Link>
@@ -85,20 +85,20 @@ export default function ImovelDetalheClient({ imovel }) {
           <h2 className="section-title mb-8">Onde fica</h2>
           <div className="bg-white border border-gray-200 p-6 mb-4">
             <p className="flex items-start gap-2.5 text-sm text-gray-600">
-              <FiMapPin size={16} className="text-[#af1e23] flex-shrink-0 mt-0.5" />
+              <FiMapPin size={16} className="text-primary flex-shrink-0 mt-0.5" />
               <span><strong>{imovel.bairro}</strong>, {imovel.cidade} — SP</span>
             </p>
           </div>
-          <div className="bg-[#1a1a1a] flex items-center justify-center" style={{ height: 300 }}>
+          <div className="bg-dark flex items-center justify-center" style={{ height: 300 }}>
             <div className="text-center">
-              <FiMapPin size={40} className="mx-auto mb-3 text-[#af1e23]" />
+              <FiMapPin size={40} className="mx-auto mb-3 text-primary" />
               <p className="text-white font-bold uppercase tracking-widest text-sm">{imovel.cidade} — SP</p>
               <p className="text-gray-400 text-xs mt-1 uppercase tracking-wider">{imovel.bairro}</p>
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${imovel.bairro}, ${imovel.cidade}, SP`)}`}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-5 inline-block text-[10px] uppercase tracking-widest font-bold text-[#af1e23] border border-[#af1e23] px-5 py-2 hover:bg-[#af1e23] hover:text-white transition-colors"
+                className="mt-5 inline-block text-[10px] uppercase tracking-widest font-bold text-primary border border-primary px-5 py-2 hover:bg-primary hover:text-white transition-colors"
               >
                 Ver no Google Maps
               </a>
@@ -121,7 +121,7 @@ export default function ImovelDetalheClient({ imovel }) {
             </a>
             <a
               href={PHONE_TEL}
-              className="flex-1 flex items-center justify-center gap-3 bg-[#1a1a1a] hover:bg-[#af1e23] text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors"
+              className="flex-1 flex items-center justify-center gap-3 bg-dark hover:bg-primary text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors"
             >
               <FiPhone size={20} /> {PHONE_DISPLAY}
             </a>
@@ -129,7 +129,7 @@ export default function ImovelDetalheClient({ imovel }) {
         </section>
       </div>
 
-      <nav className="fixed bottom-14 left-0 right-0 md:hidden z-40 grid grid-cols-3" aria-label="Contato rápido">
+      <nav className="fixed bottom-0 left-0 right-0 md:hidden z-40 grid grid-cols-3 pb-[env(safe-area-inset-bottom)]" aria-label="Contato rápido">
         <a
           href={`${PHONE_WA}?text=${whatsappMessage}`}
           target="_blank"
@@ -143,7 +143,7 @@ export default function ImovelDetalheClient({ imovel }) {
         <a
           href={PHONE_TEL}
           aria-label={`Ligar para ${PHONE_DISPLAY}`}
-          className="flex flex-col items-center justify-center gap-1 bg-[#af1e23] text-white py-3"
+          className="flex flex-col items-center justify-center gap-1 bg-primary text-white py-3"
         >
           <FiPhone size={18} />
           <span className="text-[9px] uppercase tracking-widest font-bold">Ligar</span>
@@ -151,7 +151,7 @@ export default function ImovelDetalheClient({ imovel }) {
         <button
           onClick={() => scrollToSection('contato')}
           aria-label="Agendar visita"
-          className="flex flex-col items-center justify-center gap-1 bg-[#1a1a1a] text-white py-3"
+          className="flex flex-col items-center justify-center gap-1 bg-dark text-white py-3"
         >
           <FiCalendar size={18} />
           <span className="text-[9px] uppercase tracking-widest font-bold">Visita</span>

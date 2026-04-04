@@ -7,10 +7,10 @@ import ActiveFilters from './ActiveFilters'
 import Pagination from './Pagination'
 import { usePropertyFilters } from '../../hooks/usePropertyFilters'
 
-export default function ImoveisControls({ total, currentPage, totalPages, children }) {
+export default function ImoveisControls({ total, currentPage, totalPages, bairros = [], children }) {
   const [showFilters, setShowFilters] = useState(false)
   const {
-    tipo, categoria, cidade, precoMin, precoMax, quartos, ordem,
+    tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, ordem,
     precoMinInput, precoMaxInput,
     updateFilter, updatePriceFilter, navigatePage,
     setPrecoMinInput, setPrecoMaxInput,
@@ -29,6 +29,8 @@ export default function ImoveisControls({ total, currentPage, totalPages, childr
           tipo={tipo}
           categoria={categoria}
           cidade={cidade}
+          bairro={bairro}
+          bairros={bairros}
           precoMinInput={precoMinInput}
           precoMaxInput={precoMaxInput}
           quartos={quartos}
@@ -53,6 +55,7 @@ export default function ImoveisControls({ total, currentPage, totalPages, childr
           tipo={tipo}
           categoria={categoria}
           cidade={cidade}
+          bairro={bairro}
           precoMin={precoMin}
           precoMax={precoMax}
           quartos={quartos}

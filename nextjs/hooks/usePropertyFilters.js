@@ -13,6 +13,7 @@ export function usePropertyFilters() {
   const tipo      = searchParams.get('tipo')      || ''
   const categoria = searchParams.get('categoria') || ''
   const cidade    = searchParams.get('cidade')    || ''
+  const bairro    = searchParams.get('bairro')    || ''
   const precoMin  = searchParams.get('precoMin')  || ''
   const precoMax  = searchParams.get('precoMax')  || ''
   const quartos   = searchParams.get('quartos')   || ''
@@ -49,10 +50,10 @@ export function usePropertyFilters() {
     router.replace(pathname, { scroll: false })
   }
 
-  const activeFilterCount = [tipo, categoria, cidade, precoMin, precoMax, quartos].filter(Boolean).length
+  const activeFilterCount = [tipo, categoria, cidade, bairro, precoMin, precoMax, quartos].filter(Boolean).length
 
   return {
-    tipo, categoria, cidade, precoMin, precoMax, quartos, ordem,
+    tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, ordem,
     precoMinInput, precoMaxInput,
     updateFilter,
     navigatePage,

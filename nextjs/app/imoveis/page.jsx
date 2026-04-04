@@ -1,10 +1,10 @@
 import ImoveisControls from '../../components/imoveis/ImoveisControls'
 import PropertyGrid from '../../components/imoveis/PropertyGrid'
-import { fetchProperties } from '../../lib/api'
+import { fetchProperties, fetchDistinctBairros } from '../../lib/api'
 import { ITEMS_PER_PAGE } from '../../lib/constants'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 
-const FILTER_KEYS = ['tipo', 'categoria', 'cidade', 'precoMin', 'precoMax', 'quartos']
+const FILTER_KEYS = ['tipo', 'categoria', 'cidade', 'bairro', 'precoMin', 'precoMax', 'quartos']
 
 export const metadata = {
   title: 'Imóveis Disponíveis em Osasco SP — Corretor Yuri',
@@ -29,12 +29,15 @@ export const metadata = {
 
 export default async function ImoveisPage({ searchParams }) {
   const params = await searchParams
-  const { imoveis, total } = await fetchProperties({
-    ...Object.fromEntries(FILTER_KEYS.filter(k => params[k]).map(k => [k, params[k]])),
-    ordem: params.ordem || 'recente',
-    page:  params.page  || 1,
-    limit: ITEMS_PER_PAGE,
-  })
+  const [{ imoveis, total }, bairros] = await Promise.all([
+    fetchProperties({
+      ...Object.fromEntries(FILTER_KEYS.filter(k => params[k]).map(k => [k, params[k]])),
+      ordem: params.ordem || 'recente',
+      page:  params.page  || 1,
+      limit: ITEMS_PER_PAGE,
+    }),
+    fetchDistinctBairros(),
+  ])
   const currentPage = Number(params.page || 1)
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE)
   const activeFilterCount = FILTER_KEYS.filter(k => params[k]).length
@@ -48,7 +51,7 @@ export default async function ImoveisPage({ searchParams }) {
         </div>
       </div>
       <div className="container mx-auto px-6 py-10">
-        <ImoveisControls total={total} currentPage={currentPage} totalPages={totalPages}>
+        <ImoveisControls total={total} currentPage={currentPage} totalPages={totalPages} bairros={bairros}>
           <PropertyGrid properties={imoveis} activeFilterCount={activeFilterCount} />
         </ImoveisControls>
       </div>

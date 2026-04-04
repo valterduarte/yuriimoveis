@@ -1,3 +1,6 @@
+'use client'
+
+import { usePathname } from 'next/navigation'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import { FiPhone } from 'react-icons/fi'
 import { PHONE_WA, PHONE_TEL, INSTAGRAM_URL } from '../lib/config'
@@ -9,8 +12,13 @@ const contacts = [
 ]
 
 export default function FloatingContact() {
+  const pathname = usePathname()
+  const isPropertyDetail = /^\/imoveis\/.+-\d+$/.test(pathname)
+
+  if (isPropertyDetail) return null
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden pb-[env(safe-area-inset-bottom)]">
       <div className="grid grid-cols-3">
         {contacts.map(c => (
           <a
@@ -21,7 +29,7 @@ export default function FloatingContact() {
             className={`${c.bg} text-white flex flex-col items-center justify-center gap-1 py-3 transition-colors duration-200`}
           >
             <c.icon size={18} />
-            <span className="text-[9px] uppercase tracking-wider">{c.label}</span>
+            <span className="text-[10px] uppercase tracking-wider">{c.label}</span>
           </a>
         ))}
       </div>

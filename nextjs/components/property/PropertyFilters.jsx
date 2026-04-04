@@ -10,7 +10,8 @@ const TRANSACTION_TYPE_OPTIONS = [
 ]
 
 export default function PropertyFilters({
-  tipo, categoria, cidade, precoMinInput, precoMaxInput, quartos,
+  tipo, categoria, cidade, bairro, bairros = [],
+  precoMinInput, precoMaxInput, quartos,
   activeFilterCount,
   onUpdateFilter,
   onUpdatePriceMin,
@@ -75,6 +76,22 @@ export default function PropertyFilters({
           </select>
         </div>
 
+        {bairros.length > 0 && (
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Bairro</label>
+            <select
+              value={bairro}
+              onChange={e => onUpdateFilter('bairro', e.target.value)}
+              className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
+            >
+              <option value="">Todos</option>
+              {bairros.map(b => (
+                <option key={b} value={b}>{b}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <div>
           <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Faixa de Preço</label>
           <input
@@ -104,7 +121,7 @@ export default function PropertyFilters({
                   quartos === option ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                {option || 'Td'}
+                {option || 'Todos'}
               </button>
             ))}
           </div>
