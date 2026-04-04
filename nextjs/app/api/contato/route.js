@@ -2,8 +2,19 @@ import { NextResponse } from 'next/server'
 import { getDb } from '../../../lib/db'
 import { requireAuth } from '../../../lib/requireAuth'
 import { contatoSchema } from '../../../lib/schemas'
+import { rateLimit } from '../../../lib/rateLimit'
+
+const isRateLimited = rateLimit({ name: 'contato', maxAttempts: 5, windowMs: 15 * 60 * 1000 })
 
 export async function POST(request) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: 'Muitas mensagens enviadas. Tente novamente em 15 minutos.' },
+      { status: 429 }
+    )
+  }
+
   const body = await request.json()
   const parsed = contatoSchema.safeParse(body)
   if (!parsed.success) {

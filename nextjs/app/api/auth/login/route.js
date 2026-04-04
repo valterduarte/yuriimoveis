@@ -1,20 +1,8 @@
 import { NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
+import { rateLimit, rateLimitClear } from '../../../../lib/rateLimit'
 
-const MAX_ATTEMPTS = 5
-const WINDOW_MS = 15 * 60 * 1000 // 15 minutes
-const attempts = new Map()
-
-function isRateLimited(ip) {
-  const now = Date.now()
-  const record = attempts.get(ip)
-  if (!record || now - record.firstAttempt > WINDOW_MS) {
-    attempts.set(ip, { count: 1, firstAttempt: now })
-    return false
-  }
-  record.count++
-  return record.count > MAX_ATTEMPTS
-}
+const isRateLimited = rateLimit({ name: 'login', maxAttempts: 5, windowMs: 15 * 60 * 1000 })
 
 export async function POST(request) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
@@ -45,7 +33,7 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Usuário ou senha incorretos' }, { status: 401 })
   }
 
-  attempts.delete(ip)
+  rateLimitClear('login', ip)
 
   const token = jwt.sign(
     { sub: usuario, role: 'admin' },

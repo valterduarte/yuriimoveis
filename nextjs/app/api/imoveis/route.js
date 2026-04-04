@@ -2,65 +2,17 @@ import { NextResponse } from 'next/server'
 import { getDb } from '../../../lib/db'
 import { requireAuth } from '../../../lib/requireAuth'
 import { imovelCreateSchema } from '../../../lib/schemas'
-import { parseImovel } from '../../../lib/api'
+import { fetchProperties } from '../../../lib/api'
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url)
-    const {
-      tipo, categoria, cidade, bairro,
-      precoMin, precoMax, quartos, destaque, todos,
-      ordem = 'recente', page = '1', limit = '9',
-    } = Object.fromEntries(searchParams)
+    const filters = Object.fromEntries(searchParams)
+    const result = await fetchProperties(filters)
 
-    const conditions = todos === 'true' ? [] : ['ativo = true']
-    const params = []
-    let idx = 1
-
-    if (tipo)     { conditions.push(`tipo = $${idx++}`);          params.push(tipo) }
-    if (categoria){ conditions.push(`categoria = $${idx++}`);     params.push(categoria) }
-    if (cidade)   { conditions.push(`cidade = $${idx++}`);        params.push(cidade) }
-    if (bairro)   { conditions.push(`bairro ILIKE $${idx++}`);    params.push(`%${bairro}%`) }
-    if (precoMin) { conditions.push(`preco >= $${idx++}`);        params.push(Number(precoMin)) }
-    if (precoMax) { conditions.push(`preco <= $${idx++}`);        params.push(Number(precoMax)) }
-    if (destaque) { conditions.push('destaque = true') }
-    if (quartos) {
-      if (quartos === '4+') {
-        conditions.push('quartos >= 4')
-      } else {
-        conditions.push(`quartos >= $${idx++}`)
-        params.push(Number(quartos))
-      }
-    }
-
-    const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : ''
-    const orderMap = {
-      recente:     'created_at DESC',
-      menor_preco: 'preco ASC',
-      maior_preco: 'preco DESC',
-      maior_area:  'area DESC',
-    }
-    const orderClause = `ORDER BY destaque DESC, ${orderMap[ordem] || orderMap.recente}`
-
-    const pageNum  = Math.max(1, Number(page))
-    const limitNum = Math.min(50, Math.max(1, Number(limit)))
-    const offset   = (pageNum - 1) * limitNum
-
-    const dataResult = await getDb().query(
-      `SELECT *, COUNT(*) OVER() as total FROM imoveis ${whereClause} ${orderClause} LIMIT $${idx} OFFSET $${idx + 1}`,
-      [...params, limitNum, offset]
-    )
-
-    const total = dataResult.rows.length > 0 ? parseInt(dataResult.rows[0].total) : 0
-    const imoveis = dataResult.rows.map(row => {
-      const { total: _total, ...rest } = row
-      return parseImovel(rest)
+    return NextResponse.json(result, {
+      headers: { 'Cache-Control': 'public, max-age=60' },
     })
-
-    return NextResponse.json(
-      { imoveis, total, page: pageNum, limit: limitNum, pages: Math.ceil(total / limitNum) },
-      { headers: { 'Cache-Control': 'public, max-age=60' } }
-    )
   } catch (err) {
     console.error('GET /api/imoveis error:', err)
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
