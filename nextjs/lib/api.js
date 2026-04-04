@@ -1,6 +1,6 @@
 import { getDb } from './db'
 
-function parseImovel(row) {
+export function parseImovel(row) {
   return {
     ...row,
     imagens:      JSON.parse(row.imagens      || '[]'),
@@ -14,7 +14,8 @@ export async function fetchFeaturedProperties() {
       `SELECT * FROM imoveis WHERE ativo = true AND destaque = true ORDER BY destaque DESC, created_at DESC LIMIT 6`
     )
     return result.rows.map(parseImovel)
-  } catch {
+  } catch (err) {
+    console.error('fetchFeaturedProperties error:', err)
     return []
   }
 }
@@ -27,7 +28,8 @@ export async function fetchImovel(id) {
     )
     if (!result.rows[0]) return null
     return parseImovel(result.rows[0])
-  } catch {
+  } catch (err) {
+    console.error('fetchImovel error:', err)
     return null
   }
 }
@@ -40,14 +42,15 @@ export async function fetchPropertiesByBairro(bairroName) {
     )
     const imoveis = result.rows.map(parseImovel)
     return { imoveis, total: imoveis.length }
-  } catch {
+  } catch (err) {
+    console.error('fetchPropertiesByBairro error:', err)
     return { imoveis: [], total: 0 }
   }
 }
 
 export async function fetchProperties({ tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, destaque, todos, ordem = 'recente', page = 1, limit = 9 } = {}) {
   try {
-    const conditions = todos ? [] : ['ativo = true']
+    const conditions = todos === true || todos === 'true' ? [] : ['ativo = true']
     const params = []
     let idx = 1
 
@@ -80,7 +83,8 @@ export async function fetchProperties({ tipo, categoria, cidade, bairro, precoMi
       return parseImovel(rest)
     })
     return { imoveis, total, page: pageNum, limit: limitNum, pages: Math.ceil(total / limitNum) }
-  } catch {
+  } catch (err) {
+    console.error('fetchProperties error:', err)
     return { imoveis: [], total: 0, page: 1, limit: 9, pages: 0 }
   }
 }
@@ -89,7 +93,8 @@ export async function fetchSiteConfig(key) {
   try {
     const result = await getDb().query('SELECT value FROM site_config WHERE key = $1', [key])
     return result.rows[0]?.value ?? null
-  } catch {
+  } catch (err) {
+    console.error('fetchSiteConfig error:', err)
     return null
   }
 }
@@ -100,7 +105,8 @@ export async function fetchDistinctBairros() {
       `SELECT DISTINCT bairro FROM imoveis WHERE ativo = true AND bairro IS NOT NULL AND bairro != '' ORDER BY bairro`
     )
     return result.rows.map(r => r.bairro)
-  } catch {
+  } catch (err) {
+    console.error('fetchDistinctBairros error:', err)
     return []
   }
 }
@@ -111,7 +117,8 @@ export async function fetchAllPropertySlugs() {
       `SELECT id, titulo, updated_at FROM imoveis WHERE ativo = true ORDER BY created_at DESC LIMIT 1000`
     )
     return result.rows
-  } catch {
+  } catch (err) {
+    console.error('fetchAllPropertySlugs error:', err)
     return []
   }
 }

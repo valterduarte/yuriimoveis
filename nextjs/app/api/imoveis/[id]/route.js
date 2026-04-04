@@ -2,14 +2,7 @@ import { NextResponse } from 'next/server'
 import { getDb } from '../../../../lib/db'
 import { requireAuth } from '../../../../lib/requireAuth'
 import { imovelUpdateSchema } from '../../../../lib/schemas'
-
-function parseImovel(row) {
-  return {
-    ...row,
-    imagens:      JSON.parse(row.imagens      || '[]'),
-    diferenciais: JSON.parse(row.diferenciais || '[]'),
-  }
-}
+import { parseImovel } from '../../../../lib/api'
 
 export async function GET(request, { params }) {
   const { id } = await params
