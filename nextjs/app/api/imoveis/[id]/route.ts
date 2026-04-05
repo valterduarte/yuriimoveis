@@ -64,10 +64,12 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
         diferenciais    = COALESCE($17, diferenciais),
         ativo           = COALESCE($18, ativo),
         status          = COALESCE($19, status),
-        parcela_display = COALESCE($20, parcela_display),
-        parcela_label   = COALESCE($21, parcela_label),
+        area_display    = COALESCE($20, area_display),
+        vagas_display   = COALESCE($21, vagas_display),
+        parcela_display = COALESCE($22, parcela_display),
+        parcela_label   = COALESCE($23, parcela_label),
         updated_at      = NOW()
-      WHERE id = $22
+      WHERE id = $24
     `, [
       d.titulo        ?? null,
       d.descricao     ?? null,
@@ -88,6 +90,8 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
       d.diferenciais ? JSON.stringify(d.diferenciais) : null,
       d.ativo         ?? null,
       d.status        ?? null,
+      d.area_display    ?? null,
+      d.vagas_display   ?? null,
       d.parcela_display ?? null,
       d.parcela_label   ?? null,
       id,

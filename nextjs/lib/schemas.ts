@@ -23,6 +23,8 @@ export const imovelCreateSchema = z.object({
   destaque:        z.coerce.boolean().optional().default(false),
   imagens:         z.array(z.string().url()).optional().default([]),
   diferenciais:    z.array(z.string().max(100)).optional().default([]),
+  area_display:    z.string().max(50).optional().default(''),
+  vagas_display:   z.string().max(50).optional().default(''),
   parcela_display: z.string().max(50).optional().default(''),
   parcela_label:   z.string().max(50).optional().default(''),
 })
@@ -47,6 +49,8 @@ export const imovelUpdateSchema = z.object({
   ativo:           z.coerce.boolean().optional(),
   imagens:         z.array(z.string().url()).optional(),
   diferenciais:    z.array(z.string().max(100)).optional(),
+  area_display:    z.string().max(50).optional(),
+  vagas_display:   z.string().max(50).optional(),
   parcela_display: z.string().max(50).optional(),
   parcela_label:   z.string().max(50).optional(),
 })

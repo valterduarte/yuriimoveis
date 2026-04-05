@@ -32,8 +32,8 @@ export async function POST(request: NextRequest) {
 
   try {
     const result = await getDb().query(`
-      INSERT INTO imoveis (titulo, descricao, descricao_seo, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, parcela_display, parcela_label)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
+      INSERT INTO imoveis (titulo, descricao, descricao_seo, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, area_display, vagas_display, parcela_display, parcela_label)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)
       RETURNING id
     `, [
       d.titulo, d.descricao, d.descricao_seo, d.tipo, d.categoria, d.preco,
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       d.destaque,
       JSON.stringify(d.imagens),
       JSON.stringify(d.diferenciais),
-      d.status, d.parcela_display, d.parcela_label,
+      d.status, d.area_display, d.vagas_display, d.parcela_display, d.parcela_label,
     ])
     return NextResponse.json({ id: result.rows[0].id, message: 'Imóvel criado com sucesso' }, { status: 201 })
   } catch (err) {

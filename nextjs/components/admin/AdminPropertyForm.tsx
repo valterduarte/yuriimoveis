@@ -37,9 +37,11 @@ interface FormState {
   parcela_display: string
   parcela_label: string
   area: string
+  area_display: string
   quartos: string
   banheiros: string
   vagas: string
+  vagas_display: string
   endereco: string
   bairro: string
   cidade: string
@@ -51,7 +53,7 @@ interface FormState {
 const EMPTY_FORM: FormState = {
   titulo: '', descricao: '', descricao_seo: '', tipo: 'venda', categoria: 'apartamento',
   status: 'pronto',
-  preco: '', parcela_display: '', parcela_label: '', area: '', quartos: '', banheiros: '', vagas: '',
+  preco: '', parcela_display: '', parcela_label: '', area: '', area_display: '', quartos: '', banheiros: '', vagas: '', vagas_display: '',
   endereco: '', bairro: '', cidade: 'Osasco', cep: '',
   destaque: false, diferenciais: '',
 }
@@ -68,9 +70,11 @@ function propertyToForm(property: Imovel): FormState {
     parcela_display: property.parcela_display || '',
     parcela_label:   property.parcela_label   || '',
     area:            String(property.area)    || '',
+    area_display:    property.area_display    || '',
     quartos:         String(property.quartos) || '',
     banheiros:       String(property.banheiros) || '',
     vagas:           String(property.vagas)   || '',
+    vagas_display:   property.vagas_display   || '',
     endereco:        property.endereco        || '',
     bairro:          property.bairro          || '',
     cidade:          property.cidade          || 'Osasco',
@@ -248,21 +252,36 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
                 className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
             </div>
             <div>
-              <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Quartos</label>
-              <input type="number" value={form.quartos} onChange={e => updateField('quartos', e.target.value)}
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Área exibida no site</label>
+              <input value={form.area_display} onChange={e => updateField('area_display', e.target.value)}
+                placeholder="Ex: 26 a 49 m²"
                 className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Quartos</label>
+              <input type="number" value={form.quartos} onChange={e => updateField('quartos', e.target.value)}
+                className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+            </div>
+            <div>
               <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Banheiros</label>
               <input type="number" value={form.banheiros} onChange={e => updateField('banheiros', e.target.value)}
                 className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
             </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Vagas</label>
               <input type="number" value={form.vagas} onChange={e => updateField('vagas', e.target.value)}
+                className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Vagas exibida no site</label>
+              <input value={form.vagas_display} onChange={e => updateField('vagas_display', e.target.value)}
+                placeholder="Ex: 1 a 2 vagas"
                 className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
             </div>
           </div>
