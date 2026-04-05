@@ -17,6 +17,7 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
   )
 
   const infoItems: { label: string; value: string | number }[] = [
+    { label: 'Código',    value: `#${imovel.id}`  },
     { label: 'Tipo',      value: imovel.tipo      },
     { label: 'Categoria', value: imovel.categoria  },
     { label: 'Cidade',    value: imovel.cidade     },
@@ -33,12 +34,9 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
   return (
     <div className="bg-white border border-gray-200 sticky top-36">
       <div className="bg-dark p-7">
-        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-300 mb-1">Código #{imovel.id}</p>
+        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-300 mb-1">A partir de</p>
         <p className="text-3xl font-black text-primary leading-tight">
           {formatPrice(imovel.preco, imovel.tipo)}
-        </p>
-        <p className="text-[10px] text-gray-300 uppercase tracking-wider mt-1">
-          {imovel.tipo === 'venda' ? 'Valor de venda' : 'Valor mensal'}
         </p>
         {imovel.tipo === 'venda' && (
           <p className="text-[11px] text-green-400 mt-3 font-semibold">
