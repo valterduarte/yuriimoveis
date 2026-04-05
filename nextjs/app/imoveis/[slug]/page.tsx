@@ -1,0 +1,345 @@
+import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import { FiArrowLeft } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
+import ImovelDetalheClient from '../../../components/ImovelDetalheClient'
+import PropertyCard from '../../../components/PropertyCard'
+import {
+  fetchImovel,
+  fetchAllPropertySlugs,
+  fetchPropertiesByBairro,
+  fetchDistinctBairros,
+} from '../../../lib/api'
+import { imovelSlug, slugify, formatNeighborhoodName, buildSeoDescription, ogImageUrl } from '../../../utils/imovelUtils'
+import { getBairroBySlug } from '../../../data/bairros'
+import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
+import { SITE_URL, PHONE_WA, PHONE_STRUCTURED, OG_DEFAULT_IMAGE } from '../../../lib/config'
+import type { Metadata } from 'next'
+
+export const revalidate = 60
+
+type PageProps = { params: Promise<{ slug: string }> }
+
+// ── helpers ───────────────────────────────────────────────────────────────────
+
+function isPropertySlug(slug: string): boolean {
+  return /-\d+$/.test(slug)
+}
+
+// ── static params ─────────────────────────────────────────────────────────────
+
+export async function generateStaticParams() {
+  const [imoveis, bairros] = await Promise.all([
+    fetchAllPropertySlugs(),
+    fetchDistinctBairros(),
+  ])
+  const propertyParams = imoveis.map(imovel => ({ slug: imovelSlug(imovel) }))
+  const bairroParams = bairros.map(b => ({ slug: slugify(b) }))
+  return [...propertyParams, ...bairroParams]
+}
+
+// ── metadata ──────────────────────────────────────────────────────────────────
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+
+  if (isPropertySlug(slug)) {
+    const id = slug.split('-').pop()!
+    const imovel = await fetchImovel(id)
+    if (!imovel) return { title: 'Imóvel não encontrado' }
+
+    const description = buildSeoDescription(imovel)
+    const pageUrl = `${SITE_URL}/imoveis/${imovelSlug(imovel)}`
+    const rawImage = imovel.imagens?.[0] ?? PLACEHOLDER_IMAGE
+    const socialImage = ogImageUrl(rawImage)
+
+    return {
+      title: `${imovel.titulo} — Corretor Yuri Imóveis`,
+      description,
+      alternates: { canonical: pageUrl },
+      openGraph: {
+        title: `${imovel.titulo} — Corretor Yuri Imóveis`,
+        description,
+        url: pageUrl,
+        siteName: 'Corretor Yuri Imóveis',
+        locale: 'pt_BR',
+        type: 'article',
+        images: [{ url: socialImage, width: 1200, height: 630, alt: imovel.titulo, type: 'image/jpeg' }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: imovel.titulo,
+        description,
+        images: [socialImage],
+      },
+    }
+  }
+
+  // Bairro page
+  const bairroData = getBairroBySlug(slug)
+  const neighborhoodName = bairroData?.nome || formatNeighborhoodName(slug)
+  const title = bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP — Corretor Yuri`
+  const description = bairroData?.descricaoMeta || `Veja todos os imóveis disponíveis no ${neighborhoodName} em Osasco, SP. Casas, apartamentos e terrenos à venda e para alugar. Atendimento com o Corretor Yuri.`
+
+  const bairroImage = bairroData?.imagem
+    ? ogImageUrl(bairroData.imagem)
+    : OG_DEFAULT_IMAGE
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `${SITE_URL}/imoveis/${slug}` },
+    openGraph: {
+      title: bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP`,
+      description,
+      url: `${SITE_URL}/imoveis/${slug}`,
+      siteName: 'Corretor Yuri Imóveis',
+      locale: 'pt_BR',
+      type: 'website',
+      images: [{ url: bairroImage, width: 1200, height: 630, alt: `Imóveis em ${neighborhoodName}` }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP`,
+      description,
+      images: [bairroImage],
+    },
+  }
+}
+
+// ── property detail page ──────────────────────────────────────────────────────
+
+async function ImovelDetalhePage({ slug }: { slug: string }) {
+  const id = slug.split('-').pop()!
+  const imovel = await fetchImovel(id)
+
+  if (!imovel) notFound()
+
+  const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
+  const imovelDescription = buildSeoDescription(imovel)
+
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Início',  item: `${SITE_URL}/`        },
+        { '@type': 'ListItem', position: 2, name: 'Imóveis', item: `${SITE_URL}/imoveis`  },
+        { '@type': 'ListItem', position: 3, name: imovel.titulo, item: `${SITE_URL}/imoveis/${imovelSlug(imovel)}` },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: imovel.titulo,
+      description: imovelDescription,
+      image: images,
+      url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
+      offers: {
+        '@type': 'Offer',
+        price: imovel.preco,
+        priceCurrency: 'BRL',
+        availability: 'https://schema.org/InStock',
+        url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
+        seller: { '@type': 'RealEstateAgent', name: 'Corretor Yuri Imóveis', telephone: PHONE_STRUCTURED, url: SITE_URL },
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'RealEstateListing',
+      name: imovel.titulo,
+      description: imovelDescription,
+      image: images,
+      url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
+      datePosted: imovel.created_at ? new Date(imovel.created_at).toISOString().split('T')[0] : undefined,
+      price: imovel.preco ? String(imovel.preco) : undefined,
+      priceCurrency: 'BRL',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: imovel.endereco || undefined,
+        addressLocality: imovel.cidade || 'Osasco',
+        addressRegion: imovel.estado || 'SP',
+        postalCode: imovel.cep || undefined,
+        addressCountry: 'BR',
+      },
+      ...(imovel.lat && imovel.lng
+        ? { geo: { '@type': 'GeoCoordinates', latitude: imovel.lat, longitude: imovel.lng } }
+        : {}),
+      numberOfRooms: imovel.quartos || undefined,
+      floorSize: imovel.area
+        ? { '@type': 'QuantitativeValue', value: imovel.area, unitCode: 'MTK' }
+        : undefined,
+      offers: {
+        '@type': 'Offer',
+        price: imovel.preco,
+        priceCurrency: 'BRL',
+        availability: 'https://schema.org/InStock',
+        seller: { '@type': 'RealEstateAgent', name: 'Corretor Yuri Imóveis', telephone: PHONE_STRUCTURED, url: SITE_URL },
+      },
+    },
+  ]
+
+  return (
+    <>
+      {jsonLd.map((schema, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+      <ImovelDetalheClient imovel={imovel} />
+    </>
+  )
+}
+
+// ── neighborhood page ─────────────────────────────────────────────────────────
+
+async function BairroPage({ slug }: { slug: string }) {
+  const bairroData = getBairroBySlug(slug)
+  const neighborhoodName = bairroData?.nome || formatNeighborhoodName(slug)
+  const { imoveis: properties, total } = await fetchPropertiesByBairro(neighborhoodName)
+  const hasProperties = properties.length > 0
+
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Início',  item: `${SITE_URL}/`       },
+        { '@type': 'ListItem', position: 2, name: 'Imóveis', item: `${SITE_URL}/imoveis` },
+        { '@type': 'ListItem', position: 3, name: neighborhoodName, item: `${SITE_URL}/imoveis/${slug}` },
+      ],
+    },
+    ...(hasProperties ? [{
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: `Imóveis em ${neighborhoodName}, Osasco SP`,
+      url: `${SITE_URL}/imoveis/${slug}`,
+      numberOfItems: total,
+      description: bairroData?.descricaoMeta || `Imóveis disponíveis no bairro ${neighborhoodName} em Osasco, SP.`,
+      itemListElement: properties.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${SITE_URL}/imoveis/${imovelSlug(p)}`,
+        name: p.titulo,
+      })),
+    }] : []),
+    ...(bairroData ? [{
+      '@context': 'https://schema.org',
+      '@type': 'Place',
+      name: neighborhoodName,
+      description: bairroData.conteudo.sobre,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Osasco',
+        addressRegion: 'SP',
+        addressCountry: 'BR',
+      },
+      containedInPlace: {
+        '@type': 'City',
+        name: 'Osasco',
+      },
+    }] : []),
+  ]
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {jsonLd.map((schema, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+
+      <div className="bg-dark text-white py-12">
+        <div className="container mx-auto px-6">
+          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white transition-colors">Início</Link>
+            <span>/</span>
+            <Link href="/imoveis" className="hover:text-white transition-colors">Imóveis</Link>
+            <span>/</span>
+            <span className="text-white">{neighborhoodName}</span>
+          </nav>
+          <span className="section-label">Bairro</span>
+          <h1 className="text-4xl font-black uppercase text-white">{neighborhoodName}</h1>
+          {hasProperties && (
+            <p className="text-gray-400 text-sm mt-2">
+              {total} imóvel{total !== 1 ? 'is' : ''} disponível{total !== 1 ? 'is' : ''} em Osasco, SP
+            </p>
+          )}
+        </div>
+      </div>
+
+      {bairroData && (
+        <section className="container mx-auto px-6 pt-10 pb-2">
+          <div className="bg-white border border-gray-200 p-6 md:p-8">
+            <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">
+              Sobre o bairro {neighborhoodName}
+            </h2>
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.sobre}</p>
+
+            <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Infraestrutura</h3>
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.infraestrutura}</p>
+
+            <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Transporte e Acesso</h3>
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.transporte}</p>
+
+            <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Educação</h3>
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.educacao}</p>
+
+            <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">
+              Por que morar no {neighborhoodName}?
+            </h3>
+            <p className="text-gray-700 text-sm leading-relaxed">{bairroData.conteudo.porqueMorar}</p>
+          </div>
+        </section>
+      )}
+
+      <div className="container mx-auto px-6 py-10">
+        <div className="mb-6">
+          <Link href="/imoveis" className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
+            <FiArrowLeft size={13} /> Ver todos os imóveis
+          </Link>
+        </div>
+
+        {!hasProperties ? (
+          <div className="text-center py-20 bg-white border border-gray-200 px-6">
+            <div className="text-5xl mb-4" aria-hidden="true">🏠</div>
+            <h2 className="text-lg font-bold text-dark mb-2 uppercase tracking-wide">Nenhum imóvel em {neighborhoodName}</h2>
+            <p className="text-gray-500 text-sm mb-6">Ainda não temos imóveis cadastrados neste bairro. Fale com o corretor para mais opções.</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/imoveis" className="btn-primary">Ver todos os imóveis</Link>
+              <a
+                href={`${PHONE_WA}?text=${encodeURIComponent(`Olá! Procuro imóveis no ${neighborhoodName} em Osasco. Pode me ajudar?`)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-widest text-xs py-3 px-6 transition-colors"
+              >
+                <FaWhatsapp size={14} /> Falar com o Corretor
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            {properties.map((property, i) => (
+              <div key={property.id} className="reveal" style={{ transitionDelay: `${(i % 3) * 0.08}s` }}>
+                <PropertyCard imovel={property} />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── router ────────────────────────────────────────────────────────────────────
+
+export default async function SlugPage({ params }: PageProps) {
+  const { slug } = await params
+  return isPropertySlug(slug)
+    ? <ImovelDetalhePage slug={slug} />
+    : <BairroPage slug={slug} />
+}
