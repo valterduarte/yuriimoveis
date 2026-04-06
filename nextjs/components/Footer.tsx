@@ -48,7 +48,9 @@ export default function Footer() {
               <Logo className="h-9 w-auto" />
             </Link>
             <p className="text-sm leading-relaxed text-gray-400 mb-6">
-              Do primeiro imóvel ao imóvel dos sonhos.
+              Do primeiro imóvel
+              <br />
+              ao imóvel dos sonhos.
             </p>
             <div className="flex items-center gap-3">
               {[
