@@ -10,7 +10,7 @@ import PropertySidebar from './property/PropertySidebar'
 import PropertyOverview from './property/PropertyOverview'
 import PropertyGallery from './property/PropertyGallery'
 import { imovelSlug } from '../utils/imovelUtils'
-import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, API_URL } from '../lib/config'
+import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, SITE_URL } from '../lib/config'
 import { PLACEHOLDER_IMAGE } from '../lib/constants'
 import { useScrollSpy } from '../hooks/useScrollSpy'
 import type { Imovel } from '../types'
@@ -37,7 +37,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
 
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
   const whatsappMessage = encodeURIComponent(`Olá! Tenho interesse no imóvel: ${imovel.titulo} — Código #${imovel.id}`)
-  const shareUrl = `${API_URL}/share/${imovel.id}`
+  const shareUrl = `${SITE_URL}/imoveis/${imovelSlug(imovel)}`
 
   return (
     <div className="min-h-screen bg-gray-100 pb-20 md:pb-0">
