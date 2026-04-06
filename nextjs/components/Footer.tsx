@@ -48,7 +48,7 @@ export default function Footer() {
               <Logo className="h-9 w-auto" />
             </Link>
             <p className="text-sm leading-relaxed text-gray-400 mb-6">
-              Especialista em imóveis em Osasco e região — do primeiro apartamento ao imóvel dos sonhos, com mais de 10 anos de experiência.
+              Do primeiro imóvel ao imóvel dos sonhos.
             </p>
             <div className="flex items-center gap-3">
               {[
