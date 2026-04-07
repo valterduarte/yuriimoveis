@@ -47,7 +47,7 @@ export default function SearchBar() {
             Tipo de Imóvel
           </label>
           <select id="sb-categoria" value={categoria} onChange={e => setCategoria(e.target.value)}
-            className="w-full text-sm text-dark focus:outline-none bg-white">
+            className="w-full text-sm text-dark focus:outline-none focus-visible:outline-2 focus-visible:outline-primary bg-white cursor-pointer">
             <option value="">Todos os tipos</option>
             {PROPERTY_CATEGORIES.map(c => (
               <option key={c.value} value={c.value}>{c.label}</option>
@@ -59,7 +59,7 @@ export default function SearchBar() {
             Cidade
           </label>
           <select id="sb-cidade" value={cidade} onChange={e => setCidade(e.target.value)}
-            className="w-full text-sm text-dark focus:outline-none bg-white">
+            className="w-full text-sm text-dark focus:outline-none focus-visible:outline-2 focus-visible:outline-primary bg-white cursor-pointer">
             <option value="">Todas as cidades</option>
             <option value="Osasco">Osasco</option>
           </select>
@@ -69,7 +69,7 @@ export default function SearchBar() {
             Preço Máximo
           </label>
           <select id="sb-preco" value={precoMax} onChange={e => setPrecoMax(e.target.value)}
-            className="w-full text-sm text-dark focus:outline-none bg-white">
+            className="w-full text-sm text-dark focus:outline-none focus-visible:outline-2 focus-visible:outline-primary bg-white cursor-pointer">
             <option value="">Sem limite</option>
             {(tipo === 'venda' ? SALE_PRICE_OPTIONS : RENT_PRICE_OPTIONS).map(p => (
               <option key={p.value} value={p.value}>{p.label}</option>

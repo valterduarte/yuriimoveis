@@ -4,8 +4,16 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: var(--font-inter), sans-serif; background: #fff; color: #1a1a1a; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 section { scroll-margin-top: 80px; }
+
+/* ── Focus visible ── */
+:focus-visible {
+  outline: 2px solid #af1e23;
+  outline-offset: 2px;
+}
 
 @media (max-width: 1075px) {
   .perspectivas-img { height: 350px !important; }

@@ -88,23 +88,31 @@ export default function PropertyCard({ imovel }: PropertyCardProps) {
 
         <div className="flex items-center gap-4 text-xs text-gray-600 pt-3 border-t border-gray-100">
           {imovel.quartos > 0 && (
-            <span className="flex items-center gap-1">
-              <LuBed size={13} className="text-gray-500" /> {imovel.quartos}
+            <span className="flex items-center gap-1" title="Quartos">
+              <LuBed size={13} className="text-gray-500" aria-hidden="true" />
+              {imovel.quartos}
+              <span className="sr-only">{imovel.quartos === 1 ? 'quarto' : 'quartos'}</span>
             </span>
           )}
           {imovel.banheiros > 0 && (
-            <span className="flex items-center gap-1">
-              <FaBath size={11} className="text-gray-500" /> {imovel.banheiros}
+            <span className="flex items-center gap-1" title="Banheiros">
+              <FaBath size={11} className="text-gray-500" aria-hidden="true" />
+              {imovel.banheiros}
+              <span className="sr-only">{imovel.banheiros === 1 ? 'banheiro' : 'banheiros'}</span>
             </span>
           )}
           {imovel.vagas > 0 && (
-            <span className="flex items-center gap-1">
-              <FaCar size={12} className="text-gray-500" /> {imovel.vagas}
+            <span className="flex items-center gap-1" title="Vagas">
+              <FaCar size={12} className="text-gray-500" aria-hidden="true" />
+              {imovel.vagas}
+              <span className="sr-only">{imovel.vagas === 1 ? 'vaga' : 'vagas'}</span>
             </span>
           )}
           {imovel.area > 0 && (
-            <span className="flex items-center gap-1 ml-auto">
-              <FiMaximize size={11} className="text-gray-500" /> {imovel.area}m²
+            <span className="flex items-center gap-1 ml-auto" title="Área">
+              <FiMaximize size={11} className="text-gray-500" aria-hidden="true" />
+              {imovel.area}m²
+              <span className="sr-only">de área</span>
             </span>
           )}
         </div>

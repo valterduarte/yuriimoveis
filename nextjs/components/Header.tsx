@@ -38,6 +38,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={pathname === link.href ? 'page' : undefined}
                 className={`text-xs uppercase tracking-widest font-semibold transition-colors duration-200 ${
                   pathname === link.href
                     ? 'text-primary'
@@ -87,6 +88,7 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
+              aria-current={pathname === link.href ? 'page' : undefined}
               className={`py-3 text-xs uppercase tracking-widest font-semibold border-b border-gray-800 transition-colors ${
                 pathname === link.href ? 'text-primary' : 'text-gray-300'
               }`}

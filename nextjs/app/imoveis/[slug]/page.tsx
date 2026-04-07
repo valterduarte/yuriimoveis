@@ -257,10 +257,10 @@ async function BairroPage({ slug }: { slug: string }) {
         <div className="container mx-auto px-6">
           <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
-            <span>/</span>
+            <span aria-hidden="true">/</span>
             <Link href="/imoveis" className="hover:text-white transition-colors">Imóveis</Link>
-            <span>/</span>
-            <span className="text-white">{neighborhoodName}</span>
+            <span aria-hidden="true">/</span>
+            <span className="text-white" aria-current="page">{neighborhoodName}</span>
           </nav>
           <span className="section-label">Bairro</span>
           <h1 className="text-4xl font-black uppercase text-white">{neighborhoodName}</h1>

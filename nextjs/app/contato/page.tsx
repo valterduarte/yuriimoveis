@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { FiPhone, FiMapPin, FiClock } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, PHONE_STRUCTURED, SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
@@ -22,6 +23,15 @@ export const metadata = {
     description: 'Fale com o Corretor Yuri via WhatsApp, telefone ou e-mail. Atendimento personalizado para imóveis em Osasco e região.',
     images: [OG_DEFAULT_IMAGE],
   },
+}
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'Contato', item: `${SITE_URL}/contato` },
+  ],
 }
 
 const jsonLd = {
@@ -49,11 +59,20 @@ export default function Contato() {
     <div className="min-h-screen pb-16 md:pb-0">
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       <section className="py-24 bg-dark text-white">
         <div className="container mx-auto px-6">
+          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white transition-colors">Início</Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-white" aria-current="page">Contato</span>
+          </nav>
           <span className="section-label">Fale Conosco</span>
           <h1 className="text-5xl md:text-6xl font-black text-white uppercase leading-none">Contato</h1>
         </div>

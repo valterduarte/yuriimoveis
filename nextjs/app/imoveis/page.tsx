@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import ImoveisControls from '../../components/imoveis/ImoveisControls'
 import PropertyGrid from '../../components/imoveis/PropertyGrid'
 import { fetchProperties, fetchDistinctBairros } from '../../lib/api'
@@ -45,8 +46,21 @@ export default async function ImoveisPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: 'Imóveis', item: `${SITE_URL}/imoveis` },
+        ],
+      }) }} />
       <div className="bg-dark text-white py-12">
         <div className="container mx-auto px-6">
+          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white transition-colors">Início</Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-white" aria-current="page">Imóveis</span>
+          </nav>
           <span className="section-label">Portfólio</span>
           <h1 className="text-4xl font-black uppercase text-white">Imóveis Disponíveis</h1>
         </div>
