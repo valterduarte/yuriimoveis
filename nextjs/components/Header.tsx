@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { FiMenu, FiX, FiPhone } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import Logo from './Logo'
+import WhatsAppLink from './WhatsAppLink'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL } from '../lib/config'
 import { NAVIGATION_LINKS, SCROLL_THRESHOLD } from '../lib/constants'
 
@@ -52,24 +53,25 @@ export default function Header() {
 
           <div className="hidden md:flex items-center gap-5">
             <div className="flex items-center gap-1 text-gray-400">
-              <a href={PHONE_WA} target="_blank" rel="noreferrer" aria-label="WhatsApp — ícone"
+              <WhatsAppLink href={PHONE_WA} source="header-icon" target="_blank" rel="noreferrer" aria-label="WhatsApp — ícone"
                 className="w-10 h-10 flex items-center justify-center hover:text-green-400 transition-colors">
                 <FaWhatsapp size={15} />
-              </a>
+              </WhatsAppLink>
               <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram"
                 className="w-10 h-10 flex items-center justify-center hover:text-pink-400 transition-colors">
                 <FaInstagram size={15} />
               </a>
             </div>
-            <a
+            <WhatsAppLink
               href={PHONE_WA}
+              source="header-cta"
               target="_blank"
               rel="noreferrer"
               className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs"
             >
               <FaWhatsapp size={13} />
               Fale Conosco
-            </a>
+            </WhatsAppLink>
           </div>
 
           <button
@@ -97,8 +99,8 @@ export default function Header() {
             </Link>
           ))}
           <div className="pt-5 flex items-center gap-4">
-            <a href={PHONE_WA} target="_blank" rel="noreferrer" aria-label="WhatsApp — ícone"
-              className="text-gray-400 hover:text-green-400 transition-colors"><FaWhatsapp size={18} /></a>
+            <WhatsAppLink href={PHONE_WA} source="header-mobile" target="_blank" rel="noreferrer" aria-label="WhatsApp — ícone"
+              className="text-gray-400 hover:text-green-400 transition-colors"><FaWhatsapp size={18} /></WhatsAppLink>
             <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram"
               className="text-gray-400 hover:text-pink-400 transition-colors"><FaInstagram size={18} /></a>
             <a href={PHONE_TEL} aria-label={`Ligar para ${PHONE_DISPLAY}`}

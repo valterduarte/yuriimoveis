@@ -4,13 +4,14 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { FiMapPin, FiPhone, FiArrowLeft, FiCalendar } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
+import WhatsAppLink from './WhatsAppLink'
 import PropertyHero from './property/PropertyHero'
 import PropertyLightbox from './property/PropertyLightbox'
 import PropertySidebar from './property/PropertySidebar'
 import PropertyOverview from './property/PropertyOverview'
 import PropertyGallery from './property/PropertyGallery'
 import { imovelSlug } from '../utils/imovelUtils'
-import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, SITE_URL } from '../lib/config'
+import { PHONE_WA_BASE, PHONE_TEL, PHONE_DISPLAY, SITE_URL } from '../lib/config'
 import { PLACEHOLDER_IMAGE } from '../lib/constants'
 import { useScrollSpy } from '../hooks/useScrollSpy'
 import type { Imovel } from '../types'
@@ -116,14 +117,15 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
           <h2 className="section-title mb-2">Desejo saber mais</h2>
           <p className="text-gray-500 text-sm mb-8">Fale agora com o corretor e descubra como sair do aluguel ainda este ano.</p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href={`${PHONE_WA}?text=${whatsappMessage}`}
+            <WhatsAppLink
+              href={`${PHONE_WA_BASE}?text=${whatsappMessage}`}
+              source="imovel-contato"
               target="_blank"
               rel="noreferrer"
               className="flex-1 flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors"
             >
               <FaWhatsapp size={22} /> WhatsApp
-            </a>
+            </WhatsAppLink>
             <a
               href={PHONE_TEL}
               className="flex-1 flex items-center justify-center gap-3 bg-dark hover:bg-primary text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors"
@@ -135,16 +137,15 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
       </div>
 
       <nav className="fixed bottom-0 left-0 right-0 md:hidden z-40 grid grid-cols-3 pb-[env(safe-area-inset-bottom)]" aria-label="Contato rápido">
-        <a
-          href={`${PHONE_WA}?text=${whatsappMessage}`}
-          target="_blank"
-          rel="noreferrer"
+        <WhatsAppLink
+          href={`${PHONE_WA_BASE}?text=${whatsappMessage}`}
+          source="imovel-barra-mobile"
           aria-label="Contato via WhatsApp"
           className="flex flex-col items-center justify-center gap-1 bg-green-500 text-white py-3"
         >
           <FaWhatsapp size={18} />
           <span className="text-[9px] uppercase tracking-widest font-bold">WhatsApp</span>
-        </a>
+        </WhatsAppLink>
         <a
           href={PHONE_TEL}
           aria-label={`Ligar para ${PHONE_DISPLAY}`}

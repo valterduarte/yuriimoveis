@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { FiPhone, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import Logo from './Logo'
+import WhatsAppLink from './WhatsAppLink'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI, SITE_URL, PHONE_STRUCTURED } from '../lib/config'
 import { NAVIGATION_LINKS, PROPERTY_CATEGORIES } from '../lib/constants'
 
@@ -53,15 +54,14 @@ export default function Footer() {
               ao imóvel dos sonhos.
             </p>
             <div className="flex items-center gap-3">
-              {[
-                { href: PHONE_WA,     icon: FaWhatsapp,  hover: 'hover:text-green-400', label: 'Fale pelo WhatsApp' },
-                { href: INSTAGRAM_URL, icon: FaInstagram, hover: 'hover:text-pink-400',  label: 'Siga no Instagram' },
-              ].map(({ href, icon: Icon, hover, label }) => (
-                <a key={href} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
-                  className={`w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center ${hover} hover:border-current transition-all`}>
-                  <Icon size={18} />
-                </a>
-              ))}
+              <WhatsAppLink href={PHONE_WA} source="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Fale pelo WhatsApp"
+                className="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:text-green-400 hover:border-current transition-all">
+                <FaWhatsapp size={18} />
+              </WhatsAppLink>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Siga no Instagram"
+                className="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:text-pink-400 hover:border-current transition-all">
+                <FaInstagram size={18} />
+              </a>
             </div>
           </div>
 
@@ -112,16 +112,16 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <FaWhatsapp className="text-primary flex-shrink-0" size={14} />
-                <a href={PHONE_WA} target="_blank" rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors">Fale pelo WhatsApp</a>
+                <WhatsAppLink href={PHONE_WA} source="footer-contato" target="_blank" rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors">Fale pelo WhatsApp</WhatsAppLink>
               </li>
             </ul>
 
-            <a href={PHONE_WA} target="_blank" rel="noopener noreferrer"
+            <WhatsAppLink href={PHONE_WA} source="footer-cta" target="_blank" rel="noopener noreferrer"
               className="mt-6 inline-flex items-center gap-2 bg-primary text-white text-xs font-semibold px-5 py-2.5 rounded-full hover:brightness-110 transition-all">
               <FaWhatsapp size={16} />
               Encontre seu imóvel
-            </a>
+            </WhatsAppLink>
           </div>
         </div>
       </div>

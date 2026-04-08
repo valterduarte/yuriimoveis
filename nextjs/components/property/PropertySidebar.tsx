@@ -2,7 +2,8 @@
 
 import { FiCalendar } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-import { PHONE_WA } from '../../lib/config'
+import { PHONE_WA_BASE } from '../../lib/config'
+import WhatsAppLink from '../WhatsAppLink'
 import { formatPrice, calcParcela } from '../../utils/imovelUtils'
 import type { Imovel } from '../../types'
 
@@ -49,14 +50,15 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
       </div>
 
       <div className="p-7 space-y-3">
-        <a
-          href={`${PHONE_WA}?text=${simulationMessage}`}
+        <WhatsAppLink
+          href={`${PHONE_WA_BASE}?text=${simulationMessage}`}
+          source="imovel-simulacao"
           target="_blank"
           rel="noreferrer"
           className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors"
         >
           <FaWhatsapp size={16} /> Faça Sua Simulação
-        </a>
+        </WhatsAppLink>
         <button
           onClick={onScheduleVisit}
           className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-primary hover:text-primary text-dark font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors"

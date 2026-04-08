@@ -6,7 +6,8 @@ export const SITE_URL: string =
 export const PHONE_NUMBER: string     = '5511972563420'
 export const PHONE_DISPLAY: string    = '(11) 97256-3420'
 export const PHONE_STRUCTURED: string = '+55-11-97256-3420'
-export const PHONE_WA: string         = `https://wa.me/${PHONE_NUMBER}`
+export const PHONE_WA_BASE: string     = `https://wa.me/${PHONE_NUMBER}`
+export const PHONE_WA: string         = `${PHONE_WA_BASE}?text=${encodeURIComponent('Olá! Gostaria de mais informações sobre imóveis.')}`
 export const PHONE_TEL: string        = `tel:${PHONE_NUMBER}`
 export const INSTAGRAM_URL: string    = 'https://www.instagram.com/valterrduarte/'
 export const CRECI: string            = '235509'

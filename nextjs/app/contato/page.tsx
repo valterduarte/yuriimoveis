@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { FiPhone, FiMapPin, FiClock } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
-import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, PHONE_STRUCTURED, SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
+import { PHONE_WA, PHONE_WA_BASE, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, PHONE_STRUCTURED, SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
+import WhatsAppLink from '../../components/WhatsAppLink'
 
 export const metadata = {
   title: 'Contato — Imóveis em Osasco SP',
@@ -102,10 +103,10 @@ export default function Contato() {
               ))}
 
               <div className="flex gap-2 pt-2">
-                <a href={PHONE_WA} target="_blank" rel="noreferrer"
+                <WhatsAppLink href={PHONE_WA} source="contato-info" target="_blank" rel="noreferrer"
                   className="flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white text-[10px] uppercase tracking-wider font-bold px-3 py-2.5 transition-colors">
                   <FaWhatsapp size={14} /> WhatsApp
-                </a>
+                </WhatsAppLink>
                 <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer"
                   className="w-9 h-9 border border-gray-200 flex items-center justify-center hover:border-primary hover:text-primary transition-colors">
                   <FaInstagram size={14} />
@@ -119,11 +120,11 @@ export default function Contato() {
                 <p className="text-sm text-gray-500 mb-8">Entre em contato diretamente pelo WhatsApp ou telefone. Atendemos de seg a sáb.</p>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <a href={`${PHONE_WA}?text=${encodeURIComponent('Olá! Gostaria de mais informações sobre imóveis.')}`}
-                    target="_blank" rel="noreferrer"
+                  <WhatsAppLink href={`${PHONE_WA_BASE}?text=${encodeURIComponent('Olá! Gostaria de mais informações sobre imóveis.')}`}
+                    source="contato-cta" target="_blank" rel="noreferrer"
                     className="flex-1 flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
                     <FaWhatsapp size={22} /> WhatsApp
-                  </a>
+                  </WhatsAppLink>
                   <a href={PHONE_TEL}
                     className="flex-1 flex items-center justify-center gap-3 bg-[#1a1a1a] hover:bg-[#af1e23] text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
                     <FiPhone size={20} /> {PHONE_DISPLAY}

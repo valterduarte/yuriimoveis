@@ -13,7 +13,8 @@ import {
 import { imovelSlug, slugify, formatNeighborhoodName, buildSeoDescription, ogImageUrl } from '../../../utils/imovelUtils'
 import { getBairroBySlug } from '../../../data/bairros'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
-import { SITE_URL, PHONE_WA, PHONE_STRUCTURED, OG_DEFAULT_IMAGE } from '../../../lib/config'
+import { SITE_URL, PHONE_WA_BASE, PHONE_STRUCTURED, OG_DEFAULT_IMAGE } from '../../../lib/config'
+import WhatsAppLink from '../../../components/WhatsAppLink'
 import type { Metadata } from 'next'
 
 export const revalidate = 60
@@ -311,14 +312,15 @@ async function BairroPage({ slug }: { slug: string }) {
             <p className="text-gray-500 text-sm mb-6">Ainda não temos imóveis cadastrados neste bairro. Fale com o corretor para mais opções.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/imoveis" className="btn-primary">Ver todos os imóveis</Link>
-              <a
-                href={`${PHONE_WA}?text=${encodeURIComponent(`Olá! Procuro imóveis no ${neighborhoodName} em Osasco. Pode me ajudar?`)}`}
+              <WhatsAppLink
+                href={`${PHONE_WA_BASE}?text=${encodeURIComponent(`Olá! Procuro imóveis no ${neighborhoodName} em Osasco. Pode me ajudar?`)}`}
+                source="bairro-sem-resultado"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-widest text-xs py-3 px-6 transition-colors"
               >
                 <FaWhatsapp size={14} /> Falar com o Corretor
-              </a>
+              </WhatsAppLink>
             </div>
           </div>
         ) : (

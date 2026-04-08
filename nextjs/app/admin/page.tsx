@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { FiPlus } from 'react-icons/fi'
+import { FiPlus, FiBarChart2 } from 'react-icons/fi'
 import axios from 'axios'
 import { ADMIN_PROPERTIES_LIMIT } from '../../lib/constants'
 import { API_URL } from '../../lib/config'
@@ -9,6 +9,7 @@ import { useAdminAuth } from '../../hooks/useAdminAuth'
 import AdminLogin from '../../components/admin/AdminLogin'
 import AdminPropertyList from '../../components/admin/AdminPropertyList'
 import AdminPropertyForm from '../../components/admin/AdminPropertyForm'
+import AdminClickStats from '../../components/admin/AdminClickStats'
 import type { Imovel } from '../../types'
 
 interface AdminMessage {
@@ -23,7 +24,7 @@ export default function AdminPage() {
     authHeader, handleLogin, handleLogout,
   } = useAdminAuth()
 
-  const [activeView, setActiveView] = useState<'list' | 'form'>('list')
+  const [activeView, setActiveView] = useState<'list' | 'form' | 'stats'>('list')
   const [editingId, setEditingId] = useState<number | null>(null)
   const [properties, setProperties] = useState<Imovel[]>([])
   const [message, setMessage] = useState<AdminMessage | null>(null)
@@ -95,7 +96,11 @@ export default function AdminPage() {
     )
   }
 
-  const isFormView = activeView === 'form'
+  const viewTitle = activeView === 'list'
+    ? 'Imóveis Cadastrados'
+    : activeView === 'stats'
+      ? 'Clicks WhatsApp'
+      : editingId ? 'Editar Imóvel' : 'Novo Imóvel'
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -103,15 +108,19 @@ export default function AdminPage() {
         <div className="container mx-auto px-6 flex items-center justify-between">
           <div>
             <span className="section-label">Admin</span>
-            <h1 className="text-3xl font-black uppercase text-white">
-              {!isFormView ? 'Imóveis Cadastrados' : editingId ? 'Editar Imóvel' : 'Novo Imóvel'}
-            </h1>
+            <h1 className="text-3xl font-black uppercase text-white">{viewTitle}</h1>
           </div>
           <div className="flex items-center gap-4">
-            {!isFormView ? (
-              <button onClick={openNewPropertyForm} className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs">
-                <FiPlus size={14} /> Novo Imóvel
-              </button>
+            {activeView === 'list' ? (
+              <>
+                <button onClick={() => setActiveView('stats')}
+                  className="flex items-center gap-2 text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
+                  <FiBarChart2 size={14} /> Clicks
+                </button>
+                <button onClick={openNewPropertyForm} className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs">
+                  <FiPlus size={14} /> Novo Imóvel
+                </button>
+              </>
             ) : (
               <button onClick={() => { setActiveView('list'); setMessage(null) }}
                 className="text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
@@ -140,7 +149,7 @@ export default function AdminPage() {
           </div>
         )}
 
-        {!isFormView && (
+        {activeView === 'list' && (
           <AdminPropertyList
             properties={properties}
             onEdit={openEditForm}
@@ -149,11 +158,18 @@ export default function AdminPage() {
           />
         )}
 
-        {isFormView && (
+        {activeView === 'form' && (
           <AdminPropertyForm
             editingId={editingId}
             authHeader={authHeader}
             onSuccess={handleFormSuccess}
+            onAuthError={handleLogout}
+          />
+        )}
+
+        {activeView === 'stats' && (
+          <AdminClickStats
+            authHeader={authHeader}
             onAuthError={handleLogout}
           />
         )}

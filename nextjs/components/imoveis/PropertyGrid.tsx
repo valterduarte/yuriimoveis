@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { FaWhatsapp } from 'react-icons/fa'
 import PropertyCard from '../PropertyCard'
-import { PHONE_WA } from '../../lib/config'
+import { PHONE_WA_BASE } from '../../lib/config'
+import WhatsAppLink from '../WhatsAppLink'
 import type { Imovel } from '../../types'
 
 interface PropertyGridProps {
@@ -20,14 +21,15 @@ export default function PropertyGrid({ properties, activeFilterCount }: Property
           {activeFilterCount > 0 && (
             <Link href="/imoveis" className="btn-primary">Limpar filtros</Link>
           )}
-          <a
-            href={`${PHONE_WA}?text=${encodeURIComponent('Olá! Não encontrei o imóvel que procuro no site. Pode me ajudar?')}`}
+          <WhatsAppLink
+            href={`${PHONE_WA_BASE}?text=${encodeURIComponent('Olá! Não encontrei o imóvel que procuro no site. Pode me ajudar?')}`}
+            source="lista-sem-resultado"
             target="_blank"
             rel="noreferrer"
             className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-widest text-xs py-3 px-6 transition-colors"
           >
             <FaWhatsapp size={14} /> Falar com o Corretor
-          </a>
+          </WhatsAppLink>
         </div>
       </div>
     )
