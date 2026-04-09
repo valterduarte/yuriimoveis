@@ -10,14 +10,18 @@ interface ActiveFiltersProps {
   precoMin: string
   precoMax: string
   quartos: string
+  codigo: string
   onRemove: (key: string) => void
 }
 
-export default function ActiveFilters({ tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, onRemove }: ActiveFiltersProps) {
-  if (!tipo && !categoria && !cidade && !bairro && !precoMin && !precoMax && !quartos) return null
+export default function ActiveFilters({ tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, codigo, onRemove }: ActiveFiltersProps) {
+  if (!tipo && !categoria && !cidade && !bairro && !precoMin && !precoMax && !quartos && !codigo) return null
 
   return (
     <div className="flex flex-wrap gap-2 mb-4">
+      {codigo && (
+        <FilterTag label={`Código #${codigo}`} onRemove={() => onRemove('codigo')} />
+      )}
       {tipo && (
         <FilterTag label={tipo === 'venda' ? 'Venda' : 'Aluguel'} onRemove={() => onRemove('tipo')} />
       )}

@@ -17,6 +17,7 @@ export function usePropertyFilters() {
   const precoMin  = searchParams.get('precoMin')  || ''
   const precoMax  = searchParams.get('precoMax')  || ''
   const quartos   = searchParams.get('quartos')   || ''
+  const codigo    = searchParams.get('codigo')    || ''
   const ordem     = searchParams.get('ordem')     || 'recente'
 
   const [precoMinInput, setPrecoMinInput] = useState(precoMin)
@@ -50,10 +51,10 @@ export function usePropertyFilters() {
     router.replace(pathname, { scroll: false })
   }
 
-  const activeFilterCount = [tipo, categoria, cidade, bairro, precoMin, precoMax, quartos].filter(Boolean).length
+  const activeFilterCount = [tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, codigo].filter(Boolean).length
 
   return {
-    tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, ordem,
+    tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, codigo, ordem,
     precoMinInput, precoMaxInput,
     updateFilter,
     navigatePage,

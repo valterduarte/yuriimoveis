@@ -6,7 +6,7 @@ import { ITEMS_PER_PAGE } from '../../lib/constants'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import type { Metadata } from 'next'
 
-const FILTER_KEYS = ['tipo', 'categoria', 'cidade', 'bairro', 'precoMin', 'precoMax', 'quartos']
+const FILTER_KEYS = ['tipo', 'categoria', 'cidade', 'bairro', 'precoMin', 'precoMax', 'quartos', 'codigo']
 
 export const metadata: Metadata = {
   title: 'Imóveis Disponíveis em Osasco SP — Corretor Yuri',

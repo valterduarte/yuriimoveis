@@ -70,6 +70,7 @@ export interface PropertyFilters {
   precoMin?: string
   precoMax?: string
   quartos?: string
+  codigo?: string
   destaque?: string
   todos?: string | boolean
   ordem?: string

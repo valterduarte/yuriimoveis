@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { FiMenu, FiX, FiPhone } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import Logo from './Logo'
+import CodeSearch from './CodeSearch'
 import WhatsAppLink from './WhatsAppLink'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL } from '../lib/config'
 import { NAVIGATION_LINKS, SCROLL_THRESHOLD } from '../lib/constants'
@@ -52,6 +53,7 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center gap-5">
+            <CodeSearch />
             <div className="flex items-center gap-1 text-gray-400">
               <WhatsAppLink href={PHONE_WA} source="header-icon" target="_blank" rel="noreferrer" aria-label="WhatsApp — ícone"
                 className="w-10 h-10 flex items-center justify-center hover:text-green-400 transition-colors">

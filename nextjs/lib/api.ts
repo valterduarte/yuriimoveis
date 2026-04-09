@@ -51,11 +51,12 @@ export async function fetchPropertiesByBairro(bairroName: string): Promise<{ imo
 
 export async function fetchProperties(filters: PropertyFilters = {}): Promise<PropertyListResult> {
   try {
-    const { tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, destaque, todos, ordem = 'recente', page = 1, limit = 9 } = filters
+    const { tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, codigo, destaque, todos, ordem = 'recente', page = 1, limit = 9 } = filters
     const conditions: string[] = todos === true || todos === 'true' ? [] : ['ativo = true']
     const params: (string | number)[] = []
     let idx = 1
 
+    if (codigo)   { conditions.push(`id = $${idx++}`);        params.push(Number(codigo)) }
     if (tipo)     { conditions.push(`tipo = $${idx++}`);       params.push(tipo) }
     if (categoria){ conditions.push(`categoria = $${idx++}`);  params.push(categoria) }
     if (cidade)   { conditions.push(`cidade = $${idx++}`);     params.push(cidade) }

@@ -18,7 +18,7 @@ interface ImoveisControlsProps {
 export default function ImoveisControls({ total, currentPage, totalPages, bairros = [], children }: ImoveisControlsProps) {
   const [showFilters, setShowFilters] = useState(false)
   const {
-    tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, ordem,
+    tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, codigo, ordem,
     precoMinInput, precoMaxInput,
     updateFilter, updatePriceFilter, navigatePage,
     setPrecoMinInput, setPrecoMaxInput,
@@ -42,6 +42,7 @@ export default function ImoveisControls({ total, currentPage, totalPages, bairro
           precoMinInput={precoMinInput}
           precoMaxInput={precoMaxInput}
           quartos={quartos}
+          codigo={codigo}
           activeFilterCount={activeFilterCount}
           onUpdateFilter={updateFilter}
           onUpdatePriceMin={value => updatePriceFilter('precoMin', value, setPrecoMinInput)}
@@ -67,6 +68,7 @@ export default function ImoveisControls({ total, currentPage, totalPages, bairro
           precoMin={precoMin}
           precoMax={precoMax}
           quartos={quartos}
+          codigo={codigo}
           onRemove={key => updateFilter(key, '')}
         />
         {children}

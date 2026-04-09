@@ -1,6 +1,6 @@
 'use client'
 
-import { FiX } from 'react-icons/fi'
+import { FiX, FiSearch } from 'react-icons/fi'
 import { PROPERTY_CATEGORIES, BEDROOM_OPTIONS } from '../../lib/constants'
 
 const TRANSACTION_TYPE_OPTIONS = [
@@ -18,6 +18,7 @@ interface PropertyFiltersProps {
   precoMinInput: string
   precoMaxInput: string
   quartos: string
+  codigo: string
   activeFilterCount: number
   onUpdateFilter: (key: string, value: string) => void
   onUpdatePriceMin: (value: string) => void
@@ -27,7 +28,7 @@ interface PropertyFiltersProps {
 
 export default function PropertyFilters({
   tipo, categoria, cidade, bairro, bairros = [],
-  precoMinInput, precoMaxInput, quartos,
+  precoMinInput, precoMaxInput, quartos, codigo,
   activeFilterCount,
   onUpdateFilter,
   onUpdatePriceMin,
@@ -49,6 +50,24 @@ export default function PropertyFilters({
       </div>
 
       <div className="space-y-6">
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Código do Imóvel</label>
+          <div className="relative">
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="Ex: 42"
+              value={codigo}
+              onChange={e => {
+                const raw = e.target.value.replace(/\D/g, '')
+                onUpdateFilter('codigo', raw)
+              }}
+              className="w-full border border-gray-200 px-3 py-2.5 pr-9 text-sm focus:outline-none focus:border-primary"
+            />
+            <FiSearch size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          </div>
+        </div>
+
         <div>
           <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Finalidade</label>
           <div className="flex gap-1">
