@@ -22,7 +22,7 @@ export default function HeroSection({ imageUrl }: HeroSectionProps) {
         <div className="max-w-2xl mb-12">
           <span className="section-label !text-gray-300">Corretor Yuri Imóveis</span>
           <h1 className="text-5xl md:text-7xl font-black text-white leading-none mb-6 uppercase tracking-tight">
-            Encontre o<br />Imóvel <span className="text-primary">Ideal</span>
+            Imóveis em<br />Osasco <span className="text-primary">e Região</span>
           </h1>
           <p className="text-gray-300 text-base leading-relaxed max-w-lg">
             Especialistas em imóveis residenciais e comerciais em Osasco e região. Realizamos o sonho da casa própria há mais de 10 anos.

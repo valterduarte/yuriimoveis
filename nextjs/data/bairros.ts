@@ -6,6 +6,186 @@ import type { BairroData } from '../types'
  * Fallback: bairros sem entrada aqui renderizam normalmente, só sem texto descritivo.
  */
 export const BAIRROS: Record<string, BairroData> = {
+  'bela-vista': {
+    nome: 'Bela Vista',
+    slug: 'bela-vista',
+    titulo: 'Imóveis na Bela Vista, Osasco SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos e casas na Bela Vista em Osasco, SP. Lançamentos e imóveis prontos para venda e aluguel. Atendimento personalizado com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'A Bela Vista é um dos bairros mais valorizados de Osasco, com localização estratégica próxima ao centro da cidade e fácil acesso às principais vias. O bairro combina infraestrutura urbana consolidada com áreas residenciais tranquilas, atraindo famílias e profissionais que trabalham na região.',
+      infraestrutura:
+        'O bairro conta com supermercados de rede, farmácias, bancos, restaurantes e comércio diversificado. A presença de condomínios novos com lazer completo tem elevado o padrão de moradia na região. Há unidades de saúde e hospitais acessíveis nas proximidades.',
+      transporte:
+        'A Bela Vista tem acesso direto à Avenida dos Autonomistas e proximidade com a Rodovia Presidente Castelo Branco, facilitando deslocamentos para São Paulo e cidades vizinhas. Linhas de ônibus conectam o bairro ao centro de Osasco e a estações da CPTM.',
+      educacao:
+        'A região conta com escolas públicas e particulares de ensino fundamental e médio. A proximidade com o centro de Osasco dá acesso a faculdades e cursos técnicos da região metropolitana.',
+      porqueMorar:
+        'A Bela Vista se destaca pela oferta de lançamentos imobiliários com excelente custo-benefício. É ideal para quem busca apartamentos novos com lazer completo em um bairro bem localizado e em plena valorização.',
+    },
+  },
+
+  'centro': {
+    nome: 'Centro',
+    slug: 'centro',
+    titulo: 'Imóveis no Centro de Osasco SP — Corretor Yuri',
+    descricaoMeta:
+      'Imóveis no Centro de Osasco, SP. Apartamentos e salas comerciais para venda e aluguel. Região com melhor infraestrutura da cidade.',
+    conteudo: {
+      sobre:
+        'O Centro de Osasco é o coração comercial e administrativo da cidade. Concentra os principais serviços públicos, bancos, escritórios e comércio. A região tem alta demanda tanto para moradia quanto para investimento, especialmente em apartamentos compactos e salas comerciais.',
+      infraestrutura:
+        'Infraestrutura completa: shopping centers, bancos, supermercados, hospitais, cartórios e órgãos públicos. O Calçadão de Osasco é o principal polo de comércio popular da cidade. Restaurantes, academias e serviços variados estão a poucos metros.',
+      transporte:
+        'O Centro é o ponto de maior conectividade de Osasco. A Estação Osasco da CPTM (Linha 8-Diamante) oferece ligação direta com a Estação da Luz em São Paulo. O Terminal Osasco centraliza dezenas de linhas de ônibus municipais e intermunicipais.',
+      educacao:
+        'A região concentra escolas públicas e particulares de todos os níveis, além de faculdades como UNIFIEO e unidades do SENAC e SENAI. O IFSP Osasco também fica próximo.',
+      porqueMorar:
+        'Morar no Centro de Osasco é ideal para quem prioriza praticidade e acesso a transporte público. Tudo está a poucos minutos a pé: trabalho, comércio, serviços e lazer. Apartamentos na região têm alta liquidez para revenda e locação.',
+    },
+  },
+
+  'cipava': {
+    nome: 'Cipava',
+    slug: 'cipava',
+    titulo: 'Imóveis no Cipava, Osasco SP — Corretor Yuri',
+    descricaoMeta:
+      'Casas e apartamentos no Cipava em Osasco, SP. Imóveis para venda e aluguel com atendimento do Corretor Yuri Imóveis.',
+    conteudo: {
+      sobre:
+        'O Cipava é um bairro residencial de Osasco que se destaca pela tranquilidade e pelo ambiente familiar. Localizado na região sudoeste da cidade, o bairro tem ruas arborizadas e um comércio local que atende bem os moradores no dia a dia.',
+      infraestrutura:
+        'O bairro possui mercados, padarias, farmácias e pequenos comércios. Há postos de saúde na região e fácil acesso a hospitais no centro de Osasco. A infraestrutura de lazer inclui praças e áreas verdes utilizadas pela comunidade.',
+      transporte:
+        'Linhas de ônibus municipais conectam o Cipava ao centro de Osasco e ao Terminal Osasco. O acesso à Rodovia Raposo Tavares e à Castelo Branco é facilitado pelas vias da região, tornando o deslocamento de carro prático.',
+      educacao:
+        'O bairro tem escolas municipais de ensino fundamental e creches. Para ensino médio e superior, os moradores contam com as opções no centro de Osasco, a poucos minutos de ônibus.',
+      porqueMorar:
+        'O Cipava é uma boa opção para quem busca imóveis com preços acessíveis em um bairro tranquilo de Osasco. Casas com quintal e sobrados são comuns na região, ideais para famílias que valorizam espaço e sossego.',
+    },
+  },
+
+  'conceicao': {
+    nome: 'Conceição',
+    slug: 'conceicao',
+    titulo: 'Imóveis na Conceição, Osasco SP — Corretor Yuri',
+    descricaoMeta:
+      'Imóveis na Conceição em Osasco, SP. Casas, apartamentos e terrenos para compra e aluguel. Fale com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'A Conceição é um bairro residencial de Osasco com boa localização e acesso às principais vias da cidade. O bairro tem perfil misto, combinando residências tradicionais com novos empreendimentos que vêm modernizando a região.',
+      infraestrutura:
+        'O bairro conta com comércio de bairro, incluindo mercados, padarias e prestadores de serviço. Há unidades de saúde para atendimento básico e proximidade com hospitais no centro de Osasco.',
+      transporte:
+        'A Conceição tem bom acesso a vias importantes como a Avenida dos Autonomistas. Linhas de ônibus atendem o bairro com conexões ao Terminal Osasco e à estação da CPTM, garantindo mobilidade para quem trabalha em São Paulo.',
+      educacao:
+        'Escolas públicas de ensino fundamental e médio atendem a região. A proximidade com o centro amplia as opções para ensino técnico e superior.',
+      porqueMorar:
+        'A Conceição oferece boa relação custo-benefício para moradia em Osasco. A valorização imobiliária nos últimos anos, impulsionada por novos condomínios, torna o bairro atrativo tanto para moradia quanto para investimento.',
+    },
+  },
+
+  'jaguaribe': {
+    nome: 'Jaguaribe',
+    slug: 'jaguaribe',
+    titulo: 'Imóveis no Jaguaribe, Osasco SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos e casas no Jaguaribe em Osasco, SP. Lançamentos e imóveis prontos para morar. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Jaguaribe é um dos bairros mais procurados de Osasco para novos empreendimentos imobiliários. Sua localização privilegiada entre o centro e a Rodovia Castelo Branco atrai construtoras e compradores que buscam apartamentos modernos com lazer completo.',
+      infraestrutura:
+        'O bairro tem infraestrutura em expansão: supermercados, farmácias, restaurantes e academias. Novos condomínios trouxeram padarias gourmet e comércios mais sofisticados. Há UBS na região e acesso rápido a hospitais do centro.',
+      transporte:
+        'O Jaguaribe tem excelente acesso viário. A Rodovia Presidente Castelo Branco está a poucos minutos, conectando rapidamente a São Paulo. Linhas de ônibus ligam o bairro ao Terminal Osasco e à estação CPTM.',
+      educacao:
+        'Escolas públicas e particulares atendem a região. O crescimento de condomínios familiares tem impulsionado a oferta de escolas de educação infantil e ensino fundamental no entorno.',
+      porqueMorar:
+        'O Jaguaribe é a escolha ideal para quem busca apartamentos novos em Osasco com infraestrutura de lazer completa. A região está em forte valorização e concentra alguns dos principais lançamentos imobiliários da cidade.',
+    },
+  },
+
+  'km-18': {
+    nome: 'Km 18',
+    slug: 'km-18',
+    titulo: 'Imóveis no Km 18, Osasco SP — Corretor Yuri',
+    descricaoMeta:
+      'Imóveis no Km 18 em Osasco, SP. Casas, apartamentos e terrenos para venda e aluguel. Fale com o Corretor Yuri Imóveis.',
+    conteudo: {
+      sobre:
+        'O Km 18 é uma das regiões mais tradicionais de Osasco, com forte identidade de bairro e comércio pulsante. O nome faz referência ao marco quilométrico da antiga estrada de ferro. A região combina comércio ativo com áreas residenciais consolidadas.',
+      infraestrutura:
+        'O Km 18 tem um dos comércios mais ativos de Osasco, com lojas, restaurantes, bares, mercados e feiras livres. A região conta com serviços de saúde, bancos, academias e lazer. O comércio ao longo das vias principais é diversificado e acessível.',
+      transporte:
+        'A estação Km 18 da CPTM (Linha 8-Diamante) é o principal trunfo do bairro, oferecendo conexão direta com São Paulo. Linhas de ônibus complementam o transporte, ligando a região ao centro de Osasco e a cidades vizinhas.',
+      educacao:
+        'A região possui escolas públicas e particulares de todos os níveis. A proximidade com o centro de Osasco e com São Paulo amplia as opções de ensino superior e técnico.',
+      porqueMorar:
+        'O Km 18 é perfeito para quem depende de transporte público e valoriza um bairro com vida própria. A estação CPTM no bairro é um diferencial enorme. Os imóveis na região oferecem boa relação custo-benefício, com opções de casas e apartamentos.',
+    },
+  },
+
+  'presidente-altino': {
+    nome: 'Presidente Altino',
+    slug: 'presidente-altino',
+    titulo: 'Imóveis em Presidente Altino, Osasco SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos e casas em Presidente Altino, Osasco SP. Imóveis próximos à CPTM para venda e aluguel. Corretor Yuri Imóveis.',
+    conteudo: {
+      sobre:
+        'Presidente Altino é um bairro nobre de Osasco, conhecido pela qualidade de vida, ruas arborizadas e proximidade com a capital paulista. É um dos bairros mais valorizados da cidade, atraindo moradores que buscam conforto sem se distanciar de São Paulo.',
+      infraestrutura:
+        'O bairro tem infraestrutura de alto padrão: supermercados premium, restaurantes variados, academias, clínicas e laboratórios. O comércio local é sofisticado e atende bem as necessidades dos moradores. Há condomínios de alto padrão na região.',
+      transporte:
+        'A estação Presidente Altino da CPTM (Linha 8-Diamante) oferece acesso direto à Estação da Luz em São Paulo em cerca de 30 minutos. A proximidade com a Marginal Pinheiros e a Rodovia Castelo Branco facilita o deslocamento de carro.',
+      educacao:
+        'A região concentra excelentes escolas particulares e públicas. O IFSP Osasco fica próximo, assim como faculdades do centro de Osasco. A oferta educacional é um dos pontos fortes do bairro.',
+      porqueMorar:
+        'Presidente Altino é a melhor opção em Osasco para quem busca qualidade de vida, valorização patrimonial e fácil acesso a São Paulo. Os imóveis na região são mais valorizados, mas justificam pelo padrão de moradia e pela localização estratégica.',
+    },
+  },
+
+  'santa-maria': {
+    nome: 'Santa Maria',
+    slug: 'santa-maria',
+    titulo: 'Imóveis em Santa Maria, Osasco SP — Corretor Yuri',
+    descricaoMeta:
+      'Imóveis em Santa Maria, Osasco SP. Apartamentos e casas para venda e aluguel. Atendimento personalizado com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'Santa Maria é um bairro residencial de Osasco que vem se destacando pelo número de lançamentos imobiliários nos últimos anos. A região combina tranquilidade com boa infraestrutura, atraindo famílias e jovens profissionais.',
+      infraestrutura:
+        'O bairro possui comércio local com mercados, padarias e farmácias. Novos empreendimentos trouxeram melhorias de infraestrutura urbana, como asfaltamento e iluminação. Há postos de saúde na região e acesso a hospitais no centro.',
+      transporte:
+        'Linhas de ônibus conectam Santa Maria ao centro de Osasco e ao Terminal Osasco. O acesso à Rodovia Castelo Branco é facilitado pelas vias do bairro, possibilitando deslocamento rápido para São Paulo.',
+      educacao:
+        'A região conta com escolas municipais e estaduais de ensino fundamental. Creches e escolas de educação infantil atendem a demanda crescente de famílias com crianças.',
+      porqueMorar:
+        'Santa Maria é ideal para quem busca apartamentos novos com preços competitivos em Osasco. Os lançamentos na região oferecem lazer completo e condições de financiamento atrativas, incluindo opções no programa Minha Casa Minha Vida.',
+    },
+  },
+
+  'vila-isabel': {
+    nome: 'Vila Isabel',
+    slug: 'vila-isabel',
+    titulo: 'Imóveis na Vila Isabel, Osasco SP — Corretor Yuri',
+    descricaoMeta:
+      'Casas e apartamentos na Vila Isabel em Osasco, SP. Imóveis para compra e aluguel com o Corretor Yuri Imóveis.',
+    conteudo: {
+      sobre:
+        'A Vila Isabel é um bairro residencial de Osasco com perfil familiar e localização conveniente. Próximo ao centro da cidade, o bairro oferece a tranquilidade de ruas residenciais com acesso rápido a serviços e transporte.',
+      infraestrutura:
+        'O bairro tem comércio de bairro funcional, com mercados, padarias e farmácias. A proximidade com o centro de Osasco complementa a oferta de serviços. Há unidades de saúde e escolas na região.',
+      transporte:
+        'Linhas de ônibus conectam a Vila Isabel ao Terminal Osasco e à estação da CPTM. A localização próxima ao centro facilita o deslocamento a pé ou de bicicleta para serviços e comércios.',
+      educacao:
+        'Escolas públicas de ensino fundamental e médio atendem os moradores. A proximidade com o centro dá acesso a opções de ensino superior e técnico da região.',
+      porqueMorar:
+        'A Vila Isabel é uma opção sólida para quem busca imóveis em Osasco com boa localização e preços razoáveis. O perfil residencial do bairro e a proximidade com o centro são os principais atrativos para famílias e investidores.',
+    },
+  },
+
   'metalurgicos': {
     nome: 'Metalúrgicos',
     slug: 'metalurgicos',

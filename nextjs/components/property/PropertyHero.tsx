@@ -12,7 +12,7 @@ import { FiShare2, FiLink, FiCheck } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { PLACEHOLDER_IMAGE, PROPERTY_STATUSES } from '../../lib/constants'
 import { SITE_URL } from '../../lib/config'
-import { imovelSlug } from '../../utils/imovelUtils'
+import { imovelSlug, optimizeCloudinaryUrl } from '../../utils/imovelUtils'
 import type { Imovel } from '../../types'
 
 const HERO_HEIGHT = '70vh'
@@ -64,21 +64,26 @@ export default function PropertyHero({ imovel, images, shareUrl }: PropertyHeroP
           speed={600}
           className="hero-swiper w-full h-full"
         >
-          {images.map((img, i) => (
-            <SwiperSlide key={i}>
-              <img
-                src={img}
-                alt={imovel.titulo}
-                width={1920}
-                height={1080}
-                fetchPriority={i === 0 ? 'high' : 'low'}
-                loading={i === 0 ? 'eager' : 'lazy'}
-                decoding={i === 0 ? 'sync' : 'async'}
-                className="w-full h-full object-cover opacity-75"
-                onError={e => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE }}
-              />
-            </SwiperSlide>
-          ))}
+          {images.map((img, i) => {
+            const optimized = optimizeCloudinaryUrl(img, i === 0 ? 1920 : 1200)
+            return (
+              <SwiperSlide key={i}>
+                <img
+                  src={optimized}
+                  alt={`${imovel.titulo} — ${imovel.categoria} em ${imovel.bairro || imovel.cidade}`}
+                  width={1920}
+                  height={1080}
+                  fetchPriority={i === 0 ? 'high' : 'low'}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding={i === 0 ? 'sync' : 'async'}
+                  sizes="100vw"
+                  srcSet={img.includes('res.cloudinary.com') ? `${optimizeCloudinaryUrl(img, 640)} 640w, ${optimizeCloudinaryUrl(img, 1024)} 1024w, ${optimizeCloudinaryUrl(img, 1920)} 1920w` : undefined}
+                  className="w-full h-full object-cover opacity-75"
+                  onError={e => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE }}
+                />
+              </SwiperSlide>
+            )
+          })}
         </Swiper>
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none z-20" />

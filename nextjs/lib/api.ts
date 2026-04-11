@@ -114,6 +114,23 @@ export async function fetchDistinctBairros(): Promise<string[]> {
   }
 }
 
+export async function fetchSimilarProperties(imovel: Pick<Imovel, 'id' | 'categoria' | 'cidade' | 'tipo'>): Promise<Imovel[]> {
+  try {
+    const result = await getDb().query(
+      `SELECT * FROM imoveis WHERE ativo = true AND id != $1
+       AND (categoria = $2 OR cidade = $3)
+       AND tipo = $4
+       ORDER BY (categoria = $2 AND cidade = $3)::int DESC, destaque DESC, created_at DESC
+       LIMIT 3`,
+      [imovel.id, imovel.categoria, imovel.cidade, imovel.tipo]
+    )
+    return result.rows.map(parseImovel)
+  } catch (err) {
+    console.error('fetchSimilarProperties error:', err)
+    return []
+  }
+}
+
 export async function fetchAllPropertySlugs(): Promise<Pick<Imovel, 'id' | 'titulo' | 'updated_at'>[]> {
   try {
     const result = await getDb().query(

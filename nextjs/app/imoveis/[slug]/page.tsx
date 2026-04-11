@@ -9,6 +9,7 @@ import {
   fetchAllPropertySlugs,
   fetchPropertiesByBairro,
   fetchDistinctBairros,
+  fetchSimilarProperties,
 } from '../../../lib/api'
 import { imovelSlug, slugify, formatNeighborhoodName, buildSeoDescription, ogImageUrl } from '../../../utils/imovelUtils'
 import { getBairroBySlug } from '../../../data/bairros'
@@ -116,7 +117,12 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
 
   if (!imovel) notFound()
 
+  const similarProperties = await fetchSimilarProperties(imovel)
+
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
+  const lcpImage = images[0]?.includes('res.cloudinary.com')
+    ? images[0].replace('/upload/', '/upload/f_auto,q_auto,w_1920/')
+    : images[0]
   const imovelDescription = buildSeoDescription(imovel)
 
   const jsonLd = [
@@ -159,7 +165,7 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
         '@type': 'PostalAddress',
         streetAddress: imovel.endereco || undefined,
         addressLocality: imovel.cidade || 'Osasco',
-        addressRegion: imovel.estado || 'SP',
+        addressRegion: 'SP',
         postalCode: imovel.cep || undefined,
         addressCountry: 'BR',
       },
@@ -182,6 +188,7 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
 
   return (
     <>
+      <link rel="preload" as="image" href={lcpImage} fetchPriority="high" />
       {jsonLd.map((schema, i) => (
         <script
           key={i}
@@ -190,6 +197,19 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
         />
       ))}
       <ImovelDetalheClient imovel={imovel} />
+      {similarProperties.length > 0 && (
+        <section className="bg-gray-50 py-14">
+          <div className="max-w-6xl mx-auto px-4 md:px-8">
+            <span className="section-label">Veja também</span>
+            <h2 className="section-title mb-8">Imóveis Semelhantes</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {similarProperties.map(p => (
+                <PropertyCard key={p.id} imovel={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </>
   )
 }

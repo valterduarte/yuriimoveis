@@ -1,7 +1,17 @@
 import { NextResponse } from 'next/server'
 
-export function middleware() {
+const INDEXABLE_PARAMS = new Set(['tipo', 'categoria'])
+
+export function middleware(request) {
   const response = NextResponse.next()
+  const { pathname, searchParams } = request.nextUrl
+
+  if (pathname === '/imoveis' && searchParams.size > 0) {
+    const hasNonIndexable = [...searchParams.keys()].some(k => !INDEXABLE_PARAMS.has(k))
+    if (hasNonIndexable) {
+      response.headers.set('X-Robots-Tag', 'noindex, follow')
+    }
+  }
 
   response.headers.set('X-Frame-Options', 'DENY')
   response.headers.set('X-Content-Type-Options', 'nosniff')

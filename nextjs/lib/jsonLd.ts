@@ -51,7 +51,7 @@ export function buildHomepageJsonLd(heroImageUrl: string): Record<string, unknow
           name: 'Quais são os melhores bairros para morar em Osasco?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Jardim Roberto, Km 18, Presidente Altino e Vila Yolanda se destacam pela infraestrutura, transporte e acesso à Grande São Paulo.',
+            text: 'Presidente Altino, Bela Vista, Km 18 e Jaguaribe se destacam pela infraestrutura, transporte e acesso à Grande São Paulo. Cada bairro tem perfil e faixa de preço diferentes.',
           },
         },
         {

@@ -4,8 +4,11 @@ import { SITE_URL } from '../lib/config'
 import HeroSection from '../components/home/HeroSection'
 import FeaturedProperties from '../components/home/FeaturedProperties'
 import CTASection from '../components/home/CTASection'
+import FAQSection from '../components/home/FAQSection'
 
 const FALLBACK_HERO = 'https://res.cloudinary.com/dfl3eskr9/image/upload/v1775083889/po3gf0daisooo1t7run5.jpg'
+
+export const revalidate = 300
 
 export const metadata = {
   title: 'Corretor Yuri Imóveis — Imóveis em Osasco e Região',
@@ -45,6 +48,7 @@ export default async function Home() {
       ))}
       <HeroSection imageUrl={hero} />
       <FeaturedProperties properties={featuredProperties} />
+      <FAQSection />
       <CTASection />
     </div>
   )
