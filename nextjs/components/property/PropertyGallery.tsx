@@ -15,7 +15,7 @@ interface PropertyGalleryProps {
 
 export default function PropertyGallery({ imovel, images, onImageClick }: PropertyGalleryProps) {
   return (
-    <section id="galeria" className="py-14 bg-[#1a1a1a]">
+    <section id="galeria" className="py-14 bg-dark">
       <div className="max-w-6xl mx-auto px-4 md:px-8 mb-8">
         <span className="section-label">Galeria</span>
         <h2 className="section-title text-white">Fotos do Imóvel</h2>

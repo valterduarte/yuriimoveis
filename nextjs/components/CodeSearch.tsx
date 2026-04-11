@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { FiSearch, FiX } from 'react-icons/fi'
+import { slugify } from '../utils/imovelUtils'
 
 export default function CodeSearch() {
   const [open, setOpen] = useState(false)
@@ -97,15 +98,4 @@ export default function CodeSearch() {
       )}
     </form>
   )
-}
-
-function slugify(text: string): string {
-  return String(text)
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
 }

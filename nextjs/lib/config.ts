@@ -11,6 +11,8 @@ export const PHONE_WA: string         = `${PHONE_WA_BASE}?text=${encodeURICompon
 export const PHONE_TEL: string        = `tel:${PHONE_NUMBER}`
 export const INSTAGRAM_URL: string    = 'https://www.instagram.com/valterrduarte/'
 export const CRECI: string            = '235509'
+export const DEFAULT_CITY: string     = 'Osasco'
+export const DEFAULT_STATE: string    = 'SP'
 
 export const API_URL: string =
   process.env.NEXT_PUBLIC_API_URL || ''

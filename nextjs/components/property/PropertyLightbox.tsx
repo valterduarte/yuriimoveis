@@ -65,7 +65,7 @@ export default function PropertyLightbox({ images, activeIndex, onClose, onNext,
         ref={closeButtonRef}
         onClick={onClose}
         aria-label="Fechar galeria"
-        className="absolute top-4 right-5 z-10 text-white text-4xl font-light w-12 h-12 flex items-center justify-center hover:text-[#af1e23] transition-colors"
+        className="absolute top-4 right-5 z-10 text-white text-4xl font-light w-12 h-12 flex items-center justify-center hover:text-primary transition-colors"
       >
         ×
       </button>
@@ -75,14 +75,14 @@ export default function PropertyLightbox({ images, activeIndex, onClose, onNext,
           <button
             onClick={onPrev}
             aria-label="Foto anterior"
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center bg-black/60 border border-white/20 text-white text-2xl hover:bg-[#af1e23] transition-colors"
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center bg-black/60 border border-white/20 text-white text-2xl hover:bg-primary transition-colors"
           >
             ‹
           </button>
           <button
             onClick={onNext}
             aria-label="Próxima foto"
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center bg-black/60 border border-white/20 text-white text-2xl hover:bg-[#af1e23] transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center bg-black/60 border border-white/20 text-white text-2xl hover:bg-primary transition-colors"
           >
             ›
           </button>
@@ -97,7 +97,7 @@ export default function PropertyLightbox({ images, activeIndex, onClose, onNext,
             className="max-h-[82vh] max-w-[88vw] object-contain block"
             onError={e => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE }}
           />
-          <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#af1e23]" />
+          <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary" />
           <p className="absolute bottom-3 right-4 text-white/50 text-[10px] uppercase tracking-widest">
             {activeIndex + 1} / {images.length}
           </p>

@@ -89,7 +89,7 @@ export default function Contato() {
               {[
                 { icon: FiMapPin, title: 'Endereço', content: 'Osasco - SP' },
                 { icon: FiPhone,  title: 'Telefone', content: PHONE_DISPLAY },
-                { icon: FiClock,  title: 'Horário',  content: 'Seg - Sex: 08h às 18h\nSábado: 08h às 12h' },
+                { icon: FiClock,  title: 'Horário',  content: 'Seg - Sex: 09h às 18h\nSábado: 09h às 12h' },
               ].map(info => (
                 <div key={info.title} className="flex gap-4 p-5 border border-gray-200">
                   <div className="w-8 h-8 bg-primary flex items-center justify-center flex-shrink-0">
@@ -126,7 +126,7 @@ export default function Contato() {
                     <FaWhatsapp size={22} /> WhatsApp
                   </WhatsAppLink>
                   <a href={PHONE_TEL}
-                    className="flex-1 flex items-center justify-center gap-3 bg-[#1a1a1a] hover:bg-[#af1e23] text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
+                    className="flex-1 flex items-center justify-center gap-3 bg-dark hover:bg-primary text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
                     <FiPhone size={20} /> {PHONE_DISPLAY}
                   </a>
                 </div>

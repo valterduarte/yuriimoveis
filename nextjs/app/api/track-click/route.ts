@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDb } from '../../../lib/db'
 import { requireAuth } from '../../../lib/requireAuth'
+import { rateLimit } from '../../../lib/rateLimit'
+
+const isRateLimited = rateLimit({ name: 'track-click', maxAttempts: 30, windowMs: 60 * 1000 })
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  if (isRateLimited(ip)) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
   try {
     const { source, page, device } = await request.json()
 

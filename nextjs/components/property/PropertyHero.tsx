@@ -55,7 +55,7 @@ export default function PropertyHero({ imovel, images, shareUrl }: PropertyHeroP
 
   return (
     <>
-      <div className="relative bg-[#1a1a1a]" style={{ height: HERO_HEIGHT, minHeight: HERO_MIN_HEIGHT }}>
+      <div className="relative bg-dark" style={{ height: HERO_HEIGHT, minHeight: HERO_MIN_HEIGHT }}>
         <Swiper
           modules={[Navigation, Pagination, Thumbs]}
           thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
@@ -87,7 +87,7 @@ export default function PropertyHero({ imovel, images, shareUrl }: PropertyHeroP
 
         <div className="absolute top-8 left-8 z-30">
           <span className={`text-[10px] uppercase tracking-[0.2em] font-bold px-4 py-2 text-white ${
-            imovel.tipo === 'venda' ? 'bg-[#af1e23]' : 'bg-[#1a1a1a]'
+            imovel.tipo === 'venda' ? 'bg-primary' : 'bg-dark'
           }`}>
             {imovel.tipo === 'venda' ? 'Venda' : 'Aluguel'}
           </span>
@@ -101,7 +101,7 @@ export default function PropertyHero({ imovel, images, shareUrl }: PropertyHeroP
             <FiShare2 size={13} /> Compartilhar
           </button>
           {shareOpen && (
-            <div className="absolute right-0 top-full mt-2 bg-[#1a1a1a] border border-white/10 min-w-[180px] shadow-xl">
+            <div className="absolute right-0 top-full mt-2 bg-dark border border-white/10 min-w-[180px] shadow-xl">
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(`${imovel.titulo}\n${shareUrl}`)}`}
                 target="_blank"
@@ -135,7 +135,7 @@ export default function PropertyHero({ imovel, images, shareUrl }: PropertyHeroP
               {imovel.titulo}
             </h1>
             <p className="flex items-center gap-2 text-gray-300 text-sm">
-              <span className="text-[#af1e23]">▸</span>
+              <span className="text-primary">▸</span>
               {imovel.bairro}, {imovel.cidade} — SP
             </p>
           </div>
