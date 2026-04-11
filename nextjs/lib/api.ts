@@ -131,6 +131,24 @@ export async function fetchSimilarProperties(imovel: Pick<Imovel, 'id' | 'catego
   }
 }
 
+export async function fetchPropertiesByTypeCategory(
+  tipo: string,
+  categoria: string
+): Promise<{ imoveis: Imovel[]; total: number }> {
+  try {
+    const result = await getDb().query(
+      `SELECT * FROM imoveis WHERE ativo = true AND tipo = $1 AND categoria = $2
+       ORDER BY destaque DESC, created_at DESC LIMIT 50`,
+      [tipo, categoria]
+    )
+    const imoveis = result.rows.map(parseImovel)
+    return { imoveis, total: imoveis.length }
+  } catch (err) {
+    console.error('fetchPropertiesByTypeCategory error:', err)
+    return { imoveis: [], total: 0 }
+  }
+}
+
 export async function fetchAllPropertySlugs(): Promise<Pick<Imovel, 'id' | 'titulo' | 'updated_at'>[]> {
   try {
     const result = await getDb().query(

@@ -4,7 +4,8 @@ import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import Logo from './Logo'
 import WhatsAppLink from './WhatsAppLink'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI, SITE_URL, PHONE_STRUCTURED } from '../lib/config'
-import { NAVIGATION_LINKS, PROPERTY_CATEGORIES } from '../lib/constants'
+import { NAVIGATION_LINKS } from '../lib/constants'
+import { LANDING_PAGES } from '../data/landingPages'
 
 function FooterSchema() {
   const jsonLd = {
@@ -84,15 +85,15 @@ export default function Footer() {
             </ul>
           </nav>
 
-          <nav aria-label="Tipos de imóveis">
-            <h3 className="text-white text-xs uppercase tracking-widest font-bold mb-6">Tipos de Imóveis</h3>
+          <nav aria-label="Busque por tipo">
+            <h3 className="text-white text-xs uppercase tracking-widest font-bold mb-6">Busque por Tipo</h3>
             <ul className="space-y-3">
-              {PROPERTY_CATEGORIES.map(({ label, value }) => (
-                <li key={value}>
-                  <Link href={`/imoveis?categoria=${value}`}
+              {LANDING_PAGES.map(lp => (
+                <li key={lp.slug}>
+                  <Link href={`/imoveis/${lp.slug}`}
                     className="text-xs hover:text-primary transition-colors flex items-center gap-2">
                     <span className="w-3 h-px bg-gray-600 inline-block" />
-                    {label}
+                    {lp.h1}
                   </Link>
                 </li>
               ))}

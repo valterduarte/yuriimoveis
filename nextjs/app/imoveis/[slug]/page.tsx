@@ -8,11 +8,13 @@ import {
   fetchImovel,
   fetchAllPropertySlugs,
   fetchPropertiesByBairro,
+  fetchPropertiesByTypeCategory,
   fetchDistinctBairros,
   fetchSimilarProperties,
 } from '../../../lib/api'
 import { imovelSlug, slugify, formatNeighborhoodName, buildSeoDescription, ogImageUrl } from '../../../utils/imovelUtils'
 import { getBairroBySlug } from '../../../data/bairros'
+import { findLandingPage, LANDING_PAGES } from '../../../data/landingPages'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
 import { SITE_URL, PHONE_WA_BASE, PHONE_STRUCTURED, OG_DEFAULT_IMAGE } from '../../../lib/config'
 import WhatsAppLink from '../../../components/WhatsAppLink'
@@ -28,6 +30,10 @@ function isPropertySlug(slug: string): boolean {
   return /-\d+$/.test(slug)
 }
 
+function isLandingPageSlug(slug: string): boolean {
+  return !!findLandingPage(slug)
+}
+
 // ── static params ─────────────────────────────────────────────────────────────
 
 export async function generateStaticParams() {
@@ -37,7 +43,8 @@ export async function generateStaticParams() {
   ])
   const propertyParams = imoveis.map(imovel => ({ slug: imovelSlug(imovel) }))
   const bairroParams = bairros.map(b => ({ slug: slugify(b) }))
-  return [...propertyParams, ...bairroParams]
+  const landingParams = LANDING_PAGES.map(lp => ({ slug: lp.slug }))
+  return [...landingParams, ...propertyParams, ...bairroParams]
 }
 
 // ── metadata ──────────────────────────────────────────────────────────────────
@@ -73,6 +80,31 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title: imovel.titulo,
         description,
         images: [socialImage],
+      },
+    }
+  }
+
+  // Landing page (tipo+categoria)
+  const landingPage = findLandingPage(slug)
+  if (landingPage) {
+    return {
+      title: landingPage.titulo,
+      description: landingPage.descricaoMeta,
+      alternates: { canonical: `${SITE_URL}/imoveis/${slug}` },
+      openGraph: {
+        title: landingPage.titulo,
+        description: landingPage.descricaoMeta,
+        url: `${SITE_URL}/imoveis/${slug}`,
+        siteName: 'Corretor Yuri Imóveis',
+        locale: 'pt_BR',
+        type: 'website',
+        images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: landingPage.h1 }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: landingPage.titulo,
+        description: landingPage.descricaoMeta,
+        images: [OG_DEFAULT_IMAGE],
       },
     }
   }
@@ -357,11 +389,113 @@ async function BairroPage({ slug }: { slug: string }) {
   )
 }
 
+// ── landing page (tipo + categoria) ──────────────────────────────────────────
+
+async function LandingPage({ slug }: { slug: string }) {
+  const landing = findLandingPage(slug)!
+  const { imoveis: properties, total } = await fetchPropertiesByTypeCategory(landing.tipo, landing.categoria)
+  const hasProperties = properties.length > 0
+  const tipoLabel = landing.tipo === 'venda' ? 'à Venda' : 'para Alugar'
+
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
+        { '@type': 'ListItem', position: 2, name: 'Imóveis', item: `${SITE_URL}/imoveis` },
+        { '@type': 'ListItem', position: 3, name: landing.h1, item: `${SITE_URL}/imoveis/${slug}` },
+      ],
+    },
+    ...(hasProperties ? [{
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: landing.h1,
+      url: `${SITE_URL}/imoveis/${slug}`,
+      numberOfItems: total,
+      description: landing.descricaoMeta,
+      itemListElement: properties.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${SITE_URL}/imoveis/${imovelSlug(p)}`,
+        name: p.titulo,
+      })),
+    }] : []),
+  ]
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {jsonLd.map((schema, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      ))}
+
+      <div className="bg-dark text-white py-12">
+        <div className="container mx-auto px-6">
+          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white transition-colors">Início</Link>
+            <span aria-hidden="true">/</span>
+            <Link href="/imoveis" className="hover:text-white transition-colors">Imóveis</Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-white" aria-current="page">{landing.h1}</span>
+          </nav>
+          <span className="section-label">{tipoLabel}</span>
+          <h1 className="text-4xl font-black uppercase text-white">{landing.h1}</h1>
+          {hasProperties && (
+            <p className="text-gray-400 text-sm mt-2">
+              {total} imóvel{total !== 1 ? 'is' : ''} encontrado{total !== 1 ? 's' : ''}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="container mx-auto px-6 py-10">
+        <div className="bg-white border border-gray-200 p-6 md:p-8 mb-8">
+          <p className="text-gray-700 text-sm leading-relaxed">{landing.introTexto}</p>
+        </div>
+
+        <div className="mb-6">
+          <Link href="/imoveis" className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
+            <FiArrowLeft size={13} /> Ver todos os imóveis
+          </Link>
+        </div>
+
+        {!hasProperties ? (
+          <div className="text-center py-20 bg-white border border-gray-200 px-6">
+            <div className="text-5xl mb-4" aria-hidden="true">🏠</div>
+            <h2 className="text-lg font-bold text-dark mb-2 uppercase tracking-wide">Nenhum imóvel encontrado</h2>
+            <p className="text-gray-500 text-sm mb-6">Ainda não temos imóveis nesta categoria. Fale com o corretor para mais opções.</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/imoveis" className="btn-primary">Ver todos os imóveis</Link>
+              <WhatsAppLink
+                href={`${PHONE_WA_BASE}?text=${encodeURIComponent(`Olá! Procuro ${landing.h1.toLowerCase()}. Pode me ajudar?`)}`}
+                source="landing-sem-resultado"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-widest text-xs py-3 px-6 transition-colors"
+              >
+                <FaWhatsapp size={14} /> Falar com o Corretor
+              </WhatsAppLink>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            {properties.map((property, i) => (
+              <div key={property.id} className="reveal" style={{ transitionDelay: `${(i % 3) * 0.08}s` }}>
+                <PropertyCard imovel={property} />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ── router ────────────────────────────────────────────────────────────────────
 
 export default async function SlugPage({ params }: PageProps) {
   const { slug } = await params
-  return isPropertySlug(slug)
-    ? <ImovelDetalhePage slug={slug} />
-    : <BairroPage slug={slug} />
+  if (isPropertySlug(slug)) return <ImovelDetalhePage slug={slug} />
+  if (isLandingPageSlug(slug)) return <LandingPage slug={slug} />
+  return <BairroPage slug={slug} />
 }
