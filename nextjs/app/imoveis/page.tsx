@@ -10,7 +10,7 @@ const FILTER_KEYS = ['tipo', 'categoria', 'cidade', 'bairro', 'precoMin', 'preco
 
 export const metadata: Metadata = {
   title: 'Imóveis Disponíveis em Osasco SP — Corretor Yuri',
-  description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco e região. Atendimento com o Corretor Yuri Duarte, CRECI-SP 235509.',
+  description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco e região. Atendimento com o Corretor Yuri, CRECI-SP 235509.',
   alternates: { canonical: `${SITE_URL}/imoveis` },
   openGraph: {
     title: 'Imóveis Disponíveis em Osasco SP — Corretor Yuri',

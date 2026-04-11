@@ -17,12 +17,12 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Sobre o Corretor Yuri — Imóveis em Osasco SP',
   description:
-    'Conheça o Corretor Yuri Duarte, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
+    'Conheça o Corretor Yuri, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
   alternates: { canonical: `${SITE_URL}/sobre` },
   openGraph: {
     title: 'Sobre o Corretor Yuri — Imóveis em Osasco SP',
     description:
-      'Conheça o Corretor Yuri Duarte, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
+      'Conheça o Corretor Yuri, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
     url: `${SITE_URL}/sobre`,
     siteName: 'Corretor Yuri Imóveis',
     locale: 'pt_BR',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Sobre o Corretor Yuri — Imóveis em Osasco SP',
     description:
-      'Conheça o Corretor Yuri Duarte, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
+      'Conheça o Corretor Yuri, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
     images: [OG_DEFAULT_IMAGE],
   },
 }
@@ -50,7 +50,7 @@ const breadcrumbJsonLd = {
 const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: 'Yuri Duarte',
+  name: 'Corretor Yuri',
   jobTitle: 'Corretor de Imóveis',
   description:
     'Corretor de imóveis com mais de 10 anos de experiência em Osasco e Grande São Paulo. Especialista em imóveis residenciais e comerciais.',
@@ -128,7 +128,7 @@ export default function SobrePage() {
           <span className="section-label">Quem Somos</span>
           <h1 className="text-5xl md:text-6xl font-black text-white uppercase leading-none">
             Corretor Yuri<br />
-            <span className="text-primary">Duarte</span>
+            <span className="text-primary">Imóveis</span>
           </h1>
         </div>
       </section>
@@ -138,7 +138,7 @@ export default function SobrePage() {
           <div className="max-w-3xl">
             <h2 className="text-xs font-bold uppercase tracking-widest text-dark mb-6">Sobre o Corretor</h2>
             <p className="text-gray-700 text-sm leading-relaxed mb-4">
-              Sou Yuri Duarte, corretor de imóveis registrado no <strong>CRECI-SP {CRECI}</strong>, atuando há mais de 10 anos no mercado imobiliário de Osasco e Grande São Paulo.
+              Sou o Corretor Yuri, registrado no <strong>CRECI-SP {CRECI}</strong>, atuando há mais de 10 anos no mercado imobiliário de Osasco e Grande São Paulo.
             </p>
             <p className="text-gray-700 text-sm leading-relaxed mb-4">
               Minha trajetória começou pela paixão em ajudar pessoas a realizarem o sonho da casa própria. Ao longo dos anos, me especializei no mercado local de Osasco, acompanhando a evolução dos bairros, os lançamentos imobiliários e as melhores oportunidades de investimento na região.
