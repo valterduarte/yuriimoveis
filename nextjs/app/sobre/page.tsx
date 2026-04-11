@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { FiCheckCircle, FiHome, FiUsers, FiShield } from 'react-icons/fi'
-import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
+import { FaWhatsapp } from 'react-icons/fa'
 import {
   SITE_URL,
   OG_DEFAULT_IMAGE,
@@ -209,14 +209,6 @@ export default function SobrePage() {
               className="flex items-center justify-center gap-3 border border-white/30 hover:border-primary hover:text-primary text-white font-bold uppercase tracking-[0.15em] text-sm py-4 px-8 transition-colors"
             >
               {PHONE_DISPLAY}
-            </a>
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-center gap-3 border border-white/30 hover:border-primary hover:text-primary text-white font-bold uppercase tracking-[0.15em] text-sm py-4 px-8 transition-colors"
-            >
-              <FaInstagram size={20} /> Instagram
             </a>
           </div>
         </div>
