@@ -23,12 +23,16 @@ const FAQ_ITEMS = [
     question: 'Como funciona o financiamento imobiliário em Osasco?',
     answer: (
       <>
-        O financiamento imobiliário permite adquirir seu imóvel em Osasco com entrada a partir de 20% do valor e
-        parcelas em até 360 meses. As principais opções são a <strong>Caixa Econômica Federal</strong> (taxas a partir
-        de 5,5% ao ano) e bancos privados como Itaú, Bradesco e Santander. Imóveis de até R$ 264.000 podem se
-        enquadrar no programa <strong>Minha Casa Minha Vida em Osasco</strong>, com condições facilitadas e subsídios.
-        Os documentos básicos são RG, CPF, comprovantes de renda e residência. Fazemos a simulação gratuita para
-        encontrar a melhor condição para comprar casa em Osasco ou apartamento na região.
+        Para <strong>financiar um imóvel em Osasco</strong>, você precisa de entrada a partir de 20% do valor (que pode
+        ser paga com <strong>saldo do FGTS</strong>) e parcela o restante em até 420 meses pela Caixa Econômica Federal
+        ou bancos privados como Itaú, Bradesco e Santander. Imóveis dentro do teto do <strong>SFH</strong> podem usar
+        recursos do FGTS e do SBPE, e famílias com renda de até R$ 12 mil podem se enquadrar no{' '}
+        <strong>Minha Casa Minha Vida</strong> com juros reduzidos e subsídios. Além do financiamento, reserve cerca de
+        4,5% do valor do imóvel para ITBI e registro em cartório.{' '}
+        <Link href="/contato" className="text-primary underline">
+          Fale com o Corretor Yuri
+        </Link>{' '}
+        para uma simulação gratuita e encontrar a melhor condição para comprar casa ou apartamento em Osasco.
       </>
     ),
   },
