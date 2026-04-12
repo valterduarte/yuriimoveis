@@ -5,12 +5,13 @@ import Link from 'next/link'
 
 const FAQ_ITEMS = [
   {
-    question: 'Quais tipos de imóveis o Corretor Yuri oferece em Osasco?',
+    question: 'Quais tipos de imóveis o Corretor Yuri oferece em Osasco e Região?',
     answer: (
       <>
-        Como <strong>corretor de imóveis em Osasco</strong>, trabalhamos com casas à venda, apartamentos à venda,
-        terrenos, chalés, chácaras e imóveis comerciais para venda e aluguel em Osasco e Grande São Paulo. Seja para
-        comprar apartamento em Osasco, alugar casa ou investir em imóvel comercial, nossa imobiliária em Osasco tem
+        Como <strong>corretor de imóveis em Osasco e Região</strong>, trabalhamos com casas à venda, apartamentos à
+        venda, terrenos, chalés, chácaras e imóveis comerciais para venda e aluguel em Osasco e Grande São Paulo. Seja
+        para comprar apartamento em Osasco e Região, alugar casa ou investir em imóvel comercial, nossa imobiliária em
+        Osasco e Região tem
         opções para diferentes perfis e orçamentos.{' '}
         <Link href="/imoveis" className="text-primary underline">
           Veja todos os imóveis disponíveis
@@ -20,7 +21,7 @@ const FAQ_ITEMS = [
     ),
   },
   {
-    question: 'Como funciona o financiamento imobiliário em Osasco?',
+    question: 'Como funciona o financiamento imobiliário em Osasco e Região?',
     answer: (
       <>
         Para <strong>financiar um imóvel em Osasco e região</strong>, você precisa de entrada a partir de 20% do valor (que pode
@@ -37,7 +38,7 @@ const FAQ_ITEMS = [
     ),
   },
   {
-    question: 'Quais são os melhores bairros para morar em Osasco?',
+    question: 'Quais são os melhores bairros para morar em Osasco e Região?',
     answer: (
       <>
         Os bairros mais procurados de Osasco para morar são:
@@ -82,10 +83,10 @@ const FAQ_ITEMS = [
     ),
   },
   {
-    question: 'Preciso de um corretor de imóveis para comprar meu imóvel em Osasco?',
+    question: 'Preciso de um corretor de imóveis para comprar meu imóvel em Osasco e Região?',
     answer: (
       <>
-        Sim, contar com um <strong>corretor de imóveis em Osasco</strong> faz toda a diferença. O corretor cuida da
+        Sim, contar com um <strong>corretor de imóveis em Osasco e Região</strong> faz toda a diferença. O corretor cuida da
         negociação, verifica a documentação imobiliária do imóvel, acompanha todo o processo de compra e garante
         segurança jurídica na transação. Seja para comprar seu imóvel, apartamento à venda ou imóvel comercial,
         o acompanhamento profissional evita problemas e agiliza o fechamento.{' '}
@@ -97,14 +98,14 @@ const FAQ_ITEMS = [
     ),
   },
   {
-    question: 'Quais documentos são necessários para comprar um imóvel em Osasco?',
+    question: 'Quais documentos são necessários para comprar um imóvel em Osasco e Região?',
     answer: (
       <>
-        Para comprar um imóvel em Osasco, os principais documentos são: <strong>RG, CPF, comprovante de renda,
+        Para comprar um imóvel em Osasco e Região, os principais documentos são: <strong>RG, CPF, comprovante de renda,
         comprovante de residência e certidão de estado civil</strong>. No caso de financiamento, o banco pode
         solicitar também extrato do FGTS, declaração do Imposto de Renda e carteira de trabalho. A{' '}
         <strong>documentação imobiliária</strong> do imóvel (matrícula atualizada, certidões negativas, IPTU) é
-        igualmente importante. Como sua imobiliária em Osasco, cuidamos de toda essa parte para você.
+        igualmente importante. Como sua imobiliária em Osasco e Região, cuidamos de toda essa parte para você.
       </>
     ),
   },
@@ -140,7 +141,7 @@ export default function FAQSection() {
       <div className="container mx-auto px-6">
         <div className="max-w-2xl mx-auto">
           <span className="section-label">Dúvidas Frequentes</span>
-          <h2 className="section-title mb-10">Perguntas Frequentes sobre Imóveis em Osasco</h2>
+          <h2 className="section-title mb-10">Perguntas Frequentes sobre Imóveis em Osasco e Região</h2>
           <div className="space-y-3">
             {FAQ_ITEMS.map((item, i) => (
               <div key={i} className="bg-white border border-gray-200">
