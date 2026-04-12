@@ -82,12 +82,12 @@ const FAQ_ITEMS = [
     ),
   },
   {
-    question: 'Preciso de um corretor de imóveis para comprar casa em Osasco?',
+    question: 'Preciso de um corretor de imóveis para comprar meu imóvel em Osasco?',
     answer: (
       <>
         Sim, contar com um <strong>corretor de imóveis em Osasco</strong> faz toda a diferença. O corretor cuida da
         negociação, verifica a documentação imobiliária do imóvel, acompanha todo o processo de compra e garante
-        segurança jurídica na transação. Seja para comprar casa em Osasco, apartamento à venda ou imóvel comercial,
+        segurança jurídica na transação. Seja para comprar seu imóvel, apartamento à venda ou imóvel comercial,
         o acompanhamento profissional evita problemas e agiliza o fechamento.{' '}
         <Link href="/contato" className="text-primary underline">
           Fale com o Corretor Yuri
