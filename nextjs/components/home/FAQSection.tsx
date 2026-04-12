@@ -23,7 +23,7 @@ const FAQ_ITEMS = [
     question: 'Como funciona o financiamento imobiliário em Osasco?',
     answer: (
       <>
-        Para <strong>financiar um imóvel em Osasco</strong>, você precisa de entrada a partir de 20% do valor (que pode
+        Para <strong>financiar um imóvel em Osasco e região</strong>, você precisa de entrada a partir de 20% do valor (que pode
         ser paga com <strong>saldo do FGTS</strong>) e parcela o restante em até 420 meses pela Caixa Econômica Federal
         ou bancos privados como Itaú, Bradesco e Santander. Imóveis dentro do teto do <strong>SFH</strong> podem usar
         recursos do FGTS e do SBPE, e famílias com renda de até R$ 12 mil podem se enquadrar no{' '}
@@ -32,7 +32,7 @@ const FAQ_ITEMS = [
         <Link href="/contato" className="text-primary underline">
           Fale com o Corretor Yuri
         </Link>{' '}
-        para uma simulação gratuita e encontrar a melhor condição para comprar casa ou apartamento em Osasco.
+        para uma simulação gratuita e encontrar a melhor condição para comprar casa ou apartamento em Osasco e região.
       </>
     ),
   },
