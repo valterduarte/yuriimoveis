@@ -138,7 +138,7 @@ export default function SobrePage() {
           <div className="max-w-3xl">
             <h2 className="text-xs font-bold uppercase tracking-widest text-dark mb-6">Sobre o Corretor</h2>
             <p className="text-gray-700 text-sm leading-relaxed mb-4">
-              Sou o Corretor Yuri, registrado no <strong>CRECI-SP {CRECI}</strong>, atuando há mais de 10 anos no mercado imobiliário de Osasco e Grande São Paulo.
+              Sou o Corretor Yuri, registrado no <strong>CRECI-SP</strong>, atuando há mais de 10 anos no mercado imobiliário de Osasco e Grande São Paulo.
             </p>
             <p className="text-gray-700 text-sm leading-relaxed mb-4">
               Minha trajetória começou pela paixão em ajudar pessoas a realizarem o sonho da casa própria. Ao longo dos anos, me especializei no mercado local de Osasco, acompanhando a evolução dos bairros, os lançamentos imobiliários e as melhores oportunidades de investimento na região.
