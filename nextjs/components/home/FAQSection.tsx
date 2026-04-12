@@ -43,20 +43,32 @@ const FAQ_ITEMS = [
         Os bairros mais procurados de Osasco para morar são:
         <ul className="mt-2 ml-4 list-disc space-y-1">
           <li>
+            <strong>Vila Yara</strong> — um dos bairros mais valorizados de Osasco, com condomínios de alto padrão,
+            comércio sofisticado e proximidade com o Shopping União.
+          </li>
+          <li>
+            <strong>Jardim das Flores</strong> — bairro residencial arborizado e tranquilo, ideal para famílias, com
+            boa oferta de casas à venda e apartamentos em Osasco.
+          </li>
+          <li>
             <strong>Presidente Altino</strong> — excelente acesso pela estação CPTM, comércio completo e boa oferta
             de apartamentos à venda. Ideal para quem trabalha em São Paulo.
           </li>
           <li>
-            <strong>Bela Vista</strong> — bairro residencial tranquilo com infraestrutura familiar, escolas e
-            parques próximos.
+            <strong>Quitaúna</strong> — região residencial consolidada, com áreas verdes, colégios e fácil acesso ao
+            centro de Osasco.
           </li>
           <li>
-            <strong>Km 18</strong> — região em crescimento com imóveis baratos em Osasco e fácil acesso à Raposo
-            Tavares.
+            <strong>Bela Vista</strong> — bairro residencial tranquilo com infraestrutura familiar, escolas e parques
+            próximos.
           </li>
           <li>
-            <strong>Jaguaribe</strong> — próximo ao centro comercial de Osasco, com ampla rede de serviços e
-            transporte público.
+            <strong>Km 18</strong> — região em crescimento com imóveis mais acessíveis em Osasco e fácil acesso à
+            Raposo Tavares.
+          </li>
+          <li>
+            <strong>Jaguaribe</strong> — próximo ao centro comercial de Osasco, com ampla rede de serviços e transporte
+            público.
           </li>
         </ul>
         <span className="block mt-2">
@@ -146,7 +158,7 @@ export default function FAQSection() {
                 </h3>
                 <div
                   className={`px-6 overflow-hidden transition-all duration-300 ${
-                    openIndex === i ? 'max-h-96 pb-5' : 'max-h-0'
+                    openIndex === i ? 'max-h-[800px] pb-5' : 'max-h-0'
                   }`}
                 >
                   <div className="text-sm text-gray-600 leading-relaxed">{item.answer}</div>
