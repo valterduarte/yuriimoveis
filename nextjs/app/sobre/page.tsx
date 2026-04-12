@@ -96,7 +96,7 @@ const DIFERENCIAIS = [
     icon: FiShield,
     titulo: 'Segurança Jurídica',
     descricao:
-      'Registro ativo no CRECI-SP (235509). Toda negociação é conduzida com documentação completa e transparência total.',
+      'Registro ativo no CRECI-SP. Toda negociação é conduzida com documentação completa e transparência total.',
   },
   {
     icon: FiUsers,
