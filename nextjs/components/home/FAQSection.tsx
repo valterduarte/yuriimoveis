@@ -8,10 +8,9 @@ const FAQ_ITEMS = [
     question: 'Quais tipos de imóveis o Corretor Yuri oferece em Osasco e Região?',
     answer: (
       <>
-        Como <strong>corretor de imóveis em Osasco e Região</strong>, trabalhamos com casas à venda, apartamentos à
-        venda, terrenos, chalés, chácaras e imóveis comerciais para venda e aluguel em Osasco e Grande São Paulo. Seja
-        para comprar apartamento em Osasco e Região, alugar casa ou investir em imóvel comercial, nossa imobiliária em
-        Osasco e Região tem
+        Como <strong>corretor de imóveis em Osasco e Região</strong>, trabalhamos com casas à venda, apartamentos,
+        terrenos, chalés, chácaras e imóveis comerciais para venda e aluguel em toda a Grande São Paulo. Seja para
+        comprar seu apartamento, alugar uma casa ou investir em imóvel comercial na região, nossa imobiliária tem
         opções para diferentes perfis e orçamentos.{' '}
         <Link href="/imoveis" className="text-primary underline">
           Veja todos os imóveis disponíveis
