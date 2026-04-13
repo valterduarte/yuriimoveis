@@ -182,12 +182,15 @@ export async function fetchNavigationMatrix(): Promise<NavigationMatrixRow[]> {
   }
 }
 
-export async function fetchAllPropertySlugs(): Promise<Pick<Imovel, 'id' | 'titulo' | 'updated_at'>[]> {
+export async function fetchAllPropertySlugs(): Promise<Pick<Imovel, 'id' | 'titulo' | 'updated_at' | 'imagens'>[]> {
   try {
     const result = await getDb().query(
-      `SELECT id, titulo, updated_at FROM imoveis WHERE ativo = true ORDER BY created_at DESC LIMIT 1000`
+      `SELECT id, titulo, updated_at, imagens FROM imoveis WHERE ativo = true ORDER BY created_at DESC LIMIT 1000`
     )
-    return result.rows
+    return result.rows.map(row => ({
+      ...row,
+      imagens: typeof row.imagens === 'string' ? JSON.parse(row.imagens || '[]') : (row.imagens || []),
+    }))
   } catch (err) {
     console.error('fetchAllPropertySlugs error:', err)
     return []

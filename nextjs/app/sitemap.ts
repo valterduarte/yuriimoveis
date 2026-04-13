@@ -1,5 +1,5 @@
 import { fetchAllPropertySlugs, fetchDistinctBairros, fetchNavigationMatrix } from '../lib/api'
-import { imovelSlug, slugify } from '../utils/imovelUtils'
+import { imovelSlug, ogImageUrl, slugify } from '../utils/imovelUtils'
 import { BAIRROS } from '../data/bairros'
 import { getCategoriaBySlug } from '../data/categorias'
 import { LANDING_PAGES } from '../data/landingPages'
@@ -21,12 +21,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     fetchNavigationMatrix(),
   ])
 
-  const propertyUrls: MetadataRoute.Sitemap = properties.map(p => ({
-    url: `${SITE_URL}/imoveis/${imovelSlug(p)}`,
-    lastModified: p.updated_at ? new Date(p.updated_at) : new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }))
+  const propertyUrls: MetadataRoute.Sitemap = properties.map(p => {
+    const images = (p.imagens || [])
+      .slice(0, 10)
+      .map(img => ogImageUrl(img))
+      .filter(Boolean)
+    return {
+      url: `${SITE_URL}/imoveis/${imovelSlug(p)}`,
+      lastModified: p.updated_at ? new Date(p.updated_at) : new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+      ...(images.length > 0 && { images }),
+    }
+  })
 
   const configuredBairros = Object.values(BAIRROS)
   const overriddenDbNames = new Set(configuredBairros.map(b => b.dbMatch).filter(Boolean) as string[])
