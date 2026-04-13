@@ -90,7 +90,19 @@ function renderBlock(block: ArticleBlock, key: number) {
     case 'callout':
       return (
         <aside key={key} className="border-l-4 border-primary bg-gray-50 px-5 py-4 my-8 text-sm text-dark leading-relaxed">
-          {block.text}
+          <p>{block.text}</p>
+          {block.link && (
+            <p className="mt-3">
+              <a
+                href={block.link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-primary hover:underline"
+              >
+                {block.link.label} →
+              </a>
+            </p>
+          )}
         </aside>
       )
   }

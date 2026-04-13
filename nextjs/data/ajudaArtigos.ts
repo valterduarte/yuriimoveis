@@ -4,7 +4,7 @@ export type ArticleBlock =
   | { type: 'h3'; text: string }
   | { type: 'ul'; items: string[] }
   | { type: 'ol'; items: string[] }
-  | { type: 'callout'; text: string }
+  | { type: 'callout'; text: string; link?: { href: string; label: string } }
 
 export interface Cartorio {
   nome: string
@@ -180,7 +180,7 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
       { type: 'h2', text: 'Escritura pública' },
       {
         type: 'p',
-        text: 'A escritura é lavrada em um tabelionato de notas (cartório de notas) e formaliza a transferência. O valor segue uma tabela progressiva de emolumentos definida pelo Tribunal de Justiça de São Paulo — quanto maior o valor do imóvel, maior a taxa.',
+        text: 'A escritura é lavrada em um tabelionato de notas (cartório de notas) e formaliza a transferência. O valor segue uma tabela progressiva de emolumentos definida pelo Tribunal de Justiça de São Paulo — quanto maior o valor do imóvel, maior a taxa. As faixas abaixo são estimativas aproximadas e servem apenas para planejamento; os valores oficiais são atualizados pelo TJ-SP no início de cada ano.',
       },
       {
         type: 'ul',
@@ -189,6 +189,14 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
           'Imóveis de R$ 200.000 a R$ 500.000: aproximadamente R$ 2.500 a R$ 4.500',
           'Imóveis acima de R$ 500.000: cálculo proporcional pela tabela do TJ-SP',
         ],
+      },
+      {
+        type: 'callout',
+        text: 'Os emolumentos de tabelionato em São Paulo são reajustados anualmente. Antes de fechar a compra, consulte a tabela oficial atualizada no site do Tribunal de Justiça de São Paulo ou peça uma simulação direto ao cartório escolhido.',
+        link: {
+          href: 'https://www.tjsp.jus.br/IndicesTaxasJudiciarias/TaxasCustasEmolumentos',
+          label: 'Tabela oficial de emolumentos do TJ-SP',
+        },
       },
       {
         type: 'callout',
