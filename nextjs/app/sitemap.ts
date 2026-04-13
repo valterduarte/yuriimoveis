@@ -3,6 +3,7 @@ import { imovelSlug, ogImageUrl, slugify } from '../utils/imovelUtils'
 import { BAIRROS } from '../data/bairros'
 import { getCategoriaBySlug } from '../data/categorias'
 import { LANDING_PAGES } from '../data/landingPages'
+import { AJUDA_ARTIGOS } from '../data/ajudaArtigos'
 import {
   bairroDbNameToSlug,
   cidadeNameToSlug,
@@ -137,6 +138,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    {
+      url: `${SITE_URL}/ajuda`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    ...AJUDA_ARTIGOS.map(a => ({
+      url: `${SITE_URL}/ajuda/${a.slug}`,
+      lastModified: new Date(a.atualizadoEm),
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    })),
     ...hierarchicalUrls,
     ...landingUrls,
     ...bairroUrls,

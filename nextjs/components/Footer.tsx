@@ -6,6 +6,7 @@ import WhatsAppLink from './WhatsAppLink'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI, SITE_URL, PHONE_STRUCTURED } from '../lib/config'
 import { NAVIGATION_LINKS } from '../lib/constants'
 import { LANDING_PAGES } from '../data/landingPages'
+import { AJUDA_ARTIGOS } from '../data/ajudaArtigos'
 
 function FooterSchema() {
   const jsonLd = {
@@ -94,6 +95,26 @@ export default function Footer() {
                     className="text-xs hover:text-primary transition-colors flex items-center gap-2">
                     <span className="w-3 h-px bg-gray-600 inline-block" />
                     {lp.h1}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <h3 className="text-white text-xs uppercase tracking-widest font-bold mt-8 mb-6">Ajuda</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/ajuda"
+                  className="text-xs hover:text-primary transition-colors flex items-center gap-2">
+                  <span className="w-3 h-px bg-gray-600 inline-block" />
+                  Guias para comprar imóvel
+                </Link>
+              </li>
+              {AJUDA_ARTIGOS.map(a => (
+                <li key={a.slug}>
+                  <Link href={`/ajuda/${a.slug}`}
+                    className="text-xs hover:text-primary transition-colors flex items-center gap-2">
+                    <span className="w-3 h-px bg-gray-600 inline-block" />
+                    {a.h1}
                   </Link>
                 </li>
               ))}
