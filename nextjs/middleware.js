@@ -6,15 +6,31 @@ const BAIRRO_SLUG_REDIRECTS = {
   'jd-roberto': 'jardim-roberto',
 }
 
+const LEGACY_LANDING_REDIRECTS = {
+  'casas-a-venda-em-osasco':             '/comprar/osasco/casa',
+  'apartamentos-a-venda-em-osasco':      '/comprar/osasco/apartamento',
+  'terrenos-a-venda-em-osasco':          '/comprar/osasco/terreno',
+  'imoveis-comerciais-a-venda-em-osasco':'/comprar/osasco/comercial',
+  'casas-para-alugar-em-osasco':         '/alugar/osasco/casa',
+  'apartamentos-para-alugar-em-osasco':  '/alugar/osasco/apartamento',
+}
+
 export function middleware(request) {
   const { pathname, searchParams } = request.nextUrl
 
-  const bairroRedirectMatch = pathname.match(/^\/imoveis\/([^/]+)$/)
-  if (bairroRedirectMatch) {
-    const target = BAIRRO_SLUG_REDIRECTS[bairroRedirectMatch[1]]
-    if (target) {
+  const legacyMatch = pathname.match(/^\/imoveis\/([^/]+)$/)
+  if (legacyMatch) {
+    const legacySlug = legacyMatch[1]
+    const legacyTarget = LEGACY_LANDING_REDIRECTS[legacySlug]
+    if (legacyTarget) {
       const url = request.nextUrl.clone()
-      url.pathname = `/imoveis/${target}`
+      url.pathname = legacyTarget
+      return NextResponse.redirect(url, 301)
+    }
+    const bairroTarget = BAIRRO_SLUG_REDIRECTS[legacySlug]
+    if (bairroTarget) {
+      const url = request.nextUrl.clone()
+      url.pathname = `/imoveis/${bairroTarget}`
       return NextResponse.redirect(url, 301)
     }
   }
