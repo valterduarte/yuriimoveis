@@ -149,6 +149,39 @@ export async function fetchPropertiesByTypeCategory(
   }
 }
 
+export interface NavigationMatrixRow {
+  tipo: string
+  cidade: string
+  categoria: string
+  bairro: string
+  count: number
+}
+
+export async function fetchNavigationMatrix(): Promise<NavigationMatrixRow[]> {
+  try {
+    const result = await getDb().query(
+      `SELECT tipo, cidade, categoria, bairro, COUNT(*)::int AS count
+       FROM imoveis
+       WHERE ativo = true
+         AND tipo IS NOT NULL AND tipo != ''
+         AND cidade IS NOT NULL AND cidade != ''
+         AND categoria IS NOT NULL AND categoria != ''
+         AND bairro IS NOT NULL AND bairro != ''
+       GROUP BY tipo, cidade, categoria, bairro`
+    )
+    return result.rows.map((r: NavigationMatrixRow) => ({
+      tipo:      r.tipo,
+      cidade:    r.cidade,
+      categoria: r.categoria,
+      bairro:    r.bairro,
+      count:     Number(r.count),
+    }))
+  } catch (err) {
+    console.error('fetchNavigationMatrix error:', err)
+    return []
+  }
+}
+
 export async function fetchAllPropertySlugs(): Promise<Pick<Imovel, 'id' | 'titulo' | 'updated_at'>[]> {
   try {
     const result = await getDb().query(
