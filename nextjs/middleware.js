@@ -2,9 +2,24 @@ import { NextResponse } from 'next/server'
 
 const INDEXABLE_PARAMS = new Set(['tipo', 'categoria'])
 
+const BAIRRO_SLUG_REDIRECTS = {
+  'jd-roberto': 'jardim-roberto',
+}
+
 export function middleware(request) {
-  const response = NextResponse.next()
   const { pathname, searchParams } = request.nextUrl
+
+  const bairroRedirectMatch = pathname.match(/^\/imoveis\/([^/]+)$/)
+  if (bairroRedirectMatch) {
+    const target = BAIRRO_SLUG_REDIRECTS[bairroRedirectMatch[1]]
+    if (target) {
+      const url = request.nextUrl.clone()
+      url.pathname = `/imoveis/${target}`
+      return NextResponse.redirect(url, 301)
+    }
+  }
+
+  const response = NextResponse.next()
 
   if (pathname === '/imoveis' && searchParams.size > 0) {
     const hasNonIndexable = [...searchParams.keys()].some(k => !INDEXABLE_PARAMS.has(k))

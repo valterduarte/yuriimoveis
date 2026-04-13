@@ -206,9 +206,10 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
-  'jd-roberto': {
-    nome: 'Jd Roberto',
-    slug: 'jd-roberto',
+  'jardim-roberto': {
+    nome: 'Jardim Roberto',
+    slug: 'jardim-roberto',
+    dbMatch: 'Jd Roberto',
     titulo: 'Imóveis no Jardim Roberto, Osasco SP',
     descricaoMeta:
       'Encontre imóveis no Jardim Roberto em Osasco, SP. Casas e apartamentos para venda e aluguel. Atendimento com o Corretor Yuri.',
