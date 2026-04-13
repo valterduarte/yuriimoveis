@@ -1,5 +1,6 @@
 import { fetchAllPropertySlugs, fetchDistinctBairros } from '../lib/api'
 import { imovelSlug, slugify } from '../utils/imovelUtils'
+import { BAIRROS } from '../data/bairros'
 import { LANDING_PAGES } from '../data/landingPages'
 import { SITE_URL } from '../lib/config'
 import type { MetadataRoute } from 'next'
@@ -17,12 +18,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  const bairroUrls: MetadataRoute.Sitemap = bairros.map(b => ({
-    url: `${SITE_URL}/imoveis/${slugify(b)}`,
+  const configuredBairros = Object.values(BAIRROS)
+  const overriddenDbNames = new Set(configuredBairros.map(b => b.dbMatch).filter(Boolean) as string[])
+  const configuredSlugs = new Set(configuredBairros.map(b => b.slug))
+
+  const configuredBairroUrls: MetadataRoute.Sitemap = configuredBairros.map(b => ({
+    url: `${SITE_URL}/imoveis/${b.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.7,
   }))
+
+  const dbBairroUrls: MetadataRoute.Sitemap = bairros
+    .filter(b => !overriddenDbNames.has(b) && !configuredSlugs.has(slugify(b)))
+    .map(b => ({
+      url: `${SITE_URL}/imoveis/${slugify(b)}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    }))
+
+  const bairroUrls: MetadataRoute.Sitemap = [...configuredBairroUrls, ...dbBairroUrls]
 
   const landingUrls: MetadataRoute.Sitemap = LANDING_PAGES.map(lp => ({
     url: `${SITE_URL}/imoveis/${lp.slug}`,

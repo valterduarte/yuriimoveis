@@ -43,20 +43,20 @@ const FAQ_ITEMS = [
         Os bairros mais procurados de Osasco para morar são:
         <ul className="mt-2 ml-4 list-disc space-y-1">
           <li>
-            <strong>Vila Yara</strong> — um dos bairros mais valorizados de Osasco, com condomínios de alto padrão,
-            comércio sofisticado e proximidade com o Shopping União.
+            <strong>Centro de Osasco</strong> — coração comercial da cidade, com Shopping União, estação CPTM e ampla
+            oferta de apartamentos à venda e para alugar.
           </li>
           <li>
-            <strong>Jardim das Flores</strong> — bairro residencial arborizado e tranquilo, ideal para famílias, com
-            boa oferta de casas à venda e apartamentos em Osasco.
+            <strong>Jardim Roberto</strong> — bairro residencial tradicional de Osasco, com boa oferta de casas e
+            apartamentos e fácil acesso ao centro e à CPTM.
           </li>
           <li>
             <strong>Presidente Altino</strong> — excelente acesso pela estação CPTM, comércio completo e boa oferta
             de apartamentos à venda. Ideal para quem trabalha em São Paulo.
           </li>
           <li>
-            <strong>Quitaúna</strong> — região residencial consolidada, com áreas verdes, colégios e fácil acesso ao
-            centro de Osasco.
+            <strong>Rochdale</strong> — bairro residencial consolidado, com comércio local ativo e boa infraestrutura
+            para famílias.
           </li>
           <li>
             <strong>Bela Vista</strong> — bairro residencial tranquilo com infraestrutura familiar, escolas e parques

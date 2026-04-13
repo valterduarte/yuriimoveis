@@ -13,7 +13,7 @@ import {
   fetchSimilarProperties,
 } from '../../../lib/api'
 import { imovelSlug, slugify, formatNeighborhoodName, buildSeoDescription, ogImageUrl } from '../../../utils/imovelUtils'
-import { getBairroBySlug } from '../../../data/bairros'
+import { BAIRROS, getBairroBySlug } from '../../../data/bairros'
 import { findLandingPage, LANDING_PAGES } from '../../../data/landingPages'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
 import { SITE_URL, PHONE_WA_BASE, PHONE_STRUCTURED, OG_DEFAULT_IMAGE } from '../../../lib/config'
@@ -42,9 +42,18 @@ export async function generateStaticParams() {
     fetchDistinctBairros(),
   ])
   const propertyParams = imoveis.map(imovel => ({ slug: imovelSlug(imovel) }))
-  const bairroParams = bairros.map(b => ({ slug: slugify(b) }))
+
+  const configuredBairros = Object.values(BAIRROS)
+  const overriddenDbNames = new Set(configuredBairros.map(b => b.dbMatch).filter(Boolean) as string[])
+  const configuredSlugs = new Set(configuredBairros.map(b => b.slug))
+
+  const configuredBairroParams = configuredBairros.map(b => ({ slug: b.slug }))
+  const dbBairroParams = bairros
+    .filter(b => !overriddenDbNames.has(b) && !configuredSlugs.has(slugify(b)))
+    .map(b => ({ slug: slugify(b) }))
+
   const landingParams = LANDING_PAGES.map(lp => ({ slug: lp.slug }))
-  return [...landingParams, ...propertyParams, ...bairroParams]
+  return [...landingParams, ...propertyParams, ...configuredBairroParams, ...dbBairroParams]
 }
 
 // ── metadata ──────────────────────────────────────────────────────────────────
@@ -251,7 +260,8 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
 async function BairroPage({ slug }: { slug: string }) {
   const bairroData = getBairroBySlug(slug)
   const neighborhoodName = bairroData?.nome || formatNeighborhoodName(slug)
-  const { imoveis: properties, total } = await fetchPropertiesByBairro(neighborhoodName)
+  const dbSearchTerm = bairroData?.dbMatch || neighborhoodName
+  const { imoveis: properties, total } = await fetchPropertiesByBairro(dbSearchTerm)
   const hasProperties = properties.length > 0
 
   const jsonLd = [

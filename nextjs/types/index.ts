@@ -92,5 +92,6 @@ export interface BairroData {
   titulo: string
   descricaoMeta: string
   imagem?: string
+  dbMatch?: string
   conteudo: BairroContent
 }
