@@ -192,10 +192,10 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
       },
       {
         type: 'callout',
-        text: 'Os emolumentos de tabelionato em São Paulo são reajustados anualmente. Antes de fechar a compra, consulte a tabela oficial atualizada no site do Tribunal de Justiça de São Paulo ou peça uma simulação direto ao cartório escolhido.',
+        text: 'Os emolumentos de tabelionato em São Paulo são reajustados anualmente pela Corregedoria do TJ-SP. Antes de fechar a compra, consulte as normas extrajudiciais oficiais ou peça uma simulação direto ao cartório escolhido.',
         link: {
-          href: 'https://www.tjsp.jus.br/IndicesTaxasJudiciarias/TaxasCustasEmolumentos',
-          label: 'Tabela oficial de emolumentos do TJ-SP',
+          href: 'https://www.tjsp.jus.br/Corregedoria/Comunicados/NormasExtrajudiciais',
+          label: 'Normas extrajudiciais da Corregedoria do TJ-SP',
         },
       },
       {
