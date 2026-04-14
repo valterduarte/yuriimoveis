@@ -19,6 +19,7 @@ const TIPO_TO_ACAO: Record<TransactionType, AcaoSlug> = {
 
 const CIDADES_SUPORTADAS = new Map<string, string>([
   ['osasco', 'Osasco'],
+  ['barueri', 'Barueri'],
 ])
 
 export function acaoToTipo(acao: AcaoSlug): TransactionType {

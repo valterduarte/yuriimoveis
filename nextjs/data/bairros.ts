@@ -267,6 +267,26 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'alphaville': {
+    nome: 'Alphaville',
+    slug: 'alphaville',
+    titulo: 'Imóveis em Alphaville, Barueri SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos e casas em Alphaville, Barueri SP. Lançamentos e imóveis de alto padrão para venda. Atendimento com o Corretor Yuri, CRECI 235509.',
+    conteudo: {
+      sobre:
+        'Alphaville é um dos endereços mais desejados da Região Metropolitana de São Paulo. Localizado entre Barueri e Santana de Parnaíba, o bairro se consolidou como referência em alto padrão, segurança e qualidade de vida. Abriga condomínios residenciais fechados, torres de lançamentos contemporâneos e um eixo comercial pujante que atrai empresas nacionais e multinacionais.',
+      infraestrutura:
+        'Alphaville reúne infraestrutura completa: shoppings (Alphaville, Iguatemi e Tamboré), supermercados premium, restaurantes renomados, academias, clubes esportivos e centros comerciais de alto padrão. Na área de saúde, o bairro conta com o Hospital Albert Einstein Alphaville e o Laboratório Fleury. Bancos, cartórios e serviços variados estão concentrados nas avenidas principais.',
+      transporte:
+        'O bairro tem acesso direto à Rodovia Castelo Branco (km 22–23) e ao Rodoanel Mario Covas, ligando rapidamente a cidade de São Paulo, Osasco e o interior. Linhas de ônibus fretadas e circulares internas atendem os condomínios. A proximidade com o aeroporto de Viracopos e o Centro Empresarial Tamboré reforça a vocação corporativa da região.',
+      educacao:
+        'Alphaville concentra algumas das melhores escolas da região metropolitana, incluindo Escola Morumbi Alphaville, Colégio Visconde de Porto Seguro, Colégio Concept e unidades bilíngues. Para ensino superior, há opções como a Universidade Anhembi Morumbi e Faculdade Alphaville, além de fácil acesso a instituições na capital paulista.',
+      porqueMorar:
+        'Morar em Alphaville é escolher alto padrão, segurança e valorização imobiliária consistente. Os lançamentos atuais oferecem lazer elevado em rooftops, academias equipadas, piscinas, espaços gourmet e áreas corporativas como coworking. A combinação de áreas verdes, segurança 24h e infraestrutura de primeira faz do bairro um dos destinos mais sólidos para morar e investir na grande São Paulo.',
+    },
+  },
+
   'vila-ayrosa': {
     nome: 'Vila Ayrosa',
     slug: 'vila-ayrosa',
