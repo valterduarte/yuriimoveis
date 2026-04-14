@@ -105,6 +105,17 @@ function renderBlock(block: ArticleBlock, key: number) {
           )}
         </aside>
       )
+    case 'disclaimer':
+      return (
+        <aside
+          key={key}
+          role="note"
+          aria-label="Aviso importante"
+          className="border-l-4 border-amber-500 bg-amber-50 px-5 py-4 my-8 text-xs md:text-sm text-amber-900 leading-relaxed"
+        >
+          {block.text}
+        </aside>
+      )
   }
 }
 

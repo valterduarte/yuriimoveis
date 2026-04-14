@@ -5,6 +5,7 @@ export type ArticleBlock =
   | { type: 'ul'; items: string[] }
   | { type: 'ol'; items: string[] }
   | { type: 'callout'; text: string; link?: { href: string; label: string } }
+  | { type: 'disclaimer'; text: string }
 
 export interface Cartorio {
   nome: string
@@ -159,22 +160,35 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
     blocks: [
       {
         type: 'p',
-        text: 'Além do valor do imóvel, comprar uma casa ou apartamento em Osasco envolve impostos, taxas de cartório e despesas com documentação. Em geral, esses custos somam de 4% a 6% do valor do imóvel. Conhecer cada item ajuda a planejar o orçamento e evita correr atrás de dinheiro na hora da escritura.',
+        text: 'Além do valor do imóvel, comprar uma casa ou apartamento em Osasco envolve impostos, taxas de cartório e despesas com documentação. Em geral, esses custos somam de 4% a 6%* do valor do imóvel. Conhecer cada item ajuda a planejar o orçamento e evita correr atrás de dinheiro na hora da escritura.',
+      },
+
+      {
+        type: 'disclaimer',
+        text: '⚠️ AVISO IMPORTANTE: Os percentuais e valores indicados nesta página são estimativas baseadas em práticas de mercado e legislação vigente, com finalidade exclusivamente informativa. Alíquotas, emolumentos e tarifas são definidos pelos órgãos competentes (Prefeitura de Osasco, Tribunal de Justiça de São Paulo e instituições financeiras) e podem ser alterados sem aviso prévio. Antes de qualquer negociação, confirme os valores diretamente nas fontes oficiais ou solicite uma simulação personalizada. O Corretor Yuri Imóveis não se responsabiliza por divergências, alterações posteriores ou eventuais prejuízos decorrentes do uso dessas informações sem a devida verificação.',
       },
 
       { type: 'h2', text: 'ITBI — Imposto de Transmissão de Bens Imóveis' },
       {
         type: 'p',
-        text: 'O ITBI é o imposto cobrado pela Prefeitura de Osasco sempre que um imóvel muda de dono. Em Osasco, a alíquota atual é de 2% sobre o maior valor entre o preço de venda e o valor venal de referência. O pagamento é feito antes da lavratura da escritura — sem o ITBI quitado, o cartório não realiza a transferência.',
+        text: 'O ITBI é o imposto cobrado pela Prefeitura de Osasco sempre que um imóvel muda de dono. Em Osasco, a alíquota praticada é de aproximadamente 2%* sobre o maior valor entre o preço de venda e o valor venal de referência. O pagamento é feito antes da lavratura da escritura — sem o ITBI quitado, o cartório não realiza a transferência.',
       },
       {
         type: 'ul',
         items: [
-          'Alíquota em Osasco: 2% sobre o valor do imóvel',
+          'Alíquota estimada em Osasco: 2%* sobre o valor do imóvel',
           'Pago à Prefeitura Municipal de Osasco',
           'Obrigatório antes do registro em cartório',
           'Existem isenções parciais para imóveis no programa Minha Casa Minha Vida e primeiro imóvel financiado pelo SFH',
         ],
+      },
+      {
+        type: 'callout',
+        text: 'A alíquota oficial e atualizada do ITBI é definida pela Prefeitura de Osasco. Confirme o valor vigente antes de fechar a compra no portal de serviços de Finanças do município.',
+        link: {
+          href: 'http://sf.osasco.sp.gov.br/financas/',
+          label: 'Portal de Finanças da Prefeitura de Osasco',
+        },
       },
 
       { type: 'h2', text: 'Escritura pública' },
@@ -185,8 +199,8 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
       {
         type: 'ul',
         items: [
-          'Imóveis até R$ 200.000: aproximadamente R$ 1.500 a R$ 2.500',
-          'Imóveis de R$ 200.000 a R$ 500.000: aproximadamente R$ 2.500 a R$ 4.500',
+          'Imóveis até R$ 200.000: aproximadamente R$ 1.500 a R$ 2.500*',
+          'Imóveis de R$ 200.000 a R$ 500.000: aproximadamente R$ 2.500 a R$ 4.500*',
           'Imóveis acima de R$ 500.000: cálculo proporcional pela tabela do TJ-SP',
         ],
       },
@@ -206,30 +220,35 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
       { type: 'h2', text: 'Registro no Cartório de Imóveis' },
       {
         type: 'p',
-        text: 'Depois da escritura, o documento precisa ser registrado no Cartório de Registro de Imóveis competente — em Osasco, o Oficial de Registro de Imóveis fica na Avenida Santo Antônio. Só após o registro o comprador é oficialmente o dono. A taxa também segue a tabela progressiva do TJ-SP e fica em torno de 1% do valor do imóvel.',
+        text: 'Depois da escritura, o documento precisa ser registrado no Cartório de Registro de Imóveis competente — em Osasco, o Oficial de Registro de Imóveis fica na Avenida Santo Antônio. Só após o registro o comprador é oficialmente o dono. A taxa também segue a tabela progressiva do TJ-SP e fica em torno de 1%* do valor do imóvel.',
       },
 
       { type: 'h2', text: 'Tarifas bancárias (financiamento)' },
       {
         type: 'p',
-        text: 'Quem financia paga ainda algumas tarifas do banco: avaliação do imóvel (R$ 3.500 a R$ 4.500 em média), tarifa de abertura de crédito e seguros obrigatórios (MIP e DFI) embutidos nas parcelas. Na Caixa, dentro do Minha Casa Minha Vida, várias dessas tarifas são reduzidas ou subsidiadas.',
+        text: 'Quem financia paga ainda algumas tarifas do banco: avaliação do imóvel (em média entre R$ 3.500 e R$ 4.500*), tarifa de abertura de crédito e seguros obrigatórios (MIP e DFI) embutidos nas parcelas. Na Caixa, dentro do Minha Casa Minha Vida, várias dessas tarifas são reduzidas ou subsidiadas, conforme o enquadramento do comprador.',
       },
 
-      { type: 'h2', text: 'Resumo dos custos esperados' },
+      { type: 'h2', text: 'Resumo dos custos esperados*' },
       {
         type: 'ul',
         items: [
-          'ITBI: 2% (Osasco)',
-          'Escritura ou contrato bancário: 0,5% a 1%',
-          'Registro de imóveis: cerca de 1%',
-          'Avaliação do imóvel (financiamento): valor fixo do banco',
-          'Total estimado: 4% a 6% do valor do imóvel à vista',
+          'ITBI: aproximadamente 2% (Osasco)*',
+          'Escritura ou contrato bancário: aproximadamente 0,5% a 1%*',
+          'Registro de imóveis: cerca de 1%*',
+          'Avaliação do imóvel (financiamento): tarifa fixa definida pelo banco',
+          'Total estimado: 4% a 6% do valor do imóvel à vista*',
         ],
       },
 
       {
         type: 'callout',
-        text: 'Faço a simulação personalizada de todos os custos antes da proposta. Assim você sabe exatamente quanto vai precisar separar para fechar a compra sem surpresas.',
+        text: 'Faço a simulação personalizada de todos os custos antes da proposta, com base nos valores oficiais vigentes. Assim você sabe exatamente quanto vai precisar separar para fechar a compra sem surpresas.',
+      },
+
+      {
+        type: 'disclaimer',
+        text: '* Todos os valores e percentuais marcados com asterisco nesta página são estimativas com base em práticas de mercado e legislação em vigor na data de atualização do conteúdo. Não constituem oferta, garantia ou cotação oficial. Antes de qualquer negociação, confirme as alíquotas, emolumentos e tarifas atuais junto à Prefeitura de Osasco, ao Tribunal de Justiça de São Paulo e à instituição financeira escolhida. O Corretor Yuri Imóveis (CRECI-SP 235509) não se responsabiliza por divergências entre os valores indicados e os efetivamente cobrados pelos órgãos competentes.',
       },
     ],
     faq: [
