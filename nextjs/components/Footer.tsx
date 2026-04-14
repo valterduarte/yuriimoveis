@@ -6,7 +6,7 @@ import WhatsAppLink from './WhatsAppLink'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI, SITE_URL, PHONE_STRUCTURED } from '../lib/config'
 import { NAVIGATION_LINKS } from '../lib/constants'
 import { LANDING_PAGES } from '../data/landingPages'
-import { AJUDA_ARTIGOS } from '../data/ajudaArtigos'
+import { AJUDA_ARTIGOS, fullH1 } from '../data/ajudaArtigos'
 
 function FooterSchema() {
   const jsonLd = {
@@ -113,7 +113,7 @@ export default function Footer() {
                 <li key={a.slug}>
                   <Link href={`/ajuda/${a.slug}`} className={FOOTER_LINK_CLASS}>
                     {FOOTER_BULLET}
-                    <span className="line-clamp-1">{a.h1}</span>
+                    <span className="line-clamp-1">{fullH1(a)}</span>
                   </Link>
                 </li>
               ))}

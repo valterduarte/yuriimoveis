@@ -10,7 +10,7 @@ import {
   PHONE_TEL,
 } from '../../../lib/config'
 import WhatsAppLink from '../../../components/WhatsAppLink'
-import { AJUDA_ARTIGOS, getAjudaArtigoBySlug, type ArticleBlock, type Cartorio } from '../../../data/ajudaArtigos'
+import { AJUDA_ARTIGOS, getAjudaArtigoBySlug, fullH1, type ArticleBlock, type Cartorio } from '../../../data/ajudaArtigos'
 import type { Metadata } from 'next'
 
 interface PageProps {
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'article',
       publishedTime: artigo.atualizadoEm,
       modifiedTime: artigo.atualizadoEm,
-      images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: artigo.h1 }],
+      images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: fullH1(artigo) }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -159,20 +159,22 @@ export default async function AjudaArtigoPage({ params }: PageProps) {
 
   const url = `${SITE_URL}/ajuda/${artigo.slug}`
 
+  const headline = fullH1(artigo)
+
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
       { '@type': 'ListItem', position: 2, name: 'Ajuda', item: `${SITE_URL}/ajuda` },
-      { '@type': 'ListItem', position: 3, name: artigo.h1, item: url },
+      { '@type': 'ListItem', position: 3, name: headline, item: url },
     ],
   }
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: artigo.h1,
+    headline,
     description: artigo.descricaoMeta,
     url,
     inLanguage: 'pt-BR',
@@ -241,11 +243,12 @@ export default async function AjudaArtigoPage({ params }: PageProps) {
             <span aria-hidden="true">/</span>
             <Link href="/ajuda" className="hover:text-white transition-colors">Ajuda</Link>
             <span aria-hidden="true">/</span>
-            <span className="text-white" aria-current="page">{artigo.h1}</span>
+            <span className="text-white" aria-current="page">{headline}</span>
           </nav>
           <span className="section-label">Guia Prático</span>
           <h1 className="text-3xl md:text-5xl font-black text-white uppercase leading-tight max-w-4xl">
-            {artigo.h1}
+            {artigo.h1}<br />
+            <span className="text-primary">{artigo.h1Destaque}</span>
           </h1>
           <p className="text-gray-400 text-xs uppercase tracking-widest mt-6">
             Atualizado em {new Date(artigo.atualizadoEm).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
@@ -290,7 +293,7 @@ export default async function AjudaArtigoPage({ params }: PageProps) {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <WhatsAppLink
-              href={`${PHONE_WA_BASE}?text=${encodeURIComponent(`Olá Yuri! Vi o guia "${artigo.h1}" no seu site e gostaria de tirar uma dúvida.`)}`}
+              href={`${PHONE_WA_BASE}?text=${encodeURIComponent(`Olá Yuri! Vi o guia "${headline}" no seu site e gostaria de tirar uma dúvida.`)}`}
               source={`ajuda-${artigo.slug}`}
               target="_blank"
               rel="noreferrer"
@@ -321,7 +324,7 @@ export default async function AjudaArtigoPage({ params }: PageProps) {
                   className="group block bg-white border border-gray-200 hover:border-primary p-6 transition-colors"
                 >
                   <h3 className="text-sm font-bold text-dark uppercase tracking-wide mb-3 group-hover:text-primary transition-colors">
-                    {a.h1}
+                    {fullH1(a)}
                   </h3>
                   <p className="text-gray-600 text-sm leading-relaxed mb-4">{a.resumo}</p>
                   <span className="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-bold text-primary">

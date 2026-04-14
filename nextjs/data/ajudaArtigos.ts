@@ -26,6 +26,7 @@ export interface AjudaArtigo {
   slug: string
   titulo: string
   h1: string
+  h1Destaque: string
   descricaoMeta: string
   resumo: string
   atualizadoEm: string
@@ -34,11 +35,16 @@ export interface AjudaArtigo {
   faq?: AjudaFAQ[]
 }
 
+export function fullH1(artigo: AjudaArtigo): string {
+  return `${artigo.h1} ${artigo.h1Destaque}`
+}
+
 export const AJUDA_ARTIGOS: AjudaArtigo[] = [
   {
     slug: 'documentos-para-comprar-imovel',
     titulo: 'Documentos para Comprar Imóvel em Osasco — Lista Completa',
-    h1: 'Documentos necessários para comprar um imóvel',
+    h1: 'Documentos para',
+    h1Destaque: 'Comprar um Imóvel',
     descricaoMeta:
       'Lista completa dos documentos exigidos para comprar um imóvel em Osasco e região: comprador, vendedor, imóvel urbano e rural. Atualizado para 2026.',
     resumo:
@@ -151,7 +157,8 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
   {
     slug: 'custos-para-comprar-imovel-em-osasco',
     titulo: 'Custos para Comprar Imóvel em Osasco — ITBI, Escritura e Registro',
-    h1: 'Custos para comprar um imóvel em Osasco',
+    h1: 'Custos para Comprar um Imóvel em',
+    h1Destaque: 'Osasco',
     descricaoMeta:
       'Quanto custa comprar um imóvel em Osasco? Veja ITBI, escritura, registro e demais taxas com valores atualizados para 2026 e simulações por faixa de preço.',
     resumo:
@@ -278,7 +285,8 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
   {
     slug: 'cartorios-de-imoveis-em-osasco',
     titulo: 'Cartórios de Imóveis em Osasco — Endereços e Telefones',
-    h1: 'Cartórios de imóveis em Osasco',
+    h1: 'Cartórios de Imóveis em',
+    h1Destaque: 'Osasco',
     descricaoMeta:
       'Lista completa dos cartórios de registro de imóveis e tabelionatos de notas em Osasco SP, com endereço, telefone e área de atuação. Atualizado para 2026.',
     resumo:

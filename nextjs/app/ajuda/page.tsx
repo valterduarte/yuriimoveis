@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { FiArrowRight, FiBookOpen } from 'react-icons/fi'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
-import { AJUDA_ARTIGOS } from '../../data/ajudaArtigos'
+import { AJUDA_ARTIGOS, fullH1 } from '../../data/ajudaArtigos'
 import type { Metadata } from 'next'
 
 const PAGE_TITLE = 'Ajuda — Guia Prático para Comprar Imóvel em Osasco'
@@ -46,7 +46,7 @@ const collectionJsonLd = {
   url: `${SITE_URL}/ajuda`,
   hasPart: AJUDA_ARTIGOS.map(a => ({
     '@type': 'Article',
-    headline: a.h1,
+    headline: fullH1(a),
     description: a.descricaoMeta,
     url: `${SITE_URL}/ajuda/${a.slug}`,
     dateModified: a.atualizadoEm,
@@ -90,7 +90,7 @@ export default function AjudaIndexPage() {
                   <FiBookOpen className="text-white" size={18} />
                 </div>
                 <h2 className="text-sm font-bold text-dark uppercase tracking-wide mb-3 group-hover:text-primary transition-colors">
-                  {artigo.h1}
+                  {fullH1(artigo)}
                 </h2>
                 <p className="text-gray-600 text-sm leading-relaxed mb-5">
                   {artigo.resumo}
