@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidateTag } from 'next/cache'
 import { getDb } from '../../../lib/db'
 import { requireAuth } from '../../../lib/requireAuth'
 import { imovelCreateSchema } from '../../../lib/schemas'
-import { fetchProperties } from '../../../lib/api'
+import { fetchProperties, CACHE_TAG_IMOVEIS } from '../../../lib/api'
 
 export async function GET(request: NextRequest) {
   try {
@@ -44,6 +45,7 @@ export async function POST(request: NextRequest) {
       JSON.stringify(d.diferenciais),
       d.status, d.area_display, d.vagas_display, d.parcela_display, d.parcela_label,
     ])
+    revalidateTag(CACHE_TAG_IMOVEIS)
     return NextResponse.json({ id: result.rows[0].id, message: 'Imóvel criado com sucesso' }, { status: 201 })
   } catch (err) {
     console.error('POST /api/imoveis error:', err)

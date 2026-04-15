@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidateTag } from 'next/cache'
 import { getDb } from '../../../../lib/db'
 import { requireAuth } from '../../../../lib/requireAuth'
 import { imovelUpdateSchema } from '../../../../lib/schemas'
-import { parseImovel } from '../../../../lib/api'
+import { parseImovel, CACHE_TAG_IMOVEIS } from '../../../../lib/api'
 
 type RouteContext = { params: Promise<{ id: string }> }
 
@@ -97,6 +98,7 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
       id,
     ])
 
+    revalidateTag(CACHE_TAG_IMOVEIS)
     return NextResponse.json({ message: 'Imóvel atualizado com sucesso' })
   } catch (err) {
     console.error('PUT /api/imoveis/[id] error:', err)
@@ -117,6 +119,7 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
     if (result.rowCount === 0) {
       return NextResponse.json({ error: 'Imóvel não encontrado' }, { status: 404 })
     }
+    revalidateTag(CACHE_TAG_IMOVEIS)
     return NextResponse.json({ message: 'Imóvel removido com sucesso' })
   } catch (err) {
     console.error('DELETE /api/imoveis/[id] error:', err)
