@@ -1,8 +1,5 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
 import { FiMapPin, FiMaximize } from 'react-icons/fi'
 import { FaCar, FaBath } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
@@ -14,22 +11,29 @@ interface PropertyCardProps {
   imovel: Imovel
 }
 
+function getCardImageSrc(imovel: Imovel): string {
+  const firstImage = imovel.imagens?.[0]?.trim()
+  return firstImage && firstImage.length > 0 ? firstImage : PLACEHOLDER_IMAGE
+}
+
 export default function PropertyCard({ imovel }: PropertyCardProps) {
-  const [imgSrc, setImgSrc] = useState(imovel.imagens?.[0] || PLACEHOLDER_IMAGE)
+  const imageSrc = getCardImageSrc(imovel)
+  const statusConfig = imovel.status
+    ? PROPERTY_STATUSES.find(s => s.value === imovel.status)
+    : null
 
   return (
     <Link href={`/imoveis/${imovelSlug(imovel)}`} className="group block bg-white overflow-hidden">
       <div className="relative overflow-hidden" style={{ height: CARD_IMAGE_HEIGHT }}>
         <Image
-          src={imgSrc}
+          src={imageSrc}
           alt={`${imovel.titulo} — ${imovel.categoria} para ${imovel.tipo} em ${imovel.bairro || imovel.cidade}`}
           width={600}
-          height={260}
+          height={CARD_IMAGE_HEIGHT}
           loading="lazy"
-          quality={80}
+          quality={75}
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          onError={() => setImgSrc(PLACEHOLDER_IMAGE)}
         />
 
         <div className="absolute inset-0 bg-dark/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-5">
@@ -62,16 +66,13 @@ export default function PropertyCard({ imovel }: PropertyCardProps) {
           </div>
         )}
 
-        {imovel.status && (() => {
-          const status = PROPERTY_STATUSES.find(s => s.value === imovel.status)
-          return status ? (
-            <div className={`absolute ${imovel.destaque ? 'top-9' : 'top-3'} right-3`}>
-              <span className={`text-xs uppercase tracking-wider font-bold px-2.5 py-1 text-white ${status.color}`}>
-                {status.label}
-              </span>
-            </div>
-          ) : null
-        })()}
+        {statusConfig && (
+          <div className={`absolute ${imovel.destaque ? 'top-9' : 'top-3'} right-3`}>
+            <span className={`text-xs uppercase tracking-wider font-bold px-2.5 py-1 text-white ${statusConfig.color}`}>
+              {statusConfig.label}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="p-5 border border-gray-200 border-t-0 group-hover:border-primary transition-colors duration-300">
