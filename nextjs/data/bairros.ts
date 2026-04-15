@@ -267,6 +267,26 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'cruz-preta': {
+    nome: 'Cruz Preta',
+    slug: 'cruz-preta',
+    titulo: 'Imóveis no Cruz Preta, Barueri SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos no Cruz Preta em Barueri, SP. Lançamentos e imóveis prontos para morar. Atendimento personalizado com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Cruz Preta é um bairro residencial de Barueri em pleno desenvolvimento, próximo à região de Alphaville. Com novos empreendimentos de médio e alto padrão chegando à área, o bairro ganhou visibilidade nos últimos anos como uma alternativa acessível para quem deseja morar em Barueri com boa localização e infraestrutura crescente.',
+      infraestrutura:
+        'O bairro conta com comércio local, mercados, farmácias e prestadores de serviço. A proximidade com o centro de Barueri e com a região de Alphaville amplia o acesso a shoppings, hospitais, restaurantes e serviços de alto padrão. Novos empreendimentos trouxeram melhorias de urbanização e valorização da região.',
+      transporte:
+        'O Cruz Preta tem acesso às principais vias de Barueri, com conexão à Rodovia Castelo Branco e ao Rodoanel Mario Covas. Linhas de ônibus atendem o bairro com integração ao centro de Barueri e à região de Alphaville. O deslocamento para São Paulo via Castelo Branco é rápido nos horários fora do pico.',
+      educacao:
+        'A região conta com escolas públicas municipais e estaduais de ensino fundamental. A proximidade com Alphaville dá acesso a colégios particulares de referência regional. Para ensino superior, o acesso ao centro de Barueri e a São Paulo é facilitado pelas vias expressas.',
+      porqueMorar:
+        'O Cruz Preta atrai quem busca apartamentos com boa relação custo-benefício em Barueri, aproveitando a valorização da região de Alphaville sem pagar os preços dos endereços mais consolidados. Empreendimentos prontos para morar com lazer completo têm chegado ao bairro, tornando-o uma opção prática para famílias e investidores.',
+    },
+  },
+
   'alphaville': {
     nome: 'Alphaville',
     slug: 'alphaville',
