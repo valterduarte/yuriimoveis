@@ -38,8 +38,9 @@ export const RENT_PRICE_OPTIONS = [
 
 export const NAVIGATION_LINKS = [
   { href: '/',        label: 'Início'  },
-  { href: '/imoveis', label: 'Imóveis' },
-  { href: '/sobre',   label: 'Sobre'   },
+  { href: '/imoveis',   label: 'Imóveis'   },
+  { href: '/simulador', label: 'Simulador' },
+  { href: '/sobre',     label: 'Sobre'     },
   { href: '/contato', label: 'Contato' },
 ]
 
