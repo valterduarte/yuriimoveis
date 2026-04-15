@@ -180,6 +180,47 @@ const fetchNavigationMatrixCached = unstable_cache(
   { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
 )
 
+export interface MapImovel {
+  id: number
+  titulo: string
+  preco: number
+  tipo: Imovel['tipo']
+  categoria: Imovel['categoria']
+  quartos: number
+  area: number
+  bairro: string
+  cidade: string
+  imagem: string
+  updated_at: string
+}
+
+const fetchPropertiesForMapCached = unstable_cache(
+  async (): Promise<MapImovel[]> => {
+    const result = await getDb().query(
+      `SELECT id, titulo, preco, tipo, categoria, quartos, area, bairro, cidade, imagens, updated_at
+       FROM imoveis WHERE ativo = true ORDER BY destaque DESC, created_at DESC LIMIT 500`
+    )
+    return result.rows.map((row: ImovelRow) => {
+      const imagens = typeof row.imagens === 'string' ? JSON.parse(row.imagens || '[]') : (row.imagens || [])
+      return {
+        id: row.id,
+        titulo: row.titulo,
+        preco: row.preco,
+        tipo: row.tipo,
+        categoria: row.categoria,
+        quartos: row.quartos,
+        area: row.area,
+        bairro: row.bairro,
+        cidade: row.cidade,
+        imagem: Array.isArray(imagens) && imagens[0] ? String(imagens[0]) : '',
+        updated_at: row.updated_at,
+      }
+    })
+  },
+  ['fetchPropertiesForMap'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: LISTING_REVALIDATE_SECONDS }
+)
+
 const fetchAllPropertySlugsCached = unstable_cache(
   async (): Promise<Pick<Imovel, 'id' | 'titulo' | 'updated_at' | 'imagens'>[]> => {
     const result = await getDb().query(
@@ -285,6 +326,15 @@ export async function fetchAllPropertySlugs(): Promise<Pick<Imovel, 'id' | 'titu
     return await fetchAllPropertySlugsCached()
   } catch (err) {
     logDbError('fetchAllPropertySlugs', err)
+    return []
+  }
+}
+
+export async function fetchPropertiesForMap(): Promise<MapImovel[]> {
+  try {
+    return await fetchPropertiesForMapCached()
+  } catch (err) {
+    logDbError('fetchPropertiesForMap', err)
     return []
   }
 }
