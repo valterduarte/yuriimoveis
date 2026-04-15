@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
 import PropertyCard from '../../../../../components/PropertyCard'
-import { fetchProperties, fetchNavigationMatrix, fetchBairroStats } from '../../../../../lib/api'
+import { fetchProperties, fetchNavigationMatrix } from '../../../../../lib/api'
 import { getBairroBySlug, BAIRROS } from '../../../../../data/bairros'
 import {
   acaoToTipo,
@@ -88,25 +88,15 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
   const bairroName = bairroData?.nome || bairro
 
   const tipoFilter = acaoToTipo(acao as AcaoSlug)
-  const [{ imoveis, total }, stats] = await Promise.all([
-    fetchProperties({
-      tipo: tipoFilter,
-      categoria,
-      cidade: cidadeName,
-      bairro: bairroDbName,
-      limit: 50,
-    }),
-    bairroDbName ? fetchBairroStats(bairroDbName, tipoFilter) : Promise.resolve({
-      count: 0, saleCount: 0, rentCount: 0,
-      avgPrice: 0, minPrice: 0, maxPrice: 0,
-      avgArea: 0, avgPricePerM2: 0,
-    }),
-  ])
+  const { imoveis, total } = await fetchProperties({
+    tipo: tipoFilter,
+    categoria,
+    cidade: cidadeName,
+    bairro: bairroDbName,
+    limit: 50,
+  })
 
   if (!threshold(total, bairro)) notFound()
-
-  const formatBRL = (value: number) =>
-    value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
 
   const label = ACAO_LABELS[acao as AcaoSlug].preposicao
   const h1 = `${categoriaData.plural} ${label} no ${bairroName}, ${cidadeName}`
@@ -159,40 +149,6 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
           <p className="text-gray-400 text-sm mt-2">{total} imóve{total !== 1 ? 'is' : 'l'} disponíve{total !== 1 ? 'is' : 'l'}</p>
         </div>
       </div>
-
-      {stats.count > 0 && (
-        <section className="container mx-auto px-6 pt-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-0 bg-white border border-gray-200">
-            <div className="py-6 px-5 border-r border-gray-200 text-center">
-              <p className="text-[10px] uppercase tracking-[0.15em] text-gray-500 mb-1.5">Imóveis ativos</p>
-              <p className="text-2xl md:text-3xl font-black text-dark leading-none">{stats.count}</p>
-            </div>
-            <div className="py-6 px-5 border-r border-gray-200 text-center">
-              <p className="text-[10px] uppercase tracking-[0.15em] text-gray-500 mb-1.5">Preço médio</p>
-              <p className="text-base md:text-xl font-black text-dark leading-none">{formatBRL(Math.round(stats.avgPrice))}</p>
-            </div>
-            <div className="py-6 px-5 border-r border-gray-200 text-center">
-              <p className="text-[10px] uppercase tracking-[0.15em] text-gray-500 mb-1.5">Faixa de preço</p>
-              <p className="text-xs md:text-sm font-bold text-dark leading-none">
-                {stats.minPrice > 0 ? formatBRL(stats.minPrice) : '—'}
-                <span className="mx-1 text-gray-400">→</span>
-                {formatBRL(stats.maxPrice)}
-              </p>
-            </div>
-            <div className="py-6 px-5 text-center">
-              <p className="text-[10px] uppercase tracking-[0.15em] text-gray-500 mb-1.5">Preço médio por m²</p>
-              <p className="text-base md:text-xl font-black text-dark leading-none">
-                {stats.avgPricePerM2 > 0 ? formatBRL(Math.round(stats.avgPricePerM2)) : '—'}
-              </p>
-            </div>
-          </div>
-          {stats.avgArea > 0 && (
-            <p className="text-[11px] text-gray-500 mt-2 text-center md:text-left">
-              Área média dos {categoriaData.plural.toLowerCase()} {label.toLowerCase()} no {bairroName}: <strong>{Math.round(stats.avgArea)} m²</strong>
-            </p>
-          )}
-        </section>
-      )}
 
       {bairroData && (
         <section className="container mx-auto px-6 pt-10 pb-2">
