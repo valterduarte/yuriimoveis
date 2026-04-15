@@ -1,6 +1,13 @@
+import { unstable_cache } from 'next/cache'
 import { getDb } from './db'
 import { logDbError } from './logger'
 import type { Imovel, ImovelRow, PropertyFilters, PropertyListResult } from '../types'
+
+export const CACHE_TAG_IMOVEIS = 'imoveis'
+export const CACHE_TAG_SITE_CONFIG = 'site-config'
+
+const LISTING_REVALIDATE_SECONDS = 300
+const STATIC_DATA_REVALIDATE_SECONDS = 3600
 
 export function parseImovel(row: ImovelRow): Imovel {
   return {
@@ -10,48 +17,47 @@ export function parseImovel(row: ImovelRow): Imovel {
   }
 }
 
-export async function fetchFeaturedProperties(): Promise<Imovel[]> {
-  try {
+// ── Cached implementations (throw on error so failures don't poison cache) ───
+
+const fetchFeaturedPropertiesCached = unstable_cache(
+  async (): Promise<Imovel[]> => {
     const result = await getDb().query(
       `SELECT * FROM imoveis WHERE ativo = true AND destaque = true ORDER BY destaque DESC, created_at DESC LIMIT 6`
     )
     return result.rows.map(parseImovel)
-  } catch (err) {
-    logDbError('fetchFeaturedProperties', err)
-    return []
-  }
-}
+  },
+  ['fetchFeaturedProperties'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: LISTING_REVALIDATE_SECONDS }
+)
 
-export async function fetchImovel(id: string | number): Promise<Imovel | null> {
-  try {
+const fetchImovelCached = unstable_cache(
+  async (id: string | number): Promise<Imovel | null> => {
     const result = await getDb().query(
       'SELECT * FROM imoveis WHERE id = $1 AND ativo = true',
       [id]
     )
     if (!result.rows[0]) return null
     return parseImovel(result.rows[0])
-  } catch (err) {
-    logDbError('fetchImovel', err, { id })
-    return null
-  }
-}
+  },
+  ['fetchImovel'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: LISTING_REVALIDATE_SECONDS }
+)
 
-export async function fetchPropertiesByBairro(bairroName: string): Promise<{ imoveis: Imovel[]; total: number }> {
-  try {
+const fetchPropertiesByBairroCached = unstable_cache(
+  async (bairroName: string): Promise<{ imoveis: Imovel[]; total: number }> => {
     const result = await getDb().query(
       `SELECT * FROM imoveis WHERE ativo = true AND bairro ILIKE $1 ORDER BY created_at DESC LIMIT 50`,
       [`%${bairroName}%`]
     )
     const imoveis = result.rows.map(parseImovel)
     return { imoveis, total: imoveis.length }
-  } catch (err) {
-    logDbError('fetchPropertiesByBairro', err, { bairroName })
-    return { imoveis: [], total: 0 }
-  }
-}
+  },
+  ['fetchPropertiesByBairro'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: LISTING_REVALIDATE_SECONDS }
+)
 
-export async function fetchProperties(filters: PropertyFilters = {}): Promise<PropertyListResult> {
-  try {
+const fetchPropertiesCached = unstable_cache(
+  async (filters: PropertyFilters): Promise<PropertyListResult> => {
     const { tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, codigo, destaque, todos, ordem = 'recente', page = 1, limit = 9 } = filters
     const conditions: string[] = todos === true || todos === 'true' ? [] : ['ativo = true']
     const params: (string | number)[] = []
@@ -87,36 +93,33 @@ export async function fetchProperties(filters: PropertyFilters = {}): Promise<Pr
       return parseImovel(rest)
     })
     return { imoveis, total, page: pageNum, limit: limitNum, pages: Math.ceil(total / limitNum) }
-  } catch (err) {
-    logDbError('fetchProperties', err, { filters })
-    return { imoveis: [], total: 0, page: 1, limit: 9, pages: 0 }
-  }
-}
+  },
+  ['fetchProperties'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: LISTING_REVALIDATE_SECONDS }
+)
 
-export async function fetchSiteConfig(key: string): Promise<string | null> {
-  try {
+const fetchSiteConfigCached = unstable_cache(
+  async (key: string): Promise<string | null> => {
     const result = await getDb().query('SELECT value FROM site_config WHERE key = $1', [key])
     return result.rows[0]?.value ?? null
-  } catch (err) {
-    logDbError('fetchSiteConfig', err, { key })
-    return null
-  }
-}
+  },
+  ['fetchSiteConfig'],
+  { tags: [CACHE_TAG_SITE_CONFIG], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
+)
 
-export async function fetchDistinctBairros(): Promise<string[]> {
-  try {
+const fetchDistinctBairrosCached = unstable_cache(
+  async (): Promise<string[]> => {
     const result = await getDb().query(
       `SELECT DISTINCT bairro FROM imoveis WHERE ativo = true AND bairro IS NOT NULL AND bairro != '' ORDER BY bairro`
     )
     return result.rows.map((r: { bairro: string }) => r.bairro)
-  } catch (err) {
-    logDbError('fetchDistinctBairros', err)
-    return []
-  }
-}
+  },
+  ['fetchDistinctBairros'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
+)
 
-export async function fetchSimilarProperties(imovel: Pick<Imovel, 'id' | 'categoria' | 'cidade' | 'tipo'>): Promise<Imovel[]> {
-  try {
+const fetchSimilarPropertiesCached = unstable_cache(
+  async (imovel: Pick<Imovel, 'id' | 'categoria' | 'cidade' | 'tipo'>): Promise<Imovel[]> => {
     const result = await getDb().query(
       `SELECT * FROM imoveis WHERE ativo = true AND id != $1
        AND (categoria = $2 OR cidade = $3)
@@ -126,17 +129,13 @@ export async function fetchSimilarProperties(imovel: Pick<Imovel, 'id' | 'catego
       [imovel.id, imovel.categoria, imovel.cidade, imovel.tipo]
     )
     return result.rows.map(parseImovel)
-  } catch (err) {
-    logDbError('fetchSimilarProperties', err, { imovelId: imovel.id })
-    return []
-  }
-}
+  },
+  ['fetchSimilarProperties'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: LISTING_REVALIDATE_SECONDS }
+)
 
-export async function fetchPropertiesByTypeCategory(
-  tipo: string,
-  categoria: string
-): Promise<{ imoveis: Imovel[]; total: number }> {
-  try {
+const fetchPropertiesByTypeCategoryCached = unstable_cache(
+  async (tipo: string, categoria: string): Promise<{ imoveis: Imovel[]; total: number }> => {
     const result = await getDb().query(
       `SELECT * FROM imoveis WHERE ativo = true AND tipo = $1 AND categoria = $2
        ORDER BY destaque DESC, created_at DESC LIMIT 50`,
@@ -144,11 +143,10 @@ export async function fetchPropertiesByTypeCategory(
     )
     const imoveis = result.rows.map(parseImovel)
     return { imoveis, total: imoveis.length }
-  } catch (err) {
-    logDbError('fetchPropertiesByTypeCategory', err, { tipo, categoria })
-    return { imoveis: [], total: 0 }
-  }
-}
+  },
+  ['fetchPropertiesByTypeCategory'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: LISTING_REVALIDATE_SECONDS }
+)
 
 export interface NavigationMatrixRow {
   tipo: string
@@ -158,8 +156,8 @@ export interface NavigationMatrixRow {
   count: number
 }
 
-export async function fetchNavigationMatrix(): Promise<NavigationMatrixRow[]> {
-  try {
+const fetchNavigationMatrixCached = unstable_cache(
+  async (): Promise<NavigationMatrixRow[]> => {
     const result = await getDb().query(
       `SELECT tipo, cidade, categoria, bairro, COUNT(*)::int AS count
        FROM imoveis
@@ -177,6 +175,105 @@ export async function fetchNavigationMatrix(): Promise<NavigationMatrixRow[]> {
       bairro:    r.bairro,
       count:     Number(r.count),
     }))
+  },
+  ['fetchNavigationMatrix'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
+)
+
+const fetchAllPropertySlugsCached = unstable_cache(
+  async (): Promise<Pick<Imovel, 'id' | 'titulo' | 'updated_at' | 'imagens'>[]> => {
+    const result = await getDb().query(
+      `SELECT id, titulo, updated_at, imagens FROM imoveis WHERE ativo = true ORDER BY created_at DESC LIMIT 1000`
+    )
+    return result.rows.map(row => ({
+      ...row,
+      imagens: typeof row.imagens === 'string' ? JSON.parse(row.imagens || '[]') : (row.imagens || []),
+    }))
+  },
+  ['fetchAllPropertySlugs'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
+)
+
+// ── Public wrappers (log + graceful fallback) ───────────────────────────────
+
+export async function fetchFeaturedProperties(): Promise<Imovel[]> {
+  try {
+    return await fetchFeaturedPropertiesCached()
+  } catch (err) {
+    logDbError('fetchFeaturedProperties', err)
+    return []
+  }
+}
+
+export async function fetchImovel(id: string | number): Promise<Imovel | null> {
+  try {
+    return await fetchImovelCached(id)
+  } catch (err) {
+    logDbError('fetchImovel', err, { id })
+    return null
+  }
+}
+
+export async function fetchPropertiesByBairro(bairroName: string): Promise<{ imoveis: Imovel[]; total: number }> {
+  try {
+    return await fetchPropertiesByBairroCached(bairroName)
+  } catch (err) {
+    logDbError('fetchPropertiesByBairro', err, { bairroName })
+    return { imoveis: [], total: 0 }
+  }
+}
+
+export async function fetchProperties(filters: PropertyFilters = {}): Promise<PropertyListResult> {
+  try {
+    return await fetchPropertiesCached(filters)
+  } catch (err) {
+    logDbError('fetchProperties', err, { filters })
+    return { imoveis: [], total: 0, page: 1, limit: 9, pages: 0 }
+  }
+}
+
+export async function fetchSiteConfig(key: string): Promise<string | null> {
+  try {
+    return await fetchSiteConfigCached(key)
+  } catch (err) {
+    logDbError('fetchSiteConfig', err, { key })
+    return null
+  }
+}
+
+export async function fetchDistinctBairros(): Promise<string[]> {
+  try {
+    return await fetchDistinctBairrosCached()
+  } catch (err) {
+    logDbError('fetchDistinctBairros', err)
+    return []
+  }
+}
+
+export async function fetchSimilarProperties(imovel: Pick<Imovel, 'id' | 'categoria' | 'cidade' | 'tipo'>): Promise<Imovel[]> {
+  try {
+    return await fetchSimilarPropertiesCached(imovel)
+  } catch (err) {
+    logDbError('fetchSimilarProperties', err, { imovelId: imovel.id })
+    return []
+  }
+}
+
+export async function fetchPropertiesByTypeCategory(
+  tipo: string,
+  categoria: string
+): Promise<{ imoveis: Imovel[]; total: number }> {
+  try {
+    return await fetchPropertiesByTypeCategoryCached(tipo, categoria)
+  } catch (err) {
+    logDbError('fetchPropertiesByTypeCategory', err, { tipo, categoria })
+    return { imoveis: [], total: 0 }
+  }
+}
+
+export async function fetchNavigationMatrix(): Promise<NavigationMatrixRow[]> {
+  try {
+    return await fetchNavigationMatrixCached()
   } catch (err) {
     logDbError('fetchNavigationMatrix', err)
     return []
@@ -185,13 +282,7 @@ export async function fetchNavigationMatrix(): Promise<NavigationMatrixRow[]> {
 
 export async function fetchAllPropertySlugs(): Promise<Pick<Imovel, 'id' | 'titulo' | 'updated_at' | 'imagens'>[]> {
   try {
-    const result = await getDb().query(
-      `SELECT id, titulo, updated_at, imagens FROM imoveis WHERE ativo = true ORDER BY created_at DESC LIMIT 1000`
-    )
-    return result.rows.map(row => ({
-      ...row,
-      imagens: typeof row.imagens === 'string' ? JSON.parse(row.imagens || '[]') : (row.imagens || []),
-    }))
+    return await fetchAllPropertySlugsCached()
   } catch (err) {
     logDbError('fetchAllPropertySlugs', err)
     return []
