@@ -1,4 +1,5 @@
 import { getDb } from './db'
+import { logDbError } from './logger'
 import type { Imovel, ImovelRow, PropertyFilters, PropertyListResult } from '../types'
 
 export function parseImovel(row: ImovelRow): Imovel {
@@ -16,7 +17,7 @@ export async function fetchFeaturedProperties(): Promise<Imovel[]> {
     )
     return result.rows.map(parseImovel)
   } catch (err) {
-    console.error('fetchFeaturedProperties error:', err)
+    logDbError('fetchFeaturedProperties', err)
     return []
   }
 }
@@ -30,7 +31,7 @@ export async function fetchImovel(id: string | number): Promise<Imovel | null> {
     if (!result.rows[0]) return null
     return parseImovel(result.rows[0])
   } catch (err) {
-    console.error('fetchImovel error:', err)
+    logDbError('fetchImovel', err, { id })
     return null
   }
 }
@@ -44,7 +45,7 @@ export async function fetchPropertiesByBairro(bairroName: string): Promise<{ imo
     const imoveis = result.rows.map(parseImovel)
     return { imoveis, total: imoveis.length }
   } catch (err) {
-    console.error('fetchPropertiesByBairro error:', err)
+    logDbError('fetchPropertiesByBairro', err, { bairroName })
     return { imoveis: [], total: 0 }
   }
 }
@@ -60,7 +61,7 @@ export async function fetchProperties(filters: PropertyFilters = {}): Promise<Pr
     if (tipo)     { conditions.push(`tipo = $${idx++}`);       params.push(tipo) }
     if (categoria){ conditions.push(`categoria = $${idx++}`);  params.push(categoria) }
     if (cidade)   { conditions.push(`cidade = $${idx++}`);     params.push(cidade) }
-    if (bairro)   { conditions.push(`bairro ILIKE $${idx++}`); params.push(`%${bairro}%`) }
+    if (bairro)   { conditions.push(`bairro = $${idx++}`);     params.push(bairro) }
     if (precoMin) { conditions.push(`preco >= $${idx++}`);     params.push(Number(precoMin)) }
     if (precoMax) { conditions.push(`preco <= $${idx++}`);     params.push(Number(precoMax)) }
     if (destaque) { conditions.push('destaque = true') }
@@ -87,7 +88,7 @@ export async function fetchProperties(filters: PropertyFilters = {}): Promise<Pr
     })
     return { imoveis, total, page: pageNum, limit: limitNum, pages: Math.ceil(total / limitNum) }
   } catch (err) {
-    console.error('fetchProperties error:', err)
+    logDbError('fetchProperties', err, { filters })
     return { imoveis: [], total: 0, page: 1, limit: 9, pages: 0 }
   }
 }
@@ -97,7 +98,7 @@ export async function fetchSiteConfig(key: string): Promise<string | null> {
     const result = await getDb().query('SELECT value FROM site_config WHERE key = $1', [key])
     return result.rows[0]?.value ?? null
   } catch (err) {
-    console.error('fetchSiteConfig error:', err)
+    logDbError('fetchSiteConfig', err, { key })
     return null
   }
 }
@@ -109,7 +110,7 @@ export async function fetchDistinctBairros(): Promise<string[]> {
     )
     return result.rows.map((r: { bairro: string }) => r.bairro)
   } catch (err) {
-    console.error('fetchDistinctBairros error:', err)
+    logDbError('fetchDistinctBairros', err)
     return []
   }
 }
@@ -126,7 +127,7 @@ export async function fetchSimilarProperties(imovel: Pick<Imovel, 'id' | 'catego
     )
     return result.rows.map(parseImovel)
   } catch (err) {
-    console.error('fetchSimilarProperties error:', err)
+    logDbError('fetchSimilarProperties', err, { imovelId: imovel.id })
     return []
   }
 }
@@ -144,7 +145,7 @@ export async function fetchPropertiesByTypeCategory(
     const imoveis = result.rows.map(parseImovel)
     return { imoveis, total: imoveis.length }
   } catch (err) {
-    console.error('fetchPropertiesByTypeCategory error:', err)
+    logDbError('fetchPropertiesByTypeCategory', err, { tipo, categoria })
     return { imoveis: [], total: 0 }
   }
 }
@@ -177,7 +178,7 @@ export async function fetchNavigationMatrix(): Promise<NavigationMatrixRow[]> {
       count:     Number(r.count),
     }))
   } catch (err) {
-    console.error('fetchNavigationMatrix error:', err)
+    logDbError('fetchNavigationMatrix', err)
     return []
   }
 }
@@ -192,7 +193,7 @@ export async function fetchAllPropertySlugs(): Promise<Pick<Imovel, 'id' | 'titu
       imagens: typeof row.imagens === 'string' ? JSON.parse(row.imagens || '[]') : (row.imagens || []),
     }))
   } catch (err) {
-    console.error('fetchAllPropertySlugs error:', err)
+    logDbError('fetchAllPropertySlugs', err)
     return []
   }
 }

@@ -22,6 +22,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     fetchNavigationMatrix(),
   ])
 
+  if (properties.length === 0 && bairros.length === 0 && matrix.length === 0) {
+    throw new Error('sitemap: database returned no data — refusing to serve empty sitemap')
+  }
+
   const propertyUrls: MetadataRoute.Sitemap = properties.map(p => {
     const images = (p.imagens || [])
       .slice(0, 10)

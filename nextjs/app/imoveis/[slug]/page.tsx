@@ -178,22 +178,6 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
     },
     {
       '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: imovel.titulo,
-      description: imovelDescription,
-      image: images,
-      url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
-      offers: {
-        '@type': 'Offer',
-        price: imovel.preco,
-        priceCurrency: 'BRL',
-        availability: 'https://schema.org/InStock',
-        url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
-        seller: { '@type': 'RealEstateAgent', name: 'Corretor Yuri Imóveis', telephone: PHONE_STRUCTURED, url: SITE_URL },
-      },
-    },
-    {
-      '@context': 'https://schema.org',
       '@type': 'RealEstateListing',
       name: imovel.titulo,
       description: imovelDescription,
