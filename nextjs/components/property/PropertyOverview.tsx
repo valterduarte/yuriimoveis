@@ -1,7 +1,8 @@
-import { FiMaximize, FiCheckCircle, FiHome, FiTool, FiFileText } from 'react-icons/fi'
+import { FiMaximize, FiCheckCircle, FiHome, FiTool, FiFileText, FiClock } from 'react-icons/fi'
 import { FaCar, FaBath } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
 import { PROPERTY_STATUSES } from '../../lib/constants'
+import { formatListingAge } from '../../utils/imovelUtils'
 import type { Imovel, PropertyStatus } from '../../types'
 import type { IconType } from 'react-icons'
 
@@ -18,6 +19,7 @@ interface PropertyOverviewProps {
 export default function PropertyOverview({ imovel }: PropertyOverviewProps) {
   const statusStyle = imovel.status ? STATUS_STYLES[imovel.status] : null
   const StatusIcon = statusStyle?.icon
+  const listingAge = formatListingAge(imovel.created_at)
 
   return (
     <section id="visao-geral">
@@ -25,12 +27,20 @@ export default function PropertyOverview({ imovel }: PropertyOverviewProps) {
       <h2 className="section-title mb-2">{imovel.subtitulo || 'Conheça este imóvel'}</h2>
       <p className="text-gray-500 text-sm mb-3">{imovel.cidade} — {imovel.bairro}</p>
 
-      {statusStyle && StatusIcon && (
-        <div className={`inline-flex items-center gap-2 px-4 py-2 mb-8 font-bold text-xs uppercase tracking-[0.15em] ${statusStyle.className}`}>
-          <StatusIcon size={14} />
-          {PROPERTY_STATUSES.find(s => s.value === imovel.status)?.label}
-        </div>
-      )}
+      <div className="flex flex-wrap items-center gap-3 mb-8">
+        {statusStyle && StatusIcon && (
+          <div className={`inline-flex items-center gap-2 px-4 py-2 font-bold text-xs uppercase tracking-[0.15em] ${statusStyle.className}`}>
+            <StatusIcon size={14} />
+            {PROPERTY_STATUSES.find(s => s.value === imovel.status)?.label}
+          </div>
+        )}
+        {listingAge && (
+          <div className="inline-flex items-center gap-2 px-4 py-2 font-bold text-xs uppercase tracking-[0.15em] bg-gray-50 text-gray-600 border border-gray-200">
+            <FiClock size={13} />
+            {listingAge}
+          </div>
+        )}
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-0 bg-white border border-gray-200 mb-8">
         {imovel.quartos > 0 && (

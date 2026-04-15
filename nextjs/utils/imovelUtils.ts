@@ -69,6 +69,25 @@ export function formatNeighborhoodName(slug: string): string {
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 
+export function formatListingAge(createdAt: string | null | undefined): string | null {
+  if (!createdAt) return null
+  const created = new Date(createdAt)
+  if (Number.isNaN(created.getTime())) return null
+
+  const diffMs = Date.now() - created.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  if (diffDays < 0) return null
+  if (diffDays === 0) return 'Anunciado hoje'
+  if (diffDays === 1) return 'Anunciado ontem'
+  if (diffDays < 7) return `Anunciado há ${diffDays} dias`
+  if (diffDays < 14) return 'Anunciado há 1 semana'
+  if (diffDays < 30) return `Anunciado há ${Math.floor(diffDays / 7)} semanas`
+  if (diffDays < 60) return 'Anunciado há 1 mês'
+  if (diffDays < 365) return `Anunciado há ${Math.floor(diffDays / 30)} meses`
+  return 'Anunciado há mais de 1 ano'
+}
+
 export function ogImageUrl(url: string): string {
   if (!url || !url.includes('res.cloudinary.com')) return url
   return url.replace('/upload/', '/upload/f_jpg,q_80,w_1200,h_630,c_fill/')
