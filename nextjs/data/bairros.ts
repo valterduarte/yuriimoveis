@@ -267,23 +267,23 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
-  'parque-barueri': {
-    nome: 'Parque Barueri',
-    slug: 'parque-barueri',
-    titulo: 'Imóveis no Parque Barueri, Barueri SP — Corretor Yuri',
+  'jardim-esperanca': {
+    nome: 'Jardim Esperança',
+    slug: 'jardim-esperanca',
+    titulo: 'Imóveis no Jardim Esperança, Barueri SP — Corretor Yuri',
     descricaoMeta:
-      'Apartamentos no Parque Barueri em Barueri, SP. Imóveis prontos para morar e lançamentos. Atendimento personalizado com o Corretor Yuri.',
+      'Apartamentos no Jardim Esperança em Barueri, SP. Imóveis prontos para morar e lançamentos. Atendimento personalizado com o Corretor Yuri.',
     conteudo: {
       sobre:
-        'O Parque Barueri é um bairro residencial de Barueri em expansão, com novos empreendimentos de médio e alto padrão chegando à região. Bem localizado em relação ao centro de Barueri e à área de Alphaville, o bairro atrai famílias e investidores em busca de apartamentos com boa infraestrutura e preços competitivos na Grande São Paulo.',
+        'O Jardim Esperança é um bairro residencial de Barueri em expansão, com novos empreendimentos de médio e alto padrão chegando à região. Bem localizado em relação ao centro de Barueri e à área de Alphaville, o bairro atrai famílias e investidores em busca de apartamentos com boa infraestrutura e preços competitivos na Grande São Paulo.',
       infraestrutura:
         'O bairro conta com comércio local, supermercados, farmácias e acesso fácil a serviços no centro de Barueri. A proximidade com Alphaville e o eixo da Castelo Branco ampliam o acesso a shoppings, restaurantes, clínicas e hospitais. Novos empreendimentos têm impulsionado melhorias urbanas na região.',
       transporte:
-        'O Parque Barueri tem acesso às principais vias de Barueri e conexão com a Rodovia Castelo Branco, facilitando o deslocamento para São Paulo e para a região de Alphaville. Linhas de ônibus atendem o bairro com integração ao centro de Barueri e aos terminais da região.',
+        'O Jardim Esperança tem acesso às principais vias de Barueri e conexão com a Rodovia Castelo Branco, facilitando o deslocamento para São Paulo e para a região de Alphaville. Linhas de ônibus atendem o bairro com integração ao centro de Barueri e aos terminais da região.',
       educacao:
         'A região conta com escolas públicas municipais de ensino fundamental. A proximidade com o centro de Barueri e com Alphaville amplia as opções de colégios particulares e cursos técnicos. Para ensino superior, o acesso às rodovias facilita deslocamentos a instituições em Osasco, Barueri e São Paulo.',
       porqueMorar:
-        'O Parque Barueri oferece boa relação custo-benefício para quem deseja morar em Barueri com fácil acesso a Alphaville e à capital. Empreendimentos prontos para morar com lazer completo, como academia, piscinas e espaços rooftop, tornam o bairro uma escolha prática para famílias que buscam qualidade de vida sem abrir mão da localização.',
+        'O Jardim Esperança oferece boa relação custo-benefício para quem deseja morar em Barueri com fácil acesso a Alphaville e à capital. Empreendimentos prontos para morar com lazer completo, como academia, piscinas e espaços rooftop, tornam o bairro uma escolha prática para famílias que buscam qualidade de vida sem abrir mão da localização.',
     },
   },
 
