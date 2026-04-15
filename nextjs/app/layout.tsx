@@ -4,6 +4,7 @@ import './globals.css'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import FloatingContact from '../components/FloatingContact'
+import CompareBar from '../components/compare/CompareBar'
 import ScrollReveal from '../components/ScrollReveal'
 import { SITE_URL } from '../lib/config'
 import type { Metadata } from 'next'
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
+        <CompareBar />
         <FloatingContact />
         <ScrollReveal />
         <SpeedInsights />
