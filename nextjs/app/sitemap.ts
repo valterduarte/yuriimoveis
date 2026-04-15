@@ -40,19 +40,38 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   })
 
+  const MIN_PROPERTIES_FOR_INDEXING = 3
+
+  const bairroCountByDbName = new Map<string, number>()
+  const landingCountByTipoCategoria = new Map<string, number>()
+  for (const row of matrix) {
+    bairroCountByDbName.set(row.bairro, (bairroCountByDbName.get(row.bairro) ?? 0) + row.count)
+    const landingKey = `${row.tipo}|${row.categoria}`
+    landingCountByTipoCategoria.set(landingKey, (landingCountByTipoCategoria.get(landingKey) ?? 0) + row.count)
+  }
+
   const configuredBairros = Object.values(BAIRROS)
   const overriddenDbNames = new Set(configuredBairros.map(b => b.dbMatch).filter(Boolean) as string[])
   const configuredSlugs = new Set(configuredBairros.map(b => b.slug))
 
-  const configuredBairroUrls: MetadataRoute.Sitemap = configuredBairros.map(b => ({
-    url: `${SITE_URL}/imoveis/${b.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.7,
-  }))
+  const bairroHasEnoughStock = (slug: string, dbName: string | undefined): boolean => {
+    if (hasRichBairroContent(slug)) return true
+    if (!dbName) return false
+    return (bairroCountByDbName.get(dbName) ?? 0) >= MIN_PROPERTIES_FOR_INDEXING
+  }
+
+  const configuredBairroUrls: MetadataRoute.Sitemap = configuredBairros
+    .filter(b => bairroHasEnoughStock(b.slug, b.dbMatch))
+    .map(b => ({
+      url: `${SITE_URL}/imoveis/${b.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    }))
 
   const dbBairroUrls: MetadataRoute.Sitemap = bairros
     .filter(b => !overriddenDbNames.has(b) && !configuredSlugs.has(slugify(b)))
+    .filter(b => (bairroCountByDbName.get(b) ?? 0) >= MIN_PROPERTIES_FOR_INDEXING)
     .map(b => ({
       url: `${SITE_URL}/imoveis/${slugify(b)}`,
       lastModified: new Date(),
@@ -62,12 +81,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const bairroUrls: MetadataRoute.Sitemap = [...configuredBairroUrls, ...dbBairroUrls]
 
-  const landingUrls: MetadataRoute.Sitemap = LANDING_PAGES.map(lp => ({
-    url: `${SITE_URL}/imoveis/${lp.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.85,
-  }))
+  const landingUrls: MetadataRoute.Sitemap = LANDING_PAGES
+    .filter(lp => (landingCountByTipoCategoria.get(`${lp.tipo}|${lp.categoria}`) ?? 0) >= MIN_PROPERTIES_FOR_INDEXING)
+    .map(lp => ({
+      url: `${SITE_URL}/imoveis/${lp.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    }))
 
   const hierarchicalUrls: MetadataRoute.Sitemap = []
   const hierarchicalSeen = new Set<string>()
