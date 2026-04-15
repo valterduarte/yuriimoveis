@@ -272,7 +272,7 @@ export const BAIRROS: Record<string, BairroData> = {
     slug: 'alphaville',
     titulo: 'Imóveis em Alphaville, Barueri SP — Corretor Yuri',
     descricaoMeta:
-      'Apartamentos e casas em Alphaville, Barueri SP. Lançamentos e imóveis de alto padrão para venda. Atendimento com o Corretor Yuri, CRECI 235509.',
+      'Apartamentos em Alphaville, Barueri SP. Lançamentos de alto padrão para venda e aluguel. Atendimento personalizado com o Corretor Yuri.',
     conteudo: {
       sobre:
         'Alphaville é um dos endereços mais desejados da Região Metropolitana de São Paulo. Localizado entre Barueri e Santana de Parnaíba, o bairro se consolidou como referência em alto padrão, segurança e qualidade de vida. Abriga condomínios residenciais fechados, torres de lançamentos contemporâneos e um eixo comercial pujante que atrai empresas nacionais e multinacionais.',
