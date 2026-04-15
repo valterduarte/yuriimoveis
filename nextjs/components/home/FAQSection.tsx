@@ -11,7 +11,7 @@ export default function FAQSection() {
       <div className="container mx-auto px-6">
         <div className="max-w-2xl mx-auto">
           <span className="section-label">Dúvidas Frequentes</span>
-          <h2 className="section-title mb-10">Perguntas Frequentes sobre Imóveis em Osasco e Região</h2>
+          <h2 className="section-title mb-10">Perguntas que Recebemos Toda Semana</h2>
           <div className="space-y-3">
             {HOMEPAGE_FAQ.map((item, i) => {
               const isOpen = openIndex === i
