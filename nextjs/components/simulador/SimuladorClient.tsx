@@ -22,11 +22,28 @@ const formatBRL = (value: number) =>
 const formatBRLPrecise = (value: number) =>
   value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 2 })
 
+const formatIntBR = (value: number): string =>
+  value > 0 ? value.toLocaleString('pt-BR') : ''
+
+const parseDigits = (raw: string): number => {
+  const digits = raw.replace(/\D/g, '')
+  return digits ? Number(digits) : 0
+}
+
+const parseDecimalBR = (raw: string): number => {
+  const cleaned = raw.replace(/[^\d,.-]/g, '').replace(',', '.')
+  const n = Number(cleaned)
+  return Number.isFinite(n) ? n : 0
+}
+
 export default function SimuladorClient() {
   const [propertyValue, setPropertyValue] = useState(450000)
   const [downPayment, setDownPayment] = useState(90000)
   const [termMonths, setTermMonths] = useState(360)
   const [annualRate, setAnnualRate] = useState(SAC_RATE_DEFAULT_ANNUAL)
+  const [annualRateText, setAnnualRateText] = useState(
+    String(SAC_RATE_DEFAULT_ANNUAL).replace('.', ','),
+  )
   const [monthlyIncome, setMonthlyIncome] = useState(0)
 
   const minDown = Math.round(propertyValue * MIN_DOWN_PAYMENT_RATE)
@@ -56,31 +73,36 @@ export default function SimuladorClient() {
           <label htmlFor="propertyValue" className="block text-xs font-bold uppercase tracking-wider text-dark mb-2">
             Valor do imóvel
           </label>
-          <input
-            id="propertyValue"
-            type="number"
-            min={0}
-            step={1000}
-            value={propertyValue}
-            onChange={(e) => setPropertyValue(Number(e.target.value) || 0)}
-            className="input-field"
-          />
-          <p className="text-[11px] text-gray-500 mt-1">{formatBRL(propertyValue)}</p>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">R$</span>
+            <input
+              id="propertyValue"
+              type="text"
+              inputMode="numeric"
+              value={formatIntBR(propertyValue)}
+              onChange={(e) => setPropertyValue(parseDigits(e.target.value))}
+              placeholder="0"
+              className="input-field pl-10"
+            />
+          </div>
         </div>
 
         <div>
           <label htmlFor="downPayment" className="block text-xs font-bold uppercase tracking-wider text-dark mb-2">
             Entrada
           </label>
-          <input
-            id="downPayment"
-            type="number"
-            min={0}
-            step={1000}
-            value={downPayment}
-            onChange={(e) => setDownPayment(Number(e.target.value) || 0)}
-            className="input-field"
-          />
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">R$</span>
+            <input
+              id="downPayment"
+              type="text"
+              inputMode="numeric"
+              value={formatIntBR(downPayment)}
+              onChange={(e) => setDownPayment(parseDigits(e.target.value))}
+              placeholder="0"
+              className="input-field pl-10"
+            />
+          </div>
           <p className="text-[11px] text-gray-500 mt-1">
             Mínimo recomendado: {formatBRL(minDown)} (20%)
           </p>
@@ -121,32 +143,42 @@ export default function SimuladorClient() {
           <label htmlFor="annualRate" className="block text-xs font-bold uppercase tracking-wider text-dark mb-2">
             Juros anuais (%)
           </label>
-          <input
-            id="annualRate"
-            type="number"
-            min={0}
-            step={0.01}
-            value={annualRate}
-            onChange={(e) => setAnnualRate(Number(e.target.value) || 0)}
-            className="input-field"
-          />
-          <p className="text-[11px] text-gray-500 mt-1">Taxa média Caixa SAC: {SAC_RATE_DEFAULT_ANNUAL}% a.a.</p>
+          <div className="relative">
+            <input
+              id="annualRate"
+              type="text"
+              inputMode="decimal"
+              value={annualRateText}
+              onChange={(e) => {
+                setAnnualRateText(e.target.value)
+                setAnnualRate(parseDecimalBR(e.target.value))
+              }}
+              placeholder="0,00"
+              className="input-field pr-8"
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">%</span>
+          </div>
+          <p className="text-[11px] text-gray-500 mt-1">
+            Taxa média Caixa SAC: {String(SAC_RATE_DEFAULT_ANNUAL).replace('.', ',')}% a.a.
+          </p>
         </div>
 
         <div>
           <label htmlFor="monthlyIncome" className="block text-xs font-bold uppercase tracking-wider text-dark mb-2">
             Renda familiar mensal (opcional)
           </label>
-          <input
-            id="monthlyIncome"
-            type="number"
-            min={0}
-            step={500}
-            value={monthlyIncome || ''}
-            onChange={(e) => setMonthlyIncome(Number(e.target.value) || 0)}
-            placeholder="Ex: 8000"
-            className="input-field"
-          />
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm pointer-events-none">R$</span>
+            <input
+              id="monthlyIncome"
+              type="text"
+              inputMode="numeric"
+              value={formatIntBR(monthlyIncome)}
+              onChange={(e) => setMonthlyIncome(parseDigits(e.target.value))}
+              placeholder="8.000"
+              className="input-field pl-10"
+            />
+          </div>
           <p className="text-[11px] text-gray-500 mt-1">
             Usado para checar Minha Casa Minha Vida e capacidade de pagamento.
           </p>
