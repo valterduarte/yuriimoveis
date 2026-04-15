@@ -6,6 +6,7 @@ import { LuBed } from 'react-icons/lu'
 import { formatPrice, imovelSlug } from '../utils/imovelUtils'
 import { PLACEHOLDER_IMAGE, PROPERTY_STATUSES, CARD_IMAGE_HEIGHT } from '../lib/constants'
 import type { Imovel } from '../types'
+import CompareToggleButton from './compare/CompareToggleButton'
 
 interface PropertyCardProps {
   imovel: Imovel
@@ -18,12 +19,13 @@ function getCardImageSrc(imovel: Imovel): string {
 
 export default function PropertyCard({ imovel }: PropertyCardProps) {
   const imageSrc = getCardImageSrc(imovel)
+  const slug = imovelSlug(imovel)
   const statusConfig = imovel.status
     ? PROPERTY_STATUSES.find(s => s.value === imovel.status)
     : null
 
   return (
-    <Link href={`/imoveis/${imovelSlug(imovel)}`} className="group block bg-white overflow-hidden">
+    <Link href={`/imoveis/${slug}`} className="group block bg-white overflow-hidden">
       <div className="relative overflow-hidden" style={{ height: CARD_IMAGE_HEIGHT }}>
         <Image
           src={imageSrc}
@@ -61,6 +63,8 @@ export default function PropertyCard({ imovel }: PropertyCardProps) {
             </span>
           </div>
         )}
+
+        <CompareToggleButton imovel={imovel} slug={slug} />
       </div>
 
       <div className="p-5 border border-gray-200 border-t-0 group-hover:border-primary transition-colors duration-300">
