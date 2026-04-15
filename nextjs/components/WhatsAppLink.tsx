@@ -1,6 +1,7 @@
 'use client'
 
 import type { ReactNode, MouseEvent } from 'react'
+import { track } from '@vercel/analytics'
 
 interface WhatsAppLinkProps {
   href: string
@@ -19,17 +20,17 @@ function getDevice(): string {
 
 export default function WhatsAppLink({ href, source, children, ...rest }: WhatsAppLinkProps) {
   function handleClick(e: MouseEvent<HTMLAnchorElement>) {
-    const payload = JSON.stringify({
-      source,
-      page: window.location.pathname,
-      device: getDevice(),
-    })
+    const device = getDevice()
+    const page = window.location.pathname
+    const payload = JSON.stringify({ source, page, device })
 
     if (navigator.sendBeacon) {
       navigator.sendBeacon('/api/track-click', new Blob([payload], { type: 'application/json' }))
     } else {
       fetch('/api/track-click', { method: 'POST', body: payload, keepalive: true })
     }
+
+    track('whatsapp_click', { source, device })
   }
 
   return (

@@ -180,6 +180,51 @@ const fetchNavigationMatrixCached = unstable_cache(
   { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
 )
 
+export interface BairroStats {
+  count: number
+  avgPrice: number
+  minPrice: number
+  maxPrice: number
+  avgArea: number
+  avgPricePerM2: number
+  saleCount: number
+  rentCount: number
+}
+
+const fetchBairroStatsCached = unstable_cache(
+  async (bairroName: string, tipo: string): Promise<BairroStats> => {
+    const result = await getDb().query(
+      `SELECT
+         COUNT(*)::int AS count,
+         COUNT(*) FILTER (WHERE tipo = 'venda')::int AS sale_count,
+         COUNT(*) FILTER (WHERE tipo = 'aluguel')::int AS rent_count,
+         COALESCE(AVG(preco), 0)::float AS avg_price,
+         COALESCE(MIN(NULLIF(preco, 0)), 0)::float AS min_price,
+         COALESCE(MAX(preco), 0)::float AS max_price,
+         COALESCE(AVG(NULLIF(area, 0)), 0)::float AS avg_area,
+         COALESCE(AVG(CASE WHEN area > 0 THEN preco / area END), 0)::float AS avg_price_per_m2
+       FROM imoveis
+       WHERE ativo = true
+         AND bairro = $1
+         AND tipo = $2`,
+      [bairroName, tipo]
+    )
+    const row = result.rows[0] || {}
+    return {
+      count:          Number(row.count) || 0,
+      saleCount:      Number(row.sale_count) || 0,
+      rentCount:      Number(row.rent_count) || 0,
+      avgPrice:       Number(row.avg_price) || 0,
+      minPrice:       Number(row.min_price) || 0,
+      maxPrice:       Number(row.max_price) || 0,
+      avgArea:        Number(row.avg_area) || 0,
+      avgPricePerM2:  Number(row.avg_price_per_m2) || 0,
+    }
+  },
+  ['fetchBairroStats'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: LISTING_REVALIDATE_SECONDS }
+)
+
 export interface MapImovel {
   id: number
   titulo: string
@@ -327,6 +372,19 @@ export async function fetchAllPropertySlugs(): Promise<Pick<Imovel, 'id' | 'titu
   } catch (err) {
     logDbError('fetchAllPropertySlugs', err)
     return []
+  }
+}
+
+export async function fetchBairroStats(bairroName: string, tipo: string): Promise<BairroStats> {
+  try {
+    return await fetchBairroStatsCached(bairroName, tipo)
+  } catch (err) {
+    logDbError('fetchBairroStats', err, { bairroName, tipo })
+    return {
+      count: 0, saleCount: 0, rentCount: 0,
+      avgPrice: 0, minPrice: 0, maxPrice: 0,
+      avgArea: 0, avgPricePerM2: 0,
+    }
   }
 }
 
