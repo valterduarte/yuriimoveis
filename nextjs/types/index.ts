@@ -78,6 +78,25 @@ export interface PropertyFilters {
   limit?: string | number
 }
 
+export interface BlogPost {
+  id: number
+  titulo: string
+  slug: string
+  resumo: string
+  conteudo: string
+  imagem_capa: string
+  meta_titulo: string
+  meta_descricao: string
+  tags: string[]
+  publicado: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface BlogPostRow extends Omit<BlogPost, 'tags'> {
+  tags: string
+}
+
 export interface BairroContent {
   sobre: string
   infraestrutura: string

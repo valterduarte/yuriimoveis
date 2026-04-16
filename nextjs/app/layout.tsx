@@ -7,6 +7,7 @@ import Footer from '../components/Footer'
 import FloatingContact from '../components/FloatingContact'
 import CompareBar from '../components/compare/CompareBar'
 import ScrollReveal from '../components/ScrollReveal'
+import GoogleAnalytics from '../components/GoogleAnalytics'
 import { SITE_URL } from '../lib/config'
 import type { Metadata } from 'next'
 
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CompareBar />
         <FloatingContact />
         <ScrollReveal />
+        <GoogleAnalytics />
         <SpeedInsights />
         <Analytics />
       </body>

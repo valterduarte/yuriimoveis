@@ -14,6 +14,7 @@ import {
   type AcaoSlug,
 } from '../../../lib/navigation'
 import { CATEGORIAS } from '../../../data/categorias'
+import { getAllPriceRanges, BEDROOM_FILTERS } from '../../../data/priceRanges'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
 import type { PropertyCategory } from '../../../types'
 import type { Metadata } from 'next'
@@ -159,6 +160,38 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
             <PropertyCard key={property.id} imovel={property} />
           ))}
         </div>
+
+        <section className="mt-14">
+          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por faixa de preço</h2>
+          <ul className="flex flex-wrap gap-2">
+            {getAllPriceRanges(acaoToTipo(acao as AcaoSlug)).map(range => (
+              <li key={range.slug}>
+                <Link
+                  href={`/${acao}/${cidade}/filtro/${range.slug}`}
+                  className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
+                >
+                  {range.shortLabel}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="mt-8">
+          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por quartos</h2>
+          <ul className="flex flex-wrap gap-2">
+            {BEDROOM_FILTERS.map(bf => (
+              <li key={bf.slug}>
+                <Link
+                  href={`/${acao}/${cidade}/filtro/${bf.slug}`}
+                  className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
+                >
+                  {bf.shortLabel}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
     </div>
   )

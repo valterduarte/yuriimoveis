@@ -2,6 +2,7 @@
 
 import type { ReactNode, MouseEvent } from 'react'
 import { track } from '@vercel/analytics'
+import { trackEvent } from './GoogleAnalytics'
 
 interface WhatsAppLinkProps {
   href: string
@@ -31,6 +32,7 @@ export default function WhatsAppLink({ href, source, children, ...rest }: WhatsA
     }
 
     track('whatsapp_click', { source, device })
+    trackEvent('click', 'whatsapp', source)
   }
 
   return (

@@ -81,7 +81,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         url: pageUrl,
         siteName: 'Corretor Yuri Imóveis',
         locale: 'pt_BR',
-        type: 'article',
+        type: 'website',
         images: [{ url: socialImage, width: 1200, height: 630, alt: imovel.titulo, type: 'image/jpeg' }],
       },
       twitter: {
@@ -184,8 +184,7 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
       image: images,
       url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
       datePosted: imovel.created_at ? new Date(imovel.created_at).toISOString().split('T')[0] : undefined,
-      price: imovel.preco ? String(imovel.preco) : undefined,
-      priceCurrency: 'BRL',
+      dateModified: imovel.updated_at ? new Date(imovel.updated_at).toISOString().split('T')[0] : undefined,
       address: {
         '@type': 'PostalAddress',
         streetAddress: imovel.endereco || undefined,
@@ -197,15 +196,33 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
       ...(imovel.lat && imovel.lng
         ? { geo: { '@type': 'GeoCoordinates', latitude: imovel.lat, longitude: imovel.lng } }
         : {}),
+      numberOfBedrooms: imovel.quartos || undefined,
+      numberOfBathroomsTotal: imovel.banheiros || undefined,
       numberOfRooms: imovel.quartos || undefined,
       floorSize: imovel.area
         ? { '@type': 'QuantitativeValue', value: imovel.area, unitCode: 'MTK' }
         : undefined,
+      ...(imovel.vagas ? {
+        amenityFeature: {
+          '@type': 'LocationFeatureSpecification',
+          name: 'Vagas de garagem',
+          value: imovel.vagas,
+        },
+      } : {}),
+      ...(imovel.diferenciais?.length ? {
+        additionalProperty: imovel.diferenciais.map(d => ({
+          '@type': 'PropertyValue',
+          name: d,
+        })),
+      } : {}),
       offers: {
         '@type': 'Offer',
         price: imovel.preco,
         priceCurrency: 'BRL',
         availability: 'https://schema.org/InStock',
+        businessFunction: imovel.tipo === 'aluguel'
+          ? 'http://purl.org/goodrelations/v1#LeaseOut'
+          : 'http://purl.org/goodrelations/v1#Sell',
         seller: { '@type': 'RealEstateAgent', name: 'Corretor Yuri Imóveis', telephone: PHONE_STRUCTURED, url: SITE_URL },
       },
     },

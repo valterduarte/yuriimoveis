@@ -1,10 +1,11 @@
 import { unstable_cache } from 'next/cache'
 import { getDb } from './db'
 import { logDbError } from './logger'
-import type { Imovel, ImovelRow, PropertyFilters, PropertyListResult } from '../types'
+import type { Imovel, ImovelRow, BlogPost, BlogPostRow, PropertyFilters, PropertyListResult } from '../types'
 
 export const CACHE_TAG_IMOVEIS = 'imoveis'
 export const CACHE_TAG_SITE_CONFIG = 'site-config'
+export const CACHE_TAG_BLOG = 'blog'
 
 const LISTING_REVALIDATE_SECONDS = 300
 const STATIC_DATA_REVALIDATE_SECONDS = 3600
@@ -330,11 +331,113 @@ export async function fetchAllPropertySlugs(): Promise<Pick<Imovel, 'id' | 'titu
   }
 }
 
+export interface PriceBedroomMatrixRow {
+  tipo: string
+  cidade: string
+  categoria: string
+  preco: number
+  quartos: number
+}
+
+const fetchPriceBedroomMatrixCached = unstable_cache(
+  async (): Promise<PriceBedroomMatrixRow[]> => {
+    const result = await getDb().query(
+      `SELECT tipo, cidade, categoria, preco, quartos
+       FROM imoveis
+       WHERE ativo = true
+         AND tipo IS NOT NULL AND tipo != ''
+         AND cidade IS NOT NULL AND cidade != ''
+         AND categoria IS NOT NULL AND categoria != ''
+         AND preco > 0`
+    )
+    return result.rows
+  },
+  ['fetchPriceBedroomMatrix'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
+)
+
+export async function fetchPriceBedroomMatrix(): Promise<PriceBedroomMatrixRow[]> {
+  try {
+    return await fetchPriceBedroomMatrixCached()
+  } catch (err) {
+    logDbError('fetchPriceBedroomMatrix', err)
+    return []
+  }
+}
+
 export async function fetchPropertiesForMap(): Promise<MapImovel[]> {
   try {
     return await fetchPropertiesForMapCached()
   } catch (err) {
     logDbError('fetchPropertiesForMap', err)
+    return []
+  }
+}
+
+// ── Blog ─────────────────────────────────────────────────────────────────────
+
+function parseBlogPost(row: BlogPostRow): BlogPost {
+  return { ...row, tags: JSON.parse(row.tags || '[]') }
+}
+
+const fetchPublishedBlogPostsCached = unstable_cache(
+  async (): Promise<BlogPost[]> => {
+    const result = await getDb().query(
+      'SELECT * FROM blog_posts WHERE publicado = true ORDER BY created_at DESC'
+    )
+    return result.rows.map(parseBlogPost)
+  },
+  ['fetchPublishedBlogPosts'],
+  { tags: [CACHE_TAG_BLOG], revalidate: LISTING_REVALIDATE_SECONDS }
+)
+
+const fetchBlogPostBySlugCached = unstable_cache(
+  async (slug: string): Promise<BlogPost | null> => {
+    const result = await getDb().query(
+      'SELECT * FROM blog_posts WHERE slug = $1 AND publicado = true',
+      [slug]
+    )
+    if (!result.rows[0]) return null
+    return parseBlogPost(result.rows[0])
+  },
+  ['fetchBlogPostBySlug'],
+  { tags: [CACHE_TAG_BLOG], revalidate: LISTING_REVALIDATE_SECONDS }
+)
+
+const fetchAllBlogSlugsCached = unstable_cache(
+  async (): Promise<Pick<BlogPost, 'slug' | 'updated_at'>[]> => {
+    const result = await getDb().query(
+      'SELECT slug, updated_at FROM blog_posts WHERE publicado = true ORDER BY created_at DESC'
+    )
+    return result.rows
+  },
+  ['fetchAllBlogSlugs'],
+  { tags: [CACHE_TAG_BLOG], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
+)
+
+export async function fetchPublishedBlogPosts(): Promise<BlogPost[]> {
+  try {
+    return await fetchPublishedBlogPostsCached()
+  } catch (err) {
+    logDbError('fetchPublishedBlogPosts', err)
+    return []
+  }
+}
+
+export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  try {
+    return await fetchBlogPostBySlugCached(slug)
+  } catch (err) {
+    logDbError('fetchBlogPostBySlug', err, { slug })
+    return null
+  }
+}
+
+export async function fetchAllBlogSlugs(): Promise<Pick<BlogPost, 'slug' | 'updated_at'>[]> {
+  try {
+    return await fetchAllBlogSlugsCached()
+  } catch (err) {
+    logDbError('fetchAllBlogSlugs', err)
     return []
   }
 }

@@ -55,6 +55,30 @@ export const imovelUpdateSchema = z.object({
   parcela_label:   z.string().max(50).optional(),
 })
 
+export const blogPostCreateSchema = z.object({
+  titulo:         z.string().min(3).max(200),
+  slug:           z.string().min(3).max(250).regex(/^[a-z0-9-]+$/, 'Slug deve conter apenas letras minúsculas, números e hífens'),
+  resumo:         z.string().max(500).optional().default(''),
+  conteudo:       z.string().max(50000).optional().default(''),
+  imagem_capa:    z.string().max(500).optional().default(''),
+  meta_titulo:    z.string().max(200).optional().default(''),
+  meta_descricao: z.string().max(300).optional().default(''),
+  tags:           z.array(z.string().max(50)).optional().default([]),
+  publicado:      z.coerce.boolean().optional().default(false),
+})
+
+export const blogPostUpdateSchema = z.object({
+  titulo:         z.string().min(3).max(200).optional(),
+  slug:           z.string().min(3).max(250).regex(/^[a-z0-9-]+$/).optional(),
+  resumo:         z.string().max(500).optional(),
+  conteudo:       z.string().max(50000).optional(),
+  imagem_capa:    z.string().max(500).optional(),
+  meta_titulo:    z.string().max(200).optional(),
+  meta_descricao: z.string().max(300).optional(),
+  tags:           z.array(z.string().max(50)).optional(),
+  publicado:      z.coerce.boolean().optional(),
+})
+
 export const contatoSchema = z.object({
   nome:      z.string().min(2).max(100),
   email:     z.string().email().max(200),

@@ -1,9 +1,10 @@
-import { fetchAllPropertySlugs, fetchDistinctBairros, fetchNavigationMatrix } from '../lib/api'
+import { fetchAllPropertySlugs, fetchDistinctBairros, fetchNavigationMatrix, fetchPriceBedroomMatrix, fetchAllBlogSlugs } from '../lib/api'
 import { imovelSlug, ogImageUrl, slugify } from '../utils/imovelUtils'
 import { BAIRROS } from '../data/bairros'
 import { getCategoriaBySlug } from '../data/categorias'
 import { LANDING_PAGES } from '../data/landingPages'
 import { AJUDA_ARTIGOS } from '../data/ajudaArtigos'
+import { getAllPriceRanges, BEDROOM_FILTERS } from '../data/priceRanges'
 import {
   bairroDbNameToSlug,
   cidadeNameToSlug,
@@ -16,10 +17,12 @@ import { SITE_URL } from '../lib/config'
 import type { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [properties, bairros, matrix] = await Promise.all([
+  const [properties, bairros, matrix, priceMatrix, blogSlugs] = await Promise.all([
     fetchAllPropertySlugs(),
     fetchDistinctBairros(),
     fetchNavigationMatrix(),
+    fetchPriceBedroomMatrix(),
+    fetchAllBlogSlugs(),
   ])
 
   if (properties.length === 0 && bairros.length === 0 && matrix.length === 0) {
@@ -138,6 +141,48 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   }
 
+  // Filter pages (price ranges + bedroom counts)
+  const filterUrls: MetadataRoute.Sitemap = []
+  const filterSeen = new Set<string>()
+
+  for (const row of priceMatrix) {
+    const acao: AcaoSlug = row.tipo === 'venda' ? 'comprar' : 'alugar'
+    const cidadeSlug = cidadeNameToSlug(row.cidade)
+    if (!cidadeSlugToName(cidadeSlug)) continue
+
+    const priceRanges = getAllPriceRanges(row.tipo as 'venda' | 'aluguel')
+    for (const range of priceRanges) {
+      const inRange = (!range.min || row.preco >= range.min) && (!range.max || row.preco <= range.max)
+      if (!inRange) continue
+      const key = `${acao}|${cidadeSlug}|${range.slug}`
+      if (!filterSeen.has(key)) {
+        filterSeen.add(key)
+        filterUrls.push({
+          url: `${SITE_URL}/${acao}/${cidadeSlug}/filtro/${range.slug}`,
+          lastModified: new Date(),
+          changeFrequency: 'weekly',
+          priority: 0.75,
+        })
+      }
+    }
+
+    for (const bf of BEDROOM_FILTERS) {
+      const minBedrooms = bf.value === '4+' ? 4 : bf.value
+      const matches = row.quartos >= minBedrooms
+      if (!matches) continue
+      const key = `${acao}|${cidadeSlug}|${bf.slug}`
+      if (!filterSeen.has(key)) {
+        filterSeen.add(key)
+        filterUrls.push({
+          url: `${SITE_URL}/${acao}/${cidadeSlug}/filtro/${bf.slug}`,
+          lastModified: new Date(),
+          changeFrequency: 'weekly',
+          priority: 0.75,
+        })
+      }
+    }
+  }
+
   return [
     {
       url: SITE_URL,
@@ -187,7 +232,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.75,
     })),
+    ...(blogSlugs.length > 0 ? [{
+      url: `${SITE_URL}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }] : []),
+    ...blogSlugs.map(b => ({
+      url: `${SITE_URL}/blog/${b.slug}`,
+      lastModified: b.updated_at ? new Date(b.updated_at) : new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.75,
+    })),
     ...hierarchicalUrls,
+    ...filterUrls,
     ...landingUrls,
     ...bairroUrls,
     ...propertyUrls,

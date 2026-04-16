@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { FiPlus, FiBarChart2 } from 'react-icons/fi'
+import { FiPlus, FiBarChart2, FiFileText } from 'react-icons/fi'
 import axios from 'axios'
 import { ADMIN_PROPERTIES_LIMIT } from '../../lib/constants'
 import { API_URL } from '../../lib/config'
@@ -10,6 +10,8 @@ import AdminLogin from '../../components/admin/AdminLogin'
 import AdminPropertyList from '../../components/admin/AdminPropertyList'
 import AdminPropertyForm from '../../components/admin/AdminPropertyForm'
 import AdminClickStats from '../../components/admin/AdminClickStats'
+import AdminBlogPostList from '../../components/admin/AdminBlogPostList'
+import AdminBlogPostForm from '../../components/admin/AdminBlogPostForm'
 import type { Imovel } from '../../types'
 
 interface AdminMessage {
@@ -24,8 +26,9 @@ export default function AdminPage() {
     authHeader, handleLogin, handleLogout,
   } = useAdminAuth()
 
-  const [activeView, setActiveView] = useState<'list' | 'form' | 'stats'>('list')
+  const [activeView, setActiveView] = useState<'list' | 'form' | 'stats' | 'blog' | 'blog-form'>('list')
   const [editingId, setEditingId] = useState<number | null>(null)
+  const [editingBlogId, setEditingBlogId] = useState<number | null>(null)
   const [properties, setProperties] = useState<Imovel[]>([])
   const [message, setMessage] = useState<AdminMessage | null>(null)
 
@@ -100,7 +103,11 @@ export default function AdminPage() {
     ? 'Imóveis Cadastrados'
     : activeView === 'stats'
       ? 'Clicks WhatsApp'
-      : editingId ? 'Editar Imóvel' : 'Novo Imóvel'
+      : activeView === 'blog'
+        ? 'Blog — Posts'
+        : activeView === 'blog-form'
+          ? editingBlogId ? 'Editar Post' : 'Novo Post'
+          : editingId ? 'Editar Imóvel' : 'Novo Imóvel'
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -113,6 +120,10 @@ export default function AdminPage() {
           <div className="flex items-center gap-4">
             {activeView === 'list' ? (
               <>
+                <button onClick={() => setActiveView('blog')}
+                  className="flex items-center gap-2 text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
+                  <FiFileText size={14} /> Blog
+                </button>
                 <button onClick={() => setActiveView('stats')}
                   className="flex items-center gap-2 text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
                   <FiBarChart2 size={14} /> Clicks
@@ -121,8 +132,19 @@ export default function AdminPage() {
                   <FiPlus size={14} /> Novo Imóvel
                 </button>
               </>
+            ) : activeView === 'blog' ? (
+              <>
+                <button onClick={() => { setActiveView('list'); setMessage(null) }}
+                  className="text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
+                  ← Imóveis
+                </button>
+                <button onClick={() => { setEditingBlogId(null); setMessage(null); setActiveView('blog-form') }}
+                  className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs">
+                  <FiPlus size={14} /> Novo Post
+                </button>
+              </>
             ) : (
-              <button onClick={() => { setActiveView('list'); setMessage(null) }}
+              <button onClick={() => { setActiveView(activeView === 'blog-form' ? 'blog' : 'list'); setMessage(null) }}
                 className="text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
                 ← Voltar
               </button>
@@ -170,6 +192,23 @@ export default function AdminPage() {
         {activeView === 'stats' && (
           <AdminClickStats
             authHeader={authHeader}
+            onAuthError={handleLogout}
+          />
+        )}
+
+        {activeView === 'blog' && (
+          <AdminBlogPostList
+            authHeader={authHeader}
+            onEdit={(id) => { setEditingBlogId(id); setMessage(null); setActiveView('blog-form') }}
+            onAuthError={handleLogout}
+          />
+        )}
+
+        {activeView === 'blog-form' && (
+          <AdminBlogPostForm
+            editingId={editingBlogId}
+            authHeader={authHeader}
+            onSuccess={(msg) => { setMessage({ type: 'success', text: msg }); setActiveView('blog') }}
             onAuthError={handleLogout}
           />
         )}
