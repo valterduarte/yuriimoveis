@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { FiMapPin, FiPhone, FiArrowLeft, FiCalendar } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import WhatsAppLink from './WhatsAppLink'
+import ScheduleVisitModal from './ScheduleVisitModal'
 import PropertyHero from './property/PropertyHero'
 import PropertyLightbox from './property/PropertyLightbox'
 import PropertySidebar from './property/PropertySidebar'
@@ -30,6 +31,7 @@ interface ImovelDetalheClientProps {
 export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps) {
   const { activeSection, setActiveSection } = useScrollSpy(TABS, imovel)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [showVisitModal, setShowVisitModal] = useState(false)
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -78,7 +80,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
             <PropertyOverview imovel={imovel} />
           </div>
           <div className="lg:col-span-1">
-            <PropertySidebar imovel={imovel} onScheduleVisit={() => scrollToSection('contato')} />
+            <PropertySidebar imovel={imovel} onScheduleVisit={() => setShowVisitModal(true)} />
           </div>
         </div>
       </div>
@@ -155,7 +157,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
           <span className="text-[9px] uppercase tracking-widest font-bold">Ligar</span>
         </a>
         <button
-          onClick={() => scrollToSection('contato')}
+          onClick={() => setShowVisitModal(true)}
           aria-label="Agendar visita"
           className="flex flex-col items-center justify-center gap-1 bg-dark text-white py-3"
         >
@@ -171,6 +173,14 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
           onClose={() => setLightboxIndex(null)}
           onNext={() => setLightboxIndex(i => ((i ?? 0) + 1) % images.length)}
           onPrev={() => setLightboxIndex(i => ((i ?? 0) - 1 + images.length) % images.length)}
+        />
+      )}
+
+      {showVisitModal && (
+        <ScheduleVisitModal
+          imovelTitulo={imovel.titulo}
+          imovelId={imovel.id}
+          onClose={() => setShowVisitModal(false)}
         />
       )}
     </div>
