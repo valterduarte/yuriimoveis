@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { FiX, FiCalendar, FiClock } from 'react-icons/fi'
+import { useState, useEffect, useRef } from 'react'
+import { FiX, FiCalendar, FiClock, FiUser, FiPhone, FiHome, FiCheck } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { track } from '@vercel/analytics'
 import { trackEvent } from './GoogleAnalytics'
@@ -14,8 +14,15 @@ interface ScheduleVisitModalProps {
 }
 
 const TIME_SLOTS = [
-  '08:00', '09:00', '10:00', '11:00',
-  '13:00', '14:00', '15:00', '16:00', '17:00',
+  { value: '08:00', label: '08:00', period: 'Manhã' },
+  { value: '09:00', label: '09:00', period: 'Manhã' },
+  { value: '10:00', label: '10:00', period: 'Manhã' },
+  { value: '11:00', label: '11:00', period: 'Manhã' },
+  { value: '13:00', label: '13:00', period: 'Tarde' },
+  { value: '14:00', label: '14:00', period: 'Tarde' },
+  { value: '15:00', label: '15:00', period: 'Tarde' },
+  { value: '16:00', label: '16:00', period: 'Tarde' },
+  { value: '17:00', label: '17:00', period: 'Tarde' },
 ]
 
 export default function ScheduleVisitModal({ imovelTitulo, imovelId, onClose }: ScheduleVisitModalProps) {
@@ -23,8 +30,21 @@ export default function ScheduleVisitModal({ imovelTitulo, imovelId, onClose }: 
   const [telefone, setTelefone] = useState('')
   const [data, setData] = useState('')
   const [horario, setHorario] = useState('')
+  const [visible, setVisible] = useState(false)
+  const panelRef = useRef<HTMLDivElement>(null)
 
   const today = new Date().toISOString().split('T')[0]
+
+  useEffect(() => {
+    requestAnimationFrame(() => setVisible(true))
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  function handleClose() {
+    setVisible(false)
+    setTimeout(onClose, 200)
+  }
 
   function formatPhone(value: string) {
     const digits = value.replace(/\D/g, '').slice(0, 11)
@@ -38,6 +58,11 @@ export default function ScheduleVisitModal({ imovelTitulo, imovelId, onClose }: 
     return `${day}/${month}/${year}`
   }
 
+  function getWeekday(dateStr: string) {
+    const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
+    return days[new Date(dateStr + 'T12:00:00').getDay()]
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
@@ -47,7 +72,7 @@ export default function ScheduleVisitModal({ imovelTitulo, imovelId, onClose }: 
       `*Imóvel:* ${imovelTitulo} — Código #${imovelId}`,
       `*Nome:* ${nome}`,
       `*Telefone:* ${telefone}`,
-      `*Data preferida:* ${formatDateBR(data)}`,
+      `*Data preferida:* ${getWeekday(data)}, ${formatDateBR(data)}`,
       `*Horário:* ${horario}`,
     ].join('\n')
 
@@ -55,115 +80,194 @@ export default function ScheduleVisitModal({ imovelTitulo, imovelId, onClose }: 
     trackEvent('schedule_visit', 'lead', `imovel_${imovelId}`)
 
     window.open(`${PHONE_WA_BASE}?text=${encodeURIComponent(message)}`, '_blank')
-    onClose()
+    handleClose()
   }
 
   const isValid = nome.trim().length >= 2 && telefone.replace(/\D/g, '').length >= 10 && data && horario
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Agendar visita">
-      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
+  const filledFields = [nome.trim().length >= 2, telefone.replace(/\D/g, '').length >= 10, !!data, !!horario].filter(Boolean).length
 
-      <div className="relative bg-white w-full max-w-md shadow-2xl animate-in fade-in zoom-in-95">
-        <div className="bg-dark p-6 flex items-center justify-between">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400">Agendar</p>
-            <h2 className="text-lg font-black text-white uppercase tracking-wide">Visita ao Imóvel</h2>
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Agendar visita"
+    >
+      {/* Backdrop */}
+      <div
+        className={`absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-200 ${visible ? 'opacity-100' : 'opacity-0'}`}
+        onClick={handleClose}
+      />
+
+      {/* Modal */}
+      <div
+        ref={panelRef}
+        className={`relative w-full max-w-lg overflow-hidden shadow-2xl transition-all duration-200 ${visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'}`}
+      >
+        {/* Header with gradient */}
+        <div className="relative bg-dark overflow-hidden">
+          {/* Decorative accent line */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-primary" />
+
+          <div className="relative px-7 pt-8 pb-6">
+            <button
+              onClick={handleClose}
+              aria-label="Fechar"
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/10 transition-all"
+            >
+              <FiX size={18} />
+            </button>
+
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-primary/20 flex items-center justify-center">
+                <FiCalendar size={18} className="text-primary" />
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.25em] text-primary font-bold">Agendar</p>
+                <h2 className="text-xl font-black text-white uppercase tracking-wide">Visita ao Imóvel</h2>
+              </div>
+            </div>
+
+            {/* Property info card */}
+            <div className="flex items-start gap-3 bg-white/5 border border-white/10 p-4">
+              <FiHome size={16} className="text-primary flex-shrink-0 mt-0.5" />
+              <div className="min-w-0">
+                <p className="text-sm text-white font-semibold leading-snug truncate">{imovelTitulo}</p>
+                <p className="text-[11px] text-gray-500 mt-0.5">Código #{imovelId}</p>
+              </div>
+            </div>
           </div>
-          <button
-            onClick={onClose}
-            aria-label="Fechar"
-            className="text-gray-400 hover:text-white transition-colors p-1"
-          >
-            <FiX size={20} />
-          </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
-          <p className="text-xs text-gray-500 leading-relaxed">
-            Preencha seus dados e enviaremos a solicitação direto para o corretor via WhatsApp.
-          </p>
-
-          <div>
-            <label htmlFor="visit-nome" className="block text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500 mb-2">
-              Seu nome
-            </label>
-            <input
-              id="visit-nome"
-              type="text"
-              required
-              value={nome}
-              onChange={e => setNome(e.target.value)}
-              placeholder="Ex: Maria Silva"
-              className="w-full border border-gray-300 px-4 py-3 text-sm text-dark focus:border-primary focus:outline-none transition-colors"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="visit-telefone" className="block text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500 mb-2">
-              Seu telefone
-            </label>
-            <input
-              id="visit-telefone"
-              type="tel"
-              required
-              value={telefone}
-              onChange={e => setTelefone(formatPhone(e.target.value))}
-              placeholder="(11) 99999-9999"
-              className="w-full border border-gray-300 px-4 py-3 text-sm text-dark focus:border-primary focus:outline-none transition-colors"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="visit-data" className="block text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500 mb-2">
-                <FiCalendar className="inline mr-1" size={12} />
-                Data
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="bg-white">
+          <div className="px-7 py-6 space-y-5">
+            {/* Name */}
+            <div className="group">
+              <label htmlFor="visit-nome" className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-2.5">
+                <FiUser size={12} className="text-primary" />
+                Seu nome
               </label>
               <input
-                id="visit-data"
-                type="date"
+                id="visit-nome"
+                type="text"
                 required
-                min={today}
-                value={data}
-                onChange={e => setData(e.target.value)}
-                className="w-full border border-gray-300 px-4 py-3 text-sm text-dark focus:border-primary focus:outline-none transition-colors"
+                autoFocus
+                value={nome}
+                onChange={e => setNome(e.target.value)}
+                placeholder="Ex: Maria Silva"
+                className="w-full border-b-2 border-gray-200 px-0 py-3 text-sm text-dark placeholder:text-gray-300 focus:border-primary focus:outline-none transition-colors bg-transparent"
               />
             </div>
+
+            {/* Phone */}
             <div>
-              <label htmlFor="visit-horario" className="block text-[10px] uppercase tracking-[0.15em] font-bold text-gray-500 mb-2">
-                <FiClock className="inline mr-1" size={12} />
-                Horário
+              <label htmlFor="visit-telefone" className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-2.5">
+                <FiPhone size={12} className="text-primary" />
+                Seu telefone
               </label>
-              <select
-                id="visit-horario"
+              <input
+                id="visit-telefone"
+                type="tel"
                 required
-                value={horario}
-                onChange={e => setHorario(e.target.value)}
-                className="w-full border border-gray-300 px-4 py-3 text-sm text-dark focus:border-primary focus:outline-none transition-colors bg-white"
-              >
-                <option value="">Selecione</option>
-                {TIME_SLOTS.map(t => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
+                value={telefone}
+                onChange={e => setTelefone(formatPhone(e.target.value))}
+                placeholder="(11) 99999-9999"
+                className="w-full border-b-2 border-gray-200 px-0 py-3 text-sm text-dark placeholder:text-gray-300 focus:border-primary focus:outline-none transition-colors bg-transparent"
+              />
+            </div>
+
+            {/* Date & Time */}
+            <div className="grid grid-cols-2 gap-5">
+              <div>
+                <label htmlFor="visit-data" className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-2.5">
+                  <FiCalendar size={12} className="text-primary" />
+                  Data
+                </label>
+                <input
+                  id="visit-data"
+                  type="date"
+                  required
+                  min={today}
+                  value={data}
+                  onChange={e => setData(e.target.value)}
+                  className="w-full border-b-2 border-gray-200 px-0 py-3 text-sm text-dark focus:border-primary focus:outline-none transition-colors bg-transparent"
+                />
+                {data && (
+                  <p className="text-[11px] text-primary font-semibold mt-1.5">
+                    {getWeekday(data)}, {formatDateBR(data)}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="visit-horario" className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-2.5">
+                  <FiClock size={12} className="text-primary" />
+                  Horário
+                </label>
+                <select
+                  id="visit-horario"
+                  required
+                  value={horario}
+                  onChange={e => setHorario(e.target.value)}
+                  className="w-full border-b-2 border-gray-200 px-0 py-3 text-sm text-dark focus:border-primary focus:outline-none transition-colors bg-transparent appearance-none cursor-pointer"
+                >
+                  <option value="">Selecione</option>
+                  <optgroup label="Manhã">
+                    {TIME_SLOTS.filter(t => t.period === 'Manhã').map(t => (
+                      <option key={t.value} value={t.value}>{t.label}</option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Tarde">
+                    {TIME_SLOTS.filter(t => t.period === 'Tarde').map(t => (
+                      <option key={t.value} value={t.value}>{t.label}</option>
+                    ))}
+                  </optgroup>
+                </select>
+              </div>
             </div>
           </div>
 
-          <div className="bg-gray-50 border border-gray-200 p-3">
-            <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-400 mb-1">Imóvel</p>
-            <p className="text-xs text-dark font-semibold">{imovelTitulo}</p>
-            <p className="text-[10px] text-gray-400">Código #{imovelId}</p>
-          </div>
+          {/* Progress + Submit */}
+          <div className="border-t border-gray-100">
+            {/* Progress bar */}
+            <div className="px-7 pt-5 pb-2">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-400">Progresso</span>
+                <span className="text-[10px] font-bold text-gray-400">{filledFields}/4</span>
+              </div>
+              <div className="h-1 bg-gray-100 overflow-hidden">
+                <div
+                  className="h-full bg-primary transition-all duration-500 ease-out"
+                  style={{ width: `${(filledFields / 4) * 100}%` }}
+                />
+              </div>
+            </div>
 
-          <button
-            type="submit"
-            disabled={!isValid}
-            className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold uppercase tracking-[0.15em] text-xs py-4 transition-colors"
-          >
-            <FaWhatsapp size={18} />
-            Enviar pelo WhatsApp
-          </button>
+            <div className="px-7 pb-7 pt-3">
+              <button
+                type="submit"
+                disabled={!isValid}
+                className="group w-full flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-200 disabled:cursor-not-allowed text-white disabled:text-gray-400 font-black uppercase tracking-[0.2em] text-xs py-5 transition-all duration-200 hover:shadow-lg hover:shadow-green-500/25"
+              >
+                {isValid ? (
+                  <>
+                    <FaWhatsapp size={20} />
+                    Agendar pelo WhatsApp
+                  </>
+                ) : (
+                  <>
+                    <FiCheck size={16} />
+                    Preencha todos os campos
+                  </>
+                )}
+              </button>
+
+              <p className="text-center text-[10px] text-gray-400 mt-3 tracking-wide">
+                Seus dados serão enviados diretamente ao corretor
+              </p>
+            </div>
+          </div>
         </form>
       </div>
     </div>
