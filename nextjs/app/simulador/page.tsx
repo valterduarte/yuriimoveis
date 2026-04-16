@@ -36,7 +36,9 @@ const breadcrumbJsonLd = {
   ],
 }
 
-export default function SimuladorPage() {
+export default async function SimuladorPage({ searchParams }: { searchParams: Promise<Record<string, string>> }) {
+  const params = await searchParams
+  const initialValue = params.valor ? Number(params.valor) : undefined
   return (
     <div className="min-h-screen pb-16 md:pb-0 bg-gray-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
@@ -58,7 +60,7 @@ export default function SimuladorPage() {
 
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-6">
-          <SimuladorClient />
+          <SimuladorClient initialValue={initialValue} />
         </div>
       </section>
 

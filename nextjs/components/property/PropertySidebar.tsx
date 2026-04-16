@@ -1,6 +1,7 @@
 'use client'
 
-import { FiCalendar } from 'react-icons/fi'
+import Link from 'next/link'
+import { FiCalendar, FiTrendingUp } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { PHONE_WA_BASE } from '../../lib/config'
 import WhatsAppLink from '../WhatsAppLink'
@@ -65,6 +66,14 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
         >
           <FiCalendar size={14} /> Agendar Visita
         </button>
+        {imovel.tipo === 'venda' && (
+          <Link
+            href={`/simulador?valor=${imovel.preco}`}
+            className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-primary hover:text-primary text-dark font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors"
+          >
+            <FiTrendingUp size={14} /> Simular Financiamento
+          </Link>
+        )}
       </div>
 
       <div className="border-t border-gray-100 px-7 pb-7">

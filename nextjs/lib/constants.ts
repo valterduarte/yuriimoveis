@@ -38,11 +38,14 @@ export const RENT_PRICE_OPTIONS = [
 
 export const NAVIGATION_LINKS = [
   { href: '/',        label: 'Início'  },
-  { href: '/imoveis',   label: 'Imóveis'   },
-  { href: '/mapa',      label: 'Mapa'      },
-  { href: '/simulador', label: 'Simulador' },
-  { href: '/sobre',     label: 'Sobre'     },
+  { href: '/imoveis', label: 'Imóveis' },
+  { href: '/sobre',   label: 'Sobre'   },
   { href: '/contato', label: 'Contato' },
+]
+
+export const FOOTER_TOOL_LINKS = [
+  { href: '/mapa',      label: 'Mapa de imóveis' },
+  { href: '/simulador', label: 'Simulador de financiamento' },
 ]
 
 export const ITEMS_PER_PAGE       = 9

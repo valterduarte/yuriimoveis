@@ -36,9 +36,14 @@ const parseDecimalBR = (raw: string): number => {
   return Number.isFinite(n) ? n : 0
 }
 
-export default function SimuladorClient() {
-  const [propertyValue, setPropertyValue] = useState(450000)
-  const [downPayment, setDownPayment] = useState(90000)
+interface SimuladorClientProps {
+  initialValue?: number
+}
+
+export default function SimuladorClient({ initialValue }: SimuladorClientProps) {
+  const defaultValue = initialValue && initialValue > 0 ? initialValue : 450000
+  const [propertyValue, setPropertyValue] = useState(defaultValue)
+  const [downPayment, setDownPayment] = useState(Math.round(defaultValue * MIN_DOWN_PAYMENT_RATE))
   const [termMonths, setTermMonths] = useState(360)
   const [annualRate, setAnnualRate] = useState(SAC_RATE_DEFAULT_ANNUAL)
   const [annualRateText, setAnnualRateText] = useState(

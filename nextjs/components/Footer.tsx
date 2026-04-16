@@ -4,7 +4,7 @@ import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import Logo from './Logo'
 import WhatsAppLink from './WhatsAppLink'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI, SITE_URL, PHONE_STRUCTURED } from '../lib/config'
-import { NAVIGATION_LINKS } from '../lib/constants'
+import { NAVIGATION_LINKS, FOOTER_TOOL_LINKS } from '../lib/constants'
 import { LANDING_PAGES } from '../data/landingPages'
 import { AJUDA_ARTIGOS, fullH1 } from '../data/ajudaArtigos'
 
@@ -77,6 +77,18 @@ export default function Footer() {
             <h3 className={FOOTER_TITLE_CLASS}>Navegação</h3>
             <ul className="space-y-3">
               {NAVIGATION_LINKS.map(link => (
+                <li key={link.href}>
+                  <Link href={link.href} className={FOOTER_LINK_CLASS}>
+                    {FOOTER_BULLET}
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <h3 className={`${FOOTER_TITLE_CLASS} mt-8`}>Ferramentas</h3>
+            <ul className="space-y-3">
+              {FOOTER_TOOL_LINKS.map(link => (
                 <li key={link.href}>
                   <Link href={link.href} className={FOOTER_LINK_CLASS}>
                     {FOOTER_BULLET}
