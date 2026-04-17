@@ -3,14 +3,15 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { FaWhatsapp } from 'react-icons/fa'
-import { FiAlertCircle, FiCheckCircle, FiInfo, FiDollarSign, FiPercent, FiClock, FiHome, FiUsers, FiArrowDown } from 'react-icons/fi'
+import { FiAlertCircle, FiCheckCircle, FiDollarSign, FiPercent, FiClock, FiHome, FiUsers, FiArrowDown, FiZap } from 'react-icons/fi'
 import {
   calculateSacFinancing,
-  isMcmvEligible,
+  detectCreditProgram,
   maxAffordableInstallment,
   MIN_DOWN_PAYMENT_RATE,
   SAC_RATE_DEFAULT_ANNUAL,
   TERM_OPTIONS,
+  type CreditProgram,
 } from '../../lib/financiamento'
 import { PHONE_WA } from '../../lib/config'
 import WhatsAppLink from '../WhatsAppLink'
@@ -36,6 +37,9 @@ const parseDecimalBR = (raw: string): number => {
   const n = Number(cleaned)
   return Number.isFinite(n) ? n : 0
 }
+
+const formatRate = (rate: number): string =>
+  String(rate).replace('.', ',')
 
 /* ── animated number ─────────────────────────────────────────────────────────── */
 
@@ -65,6 +69,18 @@ function AnimatedValue({ value, formatter }: { value: number; formatter: (n: num
   return <>{formatter(display)}</>
 }
 
+/* ── program badge colors ────────────────────────────────────────────────────── */
+
+function programColors(id: CreditProgram['id']) {
+  switch (id) {
+    case 'mcmv_1': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-300', icon: 'text-green-600' }
+    case 'mcmv_2': return { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300', icon: 'text-emerald-600' }
+    case 'mcmv_3': return { bg: 'bg-teal-100', text: 'text-teal-800', border: 'border-teal-300', icon: 'text-teal-600' }
+    case 'associativo': return { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300', icon: 'text-blue-600' }
+    case 'sbpe': return { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-300', icon: 'text-gray-500' }
+  }
+}
+
 /* ── main component ──────────────────────────────────────────────────────────── */
 
 interface SimuladorClientProps {
@@ -77,14 +93,31 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
   const [downPayment, setDownPayment] = useState(Math.round(defaultValue * MIN_DOWN_PAYMENT_RATE))
   const [termMonths, setTermMonths] = useState(360)
   const [annualRate, setAnnualRate] = useState(SAC_RATE_DEFAULT_ANNUAL)
-  const [annualRateText, setAnnualRateText] = useState(
-    String(SAC_RATE_DEFAULT_ANNUAL).replace('.', ','),
-  )
+  const [annualRateText, setAnnualRateText] = useState(formatRate(SAC_RATE_DEFAULT_ANNUAL))
   const [monthlyIncome, setMonthlyIncome] = useState(0)
+  const [manualRate, setManualRate] = useState(false)
 
   const minDown = Math.round(propertyValue * MIN_DOWN_PAYMENT_RATE)
   const downBelowMinimum = downPayment < minDown
   const downExceedsValue = downPayment >= propertyValue
+
+  // Auto-detect credit program
+  const detectedProgram = useMemo(
+    () => detectCreditProgram(propertyValue, monthlyIncome),
+    [propertyValue, monthlyIncome],
+  )
+
+  // Update rate when program changes (unless user manually edited)
+  const prevProgramId = useRef(detectedProgram.id)
+  useEffect(() => {
+    if (prevProgramId.current !== detectedProgram.id) {
+      prevProgramId.current = detectedProgram.id
+      if (!manualRate) {
+        setAnnualRate(detectedProgram.rate)
+        setAnnualRateText(formatRate(detectedProgram.rate))
+      }
+    }
+  }, [detectedProgram, manualRate])
 
   const result = useMemo(
     () =>
@@ -97,12 +130,25 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
     [propertyValue, downPayment, termMonths, annualRate],
   )
 
-  const eligibleMcmv = isMcmvEligible(propertyValue, monthlyIncome)
   const maxInstallment = monthlyIncome > 0 ? maxAffordableInstallment(monthlyIncome) : 0
   const installmentExceedsBudget =
     monthlyIncome > 0 && result.firstInstallment > maxInstallment
 
   const downPercent = propertyValue > 0 ? Math.round((downPayment / propertyValue) * 100) : 0
+
+  const colors = programColors(detectedProgram.id)
+
+  function handleRateChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setManualRate(true)
+    setAnnualRateText(e.target.value)
+    setAnnualRate(parseDecimalBR(e.target.value))
+  }
+
+  function resetToAutoRate() {
+    setManualRate(false)
+    setAnnualRate(detectedProgram.rate)
+    setAnnualRateText(formatRate(detectedProgram.rate))
+  }
 
   return (
     <div className="grid lg:grid-cols-5 gap-8">
@@ -178,54 +224,73 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
           )}
         </div>
 
-        {/* Term + Rate row */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white border border-gray-200 p-5">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <FiClock size={14} className="text-primary" />
-              </div>
-              <label htmlFor="termMonths" className="text-[10px] font-bold uppercase tracking-[0.15em] text-dark">
-                Prazo
-              </label>
+        {/* Term */}
+        <div className="bg-white border border-gray-200 p-5">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="w-8 h-8 bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <FiClock size={14} className="text-primary" />
             </div>
-            <select
-              id="termMonths"
-              value={termMonths}
-              onChange={(e) => setTermMonths(Number(e.target.value))}
-              className="w-full bg-gray-50 border-2 border-gray-200 px-3 py-3.5 text-sm font-bold text-dark focus:border-primary focus:bg-white focus:outline-none transition-all cursor-pointer"
-            >
-              {TERM_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
+            <label htmlFor="termMonths" className="text-[10px] font-bold uppercase tracking-[0.15em] text-dark">
+              Prazo
+            </label>
+          </div>
+          <select
+            id="termMonths"
+            value={termMonths}
+            onChange={(e) => setTermMonths(Number(e.target.value))}
+            className="w-full bg-gray-50 border-2 border-gray-200 px-3 py-3.5 text-sm font-bold text-dark focus:border-primary focus:bg-white focus:outline-none transition-all cursor-pointer"
+          >
+            {TERM_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Rate + detected program */}
+        <div className="bg-white border border-gray-200 p-5">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="w-8 h-8 bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <FiPercent size={14} className="text-primary" />
+            </div>
+            <label htmlFor="annualRate" className="text-[10px] font-bold uppercase tracking-[0.15em] text-dark">
+              Taxa de juros a.a.
+            </label>
+          </div>
+          <div className="relative">
+            <input
+              id="annualRate"
+              type="text"
+              inputMode="decimal"
+              value={annualRateText}
+              onChange={handleRateChange}
+              placeholder="0,00"
+              className="w-full bg-gray-50 border-2 border-gray-200 px-3 pr-9 py-3.5 text-sm font-bold text-dark focus:border-primary focus:bg-white focus:outline-none transition-all"
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-bold pointer-events-none">%</span>
           </div>
 
-          <div className="bg-white border border-gray-200 p-5">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <FiPercent size={14} className="text-primary" />
-              </div>
-              <label htmlFor="annualRate" className="text-[10px] font-bold uppercase tracking-[0.15em] text-dark">
-                Juros a.a.
-              </label>
-            </div>
-            <div className="relative">
-              <input
-                id="annualRate"
-                type="text"
-                inputMode="decimal"
-                value={annualRateText}
-                onChange={(e) => {
-                  setAnnualRateText(e.target.value)
-                  setAnnualRate(parseDecimalBR(e.target.value))
-                }}
-                placeholder="0,00"
-                className="w-full bg-gray-50 border-2 border-gray-200 px-3 pr-9 py-3.5 text-sm font-bold text-dark focus:border-primary focus:bg-white focus:outline-none transition-all"
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-bold pointer-events-none">%</span>
+          {/* Program badge */}
+          <div className={`mt-3 flex items-start gap-2.5 px-3 py-2.5 border ${colors.bg} ${colors.border}`}>
+            <FiZap size={14} className={`${colors.icon} flex-shrink-0 mt-0.5`} />
+            <div className="min-w-0">
+              <p className={`text-[11px] font-bold ${colors.text}`}>
+                {detectedProgram.label}
+              </p>
+              <p className="text-[10px] text-gray-500 mt-0.5">
+                {detectedProgram.description} · Taxa: {formatRate(detectedProgram.rate)}% a.a.
+              </p>
             </div>
           </div>
+
+          {manualRate && annualRate !== detectedProgram.rate && (
+            <button
+              type="button"
+              onClick={resetToAutoRate}
+              className="mt-2 text-[11px] text-primary font-bold hover:underline"
+            >
+              Usar taxa do {detectedProgram.label.split('—')[0].trim()} ({formatRate(detectedProgram.rate)}%)
+            </button>
+          )}
         </div>
 
         {/* Monthly income */}
@@ -238,7 +303,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
               <label htmlFor="monthlyIncome" className="text-xs font-bold uppercase tracking-[0.15em] text-dark block">
                 Renda familiar
               </label>
-              <span className="text-[10px] text-gray-400 uppercase tracking-wider">Opcional</span>
+              <span className="text-[10px] text-gray-400 uppercase tracking-wider">Preencha para ajustar a taxa</span>
             </div>
           </div>
           <div className="relative">
@@ -254,7 +319,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             />
           </div>
           <p className="text-[11px] text-gray-400 mt-2.5">
-            Checa Minha Casa Minha Vida e capacidade de pagamento.
+            Detecta automaticamente MCMV, Associativo ou SBPE.
           </p>
         </div>
       </form>
@@ -268,9 +333,14 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/3" />
 
           <div className="relative p-8">
-            <p className="text-[10px] uppercase tracking-[0.25em] text-primary font-bold mb-3">
-              Primeira parcela (SAC)
-            </p>
+            <div className="flex items-center gap-3 mb-3">
+              <p className="text-[10px] uppercase tracking-[0.25em] text-primary font-bold">
+                Primeira parcela (SAC)
+              </p>
+              <span className={`text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 ${colors.bg} ${colors.text}`}>
+                {formatRate(annualRate)}% a.a.
+              </span>
+            </div>
             <p className="text-5xl md:text-6xl font-black text-white leading-none mb-4">
               <AnimatedValue value={result.firstInstallment} formatter={formatBRLPrecise} />
             </p>
@@ -299,6 +369,31 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             </div>
           </div>
         </div>
+
+        {/* Detected program card */}
+        {detectedProgram.id !== 'sbpe' && (
+          <div className={`border ${colors.border} overflow-hidden`}>
+            <div className={`px-6 py-5 flex items-start gap-3 ${colors.bg}`}>
+              <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                detectedProgram.id.startsWith('mcmv') ? 'bg-green-200' : 'bg-blue-200'
+              }`}>
+                <FiZap size={16} className={colors.icon} />
+              </div>
+              <div>
+                <p className={`text-sm font-black uppercase tracking-wider ${colors.text}`}>
+                  {detectedProgram.label}
+                </p>
+                <p className="text-xs text-gray-600 mt-1.5 leading-relaxed">
+                  {detectedProgram.description}. Taxa aplicada: <strong>{formatRate(detectedProgram.rate)}% a.a.</strong>
+                  {detectedProgram.id === 'mcmv_1' && ' — possibilidade de subsídio na entrada.'}
+                  {detectedProgram.id === 'mcmv_2' && ' — juros reduzidos com subsídio parcial.'}
+                  {detectedProgram.id === 'mcmv_3' && ' — juros abaixo do mercado.'}
+                  {detectedProgram.id === 'associativo' && ' — condições especiais via cooperativas.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Key metric */}
         <div className="bg-white border border-gray-200 p-5 group hover:border-primary/30 transition-colors">
@@ -376,25 +471,6 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
                     Excede em {formatBRL(result.firstInstallment - maxInstallment)} — aumente a entrada ou o prazo.
                   </p>
                 )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* MCMV */}
-        {eligibleMcmv && (
-          <div className="border border-blue-200 overflow-hidden">
-            <div className="bg-blue-50 px-6 py-5 flex items-start gap-3">
-              <div className="w-8 h-8 bg-blue-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <FiInfo size={16} className="text-blue-700" />
-              </div>
-              <div>
-                <p className="text-sm font-black text-blue-900 uppercase tracking-wider">
-                  Elegível ao Minha Casa Minha Vida
-                </p>
-                <p className="text-xs text-gray-600 mt-1.5 leading-relaxed">
-                  Renda até R$ 12.000 e imóvel até R$ 350.000 — juros reduzidos e possibilidade de subsídio na entrada.
-                </p>
               </div>
             </div>
           </div>

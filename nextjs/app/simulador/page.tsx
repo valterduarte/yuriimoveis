@@ -109,9 +109,9 @@ export default async function SimuladorPage({ searchParams }: { searchParams: Pr
             <div>
               <h3 className="font-bold text-dark mb-2">Minha Casa Minha Vida</h3>
               <p>
-                Famílias com renda mensal de até R$ 12.000 que estejam comprando imóvel de até R$ 350.000 podem se
+                Famílias com renda mensal de até R$ 8.000 que estejam comprando imóvel de até R$ 350.000 podem se
                 enquadrar no programa Minha Casa Minha Vida, com juros bem menores que o mercado e, em alguns
-                casos, subsídio direto na entrada.
+                casos, subsídio direto na entrada. As faixas vão de 4% a.a. (Faixa 1) até 7,66% a.a. (Faixa 3).
               </p>
             </div>
           </div>
