@@ -514,30 +514,74 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
 
         {/* Upfront costs */}
         <div className="bg-white border border-gray-200 overflow-hidden">
-          <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
-              Custos iniciais (na assinatura)
-            </p>
+          <div className="bg-gray-50 px-6 py-4 border-b border-gray-200 flex items-center gap-3">
+            <span className="w-6 h-1 bg-primary flex-shrink-0" />
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.15em] text-dark">
+                Custos iniciais
+              </p>
+              <p className="text-[10px] text-gray-500 mt-0.5">
+                Pagos na assinatura do contrato
+              </p>
+            </div>
           </div>
-          <div className="px-6 py-5 space-y-3">
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">Entrada</span>
-              <span className="font-bold text-dark">{formatBRL(downPayment)}</span>
+
+          {/* Entrada destacada */}
+          <div className="px-6 py-5 border-b border-gray-100">
+            <div className="flex items-baseline justify-between gap-3 mb-4">
+              <div className="flex items-center gap-2">
+                <p className="text-[11px] font-black uppercase tracking-[0.15em] text-primary">
+                  Entrada
+                </p>
+                <span className="text-[10px] font-black px-2 py-0.5 bg-primary/10 text-primary">
+                  {downPercent}%
+                </span>
+              </div>
+              <p className="text-2xl md:text-3xl font-black text-dark leading-none">
+                <AnimatedValue value={Math.min(downPayment, propertyValue)} formatter={formatBRL} />
+              </p>
             </div>
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">ITBI (2% do valor)</span>
-              <span className="font-bold text-dark">{formatBRL(result.itbiEstimate)}</span>
+
+            <div className="space-y-2.5 bg-primary/5 border border-primary/15 px-3.5 py-3">
+              <div className="flex items-start gap-2.5">
+                <FiCheckCircle size={13} className="text-primary flex-shrink-0 mt-0.5" />
+                <p className="text-[11px] text-gray-700 leading-snug">
+                  <strong className="text-dark">Pode ser parcelada</strong> diretamente com a construtora em imóveis na planta.
+                </p>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <FiCheckCircle size={13} className="text-primary flex-shrink-0 mt-0.5" />
+                <p className="text-[11px] text-gray-700 leading-snug">
+                  <strong className="text-dark">FGTS aceito</strong> como parte da entrada em imóveis residenciais dentro do SFH.
+                </p>
+              </div>
             </div>
+          </div>
+
+          {/* Taxas e impostos */}
+          <div className="px-6 py-4 bg-gray-50/60 space-y-3">
             <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">Registro em cartório (~2,5%)</span>
-              <span className="font-bold text-dark">{formatBRL(result.registrationEstimate)}</span>
-            </div>
-            <div className="flex justify-between items-center pt-3 border-t-2 border-dark">
-              <span className="text-sm font-black text-dark uppercase tracking-wider">Total para fechar</span>
-              <span className="text-lg font-black text-primary">
-                <AnimatedValue value={result.upfrontCostsTotal} formatter={formatBRL} />
+              <span className="text-gray-600">ITBI <span className="text-gray-400">(2% do valor)</span></span>
+              <span className="font-bold text-dark">
+                <AnimatedValue value={result.itbiEstimate} formatter={formatBRL} />
               </span>
             </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-600">Registro em cartório <span className="text-gray-400">(~2,5%)</span></span>
+              <span className="font-bold text-dark">
+                <AnimatedValue value={result.registrationEstimate} formatter={formatBRL} />
+              </span>
+            </div>
+          </div>
+
+          {/* Total */}
+          <div className="bg-dark px-6 py-5 flex items-center justify-between gap-4">
+            <p className="text-[11px] font-black text-white uppercase tracking-[0.15em]">
+              Total para fechar
+            </p>
+            <p className="text-2xl md:text-3xl font-black text-primary leading-none">
+              <AnimatedValue value={result.upfrontCostsTotal} formatter={formatBRL} />
+            </p>
           </div>
         </div>
 
