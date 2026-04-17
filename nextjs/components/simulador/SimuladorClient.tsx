@@ -204,7 +204,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
       {/* ── LEFT: Form ──────────────────────────────────────────────────────── */}
       <form className="lg:col-span-2 space-y-8">
         {/* Section: O imóvel */}
-        <section className="space-y-4">
+        <section className="space-y-7">
           <div className="flex items-center gap-3">
             <span className="w-6 h-px bg-dark/30" />
             <p className="text-[10px] font-black uppercase tracking-[0.25em] text-dark/60">
@@ -213,7 +213,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
           </div>
 
         {/* Property value */}
-        <div className="bg-white border border-gray-200 p-6">
+        <div>
           <div className="flex items-center gap-3 mb-5">
             <div className="w-9 h-9 bg-primary/10 flex items-center justify-center flex-shrink-0">
               <FiHome size={16} className="text-primary" />
@@ -237,7 +237,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
         </div>
 
         {/* Down payment */}
-        <div className="bg-white border border-gray-200 p-6">
+        <div>
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -284,7 +284,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
         </section>
 
         {/* Section: Suas condições */}
-        <section className="space-y-4">
+        <section className="space-y-7">
           <div className="flex items-center gap-3">
             <span className="w-6 h-px bg-dark/30" />
             <p className="text-[10px] font-black uppercase tracking-[0.25em] text-dark/60">
@@ -293,7 +293,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
           </div>
 
         {/* Term */}
-        <div className="bg-white border border-gray-200 p-6">
+        <div>
           <div className="flex items-center gap-3 mb-5">
             <div className="w-9 h-9 bg-primary/10 flex items-center justify-center flex-shrink-0">
               <FiClock size={16} className="text-primary" />
@@ -328,7 +328,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
         </div>
 
         {/* Rate + detected program */}
-        <div className="bg-white border border-gray-200 p-6">
+        <div>
           <div className="flex items-center gap-3 mb-5">
             <div className="w-9 h-9 bg-primary/10 flex items-center justify-center flex-shrink-0">
               <FiPercent size={16} className="text-primary" />
@@ -362,7 +362,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
         </div>
 
         {/* Monthly income */}
-        <div className="bg-white border border-gray-200 p-6">
+        <div>
           <div className="flex items-center gap-3 mb-5">
             <div className="w-9 h-9 bg-primary/10 flex items-center justify-center flex-shrink-0">
               <FiUsers size={16} className="text-primary" />
