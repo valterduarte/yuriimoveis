@@ -9,7 +9,6 @@ import {
   detectCreditProgram,
   maxAffordableInstallment,
   MIN_DOWN_PAYMENT_RATE,
-  SAC_RATE_DEFAULT_ANNUAL,
   TERM_OPTIONS,
   type CreditProgram,
 } from '../../lib/financiamento'
@@ -90,11 +89,12 @@ interface SimuladorClientProps {
 
 export default function SimuladorClient({ initialValue }: SimuladorClientProps) {
   const defaultValue = initialValue && initialValue > 0 ? initialValue : 450000
+  const initialProgram = detectCreditProgram(defaultValue, 0)
   const [propertyValue, setPropertyValue] = useState(defaultValue)
   const [downPayment, setDownPayment] = useState(Math.round(defaultValue * MIN_DOWN_PAYMENT_RATE))
   const [termMonths, setTermMonths] = useState(360)
-  const [annualRate, setAnnualRate] = useState(SAC_RATE_DEFAULT_ANNUAL)
-  const [annualRateText, setAnnualRateText] = useState(formatRate(SAC_RATE_DEFAULT_ANNUAL))
+  const [annualRate, setAnnualRate] = useState(initialProgram.rate)
+  const [annualRateText, setAnnualRateText] = useState(formatRate(initialProgram.rate))
   const [monthlyIncome, setMonthlyIncome] = useState(0)
   const [manualRate, setManualRate] = useState(false)
 
