@@ -5,7 +5,7 @@ import { FiCalendar, FiTrendingUp } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { PHONE_WA_BASE } from '../../lib/config'
 import WhatsAppLink from '../WhatsAppLink'
-import { formatPrice, calcParcela } from '../../utils/imovelUtils'
+import { formatPrice } from '../../utils/imovelUtils'
 import type { Imovel } from '../../types'
 
 interface PropertySidebarProps {
@@ -42,10 +42,7 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
         </p>
         {imovel.tipo === 'venda' && (
           <p className="text-[11px] text-green-400 mt-3 font-semibold">
-            Parcelas a partir de {imovel.parcela_display || calcParcela(imovel.preco)}/mês
-            {imovel.parcela_label && (
-              <span className="text-gray-500 text-[9px] font-normal ml-1">{imovel.parcela_label}</span>
-            )}
+            Simule sua parcela abaixo
           </p>
         )}
       </div>
