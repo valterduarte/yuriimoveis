@@ -300,32 +300,17 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
           </div>
         </div>
 
-        {/* Key metrics */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white border border-gray-200 p-5 group hover:border-primary/30 transition-colors">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 bg-blue-100 flex items-center justify-center">
-                <FiDollarSign size={12} className="text-blue-600" />
-              </div>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-bold">Financiado</p>
+        {/* Key metric */}
+        <div className="bg-white border border-gray-200 p-5 group hover:border-primary/30 transition-colors">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-6 h-6 bg-blue-100 flex items-center justify-center">
+              <FiDollarSign size={12} className="text-blue-600" />
             </div>
-            <p className="text-xl font-black text-dark">
-              <AnimatedValue value={result.financedAmount} formatter={formatBRL} />
-            </p>
+            <p className="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-bold">Valor financiado</p>
           </div>
-
-          <div className="bg-white border border-gray-200 p-5 group hover:border-primary/30 transition-colors">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 bg-red-100 flex items-center justify-center">
-                <FiPercent size={12} className="text-red-600" />
-              </div>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-bold">Total juros</p>
-            </div>
-            <p className="text-xl font-black text-dark">
-              <AnimatedValue value={result.totalInterest} formatter={formatBRL} />
-            </p>
-          </div>
-
+          <p className="text-xl font-black text-dark">
+            <AnimatedValue value={result.financedAmount} formatter={formatBRL} />
+          </p>
         </div>
 
         {/* Upfront costs */}
