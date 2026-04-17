@@ -231,7 +231,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
               value={formatIntBR(propertyValue)}
               onChange={(e) => setPropertyValue(parseDigits(e.target.value))}
               placeholder="0"
-              className="w-full bg-gray-50 border-2 border-gray-200 pl-11 pr-4 py-4 text-lg font-bold text-dark focus:border-primary focus:bg-white focus:outline-none transition-all"
+              className="w-full bg-gray-100 pl-11 pr-4 py-4 text-lg font-bold text-dark focus:bg-white focus:ring-2 focus:ring-primary focus:outline-none transition-all"
             />
           </div>
         </div>
@@ -262,7 +262,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
               value={formatIntBR(downPayment)}
               onChange={(e) => setDownPayment(parseDigits(e.target.value))}
               placeholder="0"
-              className="w-full bg-gray-50 border-2 border-gray-200 pl-11 pr-4 py-4 text-lg font-bold text-dark focus:border-primary focus:bg-white focus:outline-none transition-all"
+              className="w-full bg-gray-100 pl-11 pr-4 py-4 text-lg font-bold text-dark focus:bg-white focus:ring-2 focus:ring-primary focus:outline-none transition-all"
             />
           </div>
           <p className="text-[11px] text-gray-400 mt-2.5">
@@ -311,10 +311,10 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
                   type="button"
                   onClick={() => setTermMonths(opt.value)}
                   aria-pressed={active}
-                  className={`flex items-baseline justify-center gap-1.5 py-3.5 border-2 transition-all ${
+                  className={`flex items-baseline justify-center gap-1.5 py-3.5 transition-all ${
                     active
-                      ? 'border-primary bg-primary text-white shadow-md'
-                      : 'border-gray-200 bg-gray-50 text-dark hover:border-primary/40 hover:bg-white'
+                      ? 'bg-primary text-white shadow-md shadow-primary/20'
+                      : 'bg-gray-100 text-dark hover:bg-gray-200'
                   }`}
                 >
                   <span className="text-base font-black">{opt.value}</span>
@@ -345,7 +345,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
               value={annualRateText}
               onChange={handleRateChange}
               placeholder="0,00"
-              className="w-full bg-gray-50 border-2 border-gray-200 pl-4 pr-10 py-4 text-lg font-bold text-dark focus:border-primary focus:bg-white focus:outline-none transition-all"
+              className="w-full bg-gray-100 pl-4 pr-10 py-4 text-lg font-bold text-dark focus:bg-white focus:ring-2 focus:ring-primary focus:outline-none transition-all"
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold pointer-events-none">%</span>
           </div>
@@ -383,7 +383,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
               value={formatIntBR(monthlyIncome)}
               onChange={(e) => setMonthlyIncome(parseDigits(e.target.value))}
               placeholder="8.000"
-              className="w-full bg-gray-50 border-2 border-gray-200 pl-11 pr-4 py-4 text-lg font-bold text-dark focus:border-primary focus:bg-white focus:outline-none transition-all"
+              className="w-full bg-gray-100 pl-11 pr-4 py-4 text-lg font-bold text-dark focus:bg-white focus:ring-2 focus:ring-primary focus:outline-none transition-all"
             />
           </div>
           <p className="text-[11px] text-gray-400 mt-2.5">
@@ -399,10 +399,10 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
                   type="button"
                   onClick={() => setMonthlyIncome(preset.value)}
                   aria-pressed={active}
-                  className={`py-2.5 px-3 text-[11px] font-bold border-2 transition-all text-left ${
+                  className={`py-2.5 px-3 text-[11px] font-bold transition-all text-left ${
                     active
-                      ? 'border-primary bg-primary/10 text-primary'
-                      : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-primary/40 hover:text-dark'
+                      ? 'bg-primary text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-dark'
                   }`}
                 >
                   {preset.label}
