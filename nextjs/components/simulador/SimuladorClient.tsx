@@ -436,58 +436,46 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             </div>
           ) : (
           <div className="relative p-8 md:p-10">
-            <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
-              <div className="flex items-center gap-3">
-                <span className="w-7 h-1 bg-primary" />
-                <p className="text-sm md:text-base font-black text-white uppercase tracking-[0.15em]">
-                  Primeira parcela
-                </p>
-              </div>
-              <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 ${colors.bg} ${colors.text}`}>
+            <div className="flex items-center justify-between gap-4 mb-7 flex-wrap">
+              <p className="text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-gray-400 font-bold">
+                Primeira parcela
+                <span className="text-gray-600 font-normal normal-case tracking-normal ml-2">· Sistema SAC</span>
+              </p>
+              <p className="text-[11px] md:text-xs font-bold text-primary">
                 {formatRate(annualRate)}% a.a.
-              </span>
+              </p>
             </div>
 
-            <div className="flex items-baseline gap-1 flex-wrap">
+            <div className="flex items-baseline flex-wrap">
               <p className="text-6xl md:text-7xl font-black text-white leading-none tracking-tight">
                 <AnimatedValue value={result.firstInstallment} formatter={formatBRLInteger} />
               </p>
-              <p className="text-xl md:text-2xl font-bold text-gray-400 leading-none">
+              <p className="text-base md:text-lg font-bold text-gray-500 leading-none">
                 ,<AnimatedValue value={result.firstInstallment} formatter={formatCentsOnly} />
               </p>
-              <p className="text-sm md:text-base font-bold text-gray-500 leading-none ml-1.5">
+              <p className="text-sm md:text-base font-bold text-gray-500 leading-none ml-2">
                 /mês
               </p>
             </div>
 
             <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 gap-6">
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 bg-green-500/15 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <FiArrowDown size={15} className="text-green-400" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1.5">
-                    Cai para
-                  </p>
-                  <p className="text-xl md:text-2xl font-black text-green-400 leading-none">
-                    <AnimatedValue value={result.lastInstallment} formatter={formatBRL} />
-                  </p>
-                  <p className="text-[10px] text-gray-500 mt-1.5">na última parcela</p>
-                </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-2 flex items-center gap-1.5">
+                  <FiArrowDown size={11} className="text-green-400" />
+                  Última parcela
+                </p>
+                <p className="text-xl md:text-2xl font-black text-green-400 leading-none">
+                  <AnimatedValue value={result.lastInstallment} formatter={formatBRL} />
+                </p>
               </div>
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 bg-white/5 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <FiClock size={15} className="text-gray-400" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1.5">
-                    Prazo
-                  </p>
-                  <p className="text-xl md:text-2xl font-black text-white leading-none">
-                    {termMonths} <span className="text-sm md:text-base text-gray-400 font-bold">meses</span>
-                  </p>
-                  <p className="text-[10px] text-gray-500 mt-1.5">duração total</p>
-                </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-2 flex items-center gap-1.5">
+                  <FiClock size={11} className="text-gray-400" />
+                  Duração
+                </p>
+                <p className="text-xl md:text-2xl font-black text-white leading-none">
+                  {termMonths}<span className="text-sm md:text-base text-gray-500 font-bold ml-1.5">meses</span>
+                </p>
               </div>
             </div>
           </div>
