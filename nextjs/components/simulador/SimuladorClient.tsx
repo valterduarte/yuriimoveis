@@ -525,70 +525,59 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             </div>
           </div>
 
-          {/* Unified values list */}
-          <div className="px-6 py-5 space-y-4">
-            <div className="flex items-baseline justify-between gap-3 border-l-[3px] border-primary pl-[calc(1.5rem-3px)] -ml-6">
+          {/* Entrada — bloco protagonista */}
+          <div className="bg-primary/5 border-l-[3px] border-primary px-6 py-5">
+            <div className="flex items-baseline justify-between gap-3 mb-4">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-black uppercase tracking-[0.15em] text-primary">
+                <span className="text-xs font-black uppercase tracking-[0.2em] text-primary">
                   Entrada
                 </span>
-                <span className="text-[10px] font-black px-2 py-0.5 bg-primary/10 text-primary">
+                <span className="text-[10px] font-black px-2 py-0.5 bg-primary text-white">
                   {downPercent}%
                 </span>
               </div>
-              <p className="text-xl md:text-2xl font-black text-dark leading-none">
+              <p className="text-2xl md:text-3xl font-black text-dark leading-none">
                 <AnimatedValue value={Math.min(downPayment, propertyValue)} formatter={formatBRL} />
               </p>
             </div>
+            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-primary/15">
+              <div className="flex items-start gap-2">
+                <FiCheckCircle size={14} className="text-primary flex-shrink-0 mt-0.5" />
+                <div className="min-w-0">
+                  <p className="text-[11px] font-black text-dark leading-tight">Parcelável</p>
+                  <p className="text-[10px] text-gray-600 mt-0.5 leading-snug">com a construtora em imóveis na planta</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <FiCheckCircle size={14} className="text-primary flex-shrink-0 mt-0.5" />
+                <div className="min-w-0">
+                  <p className="text-[11px] font-black text-dark leading-tight">FGTS aceito</p>
+                  <p className="text-[10px] text-gray-600 mt-0.5 leading-snug">em residenciais dentro do SFH</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-            <div className="flex items-baseline justify-between gap-3">
-              <span className="text-sm text-gray-600">
-                ITBI <span className="text-gray-400">(2% do valor)</span>
-              </span>
-              <span className="text-sm font-bold text-dark">
+          {/* Outros custos — discreto */}
+          <div className="px-6 py-4 space-y-2.5 text-[11px]">
+            <div className="flex items-baseline justify-between text-gray-500">
+              <span>ITBI <span className="text-gray-400">(2%)</span></span>
+              <span className="font-bold text-gray-700 tabular-nums">
                 <AnimatedValue value={result.itbiEstimate} formatter={formatBRL} />
               </span>
             </div>
-
-            <div className="flex items-baseline justify-between gap-3">
-              <span className="text-sm text-gray-600">
-                Registro em cartório <span className="text-gray-400">(~2,5%)</span>
-              </span>
-              <span className="text-sm font-bold text-dark">
+            <div className="flex items-baseline justify-between text-gray-500">
+              <span>Registro em cartório <span className="text-gray-400">(~2,5%)</span></span>
+              <span className="font-bold text-gray-700 tabular-nums">
                 <AnimatedValue value={result.registrationEstimate} formatter={formatBRL} />
               </span>
             </div>
-          </div>
-
-          {/* Tips (sobre a entrada) */}
-          <div className="mx-6 mb-5 bg-primary/5 border border-primary/15 px-4 py-3">
-            <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2.5">
-              Sobre a entrada
-            </p>
-            <div className="space-y-2">
-              <div className="flex items-start gap-2.5">
-                <FiCheckCircle size={13} className="text-primary flex-shrink-0 mt-0.5" />
-                <p className="text-[11px] text-gray-700 leading-snug">
-                  <strong className="text-dark">Parcelável</strong> com a construtora em imóveis na planta.
-                </p>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <FiCheckCircle size={13} className="text-primary flex-shrink-0 mt-0.5" />
-                <p className="text-[11px] text-gray-700 leading-snug">
-                  <strong className="text-dark">FGTS aceito</strong> em imóveis residenciais dentro do SFH.
-                </p>
-              </div>
+            <div className="flex items-baseline justify-between text-gray-500 pt-2.5 border-t border-gray-100">
+              <span className="uppercase tracking-wider text-[10px] font-bold">Valor financiado · SAC</span>
+              <span className="font-bold text-gray-700 tabular-nums">
+                <AnimatedValue value={result.financedAmount} formatter={formatBRL} />
+              </span>
             </div>
-          </div>
-
-          {/* Footer: valor financiado */}
-          <div className="border-t border-gray-100 px-6 py-4 flex items-center justify-between gap-3 bg-gray-50/60">
-            <span className="text-[10px] uppercase tracking-[0.15em] text-gray-500 font-bold">
-              Valor financiado · SAC
-            </span>
-            <span className="text-sm font-black text-dark">
-              <AnimatedValue value={result.financedAmount} formatter={formatBRL} />
-            </span>
           </div>
         </div>
 
