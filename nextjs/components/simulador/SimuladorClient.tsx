@@ -413,10 +413,13 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             </div>
           ) : (
           <div className="relative p-8 md:p-10">
-            <div className="flex items-start justify-between gap-4 mb-6">
-              <p className="text-[11px] uppercase tracking-[0.25em] text-primary font-bold">
-                Primeira parcela
-              </p>
+            <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
+              <div className="flex items-center gap-3">
+                <span className="w-7 h-1 bg-primary" />
+                <p className="text-sm md:text-base font-black text-white uppercase tracking-[0.15em]">
+                  Primeira parcela
+                </p>
+              </div>
               <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 ${colors.bg} ${colors.text}`}>
                 {formatRate(annualRate)}% a.a.
               </span>
