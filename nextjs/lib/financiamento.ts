@@ -106,10 +106,10 @@ export const ALL_CREDIT_PROGRAMS: CreditProgram[] = [
 ]
 
 export const TERM_OPTIONS = [
-  { value: 240, label: '240 meses (20 anos)' },
-  { value: 300, label: '300 meses (25 anos)' },
-  { value: 360, label: '360 meses (30 anos)' },
-  { value: 420, label: '420 meses (35 anos)' },
+  { value: 240, label: '240 meses' },
+  { value: 300, label: '300 meses' },
+  { value: 360, label: '360 meses' },
+  { value: 420, label: '420 meses' },
 ]
 
 export function annualToMonthlyRate(annualRatePercent: number): number {

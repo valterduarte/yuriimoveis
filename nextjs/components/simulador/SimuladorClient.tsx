@@ -264,7 +264,6 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
           </div>
           <div className="grid grid-cols-2 gap-2">
             {TERM_OPTIONS.map((opt) => {
-              const years = Math.round(opt.value / 12)
               const active = termMonths === opt.value
               return (
                 <button
@@ -272,15 +271,15 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
                   type="button"
                   onClick={() => setTermMonths(opt.value)}
                   aria-pressed={active}
-                  className={`flex flex-col items-center justify-center py-3 border-2 transition-all ${
+                  className={`flex items-baseline justify-center gap-1.5 py-3.5 border-2 transition-all ${
                     active
                       ? 'border-primary bg-primary text-white shadow-md'
                       : 'border-gray-200 bg-gray-50 text-dark hover:border-primary/40 hover:bg-white'
                   }`}
                 >
-                  <span className="text-sm font-black">{opt.value}</span>
-                  <span className={`text-[10px] uppercase tracking-wider mt-0.5 ${active ? 'text-white/80' : 'text-gray-400'}`}>
-                    {years} anos
+                  <span className="text-base font-black">{opt.value}</span>
+                  <span className={`text-[10px] uppercase tracking-wider ${active ? 'text-white/80' : 'text-gray-400'}`}>
+                    meses
                   </span>
                 </button>
               )
