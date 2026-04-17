@@ -387,7 +387,8 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
                   {detectedProgram.description}. Taxa aplicada: <strong>{formatRate(detectedProgram.rate)}% a.a.</strong>
                   {detectedProgram.id === 'mcmv_1' && ' — possibilidade de subsídio na entrada.'}
                   {detectedProgram.id === 'mcmv_2' && ' — juros reduzidos com subsídio parcial.'}
-                  {detectedProgram.id === 'mcmv_3' && ' — juros abaixo do mercado.'}
+                  {detectedProgram.id === 'mcmv_3' && monthlyIncome > 0 && ' — juros abaixo do mercado.'}
+                  {detectedProgram.id === 'mcmv_3' && monthlyIncome === 0 && ' — preencha sua renda para encontrar uma taxa ainda menor.'}
                   {detectedProgram.id === 'associativo' && ' — condições especiais via cooperativas.'}
                 </p>
               </div>

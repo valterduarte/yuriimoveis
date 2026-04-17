@@ -74,10 +74,16 @@ const SBPE: CreditProgram = {
  * Returns the best-fit program or SBPE as default.
  */
 export function detectCreditProgram(propertyValue: number, monthlyIncome: number): CreditProgram {
+  // With income: precise faixa detection
   if (propertyValue > 0 && propertyValue <= MCMV_PROPERTY_LIMIT && monthlyIncome > 0) {
     if (monthlyIncome <= 2640) return MCMV_FAIXA_1
     if (monthlyIncome <= 4400) return MCMV_FAIXA_2
     if (monthlyIncome <= MCMV_INCOME_LIMIT) return MCMV_FAIXA_3
+  }
+
+  // Without income but property fits MCMV: suggest Faixa 3 (conservative)
+  if (propertyValue > 0 && propertyValue <= MCMV_PROPERTY_LIMIT && monthlyIncome === 0) {
+    return MCMV_FAIXA_3
   }
 
   // Associativo: income up to R$ 12k, property up to R$ 500k
