@@ -40,6 +40,13 @@ const parseDecimalBR = (raw: string): number => {
 const formatRate = (rate: number): string =>
   String(rate).replace('.', ',')
 
+const INCOME_PRESETS = [
+  { label: 'Até R$ 2.640', min: 1, max: 2640, value: 2000 },
+  { label: 'R$ 2.640 – 4.400', min: 2641, max: 4400, value: 3500 },
+  { label: 'R$ 4.400 – 8.000', min: 4401, max: 8000, value: 6000 },
+  { label: 'Acima de R$ 8.000', min: 8001, max: Infinity, value: 12000 },
+]
+
 /* ── animated number ─────────────────────────────────────────────────────────── */
 
 function AnimatedValue({ value, formatter }: { value: number; formatter: (n: number) => string }) {
@@ -356,6 +363,27 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
           <p className="text-[11px] text-gray-400 mt-2.5">
             Detecta automaticamente MCMV, Associativo ou SBPE.
           </p>
+
+          <div className="grid grid-cols-2 gap-2 mt-4">
+            {INCOME_PRESETS.map((preset) => {
+              const active = monthlyIncome > 0 && monthlyIncome >= preset.min && monthlyIncome <= preset.max
+              return (
+                <button
+                  key={preset.label}
+                  type="button"
+                  onClick={() => setMonthlyIncome(preset.value)}
+                  aria-pressed={active}
+                  className={`py-2.5 px-3 text-[11px] font-bold border-2 transition-all text-left ${
+                    active
+                      ? 'border-primary bg-primary/10 text-primary'
+                      : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-primary/40 hover:text-dark'
+                  }`}
+                >
+                  {preset.label}
+                </button>
+              )
+            })}
+          </div>
         </div>
       </form>
 
