@@ -293,12 +293,12 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
         </div>
 
         {/* Rate + detected program */}
-        <div className="bg-white border border-gray-200 p-5">
-          <div className="flex items-center gap-2.5 mb-4">
-            <div className="w-8 h-8 bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <FiPercent size={14} className="text-primary" />
+        <div className="bg-white border border-gray-200 p-6">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <FiPercent size={16} className="text-primary" />
             </div>
-            <label htmlFor="annualRate" className="text-[10px] font-bold uppercase tracking-[0.15em] text-dark">
+            <label htmlFor="annualRate" className="text-xs font-bold uppercase tracking-[0.15em] text-dark">
               Taxa de juros a.a.
             </label>
           </div>
@@ -310,9 +310,9 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
               value={annualRateText}
               onChange={handleRateChange}
               placeholder="0,00"
-              className="w-full bg-gray-50 border-2 border-gray-200 px-3 pr-9 py-3.5 text-sm font-bold text-dark focus:border-primary focus:bg-white focus:outline-none transition-all"
+              className="w-full bg-gray-50 border-2 border-gray-200 pl-4 pr-10 py-4 text-lg font-bold text-dark focus:border-primary focus:bg-white focus:outline-none transition-all"
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-bold pointer-events-none">%</span>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold pointer-events-none">%</span>
           </div>
 
           {/* Program badge */}
@@ -399,6 +399,19 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
           <div className="absolute top-0 left-0 right-0 h-1 bg-primary" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/3" />
 
+          {propertyValue <= 0 ? (
+            <div className="relative p-8 md:p-10 text-center">
+              <div className="w-12 h-12 bg-primary/15 flex items-center justify-center mx-auto mb-5">
+                <FiHome size={20} className="text-primary" />
+              </div>
+              <p className="text-[11px] uppercase tracking-[0.25em] text-primary font-bold mb-3">
+                Informe o valor do imóvel
+              </p>
+              <p className="text-white/70 text-sm leading-relaxed max-w-sm mx-auto">
+                Preencha o valor ao lado e veja sua parcela, taxa e custos iniciais em tempo real.
+              </p>
+            </div>
+          ) : (
           <div className="relative p-8 md:p-10">
             <div className="flex items-start justify-between gap-4 mb-6">
               <p className="text-[11px] uppercase tracking-[0.25em] text-primary font-bold">
@@ -452,6 +465,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
               </div>
             </div>
           </div>
+          )}
         </div>
 
         {/* Detected program card */}
