@@ -20,8 +20,13 @@ import WhatsAppLink from '../WhatsAppLink'
 const formatBRL = (value: number) =>
   value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
 
-const formatBRLPrecise = (value: number) =>
-  value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 2 })
+const formatBRLInteger = (value: number) =>
+  Math.floor(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
+
+const formatCentsOnly = (value: number) => {
+  const cents = Math.round((value - Math.floor(value)) * 100)
+  return cents.toString().padStart(2, '0')
+}
 
 const formatIntBR = (value: number): string =>
   value > 0 ? value.toLocaleString('pt-BR') : ''
@@ -394,38 +399,55 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
           <div className="absolute top-0 left-0 right-0 h-1 bg-primary" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/3" />
 
-          <div className="relative p-8">
-            <div className="flex items-center gap-3 mb-3">
-              <p className="text-[10px] uppercase tracking-[0.25em] text-primary font-bold">
-                Primeira parcela (SAC)
+          <div className="relative p-8 md:p-10">
+            <div className="flex items-start justify-between gap-4 mb-6">
+              <p className="text-[11px] uppercase tracking-[0.25em] text-primary font-bold">
+                Primeira parcela
               </p>
-              <span className={`text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 ${colors.bg} ${colors.text}`}>
+              <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 ${colors.bg} ${colors.text}`}>
                 {formatRate(annualRate)}% a.a.
               </span>
             </div>
-            <p className="text-5xl md:text-6xl font-black text-white leading-none mb-4">
-              <AnimatedValue value={result.firstInstallment} formatter={formatBRLPrecise} />
-            </p>
 
-            <div className="flex items-center gap-6 mt-4">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 bg-white/10 flex items-center justify-center">
-                  <FiArrowDown size={13} className="text-green-400" />
+            <div className="flex items-baseline gap-1 flex-wrap">
+              <p className="text-6xl md:text-7xl font-black text-white leading-none tracking-tight">
+                <AnimatedValue value={result.firstInstallment} formatter={formatBRLInteger} />
+              </p>
+              <p className="text-xl md:text-2xl font-bold text-gray-400 leading-none">
+                ,<AnimatedValue value={result.firstInstallment} formatter={formatCentsOnly} />
+              </p>
+              <p className="text-sm md:text-base font-bold text-gray-500 leading-none ml-1.5">
+                /mês
+              </p>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 gap-6">
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 bg-green-500/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <FiArrowDown size={15} className="text-green-400" />
                 </div>
-                <div>
-                  <p className="text-[9px] uppercase tracking-widest text-gray-500">Última</p>
-                  <p className="text-sm font-bold text-green-400">
-                    <AnimatedValue value={result.lastInstallment} formatter={formatBRLPrecise} />
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1.5">
+                    Cai para
                   </p>
+                  <p className="text-xl md:text-2xl font-black text-green-400 leading-none">
+                    <AnimatedValue value={result.lastInstallment} formatter={formatBRL} />
+                  </p>
+                  <p className="text-[10px] text-gray-500 mt-1.5">na última parcela</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 bg-white/10 flex items-center justify-center">
-                  <FiClock size={13} className="text-gray-400" />
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 bg-white/5 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <FiClock size={15} className="text-gray-400" />
                 </div>
-                <div>
-                  <p className="text-[9px] uppercase tracking-widest text-gray-500">Prazo</p>
-                  <p className="text-sm font-bold text-white">{termMonths} meses</p>
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1.5">
+                    Prazo
+                  </p>
+                  <p className="text-xl md:text-2xl font-black text-white leading-none">
+                    {termMonths} <span className="text-sm md:text-base text-gray-400 font-bold">meses</span>
+                  </p>
+                  <p className="text-[10px] text-gray-500 mt-1.5">pagamento total</p>
                 </div>
               </div>
             </div>
