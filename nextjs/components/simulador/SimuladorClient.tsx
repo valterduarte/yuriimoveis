@@ -1,9 +1,8 @@
 'use client'
 
 import { useMemo, useState, useEffect, useRef } from 'react'
-import Link from 'next/link'
 import { FaWhatsapp } from 'react-icons/fa'
-import { FiAlertCircle, FiCheckCircle, FiDollarSign, FiPercent, FiClock, FiHome, FiUsers, FiArrowDown, FiZap } from 'react-icons/fi'
+import { FiAlertCircle, FiCheckCircle, FiDollarSign, FiPercent, FiClock, FiHome, FiUsers, FiArrowDown, FiZap, FiShield } from 'react-icons/fi'
 import {
   calculateSacFinancing,
   detectCreditProgram,
@@ -12,7 +11,7 @@ import {
   TERM_OPTIONS,
   type CreditProgram,
 } from '../../lib/financiamento'
-import { PHONE_WA, PHONE_WA_BASE } from '../../lib/config'
+import { PHONE_WA, PHONE_WA_BASE, CRECI } from '../../lib/config'
 import WhatsAppLink from '../WhatsAppLink'
 
 /* ── formatting helpers ──────────────────────────────────────────────────────── */
@@ -646,31 +645,60 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             <p className="text-[10px] uppercase tracking-[0.25em] text-primary font-bold mb-2">
               Próximo passo
             </p>
-            <p className="font-black text-xl text-white uppercase tracking-wide mb-2">
-              Quer taxas reais dos bancos?
+            <p className="font-black text-xl md:text-2xl text-white uppercase tracking-wide mb-3 leading-tight">
+              Quer que eu simule nos bancos pra você?
             </p>
             <p className="text-sm text-white/70 mb-6 max-w-md leading-relaxed">
-              Simulo gratuitamente no seu nome com Caixa, Itaú, Bradesco e Santander.
-              Sem compromisso.
+              Envio a proposta no seu nome para Caixa, Itaú, Bradesco e Santander e
+              volto com as taxas reais. Sem custo, sem compromisso.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <WhatsAppLink
-                href={whatsappHref}
-                source="simulador"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2.5 bg-green-500 hover:bg-green-600 text-white font-black uppercase tracking-[0.2em] text-xs py-4 px-7 transition-all hover:shadow-lg hover:shadow-green-500/25"
-              >
-                <FaWhatsapp size={18} /> Enviar esta simulação
-              </WhatsAppLink>
-              <Link
-                href="/imoveis"
-                className="inline-flex items-center justify-center gap-2 border-2 border-white/20 text-white font-bold uppercase tracking-[0.15em] text-xs py-4 px-7 hover:border-white/50 transition-colors"
-              >
-                Ver imóveis
-              </Link>
+
+            <WhatsAppLink
+              href={whatsappHref}
+              source="simulador"
+              target="_blank"
+              rel="noreferrer"
+              className="w-full inline-flex items-center justify-center gap-2.5 bg-green-500 hover:bg-green-600 text-white font-black uppercase tracking-[0.2em] text-xs py-4 px-7 transition-all hover:shadow-lg hover:shadow-green-500/25"
+            >
+              <FaWhatsapp size={18} /> Enviar esta simulação
+            </WhatsAppLink>
+
+            {/* Trust strip */}
+            <div className="mt-5 pt-5 border-t border-white/10 flex items-center gap-4 flex-wrap">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 bg-primary/15 flex items-center justify-center flex-shrink-0">
+                  <FiShield size={14} className="text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs font-black text-white leading-none">Corretor Yuri</p>
+                  <p className="text-[10px] text-gray-400 mt-1">CRECI-SP {CRECI}</p>
+                </div>
+              </div>
+              <div className="h-8 w-px bg-white/10 hidden sm:block" />
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 bg-green-400" />
+                </span>
+                <p className="text-[11px] text-gray-300">
+                  Resposta rápida no WhatsApp
+                </p>
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Floating mobile CTA */}
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 pb-[env(safe-area-inset-bottom)] bg-dark border-t border-primary/30 shadow-2xl">
+          <WhatsAppLink
+            href={whatsappHref}
+            source="simulador-floating"
+            target="_blank"
+            rel="noreferrer"
+            className="w-full flex items-center justify-center gap-2.5 bg-green-500 hover:bg-green-600 text-white font-black uppercase tracking-[0.15em] text-xs py-4"
+          >
+            <FaWhatsapp size={18} /> Enviar simulação para o Yuri
+          </WhatsAppLink>
         </div>
 
         <p className="text-[10px] text-gray-400 leading-relaxed tracking-wide">

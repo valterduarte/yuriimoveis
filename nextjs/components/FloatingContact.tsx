@@ -9,8 +9,9 @@ import WhatsAppLink from './WhatsAppLink'
 export default function FloatingContact() {
   const pathname = usePathname()
   const isPropertyDetail = /^\/imoveis\/.+-\d+$/.test(pathname)
+  const isSimulator = pathname === '/simulador'
 
-  if (isPropertyDetail) return null
+  if (isPropertyDetail || isSimulator) return null
 
   const secondaryClass = 'bg-dark hover:bg-dark/80 text-white flex flex-col items-center justify-center gap-0.5 py-3 transition-colors duration-200'
 
