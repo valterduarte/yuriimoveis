@@ -527,32 +527,30 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
 
           {/* Entrada — bloco protagonista */}
           <div className="bg-primary/5 border-l-[3px] border-primary px-6 py-5">
-            <div className="flex items-baseline justify-between gap-3 mb-4">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-black uppercase tracking-[0.2em] text-primary">
-                  Entrada
-                </span>
-                <span className="text-[10px] font-black px-2 py-0.5 bg-primary text-white">
-                  {downPercent}%
-                </span>
-              </div>
-              <p className="text-2xl md:text-3xl font-black text-dark leading-none">
-                <AnimatedValue value={Math.min(downPayment, propertyValue)} formatter={formatBRL} />
-              </p>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-base md:text-lg font-black uppercase tracking-[0.15em] text-primary">
+                Entrada
+              </span>
+              <span className="text-[9px] font-bold tracking-wider px-1.5 py-0.5 bg-primary/15 text-primary">
+                {downPercent}%
+              </span>
             </div>
+            <p className="text-xl md:text-2xl font-black text-dark leading-none mb-5">
+              <AnimatedValue value={Math.min(downPayment, propertyValue)} formatter={formatBRL} />
+            </p>
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-primary/15">
-              <div className="flex items-start gap-2">
-                <FiCheckCircle size={14} className="text-primary flex-shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2.5">
+                <FiCheckCircle size={16} className="text-primary flex-shrink-0 mt-0.5" />
                 <div className="min-w-0">
-                  <p className="text-[11px] font-black text-dark leading-tight">Parcelável</p>
-                  <p className="text-[10px] text-gray-600 mt-0.5 leading-snug">com a construtora em imóveis na planta</p>
+                  <p className="text-sm font-black text-dark leading-tight">Parcelável</p>
+                  <p className="text-[11px] text-gray-600 mt-1 leading-snug">com a construtora em imóveis na planta</p>
                 </div>
               </div>
-              <div className="flex items-start gap-2">
-                <FiCheckCircle size={14} className="text-primary flex-shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2.5">
+                <FiCheckCircle size={16} className="text-primary flex-shrink-0 mt-0.5" />
                 <div className="min-w-0">
-                  <p className="text-[11px] font-black text-dark leading-tight">FGTS aceito</p>
-                  <p className="text-[10px] text-gray-600 mt-0.5 leading-snug">em residenciais dentro do SFH</p>
+                  <p className="text-sm font-black text-dark leading-tight">FGTS aceito</p>
+                  <p className="text-[11px] text-gray-600 mt-1 leading-snug">em residenciais dentro do SFH</p>
                 </div>
               </div>
             </div>
