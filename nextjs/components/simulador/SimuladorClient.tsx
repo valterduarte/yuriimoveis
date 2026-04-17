@@ -152,7 +152,27 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
   }
 
   return (
-    <div className="grid lg:grid-cols-5 gap-8">
+    <>
+      {/* ── Mobile sticky summary ───────────────────────────────────────────── */}
+      <div className="lg:hidden sticky top-16 md:top-20 z-30 -mx-6 px-6 py-3 bg-dark/95 backdrop-blur-md border-b border-primary/30 mb-6 shadow-lg">
+        <div className="flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-[9px] uppercase tracking-widest text-gray-400 font-bold">Imóvel</p>
+            <p className="text-xs font-bold text-white truncate">{formatBRL(propertyValue)}</p>
+          </div>
+          <div className="text-right min-w-0">
+            <p className="text-[9px] uppercase tracking-widest text-primary font-bold">
+              Parcela · {formatRate(annualRate)}% a.a.
+            </p>
+            <p className="text-lg font-black text-white leading-none mt-0.5">
+              <AnimatedValue value={result.firstInstallment} formatter={formatBRL} />
+              <span className="text-[10px] font-bold text-gray-400 ml-1">/mês</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-5 gap-8">
       {/* ── LEFT: Form ──────────────────────────────────────────────────────── */}
       <form className="lg:col-span-2 space-y-6">
         {/* Property value */}
@@ -226,25 +246,39 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
         </div>
 
         {/* Term */}
-        <div className="bg-white border border-gray-200 p-5">
-          <div className="flex items-center gap-2.5 mb-4">
-            <div className="w-8 h-8 bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <FiClock size={14} className="text-primary" />
+        <div className="bg-white border border-gray-200 p-6">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <FiClock size={16} className="text-primary" />
             </div>
-            <label htmlFor="termMonths" className="text-[10px] font-bold uppercase tracking-[0.15em] text-dark">
+            <label className="text-xs font-bold uppercase tracking-[0.15em] text-dark">
               Prazo
             </label>
           </div>
-          <select
-            id="termMonths"
-            value={termMonths}
-            onChange={(e) => setTermMonths(Number(e.target.value))}
-            className="w-full bg-gray-50 border-2 border-gray-200 px-3 py-3.5 text-sm font-bold text-dark focus:border-primary focus:bg-white focus:outline-none transition-all cursor-pointer"
-          >
-            {TERM_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
+          <div className="grid grid-cols-2 gap-2">
+            {TERM_OPTIONS.map((opt) => {
+              const years = Math.round(opt.value / 12)
+              const active = termMonths === opt.value
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setTermMonths(opt.value)}
+                  aria-pressed={active}
+                  className={`flex flex-col items-center justify-center py-3 border-2 transition-all ${
+                    active
+                      ? 'border-primary bg-primary text-white shadow-md'
+                      : 'border-gray-200 bg-gray-50 text-dark hover:border-primary/40 hover:bg-white'
+                  }`}
+                >
+                  <span className="text-sm font-black">{opt.value}</span>
+                  <span className={`text-[10px] uppercase tracking-wider mt-0.5 ${active ? 'text-white/80' : 'text-gray-400'}`}>
+                    {years} anos
+                  </span>
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         {/* Rate + detected program */}
@@ -522,6 +556,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
           Não é proposta de crédito.
         </p>
       </div>
-    </div>
+      </div>
+    </>
   )
 }
