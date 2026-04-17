@@ -331,24 +331,11 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold pointer-events-none">%</span>
           </div>
 
-          {/* Program badge */}
-          <div className={`mt-3 flex items-start gap-2.5 px-3 py-2.5 border ${colors.bg} ${colors.border}`}>
-            <FiZap size={14} className={`${colors.icon} flex-shrink-0 mt-0.5`} />
-            <div className="min-w-0">
-              <p className={`text-[11px] font-bold ${colors.text}`}>
-                {detectedProgram.label}
-              </p>
-              <p className="text-[10px] text-gray-500 mt-0.5">
-                {detectedProgram.description} · Taxa: {formatRate(detectedProgram.rate)}% a.a.
-              </p>
-            </div>
-          </div>
-
           {manualRate && annualRate !== detectedProgram.rate && (
             <button
               type="button"
               onClick={resetToAutoRate}
-              className="mt-2 text-[11px] text-primary font-bold hover:underline"
+              className="mt-3 text-[11px] text-primary font-bold hover:underline"
             >
               Usar taxa do {detectedProgram.label.split('—')[0].trim()} ({formatRate(detectedProgram.rate)}%)
             </button>
@@ -488,32 +475,32 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
         </div>
 
         {/* Detected program card */}
-        {detectedProgram.id !== 'sbpe' && (
-          <div className={`border ${colors.border} overflow-hidden`}>
-            <div className={`px-6 py-5 flex items-start gap-3 ${colors.bg}`}>
-              <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                detectedProgram.id === 'mcmv_estimado' ? 'bg-amber-200'
-                  : detectedProgram.id.startsWith('mcmv') ? 'bg-green-200'
-                  : 'bg-blue-200'
-              }`}>
-                <FiZap size={16} className={colors.icon} />
-              </div>
-              <div>
-                <p className={`text-sm font-black uppercase tracking-wider ${colors.text}`}>
-                  {detectedProgram.label}
-                </p>
-                <p className="text-xs text-gray-600 mt-1.5 leading-relaxed">
-                  {detectedProgram.description}. Taxa aplicada: <strong>{formatRate(detectedProgram.rate)}% a.a.</strong>
-                  {detectedProgram.id === 'mcmv_1' && ' — possibilidade de subsídio na entrada.'}
-                  {detectedProgram.id === 'mcmv_2' && ' — juros reduzidos com subsídio parcial.'}
-                  {detectedProgram.id === 'mcmv_3' && ' — juros abaixo do mercado.'}
-                  {detectedProgram.id === 'mcmv_estimado' && ' — preencha sua renda para encontrar uma taxa ainda menor (a partir de 4% a.a.).'}
-                  {detectedProgram.id === 'associativo' && ' — condições especiais via cooperativas.'}
-                </p>
-              </div>
+        <div className={`border ${colors.border} overflow-hidden`}>
+          <div className={`px-6 py-5 flex items-start gap-3 ${colors.bg}`}>
+            <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+              detectedProgram.id === 'mcmv_estimado' ? 'bg-amber-200'
+                : detectedProgram.id === 'sbpe' ? 'bg-gray-200'
+                : detectedProgram.id === 'associativo' ? 'bg-blue-200'
+                : 'bg-green-200'
+            }`}>
+              <FiZap size={16} className={colors.icon} />
+            </div>
+            <div>
+              <p className={`text-sm font-black uppercase tracking-wider ${colors.text}`}>
+                {detectedProgram.label}
+              </p>
+              <p className="text-xs text-gray-600 mt-1.5 leading-relaxed">
+                {detectedProgram.description}. Taxa aplicada: <strong>{formatRate(detectedProgram.rate)}% a.a.</strong>
+                {detectedProgram.id === 'mcmv_1' && ' — possibilidade de subsídio na entrada.'}
+                {detectedProgram.id === 'mcmv_2' && ' — juros reduzidos com subsídio parcial.'}
+                {detectedProgram.id === 'mcmv_3' && ' — juros abaixo do mercado.'}
+                {detectedProgram.id === 'mcmv_estimado' && ' — preencha sua renda para encontrar uma taxa ainda menor (a partir de 4% a.a.).'}
+                {detectedProgram.id === 'associativo' && ' — condições especiais via cooperativas.'}
+                {detectedProgram.id === 'sbpe' && ' — financiamento padrão do mercado. Com relacionamento bancário (conta salário, portabilidade, seguros) a taxa pode cair para ~9,9% a.a.'}
+              </p>
             </div>
           </div>
-        )}
+        </div>
 
         {/* What you need to have */}
         <div className="bg-white border border-gray-200 overflow-hidden">
