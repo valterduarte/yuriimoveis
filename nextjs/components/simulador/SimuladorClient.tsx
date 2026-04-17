@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { FaWhatsapp } from 'react-icons/fa'
-import { FiAlertCircle, FiCheckCircle, FiInfo, FiDollarSign, FiPercent, FiClock, FiHome, FiUsers, FiArrowDown, FiArrowUp, FiShield } from 'react-icons/fi'
+import { FiAlertCircle, FiCheckCircle, FiInfo, FiDollarSign, FiPercent, FiClock, FiHome, FiUsers, FiArrowDown } from 'react-icons/fi'
 import {
   calculateSacFinancing,
   isMcmvEligible,
@@ -293,7 +293,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
                 </div>
                 <div>
                   <p className="text-[9px] uppercase tracking-widest text-gray-500">Prazo</p>
-                  <p className="text-sm font-bold text-white">{termMonths / 12} anos</p>
+                  <p className="text-sm font-bold text-white">{termMonths} meses</p>
                 </div>
               </div>
             </div>
@@ -326,32 +326,6 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             </p>
           </div>
 
-          <div className="bg-white border border-gray-200 p-5 group hover:border-primary/30 transition-colors">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 bg-amber-100 flex items-center justify-center">
-                <FiArrowUp size={12} className="text-amber-600" />
-              </div>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-bold">Total ao banco</p>
-            </div>
-            <p className="text-xl font-black text-dark">
-              <AnimatedValue value={result.totalPaid} formatter={formatBRL} />
-            </p>
-          </div>
-
-          <div className="bg-white border border-gray-200 p-5 group hover:border-primary/30 transition-colors">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 bg-purple-100 flex items-center justify-center">
-                <FiShield size={12} className="text-purple-600" />
-              </div>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-bold">Custo total</p>
-            </div>
-            <p className="text-xl font-black text-dark">
-              <AnimatedValue
-                value={result.totalPaid + result.itbiEstimate + result.registrationEstimate}
-                formatter={formatBRL}
-              />
-            </p>
-          </div>
         </div>
 
         {/* Upfront costs */}
