@@ -12,7 +12,7 @@ import {
   TERM_OPTIONS,
   type CreditProgram,
 } from '../../lib/financiamento'
-import { PHONE_WA } from '../../lib/config'
+import { PHONE_WA, PHONE_WA_BASE } from '../../lib/config'
 import WhatsAppLink from '../WhatsAppLink'
 
 /* ── formatting helpers ──────────────────────────────────────────────────────── */
@@ -150,6 +150,23 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
   const downPercent = propertyValue > 0 ? Math.round((downPayment / propertyValue) * 100) : 0
 
   const colors = programColors(detectedProgram.id)
+
+  const whatsappHref = useMemo(() => {
+    if (propertyValue <= 0) return PHONE_WA
+    const lines = [
+      'Olá Yuri! Fiz uma simulação no site e quero conversar:',
+      '',
+      `Imóvel: ${formatBRL(propertyValue)}`,
+      `Entrada: ${formatBRL(Math.min(downPayment, propertyValue))} (${downPercent}%)`,
+      `Prazo: ${termMonths} meses`,
+      `Taxa: ${formatRate(annualRate)}% a.a. (${detectedProgram.label})`,
+      monthlyIncome > 0 ? `Renda familiar: ${formatBRL(monthlyIncome)}` : null,
+      `Parcela: ${formatBRL(result.firstInstallment)}/mês`,
+      '',
+      'Pode me ajudar com as próximas etapas?',
+    ].filter(Boolean).join('\n')
+    return `${PHONE_WA_BASE}?text=${encodeURIComponent(lines)}`
+  }, [propertyValue, downPayment, downPercent, termMonths, annualRate, detectedProgram, monthlyIncome, result.firstInstallment])
 
   function handleRateChange(e: React.ChangeEvent<HTMLInputElement>) {
     setManualRate(true)
@@ -638,13 +655,13 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <WhatsAppLink
-                href={PHONE_WA}
+                href={whatsappHref}
                 source="simulador"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2.5 bg-green-500 hover:bg-green-600 text-white font-black uppercase tracking-[0.2em] text-xs py-4 px-7 transition-all hover:shadow-lg hover:shadow-green-500/25"
               >
-                <FaWhatsapp size={18} /> Falar no WhatsApp
+                <FaWhatsapp size={18} /> Enviar esta simulação
               </WhatsAppLink>
               <Link
                 href="/imoveis"
