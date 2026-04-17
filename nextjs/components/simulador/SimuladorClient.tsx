@@ -83,9 +83,9 @@ function AnimatedValue({ value, formatter }: { value: number; formatter: (n: num
 
 function programColors(id: CreditProgram['id']) {
   switch (id) {
-    case 'mcmv_1': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-300', icon: 'text-green-600' }
-    case 'mcmv_2': return { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300', icon: 'text-emerald-600' }
-    case 'mcmv_3': return { bg: 'bg-teal-100', text: 'text-teal-800', border: 'border-teal-300', icon: 'text-teal-600' }
+    case 'mcmv_1':
+    case 'mcmv_2':
+    case 'mcmv_3': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-300', icon: 'text-green-600' }
     case 'mcmv_estimado': return { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200', icon: 'text-amber-600' }
     case 'associativo': return { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300', icon: 'text-blue-600' }
     case 'sbpe': return { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-300', icon: 'text-gray-500' }
