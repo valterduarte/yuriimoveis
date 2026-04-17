@@ -202,7 +202,16 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
 
       <div className="grid lg:grid-cols-5 gap-8">
       {/* ── LEFT: Form ──────────────────────────────────────────────────────── */}
-      <form className="lg:col-span-2 space-y-6">
+      <form className="lg:col-span-2 space-y-8">
+        {/* Section: O imóvel */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-3">
+            <span className="w-6 h-px bg-dark/30" />
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-dark/60">
+              O imóvel
+            </p>
+          </div>
+
         {/* Property value */}
         <div className="bg-white border border-gray-200 p-6">
           <div className="flex items-center gap-3 mb-5">
@@ -272,6 +281,16 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             </div>
           )}
         </div>
+        </section>
+
+        {/* Section: Suas condições */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-3">
+            <span className="w-6 h-px bg-dark/30" />
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-dark/60">
+              Suas condições
+            </p>
+          </div>
 
         {/* Term */}
         <div className="bg-white border border-gray-200 p-6">
@@ -392,6 +411,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             })}
           </div>
         </div>
+        </section>
       </form>
 
       {/* ── RIGHT: Results ──────────────────────────────────────────────────── */}
