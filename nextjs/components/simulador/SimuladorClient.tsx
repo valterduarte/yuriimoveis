@@ -466,7 +466,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
                   <p className="text-xl md:text-2xl font-black text-white leading-none">
                     {termMonths} <span className="text-sm md:text-base text-gray-400 font-bold">meses</span>
                   </p>
-                  <p className="text-[10px] text-gray-500 mt-1.5">pagamento total</p>
+                  <p className="text-[10px] text-gray-500 mt-1.5">duração total</p>
                 </div>
               </div>
             </div>
@@ -519,7 +519,7 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
 
           {/* Unified values list */}
           <div className="px-6 py-5 space-y-4">
-            <div className="flex items-baseline justify-between gap-3 border-l-[3px] border-primary pl-3 -ml-3">
+            <div className="flex items-baseline justify-between gap-3 border-l-[3px] border-primary pl-[calc(1.5rem-3px)] -ml-6">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-black uppercase tracking-[0.15em] text-primary">
                   Entrada
