@@ -28,7 +28,7 @@ export const MAX_TERM_MONTHS = 420
 /* ── Credit programs ─────────────────────────────────────────────────────────── */
 
 export interface CreditProgram {
-  id: 'mcmv_1' | 'mcmv_2' | 'mcmv_3' | 'associativo' | 'sbpe'
+  id: 'mcmv_1' | 'mcmv_2' | 'mcmv_3' | 'mcmv_estimado' | 'associativo' | 'sbpe'
   label: string
   description: string
   rate: number
@@ -53,6 +53,13 @@ const MCMV_FAIXA_3: CreditProgram = {
   label: 'Minha Casa Minha Vida — Faixa 3',
   description: 'Renda de R$ 4.400 a R$ 8.000',
   rate: 7.66,
+}
+
+const MCMV_ESTIMADO: CreditProgram = {
+  id: 'mcmv_estimado',
+  label: 'Minha Casa Minha Vida — estimativa',
+  description: 'Imóvel elegível · Preencha sua renda para taxa exata',
+  rate: 9.9,
 }
 
 const ASSOCIATIVO: CreditProgram = {
@@ -81,9 +88,9 @@ export function detectCreditProgram(propertyValue: number, monthlyIncome: number
     if (monthlyIncome <= MCMV_INCOME_LIMIT) return MCMV_FAIXA_3
   }
 
-  // Without income but property fits MCMV: suggest Faixa 3 (conservative)
+  // Without income but property fits MCMV: conservative market estimate
   if (propertyValue > 0 && propertyValue <= MCMV_PROPERTY_LIMIT && monthlyIncome === 0) {
-    return MCMV_FAIXA_3
+    return MCMV_ESTIMADO
   }
 
   // Associativo: income up to R$ 12k, property up to R$ 500k
@@ -95,7 +102,7 @@ export function detectCreditProgram(propertyValue: number, monthlyIncome: number
 }
 
 export const ALL_CREDIT_PROGRAMS: CreditProgram[] = [
-  MCMV_FAIXA_1, MCMV_FAIXA_2, MCMV_FAIXA_3, ASSOCIATIVO, SBPE,
+  MCMV_FAIXA_1, MCMV_FAIXA_2, MCMV_FAIXA_3, MCMV_ESTIMADO, ASSOCIATIVO, SBPE,
 ]
 
 export const TERM_OPTIONS = [
@@ -146,7 +153,7 @@ export function isMcmvEligible(propertyValue: number, monthlyIncome: number): bo
 }
 
 export function isMcmvOrAssociativo(programId: CreditProgram['id']): boolean {
-  return programId === 'mcmv_1' || programId === 'mcmv_2' || programId === 'mcmv_3' || programId === 'associativo'
+  return programId === 'mcmv_1' || programId === 'mcmv_2' || programId === 'mcmv_3' || programId === 'mcmv_estimado' || programId === 'associativo'
 }
 
 export function maxAffordableInstallment(monthlyIncome: number): number {

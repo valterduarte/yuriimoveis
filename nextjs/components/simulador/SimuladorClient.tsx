@@ -76,6 +76,7 @@ function programColors(id: CreditProgram['id']) {
     case 'mcmv_1': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-300', icon: 'text-green-600' }
     case 'mcmv_2': return { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300', icon: 'text-emerald-600' }
     case 'mcmv_3': return { bg: 'bg-teal-100', text: 'text-teal-800', border: 'border-teal-300', icon: 'text-teal-600' }
+    case 'mcmv_estimado': return { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200', icon: 'text-amber-600' }
     case 'associativo': return { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300', icon: 'text-blue-600' }
     case 'sbpe': return { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-300', icon: 'text-gray-500' }
   }
@@ -375,7 +376,9 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
           <div className={`border ${colors.border} overflow-hidden`}>
             <div className={`px-6 py-5 flex items-start gap-3 ${colors.bg}`}>
               <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                detectedProgram.id.startsWith('mcmv') ? 'bg-green-200' : 'bg-blue-200'
+                detectedProgram.id === 'mcmv_estimado' ? 'bg-amber-200'
+                  : detectedProgram.id.startsWith('mcmv') ? 'bg-green-200'
+                  : 'bg-blue-200'
               }`}>
                 <FiZap size={16} className={colors.icon} />
               </div>
@@ -387,8 +390,8 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
                   {detectedProgram.description}. Taxa aplicada: <strong>{formatRate(detectedProgram.rate)}% a.a.</strong>
                   {detectedProgram.id === 'mcmv_1' && ' — possibilidade de subsídio na entrada.'}
                   {detectedProgram.id === 'mcmv_2' && ' — juros reduzidos com subsídio parcial.'}
-                  {detectedProgram.id === 'mcmv_3' && monthlyIncome > 0 && ' — juros abaixo do mercado.'}
-                  {detectedProgram.id === 'mcmv_3' && monthlyIncome === 0 && ' — preencha sua renda para encontrar uma taxa ainda menor.'}
+                  {detectedProgram.id === 'mcmv_3' && ' — juros abaixo do mercado.'}
+                  {detectedProgram.id === 'mcmv_estimado' && ' — preencha sua renda para encontrar uma taxa ainda menor (a partir de 4% a.a.).'}
                   {detectedProgram.id === 'associativo' && ' — condições especiais via cooperativas.'}
                 </p>
               </div>
