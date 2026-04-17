@@ -574,15 +574,6 @@ export default function SimuladorClient({ initialValue }: SimuladorClientProps) 
             </div>
           </div>
 
-          {/* Total */}
-          <div className="bg-dark px-6 py-5 flex items-center justify-between gap-4">
-            <p className="text-[11px] font-black text-white uppercase tracking-[0.15em]">
-              Total para fechar
-            </p>
-            <p className="text-2xl md:text-3xl font-black text-primary leading-none">
-              <AnimatedValue value={result.upfrontCostsTotal} formatter={formatBRL} />
-            </p>
-          </div>
         </div>
 
         {/* Budget check */}
