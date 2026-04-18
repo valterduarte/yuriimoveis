@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { fetchBlogPostBySlug, fetchAllBlogSlugs } from '../../../lib/api'
+import { fetchBlogPostBySlug, fetchAllBlogSlugs, fetchRelatedBlogPosts } from '../../../lib/api'
 import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA } from '../../../lib/config'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
 import WhatsAppLink from '../../../components/WhatsAppLink'
@@ -50,6 +50,8 @@ export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params
   const post = await fetchBlogPostBySlug(slug)
   if (!post) notFound()
+
+  const relatedPosts = await fetchRelatedBlogPosts(post.slug, post.tags, 3)
 
   const jsonLd = [
     {
@@ -155,6 +157,56 @@ export default async function BlogPostPage({ params }: PageProps) {
             </WhatsAppLink>
           </div>
         </div>
+
+        {relatedPosts.length > 0 && (
+          <section className="mt-14 pt-10 border-t border-gray-200" aria-labelledby="related-heading">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="w-6 h-1 bg-primary flex-shrink-0" />
+              <h2 id="related-heading" className="text-xs font-black uppercase tracking-[0.2em] text-dark">
+                Leia também
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {relatedPosts.map(related => (
+                <article key={related.id} className="bg-white border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group">
+                  <Link href={`/blog/${related.slug}`}>
+                    <div className="relative aspect-[16/9] overflow-hidden">
+                      <Image
+                        src={related.imagem_capa || OG_DEFAULT_IMAGE}
+                        alt={related.titulo}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="p-4">
+                      {related.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mb-2">
+                          {related.tags.slice(0, 2).map(tag => (
+                            <span key={tag} className="text-[9px] uppercase tracking-wider font-bold text-primary bg-red-50 px-1.5 py-0.5">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <h3 className="text-sm font-bold text-dark group-hover:text-primary transition-colors leading-snug line-clamp-3">
+                        {related.titulo}
+                      </h3>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+            <div className="mt-6 text-center">
+              <Link
+                href="/blog"
+                className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-dark hover:text-primary transition-colors"
+              >
+                Ver todos os artigos →
+              </Link>
+            </div>
+          </section>
+        )}
       </article>
     </div>
   )

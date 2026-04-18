@@ -441,3 +441,26 @@ export async function fetchAllBlogSlugs(): Promise<Pick<BlogPost, 'slug' | 'upda
     return []
   }
 }
+
+export async function fetchRelatedBlogPosts(
+  currentSlug: string,
+  tags: string[],
+  limit = 3,
+): Promise<BlogPost[]> {
+  try {
+    const result = await getDb().query(
+      `SELECT *,
+         (SELECT COUNT(*) FROM jsonb_array_elements_text(tags::jsonb) tag
+          WHERE tag = ANY($2::text[])) AS tag_matches
+       FROM blog_posts
+       WHERE publicado = true AND slug != $1
+       ORDER BY tag_matches DESC, created_at DESC
+       LIMIT $3`,
+      [currentSlug, tags, limit],
+    )
+    return result.rows.map(parseBlogPost)
+  } catch (err) {
+    logDbError('fetchRelatedBlogPosts', err, { currentSlug })
+    return []
+  }
+}
