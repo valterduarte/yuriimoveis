@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:blog": "tsx scripts/seed-blog.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -28,14 +29,19 @@
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/marked": "^5.0.2",
     "@types/node": "^25.5.2",
     "@types/react": "^19.2.14",
     "autoprefixer": "^10.4.20",
+    "dotenv": "^17.4.2",
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.1.0",
+    "gray-matter": "^4.0.3",
+    "marked": "^18.0.1",
     "postcss": "^8.4.49",
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   }
 }
