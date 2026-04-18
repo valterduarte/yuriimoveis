@@ -28,6 +28,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/marked": "^5.0.2",
     "@types/node": "^25.5.2",
