@@ -141,19 +141,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   }
 
-  // Filter pages (price ranges + bedroom counts)
+  // Filter pages (price ranges + bedroom counts) — city-wide and category-scoped
   const filterUrls: MetadataRoute.Sitemap = []
   const filterSeen = new Set<string>()
+  const categoryFilterSeen = new Set<string>()
 
   for (const row of priceMatrix) {
     const acao: AcaoSlug = row.tipo === 'venda' ? 'comprar' : 'alugar'
     const cidadeSlug = cidadeNameToSlug(row.cidade)
     if (!cidadeSlugToName(cidadeSlug)) continue
+    const hasCategoria = !!getCategoriaBySlug(row.categoria)
 
     const priceRanges = getAllPriceRanges(row.tipo as 'venda' | 'aluguel')
     for (const range of priceRanges) {
       const inRange = (!range.min || row.preco >= range.min) && (!range.max || row.preco <= range.max)
       if (!inRange) continue
+
       const key = `${acao}|${cidadeSlug}|${range.slug}`
       if (!filterSeen.has(key)) {
         filterSeen.add(key)
@@ -164,12 +167,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           priority: 0.75,
         })
       }
+
+      if (hasCategoria) {
+        const catKey = `${acao}|${cidadeSlug}|${row.categoria}|${range.slug}`
+        if (!categoryFilterSeen.has(catKey)) {
+          categoryFilterSeen.add(catKey)
+          filterUrls.push({
+            url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/filtro/${range.slug}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+          })
+        }
+      }
     }
 
     for (const bf of BEDROOM_FILTERS) {
       const minBedrooms = bf.value === '4+' ? 4 : bf.value
       const matches = row.quartos >= minBedrooms
       if (!matches) continue
+
       const key = `${acao}|${cidadeSlug}|${bf.slug}`
       if (!filterSeen.has(key)) {
         filterSeen.add(key)
@@ -179,6 +196,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           changeFrequency: 'weekly',
           priority: 0.75,
         })
+      }
+
+      if (hasCategoria) {
+        const catKey = `${acao}|${cidadeSlug}|${row.categoria}|${bf.slug}`
+        if (!categoryFilterSeen.has(catKey)) {
+          categoryFilterSeen.add(catKey)
+          filterUrls.push({
+            url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/filtro/${bf.slug}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+          })
+        }
       }
     }
   }

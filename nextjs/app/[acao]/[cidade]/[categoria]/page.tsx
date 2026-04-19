@@ -15,8 +15,81 @@ import {
   type AcaoSlug,
 } from '../../../../lib/navigation'
 import { getBairroBySlug } from '../../../../data/bairros'
+import { BEDROOM_FILTERS, getAllPriceRanges } from '../../../../data/priceRanges'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../lib/config'
 import type { Metadata } from 'next'
+
+const ITBI_RATE_BY_CITY: Record<string, string> = {
+  Osasco: '2%',
+  Barueri: '3%',
+}
+
+interface Faq {
+  q: string
+  a: string
+}
+
+function buildFaqs(args: {
+  acao: AcaoSlug
+  cidadeName: string
+  categoriaData: { singular: string; plural: string }
+  label: string
+  total: number
+  topBairros: { slug: string; count: number }[]
+}): Faq[] {
+  const { acao, cidadeName, categoriaData, label, total, topBairros } = args
+  const pluralLc = categoriaData.plural.toLowerCase()
+  const labelLc = label.toLowerCase()
+
+  const topBairroNames = topBairros
+    .slice(0, 3)
+    .map(b => getBairroBySlug(b.slug)?.nome || b.slug)
+
+  const bairrosAnswer = topBairroNames.length > 0
+    ? `Atualmente os bairros com mais ${pluralLc} ${labelLc} em ${cidadeName} são ${topBairroNames.join(', ')}. Veja a lista completa de bairros logo abaixo.`
+    : `Temos ${pluralLc} ${labelLc} distribuídos por vários bairros de ${cidadeName}. Confira a lista de bairros abaixo.`
+
+  const countAnswer = total > 0
+    ? `Hoje temos ${total} ${pluralLc} ${labelLc} em ${cidadeName} no site. O estoque é atualizado diariamente e você pode falar com o corretor pelo WhatsApp para opções ainda não publicadas.`
+    : `O estoque muda todos os dias. Fale com o Corretor Yuri pelo WhatsApp para receber opções de ${pluralLc} ${labelLc} em ${cidadeName} assim que aparecerem.`
+
+  if (acao === 'comprar') {
+    const itbi = ITBI_RATE_BY_CITY[cidadeName] || 'varia por município'
+    return [
+      { q: `Quantos ${pluralLc} ${labelLc} há em ${cidadeName}?`, a: countAnswer },
+      { q: `Quais bairros de ${cidadeName} têm mais ${pluralLc} ${labelLc}?`, a: bairrosAnswer },
+      {
+        q: `Posso financiar pela Caixa ou pelo Minha Casa Minha Vida?`,
+        a: `Sim. Trabalhamos com SBPE da Caixa e Minha Casa Minha Vida para renda até R$ 12 mil. Use o simulador para ver a parcela estimada do imóvel de interesse.`,
+      },
+      {
+        q: `Quanto custa o ITBI ao comprar um imóvel em ${cidadeName}?`,
+        a: `A alíquota de ITBI em ${cidadeName} é de ${itbi} sobre o valor de compra (ou o valor venal, o que for maior). Confira o guia completo de ITBI no blog.`,
+      },
+      {
+        q: `Como funciona a negociação com o Corretor Yuri?`,
+        a: `Todas as negociações são conduzidas pelo Corretor Yuri (CRECI-SP 235509): verificação de documentação, assessoria no cartório e orientação completa sobre financiamento, sem custo para o comprador.`,
+      },
+    ]
+  }
+
+  return [
+    { q: `Quantos ${pluralLc} ${labelLc} há em ${cidadeName}?`, a: countAnswer },
+    { q: `Quais bairros de ${cidadeName} têm mais ${pluralLc} ${labelLc}?`, a: bairrosAnswer },
+    {
+      q: `Quais garantias locatícias são aceitas?`,
+      a: `Aceitamos fiador, seguro-fiança, caução e título de capitalização. A garantia exigida depende do imóvel e do perfil do locatário.`,
+    },
+    {
+      q: `Qual é o prazo mínimo do contrato de locação?`,
+      a: `Contratos residenciais costumam ter prazo de 30 meses, com reajuste anual pelo índice definido em contrato (geralmente IGPM ou IPCA).`,
+    },
+    {
+      q: `Como funciona a negociação com o Corretor Yuri?`,
+      a: `Todas as locações são intermediadas pelo Corretor Yuri (CRECI-SP 235509), com verificação de documentação do imóvel e orientação completa sobre garantias, vistoria e assinatura do contrato.`,
+    },
+  ]
+}
 
 export const revalidate = 300
 
@@ -50,8 +123,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!cidadeName || !categoriaData) return {}
 
   const label = ACAO_LABELS[acao].preposicao
-  const title = `${categoriaData.plural} ${label} em ${cidadeName} SP — Corretor Yuri`
-  const description = `${categoriaData.plural} ${label.toLowerCase()} em ${cidadeName}, SP. Encontre imóveis nos melhores bairros com o Corretor Yuri, CRECI 235509.`
+  const { total } = await fetchProperties({
+    tipo: acaoToTipo(acao as AcaoSlug),
+    categoria,
+    cidade: cidadeName,
+    limit: 50,
+  })
+
+  const countPrefix = total > 0 ? `${total} ` : ''
+  const title = `${countPrefix}${categoriaData.plural} ${label} em ${cidadeName} SP | Corretor Yuri`
+  const description = total > 0
+    ? `${total} ${categoriaData.plural.toLowerCase()} ${label.toLowerCase()} em ${cidadeName}, SP. Financiamento Caixa, Minha Casa Minha Vida e atendimento com o Corretor Yuri (CRECI 235509).`
+    : `${categoriaData.plural} ${label.toLowerCase()} em ${cidadeName}, SP. Encontre imóveis nos melhores bairros com o Corretor Yuri, CRECI 235509.`
   const url = `${SITE_URL}${buildHierarchicalUrl({ acao, cidade, categoria })}`
 
   return {
@@ -100,6 +183,17 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
     .map(r => ({ slug: bairroDbNameToSlug(r.bairro), count: r.count }))
     .filter(b => !!getBairroBySlug(b.slug) || b.count >= 3)
 
+  const topBairros = [...bairrosWithCount].sort((a, b) => b.count - a.count)
+
+  const faqs = buildFaqs({
+    acao: acao as AcaoSlug,
+    cidadeName,
+    categoriaData,
+    label,
+    total,
+    topBairros,
+  })
+
   const jsonLd = [
     {
       '@context': 'https://schema.org',
@@ -117,6 +211,15 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
       url: canonicalUrl,
       numberOfItems: total,
       itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.titulo })),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(f => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
     },
   ]
 
@@ -162,6 +265,43 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
           ))}
         </div>
 
+        <section className="mt-14 grid gap-8 md:grid-cols-2">
+          <div>
+            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
+              {categoriaData.plural} {label} por quartos
+            </h2>
+            <ul className="flex flex-wrap gap-2">
+              {BEDROOM_FILTERS.map(bf => (
+                <li key={bf.slug}>
+                  <Link
+                    href={`/${acao}/${cidade}/${categoria}/filtro/${bf.slug}`}
+                    className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
+                  >
+                    {bf.shortLabel || bf.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
+              {categoriaData.plural} {label} por preço
+            </h2>
+            <ul className="flex flex-wrap gap-2">
+              {getAllPriceRanges(acaoToTipo(acao as AcaoSlug)).map(pr => (
+                <li key={pr.slug}>
+                  <Link
+                    href={`/${acao}/${cidade}/${categoria}/filtro/${pr.slug}`}
+                    className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
+                  >
+                    {pr.shortLabel || pr.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
         {bairrosWithCount.length > 0 && (
           <section className="mt-14">
             <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
@@ -185,6 +325,23 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
             </ul>
           </section>
         )}
+
+        <section className="mt-14" aria-labelledby="faq-heading">
+          <h2 id="faq-heading" className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
+            Perguntas frequentes
+          </h2>
+          <div className="divide-y divide-gray-200 border border-gray-200 bg-white">
+            {faqs.map((faq, i) => (
+              <details key={i} className="group">
+                <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none text-sm font-bold text-dark hover:text-primary">
+                  <span>{faq.q}</span>
+                  <span className="text-primary text-lg leading-none transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+                </summary>
+                <p className="px-5 pb-4 text-sm text-gray-700 leading-relaxed">{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   )
