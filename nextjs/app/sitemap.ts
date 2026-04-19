@@ -141,16 +141,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   }
 
-  // Filter pages (price ranges + bedroom counts) — city-wide and category-scoped
+  // Filter pages (price ranges + bedroom counts) — city-wide, category-scoped, and bairro-scoped
   const filterUrls: MetadataRoute.Sitemap = []
   const filterSeen = new Set<string>()
   const categoryFilterSeen = new Set<string>()
+  const bairroFilterSeen = new Set<string>()
 
   for (const row of priceMatrix) {
     const acao: AcaoSlug = row.tipo === 'venda' ? 'comprar' : 'alugar'
     const cidadeSlug = cidadeNameToSlug(row.cidade)
     if (!cidadeSlugToName(cidadeSlug)) continue
     const hasCategoria = !!getCategoriaBySlug(row.categoria)
+    const bairroSlug = bairroDbNameToSlug(row.bairro)
 
     const priceRanges = getAllPriceRanges(row.tipo as 'venda' | 'aluguel')
     for (const range of priceRanges) {
@@ -208,6 +210,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             changeFrequency: 'weekly',
             priority: 0.8,
           })
+        }
+
+        if (bairroSlug) {
+          const bairroKey = `${acao}|${cidadeSlug}|${row.categoria}|${bairroSlug}|${bf.slug}`
+          if (!bairroFilterSeen.has(bairroKey)) {
+            bairroFilterSeen.add(bairroKey)
+            filterUrls.push({
+              url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/${bairroSlug}/filtro/${bf.slug}`,
+              lastModified: new Date(),
+              changeFrequency: 'weekly',
+              priority: 0.78,
+            })
+          }
         }
       }
     }

@@ -17,6 +17,7 @@ import {
   ACAO_LABELS,
   type AcaoSlug,
 } from '../../../../../lib/navigation'
+import { BEDROOM_FILTERS } from '../../../../../data/priceRanges'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../../lib/config'
 import type { Metadata } from 'next'
 
@@ -53,8 +54,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!cidadeName || !categoriaData) return {}
 
   const bairroName = bairroData?.nome || bairro
+  const bairroDbName = bairroSlugToDbName(bairro)
   const label = ACAO_LABELS[acao].preposicao
-  const title = `${categoriaData.plural} ${label} no ${bairroName}, ${cidadeName} SP — Corretor Yuri`
+
+  const { total } = await fetchProperties({
+    tipo: acaoToTipo(acao as AcaoSlug),
+    categoria,
+    cidade: cidadeName,
+    bairro: bairroDbName,
+    limit: 50,
+  })
+
+  const countPrefix = total > 0 ? `${total} ` : ''
+  const title = `${countPrefix}${categoriaData.plural} ${label} no ${bairroName}, ${cidadeName} SP`
   const description = `${categoriaData.plural} ${label.toLowerCase()} no ${bairroName} em ${cidadeName}, SP. Atendimento com o Corretor Yuri, CRECI 235509.`
   const url = `${SITE_URL}${buildHierarchicalUrl({ acao, cidade, categoria, bairro })}`
 
@@ -105,6 +117,17 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
   const siblingBairros = Object.values(BAIRROS)
     .filter(b => b.slug !== bairro)
     .slice(0, 8)
+
+  const bedroomCounts = new Map<string, number>()
+  for (const p of imoveis) {
+    for (const bf of BEDROOM_FILTERS) {
+      const minBedrooms = bf.value === '4+' ? 4 : bf.value
+      if (p.quartos >= minBedrooms) {
+        bedroomCounts.set(bf.slug, (bedroomCounts.get(bf.slug) ?? 0) + 1)
+      }
+    }
+  }
+  const availableBedroomFilters = BEDROOM_FILTERS.filter(bf => (bedroomCounts.get(bf.slug) ?? 0) > 0)
 
   const jsonLd = [
     {
@@ -175,6 +198,24 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
             <PropertyCard key={property.id} imovel={property} />
           ))}
         </div>
+
+        {availableBedroomFilters.length > 0 && (
+          <section className="mt-14">
+            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por quartos no {bairroName}</h2>
+            <ul className="flex flex-wrap gap-2">
+              {availableBedroomFilters.map(bf => (
+                <li key={bf.slug}>
+                  <Link
+                    href={`${buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria, bairro })}/filtro/${bf.slug}`}
+                    className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
+                  >
+                    {categoriaData.plural} {label.toLowerCase()} com {bf.shortLabel || bf.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {siblingBairros.length > 0 && (
           <section className="mt-14">

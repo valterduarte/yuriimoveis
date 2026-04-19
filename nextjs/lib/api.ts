@@ -335,6 +335,7 @@ export interface PriceBedroomMatrixRow {
   tipo: string
   cidade: string
   categoria: string
+  bairro: string
   preco: number
   quartos: number
 }
@@ -342,12 +343,13 @@ export interface PriceBedroomMatrixRow {
 const fetchPriceBedroomMatrixCached = unstable_cache(
   async (): Promise<PriceBedroomMatrixRow[]> => {
     const result = await getDb().query(
-      `SELECT tipo, cidade, categoria, preco, quartos
+      `SELECT tipo, cidade, categoria, bairro, preco, quartos
        FROM imoveis
        WHERE ativo = true
          AND tipo IS NOT NULL AND tipo != ''
          AND cidade IS NOT NULL AND cidade != ''
          AND categoria IS NOT NULL AND categoria != ''
+         AND bairro IS NOT NULL AND bairro != ''
          AND preco > 0`
     )
     return result.rows
