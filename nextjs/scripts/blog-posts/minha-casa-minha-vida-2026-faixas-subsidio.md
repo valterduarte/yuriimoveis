@@ -4,7 +4,7 @@ slug: "minha-casa-minha-vida-2026-faixas-subsidio"
 resumo: "A portaria de abril de 2026 ampliou as faixas do MCMV: Faixa 1 vai até R$ 3.200, Faixa 4 até R$ 13 mil, e o teto do imóvel na Faixa 4 subiu para R$ 600 mil. Veja as regras completas, subsídio por faixa e como se enquadrar."
 meta_titulo: "Minha Casa Minha Vida 2026: faixas, subsídio e regras atualizadas"
 meta_descricao: "Guia completo do MCMV 2026 com as novas faixas de renda (até R$ 13 mil), subsídio de até R$ 55 mil, teto do imóvel e passo a passo para se enquadrar."
-imagem_capa: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&h=630&fit=crop"
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1776481397/blog/minha-casa-minha-vida-2026-faixas-subsidio.jpg"
 tags: ["MCMV", "Financiamento", "Subsídio", "Caixa"]
 publicado: true
 ---

@@ -4,7 +4,7 @@ slug: "documentos-para-financiar-imovel-2026"
 resumo: "A aprovação do financiamento imobiliário pela Caixa leva 30 a 60 dias — mas com a documentação certa no primeiro envio, sai em até 3 semanas. Veja o checklist completo para CLT, autônomo, MEI e aposentado."
 meta_titulo: "Documentos para financiar imóvel em 2026: checklist Caixa completo"
 meta_descricao: "Checklist definitivo de documentos para financiar imóvel em 2026 na Caixa e em bancos privados. CLT, autônomo, MEI, aposentado e documentos do imóvel."
-imagem_capa: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200&h=630&fit=crop"
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1776481395/blog/documentos-para-financiar-imovel-2026.jpg"
 tags: ["Financiamento", "Documentos", "Caixa", "Aprovação"]
 publicado: true
 ---

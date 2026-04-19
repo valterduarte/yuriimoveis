@@ -4,7 +4,7 @@ slug: "itbi-osasco-barueri-carapicuiba-sao-paulo-2026"
 resumo: "Cada cidade da região metropolitana oeste cobra ITBI de um jeito diferente. Osasco 3%, Barueri 5% e 1%, Carapicuíba 2% e 1%, e São Paulo 3% ou 0,5% no SFH. Veja a tabela completa com exemplos numéricos."
 meta_titulo: "ITBI 2026: Osasco, Barueri, Carapicuíba e São Paulo comparados"
 meta_descricao: "Alíquotas, fórmulas e exemplos reais de ITBI em Osasco, Barueri, Carapicuíba e São Paulo. Entenda quanto vai pagar antes de assinar o contrato."
-imagem_capa: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=630&fit=crop"
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1776481396/blog/itbi-osasco-barueri-carapicuiba-sao-paulo-2026.jpg"
 tags: ["ITBI", "Osasco", "Barueri", "Carapicuíba", "Impostos"]
 publicado: true
 ---

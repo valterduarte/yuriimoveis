@@ -4,7 +4,7 @@ slug: "morar-em-carapicuiba-bairros-precos-2026"
 resumo: "Carapicuíba tem o melhor custo-benefício da região metropolitana oeste — a 15 minutos da capital, com apartamentos a partir de R$ 190 mil. Conheça 5 bairros para morar, o ITBI mais baixo da região e o mercado MCMV da cidade."
 meta_titulo: "Morar em Carapicuíba 2026: bairros, preços e acesso a São Paulo"
 meta_descricao: "Guia completo para morar em Carapicuíba em 2026: 5 melhores bairros, preços de apartamentos de R$ 190 mil a R$ 350 mil, ITBI, transporte e comparação com Osasco."
-imagem_capa: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200&h=630&fit=crop"
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1776481397/blog/morar-em-carapicuiba-bairros-precos-2026.jpg"
 tags: ["Carapicuíba", "Morar", "Bairros", "MCMV"]
 publicado: true
 ---

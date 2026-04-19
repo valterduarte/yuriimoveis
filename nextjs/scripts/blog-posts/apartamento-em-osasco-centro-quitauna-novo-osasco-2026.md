@@ -4,7 +4,7 @@ slug: "apartamento-em-osasco-centro-quitauna-novo-osasco-2026"
 resumo: "Osasco tem bairros com perfis muito diferentes: do Centro comercial ao Quitaúna em alta com lançamentos de entrada. Este guia compara preço do metro quadrado, perfil do morador e valorização em 5 bairros em 2026."
 meta_titulo: "Apartamento em Osasco 2026: guia por bairro com preços e perfis"
 meta_descricao: "Compare os melhores bairros de Osasco para comprar apartamento em 2026: Centro, Quitaúna, Novo Osasco, Bela Vista e Santa Maria. Preços reais, MCMV e valorização."
-imagem_capa: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&h=630&fit=crop"
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1776481395/blog/apartamento-em-osasco-centro-quitauna-novo-osasco-2026.jpg"
 tags: ["Osasco", "Bairros", "Apartamento", "Investimento"]
 publicado: true
 ---

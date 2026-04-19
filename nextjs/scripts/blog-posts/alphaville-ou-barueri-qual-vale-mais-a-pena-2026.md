@@ -4,7 +4,7 @@ slug: "alphaville-ou-barueri-qual-vale-mais-a-pena-2026"
 resumo: "Alphaville tem metro quadrado de R$ 14 mil e mora em condomínio fechado. O restante de Barueri fica entre R$ 6 mil e R$ 9 mil o m². Veja os melhores bairros, preços reais e quando compensa cada opção em 2026."
 meta_titulo: "Alphaville ou Barueri em 2026: preços, bairros e qual escolher"
 meta_descricao: "Compare preço do metro quadrado, segurança, infraestrutura e estilo de vida em Alphaville e no restante de Barueri. Guia completo para decidir onde morar em 2026."
-imagem_capa: "https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=1200&h=630&fit=crop"
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1776481394/blog/alphaville-ou-barueri-qual-vale-mais-a-pena-2026.jpg"
 tags: ["Barueri", "Alphaville", "Morar", "Bairros"]
 publicado: true
 ---
