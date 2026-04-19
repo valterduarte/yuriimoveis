@@ -18,9 +18,18 @@ import {
 } from '../../../../../../../lib/navigation'
 import {
   getBedroomFilterBySlug,
+  getPriceRangeBySlug,
+  getAllPriceRanges,
   BEDROOM_FILTERS,
+  type PriceRange,
   type BedroomFilter,
 } from '../../../../../../../data/priceRanges'
+import {
+  AMENITY_FILTERS,
+  getAmenityFilterBySlug,
+  imovelMatchesAmenity,
+  type AmenityFilter,
+} from '../../../../../../../data/amenityFilters'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../../../../lib/config'
 import type { Metadata } from 'next'
 
@@ -56,6 +65,24 @@ export async function generateStaticParams() {
       seen.add(key)
       params.push({ acao, cidade, categoria: row.categoria, bairro, filtro: bf.slug })
     }
+
+    for (const range of getAllPriceRanges(row.tipo as 'venda' | 'aluguel')) {
+      const inRange = (!range.min || row.preco >= range.min) && (!range.max || row.preco <= range.max)
+      if (!inRange) continue
+
+      const key = `${acao}|${cidade}|${row.categoria}|${bairro}|${range.slug}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      params.push({ acao, cidade, categoria: row.categoria, bairro, filtro: range.slug })
+    }
+
+    for (const amenity of AMENITY_FILTERS) {
+      if (!imovelMatchesAmenity(row.diferenciais, amenity)) continue
+      const key = `${acao}|${cidade}|${row.categoria}|${bairro}|${amenity.slug}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      params.push({ acao, cidade, categoria: row.categoria, bairro, filtro: amenity.slug })
+    }
   }
 
   return params
@@ -69,8 +96,11 @@ async function resolveParams(p: { acao: string; cidade: string; categoria: strin
   const bairroData = getBairroBySlug(p.bairro)
   const bairroDbName = bairroSlugToDbName(p.bairro)
   const bairroName = bairroData?.nome || p.bairro
-  const bedroom: BedroomFilter | undefined = getBedroomFilterBySlug(p.filtro)
-  if (!bedroom) return null
+  const tipo = acaoToTipo(p.acao as AcaoSlug)
+  const bedroom = getBedroomFilterBySlug(p.filtro)
+  const amenity = getAmenityFilterBySlug(p.filtro)
+  const price = getPriceRangeBySlug(p.filtro, tipo)
+  if (!bedroom && !amenity && !price) return null
   return {
     acao: p.acao as AcaoSlug,
     cidade: p.cidade,
@@ -81,6 +111,8 @@ async function resolveParams(p: { acao: string; cidade: string; categoria: strin
     bairroDbName,
     bairroName,
     bedroom,
+    amenity,
+    price,
   }
 }
 
@@ -94,14 +126,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     categoria: ctx.categoria,
     cidade: ctx.cidadeName,
     bairro: ctx.bairroDbName,
-    quartos: String(ctx.bedroom.value),
+    quartos: ctx.bedroom ? String(ctx.bedroom.value) : undefined,
+    amenity: ctx.amenity ? ctx.amenity.matchTerms.join('|') : undefined,
+    precoMin: ctx.price?.min ? String(ctx.price.min) : undefined,
+    precoMax: ctx.price?.max ? String(ctx.price.max) : undefined,
     limit: 50,
   })
 
   const label = ACAO_LABELS[ctx.acao].preposicao
+  const filterFragment = ctx.bedroom
+    ? `com ${ctx.bedroom.label}`
+    : ctx.price
+    ? `com preço ${ctx.price.label}`
+    : ctx.amenity!.label
   const countPrefix = total > 0 ? `${total} ` : ''
-  const title = `${countPrefix}${ctx.categoriaData.plural} ${label} com ${ctx.bedroom.label} no ${ctx.bairroName}, ${ctx.cidadeName} SP`
-  const description = `${ctx.categoriaData.plural} ${label.toLowerCase()} com ${ctx.bedroom.label} no ${ctx.bairroName}, ${ctx.cidadeName} SP. Financiamento, documentação e atendimento com o Corretor Yuri (CRECI 235509).`
+  const title = `${countPrefix}${ctx.categoriaData.plural} ${label} ${filterFragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP`
+  const description = `${ctx.categoriaData.plural} ${label.toLowerCase()} ${filterFragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP. Financiamento, documentação e atendimento com o Corretor Yuri (CRECI 235509).`
   const url = `${SITE_URL}${buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro)}`
 
   return {
@@ -131,14 +171,23 @@ export default async function BairroFilterPage({ params }: PageProps) {
     categoria: ctx.categoria,
     cidade: ctx.cidadeName,
     bairro: ctx.bairroDbName,
-    quartos: String(ctx.bedroom.value),
+    quartos: ctx.bedroom ? String(ctx.bedroom.value) : undefined,
+    amenity: ctx.amenity ? ctx.amenity.matchTerms.join('|') : undefined,
+    precoMin: ctx.price?.min ? String(ctx.price.min) : undefined,
+    precoMax: ctx.price?.max ? String(ctx.price.max) : undefined,
     limit: 50,
   })
 
   if (total === 0) notFound()
 
   const label = ACAO_LABELS[ctx.acao].preposicao
-  const h1 = `${ctx.categoriaData.plural} ${label} com ${ctx.bedroom.label} no ${ctx.bairroName}, ${ctx.cidadeName}`
+  const filterLabel = ctx.bedroom ? ctx.bedroom.label : ctx.price ? ctx.price.label : ctx.amenity!.label
+  const filterFragment = ctx.bedroom
+    ? `com ${ctx.bedroom.label}`
+    : ctx.price
+    ? `com preço ${ctx.price.label}`
+    : ctx.amenity!.label
+  const h1 = `${ctx.categoriaData.plural} ${label} ${filterFragment} no ${ctx.bairroName}, ${ctx.cidadeName}`
   const canonicalUrl = `${SITE_URL}${buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro)}`
   const bairroUrl = buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade, categoria: raw.categoria, bairro: raw.bairro })
 
@@ -151,7 +200,7 @@ export default async function BairroFilterPage({ params }: PageProps) {
         { '@type': 'ListItem', position: 2, name: `${ctx.acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${ctx.cidadeName}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade })}` },
         { '@type': 'ListItem', position: 3, name: `${ctx.categoriaData.plural} ${label}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade, categoria: raw.categoria })}` },
         { '@type': 'ListItem', position: 4, name: ctx.bairroName, item: `${SITE_URL}${bairroUrl}` },
-        { '@type': 'ListItem', position: 5, name: ctx.bedroom.label, item: canonicalUrl },
+        { '@type': 'ListItem', position: 5, name: filterLabel, item: canonicalUrl },
       ],
     },
     {
@@ -160,7 +209,7 @@ export default async function BairroFilterPage({ params }: PageProps) {
       name: h1,
       url: canonicalUrl,
       numberOfItems: total,
-      description: `${ctx.categoriaData.plural} ${label.toLowerCase()} com ${ctx.bedroom.label} no ${ctx.bairroName}, ${ctx.cidadeName} SP.`,
+      description: `${ctx.categoriaData.plural} ${label.toLowerCase()} ${filterFragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP.`,
       itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.titulo })),
     },
   ]
@@ -182,7 +231,7 @@ export default async function BairroFilterPage({ params }: PageProps) {
             <span aria-hidden="true">/</span>
             <Link href={bairroUrl} className="hover:text-white transition-colors">{ctx.bairroName}</Link>
             <span aria-hidden="true">/</span>
-            <span className="text-white" aria-current="page">{ctx.bedroom.label}</span>
+            <span className="text-white" aria-current="page">{filterLabel}</span>
           </nav>
           <span className="section-label">{label}</span>
           <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{h1}</h1>
@@ -193,8 +242,22 @@ export default async function BairroFilterPage({ params }: PageProps) {
       <div className="container mx-auto px-6 py-10">
         <div className="bg-white border border-gray-200 p-6 md:p-8 mb-8">
           <p className="text-gray-700 text-sm leading-relaxed">
-            Encontre {ctx.categoriaData.plural.toLowerCase()} {label.toLowerCase()} com {ctx.bedroom.label} no {ctx.bairroName}, {ctx.cidadeName} SP.
-            Todas as opções com documentação verificada e atendimento personalizado do Corretor Yuri.
+            {ctx.bedroom ? (
+              <>
+                Encontre {ctx.categoriaData.plural.toLowerCase()} {label.toLowerCase()} com {ctx.bedroom.label} no {ctx.bairroName}, {ctx.cidadeName} SP.
+                Todas as opções com documentação verificada e atendimento personalizado do Corretor Yuri.
+              </>
+            ) : ctx.price ? (
+              <>
+                {ctx.categoriaData.plural} {label.toLowerCase()} com preço {ctx.price.label} no {ctx.bairroName}, {ctx.cidadeName} SP.
+                Documentação verificada e atendimento personalizado do Corretor Yuri.
+              </>
+            ) : (
+              <>
+                {ctx.categoriaData.plural} {label.toLowerCase()} {ctx.amenity!.label} no {ctx.bairroName}, {ctx.cidadeName} SP.
+                Listagens com {ctx.amenity!.heroLabel} no condomínio, documentação verificada e atendimento personalizado do Corretor Yuri.
+              </>
+            )}
           </p>
         </div>
 
@@ -224,6 +287,46 @@ export default async function BairroFilterPage({ params }: PageProps) {
                   }`}
                 >
                   {f.shortLabel || f.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="mt-10">
+          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por preço no {ctx.bairroName}</h2>
+          <ul className="flex flex-wrap gap-2">
+            {getAllPriceRanges(acaoToTipo(ctx.acao)).map(r => (
+              <li key={r.slug}>
+                <Link
+                  href={buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, r.slug)}
+                  className={`inline-block border px-3 py-2 text-xs transition-colors ${
+                    r.slug === raw.filtro
+                      ? 'bg-primary border-primary text-white'
+                      : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'
+                  }`}
+                >
+                  {r.shortLabel || r.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="mt-10">
+          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por comodidade no {ctx.bairroName}</h2>
+          <ul className="flex flex-wrap gap-2">
+            {AMENITY_FILTERS.map(a => (
+              <li key={a.slug}>
+                <Link
+                  href={buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, a.slug)}
+                  className={`inline-block border px-3 py-2 text-xs transition-colors ${
+                    a.slug === raw.filtro
+                      ? 'bg-primary border-primary text-white'
+                      : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'
+                  }`}
+                >
+                  {a.shortLabel}
                 </Link>
               </li>
             ))}

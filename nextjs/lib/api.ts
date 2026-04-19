@@ -59,7 +59,7 @@ const fetchPropertiesByBairroCached = unstable_cache(
 
 const fetchPropertiesCached = unstable_cache(
   async (filters: PropertyFilters): Promise<PropertyListResult> => {
-    const { tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, codigo, destaque, todos, ordem = 'recente', page = 1, limit = 9 } = filters
+    const { tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, amenity, codigo, destaque, todos, ordem = 'recente', page = 1, limit = 9 } = filters
     const conditions: string[] = todos === true || todos === 'true' ? [] : ['ativo = true']
     const params: (string | number)[] = []
     let idx = 1
@@ -75,6 +75,14 @@ const fetchPropertiesCached = unstable_cache(
     if (quartos) {
       if (quartos === '4+') { conditions.push('quartos >= 4') }
       else { conditions.push(`quartos >= $${idx++}`); params.push(Number(quartos)) }
+    }
+    if (amenity) {
+      const terms = amenity.split('|').filter(Boolean)
+      if (terms.length > 0) {
+        const clauses = terms.map(() => `diferenciais ILIKE $${idx++}`)
+        conditions.push(`(${clauses.join(' OR ')})`)
+        for (const term of terms) params.push(`%${term}%`)
+      }
     }
 
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : ''
@@ -338,12 +346,13 @@ export interface PriceBedroomMatrixRow {
   bairro: string
   preco: number
   quartos: number
+  diferenciais: string[]
 }
 
 const fetchPriceBedroomMatrixCached = unstable_cache(
   async (): Promise<PriceBedroomMatrixRow[]> => {
     const result = await getDb().query(
-      `SELECT tipo, cidade, categoria, bairro, preco, quartos
+      `SELECT tipo, cidade, categoria, bairro, preco, quartos, diferenciais
        FROM imoveis
        WHERE ativo = true
          AND tipo IS NOT NULL AND tipo != ''
@@ -352,7 +361,15 @@ const fetchPriceBedroomMatrixCached = unstable_cache(
          AND bairro IS NOT NULL AND bairro != ''
          AND preco > 0`
     )
-    return result.rows
+    return result.rows.map((r: { tipo: string; cidade: string; categoria: string; bairro: string; preco: number; quartos: number; diferenciais: string | string[] | null }) => ({
+      tipo:      r.tipo,
+      cidade:    r.cidade,
+      categoria: r.categoria,
+      bairro:    r.bairro,
+      preco:     Number(r.preco),
+      quartos:   Number(r.quartos),
+      diferenciais: typeof r.diferenciais === 'string' ? JSON.parse(r.diferenciais || '[]') : (r.diferenciais ?? []),
+    }))
   },
   ['fetchPriceBedroomMatrix'],
   { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS }

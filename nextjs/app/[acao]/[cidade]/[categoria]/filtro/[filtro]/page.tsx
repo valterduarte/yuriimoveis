@@ -21,6 +21,12 @@ import {
   type PriceRange,
   type BedroomFilter,
 } from '../../../../../../data/priceRanges'
+import {
+  AMENITY_FILTERS,
+  getAmenityFilterBySlug,
+  imovelMatchesAmenity,
+  type AmenityFilter,
+} from '../../../../../../data/amenityFilters'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../../../lib/config'
 import type { Metadata } from 'next'
 
@@ -30,12 +36,17 @@ type PageProps = {
   params: Promise<{ acao: string; cidade: string; categoria: string; filtro: string }>
 }
 
-function parseFilter(filtro: string, tipo: 'venda' | 'aluguel'): { price?: PriceRange; bedroom?: BedroomFilter } | null {
+type ParsedFilter = { price?: PriceRange; bedroom?: BedroomFilter; amenity?: AmenityFilter }
+
+function parseFilter(filtro: string, tipo: 'venda' | 'aluguel'): ParsedFilter | null {
   const priceRange = getPriceRangeBySlug(filtro, tipo)
   if (priceRange) return { price: priceRange }
 
   const bedroomFilter = getBedroomFilterBySlug(filtro)
   if (bedroomFilter) return { bedroom: bedroomFilter }
+
+  const amenityFilter = getAmenityFilterBySlug(filtro)
+  if (amenityFilter) return { amenity: amenityFilter }
 
   return null
 }
@@ -80,6 +91,15 @@ export async function generateStaticParams() {
         params.push({ acao, cidade, categoria: row.categoria, filtro: bf.slug })
       }
     }
+
+    for (const amenity of AMENITY_FILTERS) {
+      if (!imovelMatchesAmenity(row.diferenciais, amenity)) continue
+      const key = `${acao}|${cidade}|${row.categoria}|${amenity.slug}`
+      if (!seen.has(key)) {
+        seen.add(key)
+        params.push({ acao, cidade, categoria: row.categoria, filtro: amenity.slug })
+      }
+    }
   }
 
   return params
@@ -97,7 +117,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!filter) return {}
 
   const label = ACAO_LABELS[acao].preposicao
-  const filterLabel = filter.price?.label || filter.bedroom?.label || ''
+  const filterLabel = filter.price?.label || filter.bedroom?.label || filter.amenity?.label || ''
   const filterConnector = filter.bedroom ? 'com ' : ''
 
   const { total } = await fetchProperties({
@@ -107,6 +127,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     precoMin: filter.price?.min ? String(filter.price.min) : undefined,
     precoMax: filter.price?.max ? String(filter.price.max) : undefined,
     quartos: filter.bedroom ? String(filter.bedroom.value) : undefined,
+    amenity: filter.amenity ? filter.amenity.matchTerms.join('|') : undefined,
     limit: 50,
   })
 
@@ -143,7 +164,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
   if (!filter) notFound()
 
   const label = ACAO_LABELS[acao as AcaoSlug].preposicao
-  const filterLabel = filter.price?.label || filter.bedroom?.label || ''
+  const filterLabel = filter.price?.label || filter.bedroom?.label || filter.amenity?.label || ''
   const filterConnector = filter.bedroom ? 'com ' : ''
 
   const { imoveis, total } = await fetchProperties({
@@ -153,6 +174,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
     precoMin: filter.price?.min ? String(filter.price.min) : undefined,
     precoMax: filter.price?.max ? String(filter.price.max) : undefined,
     quartos: filter.bedroom ? String(filter.bedroom.value) : undefined,
+    amenity: filter.amenity ? filter.amenity.matchTerms.join('|') : undefined,
     limit: 50,
   })
 
@@ -162,9 +184,8 @@ export default async function CategoryFilterPage({ params }: PageProps) {
   const canonicalUrl = `${SITE_URL}${buildCategoryFilterUrl(acao, cidade, categoria, filtro)}`
   const categoryUrl = buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria })
 
-  const relatedFilters = filter.price
-    ? BEDROOM_FILTERS
-    : getAllPriceRanges(tipo)
+  const relatedFilters = filter.price ? BEDROOM_FILTERS : getAllPriceRanges(tipo)
+  const relatedSectionTitle = filter.price ? 'Filtrar por quartos' : 'Filtrar por preço'
 
   const jsonLd = [
     {
@@ -219,6 +240,12 @@ export default async function CategoryFilterPage({ params }: PageProps) {
                 Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} com preço {filterLabel} em {cidadeName}, SP.
                 Todas as opções com documentação verificada e atendimento personalizado do Corretor Yuri.
               </>
+            ) : filter.amenity ? (
+              <>
+                {categoriaData.plural} {label.toLowerCase()} {filterLabel} em {cidadeName}, SP.
+                Listagens com {filter.amenity.heroLabel} no condomínio, em vários bairros da cidade.
+                Documentação verificada e atendimento personalizado do Corretor Yuri.
+              </>
             ) : (
               <>
                 Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} com {filterLabel} em {cidadeName}, SP.
@@ -241,9 +268,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
         </div>
 
         <section className="mt-14">
-          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
-            {filter.price ? 'Filtrar por quartos' : 'Filtrar por preço'}
-          </h2>
+          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">{relatedSectionTitle}</h2>
           <ul className="flex flex-wrap gap-2">
             {relatedFilters.map(f => (
               <li key={f.slug}>
@@ -256,6 +281,26 @@ export default async function CategoryFilterPage({ params }: PageProps) {
                   }`}
                 >
                   {f.shortLabel || f.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="mt-10">
+          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por comodidade</h2>
+          <ul className="flex flex-wrap gap-2">
+            {AMENITY_FILTERS.map(a => (
+              <li key={a.slug}>
+                <Link
+                  href={buildCategoryFilterUrl(acao, cidade, categoria, a.slug)}
+                  className={`inline-block border px-3 py-2 text-xs transition-colors ${
+                    a.slug === filtro
+                      ? 'bg-primary border-primary text-white'
+                      : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'
+                  }`}
+                >
+                  {a.shortLabel}
                 </Link>
               </li>
             ))}

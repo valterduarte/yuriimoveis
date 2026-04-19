@@ -5,6 +5,7 @@ import { getCategoriaBySlug } from '../data/categorias'
 import { LANDING_PAGES } from '../data/landingPages'
 import { AJUDA_ARTIGOS } from '../data/ajudaArtigos'
 import { getAllPriceRanges, BEDROOM_FILTERS } from '../data/priceRanges'
+import { AMENITY_FILTERS, imovelMatchesAmenity } from '../data/amenityFilters'
 import {
   bairroDbNameToSlug,
   cidadeNameToSlug,
@@ -180,6 +181,60 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             changeFrequency: 'weekly',
             priority: 0.8,
           })
+        }
+
+        if (bairroSlug) {
+          const bairroKey = `${acao}|${cidadeSlug}|${row.categoria}|${bairroSlug}|${range.slug}`
+          if (!bairroFilterSeen.has(bairroKey)) {
+            bairroFilterSeen.add(bairroKey)
+            filterUrls.push({
+              url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/${bairroSlug}/filtro/${range.slug}`,
+              lastModified: new Date(),
+              changeFrequency: 'weekly',
+              priority: 0.78,
+            })
+          }
+        }
+      }
+    }
+
+    for (const amenity of AMENITY_FILTERS) {
+      if (!imovelMatchesAmenity(row.diferenciais, amenity)) continue
+
+      const key = `${acao}|${cidadeSlug}|${amenity.slug}`
+      if (!filterSeen.has(key)) {
+        filterSeen.add(key)
+        filterUrls.push({
+          url: `${SITE_URL}/${acao}/${cidadeSlug}/filtro/${amenity.slug}`,
+          lastModified: new Date(),
+          changeFrequency: 'weekly',
+          priority: 0.75,
+        })
+      }
+
+      if (hasCategoria) {
+        const catKey = `${acao}|${cidadeSlug}|${row.categoria}|${amenity.slug}`
+        if (!categoryFilterSeen.has(catKey)) {
+          categoryFilterSeen.add(catKey)
+          filterUrls.push({
+            url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/filtro/${amenity.slug}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+          })
+        }
+
+        if (bairroSlug) {
+          const bairroKey = `${acao}|${cidadeSlug}|${row.categoria}|${bairroSlug}|${amenity.slug}`
+          if (!bairroFilterSeen.has(bairroKey)) {
+            bairroFilterSeen.add(bairroKey)
+            filterUrls.push({
+              url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/${bairroSlug}/filtro/${amenity.slug}`,
+              lastModified: new Date(),
+              changeFrequency: 'weekly',
+              priority: 0.78,
+            })
+          }
         }
       }
     }
