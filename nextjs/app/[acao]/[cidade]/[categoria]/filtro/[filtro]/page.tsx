@@ -111,7 +111,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   })
 
   const countPrefix = total > 0 ? `${total} ` : ''
-  const title = `${countPrefix}${categoriaData.plural} ${label} ${filterConnector}${filterLabel} em ${cidadeName} SP | Corretor Yuri`
+  const title = `${countPrefix}${categoriaData.plural} ${label} ${filterConnector}${filterLabel} em ${cidadeName} SP`
   const description = `${categoriaData.plural} ${label.toLowerCase()} ${filterConnector}${filterLabel} em ${cidadeName}, SP. Financiamento, documentação e atendimento com o Corretor Yuri (CRECI 235509).`
   const url = `${SITE_URL}${buildCategoryFilterUrl(acao, cidade, categoria, filtro)}`
 

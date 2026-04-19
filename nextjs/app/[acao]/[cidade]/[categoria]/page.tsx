@@ -131,7 +131,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   })
 
   const countPrefix = total > 0 ? `${total} ` : ''
-  const title = `${countPrefix}${categoriaData.plural} ${label} em ${cidadeName} SP | Corretor Yuri`
+  const title = `${countPrefix}${categoriaData.plural} ${label} em ${cidadeName} SP`
   const description = total > 0
     ? `${total} ${categoriaData.plural.toLowerCase()} ${label.toLowerCase()} em ${cidadeName}, SP. Financiamento Caixa, Minha Casa Minha Vida e atendimento com o Corretor Yuri (CRECI 235509).`
     : `${categoriaData.plural} ${label.toLowerCase()} em ${cidadeName}, SP. Encontre imóveis nos melhores bairros com o Corretor Yuri, CRECI 235509.`
