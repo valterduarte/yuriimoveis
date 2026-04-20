@@ -327,6 +327,27 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'aldeia': {
+    nome: 'Aldeia',
+    slug: 'aldeia',
+    dbMatch: 'Aldeia',
+    titulo: 'Imóveis na Aldeia, Barueri SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos e casas na Aldeia em Barueri, SP. Lançamentos e imóveis prontos para venda e aluguel ao lado do Shopping Barueri. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'A Aldeia é um bairro central de Barueri com forte vocação residencial e comercial. É a região onde surgiu o núcleo histórico da cidade, hoje consolidada como endereço estratégico pela proximidade com o Shopping Barueri, o centro administrativo e o eixo da Rodovia Castelo Branco. O bairro concentra lançamentos recentes, prédios consolidados e casas em condomínio, atraindo famílias que querem combinar infraestrutura urbana com conveniência no dia a dia.',
+      infraestrutura:
+        'A Aldeia conta com o Shopping Barueri a poucos metros, reunindo cinemas, praça de alimentação, supermercado, academias e dezenas de lojas. A região tem agências bancárias, farmácias, padarias, restaurantes e comércio de rua diversificado. Na área de saúde, há clínicas, laboratórios e fácil acesso ao Hospital Municipal de Barueri e unidades privadas da região.',
+      transporte:
+        'O bairro tem acesso direto à Rodovia Castelo Branco (km 26) e proximidade com o Rodoanel Mario Covas, facilitando deslocamentos para São Paulo, Osasco, Alphaville e o interior. A Estação Barueri da CPTM (Linha 8-Diamante) fica a poucos minutos, com ligação direta à Estação da Luz. Linhas de ônibus municipais e intermunicipais atendem o bairro e conectam ao Terminal Barueri.',
+      educacao:
+        'A Aldeia e entorno concentram escolas municipais e estaduais de ensino fundamental e médio, além de colégios particulares tradicionais de Barueri. Há creches e escolas de educação infantil, e a proximidade com Alphaville e o centro da cidade dá acesso a faculdades e cursos técnicos da região metropolitana.',
+      porqueMorar:
+        'Morar na Aldeia é escolher localização central em Barueri sem abrir mão de infraestrutura e mobilidade. Os lançamentos recentes oferecem lazer completo — piscina, academia, espaço gourmet, sport bar — com preços mais acessíveis que Alphaville, mas com o mesmo acesso rápido à Castelo Branco e à CPTM. Ideal para quem trabalha em Barueri, Alphaville ou São Paulo e quer praticidade no dia a dia.',
+    },
+  },
+
   'vila-ayrosa': {
     nome: 'Vila Ayrosa',
     slug: 'vila-ayrosa',
