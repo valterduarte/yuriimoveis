@@ -53,8 +53,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={inter.variable}>
       <head>
-        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
-        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         {globalJsonLd.map((schema, i) => (
           <script
             key={i}

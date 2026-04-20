@@ -9,6 +9,7 @@ export const CACHE_TAG_BLOG = 'blog'
 
 const LISTING_REVALIDATE_SECONDS = 300
 const STATIC_DATA_REVALIDATE_SECONDS = 3600
+const SITE_CONFIG_REVALIDATE_SECONDS = 86400
 
 export function parseImovel(row: ImovelRow): Imovel {
   return {
@@ -113,7 +114,7 @@ const fetchSiteConfigCached = unstable_cache(
     return result.rows[0]?.value ?? null
   },
   ['fetchSiteConfig'],
-  { tags: [CACHE_TAG_SITE_CONFIG], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
+  { tags: [CACHE_TAG_SITE_CONFIG], revalidate: SITE_CONFIG_REVALIDATE_SECONDS }
 )
 
 const fetchDistinctBairrosCached = unstable_cache(

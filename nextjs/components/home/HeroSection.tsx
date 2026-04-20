@@ -14,7 +14,7 @@ export default function HeroSection({ imageUrl }: HeroSectionProps) {
         fill
         priority
         fetchPriority="high"
-        quality={75}
+        quality={65}
         sizes="100vw"
         className="object-cover object-center"
       />
