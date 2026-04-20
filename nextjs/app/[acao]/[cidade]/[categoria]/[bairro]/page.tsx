@@ -182,6 +182,12 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
             <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.infraestrutura}</p>
             <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Transporte e Acesso</h3>
             <p className="text-gray-700 text-sm leading-relaxed">{bairroData.conteudo.transporte}</p>
+            <Link
+              href={`/bairros/${bairro}`}
+              className="inline-flex items-center gap-1.5 mt-5 text-xs uppercase tracking-wider font-bold text-primary hover:text-primary-dark transition-colors"
+            >
+              Ler guia completo do {bairroName} →
+            </Link>
           </div>
         </section>
       )}

@@ -283,6 +283,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
+  const activeBairroDbNames = new Set(matrix.map(r => r.bairro))
+  const bairroGuideUrls: MetadataRoute.Sitemap = Object.values(BAIRROS)
+    .filter(b => activeBairroDbNames.has(b.dbMatch || b.nome))
+    .map(b => ({
+      url: `${SITE_URL}/bairros/${b.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.78,
+    }))
+
   return [
     {
       url: SITE_URL,
@@ -344,10 +354,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.75,
     })),
+    {
+      url: `${SITE_URL}/bairros`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
     ...hierarchicalUrls,
     ...filterUrls,
     ...landingUrls,
     ...bairroUrls,
+    ...bairroGuideUrls,
     ...propertyUrls,
   ]
 }

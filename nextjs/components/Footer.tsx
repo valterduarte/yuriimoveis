@@ -164,6 +164,8 @@ export default function Footer() {
             <Link href="/contato" className="hover:text-primary transition-colors">Contato</Link>
             <span aria-hidden="true" className="hidden md:inline">•</span>
             <Link href="/ajuda" className="hover:text-primary transition-colors">Ajuda</Link>
+            <span aria-hidden="true" className="hidden md:inline">•</span>
+            <Link href="/bairros" className="hover:text-primary transition-colors">Bairros</Link>
           </div>
         </div>
       </div>
