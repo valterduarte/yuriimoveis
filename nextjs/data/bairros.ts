@@ -327,6 +327,27 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'jardim-julio': {
+    nome: 'Jardim Julio',
+    slug: 'jardim-julio',
+    dbMatch: 'Jardim Julio',
+    titulo: 'Imóveis no Jardim Julio, Barueri SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos no Jardim Julio em Barueri, SP. Lançamentos e imóveis em construção para venda ao lado de Alphaville. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Jardim Julio é um bairro residencial em expansão de Barueri, localizado em região privilegiada entre o centro da cidade e Alphaville. A proximidade com a Estrada das Pitas e a Rua São Fernando deu ao bairro protagonismo como endereço de novos empreendimentos verticais, com torres modernas e lazer completo atraindo famílias que buscam morar perto do polo corporativo de Alphaville sem pagar os preços dos condomínios fechados.',
+      infraestrutura:
+        'O bairro e arredores contam com supermercados, farmácias, padarias e comércio de rua crescente. Há unidades de saúde, escolas municipais e restaurantes pela região. A proximidade com o Centro de Barueri e com os shoppings de Alphaville (Iguatemi, Tamboré e Alphaville) amplia as opções de compras, cinemas e serviços a poucos minutos de carro.',
+      transporte:
+        'O Jardim Julio tem acesso rápido à Rodovia Castelo Branco e ao Rodoanel Mario Covas, facilitando o deslocamento para São Paulo, Osasco e o interior. Linhas de ônibus municipais e intermunicipais conectam o bairro ao Terminal Barueri e à Estação Barueri da CPTM (Linha 8-Diamante), que liga direto à Estação da Luz.',
+      educacao:
+        'A região conta com escolas municipais e estaduais de ensino fundamental e médio, além de creches e escolas de educação infantil. A proximidade com Alphaville e o centro de Barueri dá acesso a colégios particulares tradicionais e a faculdades da região metropolitana.',
+      porqueMorar:
+        'Morar no Jardim Julio é combinar preço competitivo com localização estratégica: a poucos minutos do polo de Alphaville e com acesso rápido à Castelo Branco. Os lançamentos verticais do bairro oferecem lazer de alto padrão — piscina, academia, salão de festas, espaço gourmet, coworking, quadra e playground — a valores mais acessíveis que os bairros vizinhos. Escolha sólida para famílias jovens e para quem quer investir em imóvel na planta com boa perspectiva de valorização.',
+    },
+  },
+
   'aldeia': {
     nome: 'Aldeia',
     slug: 'aldeia',
