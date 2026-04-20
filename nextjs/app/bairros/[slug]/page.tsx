@@ -13,6 +13,7 @@ import {
 } from '../../../lib/navigation'
 import { CATEGORIAS } from '../../../data/categorias'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
+import { AGENT_ID } from '../../../lib/jsonLd'
 import type { Metadata } from 'next'
 import type { BairroData, PropertyCategory } from '../../../types'
 
@@ -148,6 +149,17 @@ export default async function BairroGuidePage({ params }: PageProps) {
         addressCountry: 'BR',
       },
       url: canonicalUrl,
+      containedInPlace: { '@type': 'City', name: cidadeName, address: { '@type': 'PostalAddress', addressRegion: 'SP', addressCountry: 'BR' } },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: guideTitle,
+      description: bairro.descricaoMeta,
+      author: { '@id': AGENT_ID },
+      publisher: { '@id': AGENT_ID },
+      mainEntityOfPage: canonicalUrl,
+      image: OG_DEFAULT_IMAGE,
     },
     {
       '@context': 'https://schema.org',

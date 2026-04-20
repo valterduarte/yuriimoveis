@@ -9,6 +9,7 @@ import CompareBar from '../components/compare/CompareBar'
 import ScrollReveal from '../components/ScrollReveal'
 import GoogleAnalytics from '../components/GoogleAnalytics'
 import { SITE_URL } from '../lib/config'
+import { buildGlobalJsonLd } from '../lib/jsonLd'
 import type { Metadata } from 'next'
 
 const inter = Inter({
@@ -48,11 +49,19 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const globalJsonLd = buildGlobalJsonLd()
   return (
     <html lang="pt-BR" className={inter.variable}>
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        {globalJsonLd.map((schema, i) => (
+          <script
+            key={i}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
       </head>
       <body className="flex flex-col min-h-screen">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:text-sm focus:font-bold">

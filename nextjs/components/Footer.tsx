@@ -3,38 +3,10 @@ import { FiPhone, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import Logo from './Logo'
 import WhatsAppLink from './WhatsAppLink'
-import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI, SITE_URL, PHONE_STRUCTURED } from '../lib/config'
+import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI } from '../lib/config'
 import { NAVIGATION_LINKS, FOOTER_TOOL_LINKS } from '../lib/constants'
 import { LANDING_PAGES } from '../data/landingPages'
 import { AJUDA_ARTIGOS, fullH1 } from '../data/ajudaArtigos'
-
-function FooterSchema() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'RealEstateAgent',
-    name: 'Corretor Yuri Imóveis',
-    url: SITE_URL,
-    telephone: PHONE_STRUCTURED,
-    areaServed: {
-      '@type': 'City',
-      name: 'Osasco',
-      containedInPlace: { '@type': 'State', name: 'São Paulo' },
-    },
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Osasco',
-      addressRegion: 'SP',
-      addressCountry: 'BR',
-    },
-  }
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-    />
-  )
-}
 
 const FOOTER_LINK_CLASS =
   'text-xs text-gray-400 hover:text-primary transition-colors flex items-center gap-2'
@@ -49,8 +21,6 @@ export default function Footer() {
 
   return (
     <footer className="bg-dark text-gray-400">
-      <FooterSchema />
-
       <div className="container mx-auto px-6 pt-16 pb-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
 

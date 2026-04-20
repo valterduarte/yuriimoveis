@@ -1,5 +1,8 @@
-import { SITE_URL, PHONE_STRUCTURED, PHONE_WA } from './config'
+import { SITE_URL, PHONE_STRUCTURED, PHONE_WA, INSTAGRAM_URL, OG_DEFAULT_IMAGE, CRECI } from './config'
 import { HOMEPAGE_FAQ } from '../data/faq'
+
+export const AGENT_ID = `${SITE_URL}/#agent`
+export const WEBSITE_ID = `${SITE_URL}/#website`
 
 export function buildBreadcrumb(items: { name: string; path: string }[]): Record<string, unknown> {
   return {
@@ -14,13 +17,16 @@ export function buildBreadcrumb(items: { name: string; path: string }[]): Record
   }
 }
 
-export function buildHomepageJsonLd(heroImageUrl: string): Record<string, unknown>[] {
+export function buildGlobalJsonLd(): Record<string, unknown>[] {
   return [
     {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
+      '@id': WEBSITE_ID,
       name: 'Corretor Yuri Imóveis',
       url: SITE_URL,
+      inLanguage: 'pt-BR',
+      publisher: { '@id': AGENT_ID },
       potentialAction: {
         '@type': 'SearchAction',
         target: `${SITE_URL}/imoveis?busca={search_term_string}`,
@@ -29,25 +35,17 @@ export function buildHomepageJsonLd(heroImageUrl: string): Record<string, unknow
     },
     {
       '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: HOMEPAGE_FAQ.map(item => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: item.answerText,
-        },
-      })),
-    },
-    {
-      '@context': 'https://schema.org',
       '@type': ['LocalBusiness', 'RealEstateAgent'],
+      '@id': AGENT_ID,
       name: 'Corretor Yuri Imóveis',
+      legalName: 'Corretor Yuri Imóveis',
       description:
-        'Especialistas em imóveis residenciais e comerciais em Osasco e região. Mais de 10 anos de experiência, atendimento personalizado e segurança jurídica.',
+        'Corretor de imóveis em Osasco e Barueri com mais de 10 anos de experiência. Casas, apartamentos, terrenos e imóveis comerciais para venda e aluguel. Atendimento personalizado e segurança jurídica.',
       url: SITE_URL,
       telephone: PHONE_STRUCTURED,
-      image: heroImageUrl,
+      image: OG_DEFAULT_IMAGE,
+      logo: OG_DEFAULT_IMAGE,
+      priceRange: 'R$ 200.000 – R$ 5.000.000',
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Osasco',
@@ -61,15 +59,58 @@ export function buildHomepageJsonLd(heroImageUrl: string): Record<string, unknow
       },
       openingHoursSpecification: {
         '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         opens: '09:00',
         closes: '18:00',
       },
       areaServed: [
         { '@type': 'City', name: 'Osasco' },
+        { '@type': 'City', name: 'Barueri' },
+        { '@type': 'City', name: 'Carapicuíba' },
         { '@type': 'AdministrativeArea', name: 'Grande São Paulo' },
       ],
-      sameAs: [PHONE_WA],
+      knowsAbout: [
+        'Mercado imobiliário de Osasco',
+        'Mercado imobiliário de Barueri e Alphaville',
+        'Financiamento imobiliário Caixa SBPE',
+        'Minha Casa Minha Vida',
+        'Imóveis residenciais e comerciais',
+        'Locação e venda de imóveis',
+      ],
+      hasCredential: {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'Professional License',
+        name: `CRECI-SP ${CRECI}`,
+        recognizedBy: {
+          '@type': 'Organization',
+          name: 'CRECI-SP — Conselho Regional de Corretores de Imóveis de São Paulo',
+        },
+      },
+      founder: {
+        '@type': 'Person',
+        name: 'Corretor Yuri',
+        jobTitle: 'Corretor de Imóveis',
+        url: `${SITE_URL}/sobre`,
+        sameAs: [INSTAGRAM_URL],
+      },
+      sameAs: [INSTAGRAM_URL, PHONE_WA],
+    },
+  ]
+}
+
+export function buildHomepageJsonLd(_heroImageUrl: string): Record<string, unknown>[] {
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: HOMEPAGE_FAQ.map(item => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answerText,
+        },
+      })),
     },
   ]
 }

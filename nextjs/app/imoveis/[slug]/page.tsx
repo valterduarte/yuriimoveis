@@ -16,7 +16,8 @@ import { imovelSlug, slugify, formatNeighborhoodName, buildSeoDescription, ogIma
 import { BAIRROS, getBairroBySlug } from '../../../data/bairros'
 import { findLandingPage, LANDING_PAGES } from '../../../data/landingPages'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
-import { SITE_URL, PHONE_WA_BASE, PHONE_STRUCTURED, OG_DEFAULT_IMAGE } from '../../../lib/config'
+import { SITE_URL, PHONE_WA_BASE, OG_DEFAULT_IMAGE } from '../../../lib/config'
+import { AGENT_ID } from '../../../lib/jsonLd'
 import WhatsAppLink from '../../../components/WhatsAppLink'
 import type { Metadata } from 'next'
 
@@ -223,7 +224,7 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
         businessFunction: imovel.tipo === 'aluguel'
           ? 'http://purl.org/goodrelations/v1#LeaseOut'
           : 'http://purl.org/goodrelations/v1#Sell',
-        seller: { '@type': 'RealEstateAgent', name: 'Corretor Yuri Imóveis', telephone: PHONE_STRUCTURED, url: SITE_URL },
+        seller: { '@id': AGENT_ID },
       },
     },
   ]
