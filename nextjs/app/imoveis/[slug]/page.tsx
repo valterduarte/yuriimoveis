@@ -18,8 +18,18 @@ import { findLandingPage, LANDING_PAGES } from '../../../data/landingPages'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
 import { SITE_URL, PHONE_WA_BASE, OG_DEFAULT_IMAGE } from '../../../lib/config'
 import { AGENT_ID } from '../../../lib/jsonLd'
+import {
+  bairroDbNameToSlug,
+  buildHierarchicalUrl,
+  cidadeNameToSlug,
+  hasRichBairroContent,
+  tipoToAcao,
+} from '../../../lib/navigation'
+import { CATEGORIAS } from '../../../data/categorias'
 import WhatsAppLink from '../../../components/WhatsAppLink'
 import type { Metadata } from 'next'
+
+const SUPPORTED_CIDADE_SLUGS = new Set(['osasco', 'barueri'])
 
 export const revalidate = 60
 
@@ -161,6 +171,45 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
 
   const similarProperties = await fetchSimilarProperties(imovel)
 
+  const acao = tipoToAcao(imovel.tipo)
+  const cidadeSlug = imovel.cidade ? cidadeNameToSlug(imovel.cidade) : ''
+  const bairroSlug = imovel.bairro ? bairroDbNameToSlug(imovel.bairro) : ''
+  const cidadeSupported = SUPPORTED_CIDADE_SLUGS.has(cidadeSlug)
+  const categoriaData = CATEGORIAS[imovel.categoria]
+  const categoriaPlural = categoriaData?.plural ?? 'Imóveis'
+  const actionLabel = acao === 'alugar' ? 'aluguel' : 'venda'
+  const bairroDisplay = imovel.bairro || ''
+  const cidadeDisplay = imovel.cidade || ''
+  const hasGuide = bairroSlug && hasRichBairroContent(bairroSlug)
+
+  const exploreLinks: { href: string; label: string }[] = []
+  if (hasGuide) {
+    exploreLinks.push({
+      href: `/bairros/${bairroSlug}`,
+      label: `Guia do bairro ${bairroDisplay}`,
+    })
+  }
+  if (cidadeSupported && bairroSlug && bairroDisplay) {
+    exploreLinks.push({
+      href: buildHierarchicalUrl({ acao, cidade: cidadeSlug, categoria: imovel.categoria, bairro: bairroSlug }),
+      label: `${categoriaPlural} para ${actionLabel} no ${bairroDisplay}`,
+    })
+    exploreLinks.push({
+      href: buildHierarchicalUrl({ acao, cidade: cidadeSlug, bairro: bairroSlug }),
+      label: `Todos os imóveis no ${bairroDisplay}`,
+    })
+  }
+  if (cidadeSupported && cidadeDisplay) {
+    exploreLinks.push({
+      href: buildHierarchicalUrl({ acao, cidade: cidadeSlug, categoria: imovel.categoria }),
+      label: `${categoriaPlural} para ${actionLabel} em ${cidadeDisplay}`,
+    })
+    exploreLinks.push({
+      href: buildHierarchicalUrl({ acao, cidade: cidadeSlug }),
+      label: `Imóveis para ${actionLabel} em ${cidadeDisplay}`,
+    })
+  }
+
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
   const lcpImage = images[0]?.includes('res.cloudinary.com')
     ? images[0].replace('/upload/', '/upload/f_auto,q_auto,w_1920/')
@@ -250,6 +299,27 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
                 <PropertyCard key={p.id} imovel={p} />
               ))}
             </div>
+          </div>
+        </section>
+      )}
+      {exploreLinks.length > 0 && (
+        <section className="bg-white border-t border-gray-200 py-12">
+          <div className="max-w-6xl mx-auto px-4 md:px-8">
+            <span className="section-label">Explore mais</span>
+            <h2 className="section-title mb-6">Continue sua busca</h2>
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {exploreLinks.map(link => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="flex items-center justify-between gap-3 border border-gray-200 px-4 py-3 text-sm text-dark hover:border-primary hover:text-primary transition-colors"
+                  >
+                    <span>{link.label}</span>
+                    <span aria-hidden="true" className="text-xs">→</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       )}

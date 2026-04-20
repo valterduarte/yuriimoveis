@@ -11,6 +11,7 @@ import {
   getCategoriaBySlug,
   bairroDbNameToSlug,
   buildHierarchicalUrl,
+  hasRichBairroContent,
   ACAO_LABELS,
   type AcaoSlug,
 } from '../../../../lib/navigation'
@@ -304,20 +305,29 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
 
         {bairrosWithCount.length > 0 && (
           <section className="mt-14">
-            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
-              {categoriaData.plural} {label} por bairro
-            </h2>
+            <div className="flex items-end justify-between gap-4 mb-4">
+              <h2 className="text-base font-bold text-dark uppercase tracking-wide">
+                {categoriaData.plural} {label} por bairro
+              </h2>
+              <Link href="/bairros" className="text-xs uppercase tracking-wider font-bold text-primary hover:underline whitespace-nowrap">
+                Guias de bairro →
+              </Link>
+            </div>
             <ul className="flex flex-wrap gap-2">
               {bairrosWithCount.map(b => {
                 const bairroData = getBairroBySlug(b.slug)
                 const displayName = bairroData?.nome || b.slug
+                const hasGuide = hasRichBairroContent(b.slug)
                 return (
                   <li key={b.slug}>
                     <Link
                       href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria, bairro: b.slug })}
-                      className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
+                      className="inline-flex items-center gap-2 bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
                     >
-                      {displayName} ({b.count})
+                      <span>{displayName} ({b.count})</span>
+                      {hasGuide && (
+                        <span className="text-[10px] uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5">Guia</span>
+                      )}
                     </Link>
                   </li>
                 )

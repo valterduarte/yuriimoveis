@@ -7,6 +7,9 @@ import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI } from '../lib
 import { NAVIGATION_LINKS, FOOTER_TOOL_LINKS } from '../lib/constants'
 import { LANDING_PAGES } from '../data/landingPages'
 import { AJUDA_ARTIGOS, fullH1 } from '../data/ajudaArtigos'
+import { BAIRROS } from '../data/bairros'
+import { fetchNavigationMatrix } from '../lib/api'
+import { bairroDbNameToSlug } from '../lib/navigation'
 
 const FOOTER_LINK_CLASS =
   'text-xs text-gray-400 hover:text-primary transition-colors flex items-center gap-2'
@@ -14,10 +17,26 @@ const FOOTER_TITLE_CLASS =
   'text-white text-xs uppercase tracking-widest font-bold mb-5'
 const FOOTER_BULLET = <span className="w-2 h-px bg-gray-600 inline-block flex-shrink-0" />
 
-const TOP_LANDING_PAGES = LANDING_PAGES.slice(0, 4)
+const TOP_LANDING_PAGES = LANDING_PAGES.slice(0, 3)
 
-export default function Footer() {
+async function getTopBairrosWithGuide(): Promise<{ slug: string; nome: string }[]> {
+  const matrix = await fetchNavigationMatrix()
+  const counts = new Map<string, number>()
+  for (const row of matrix) {
+    if (!row.bairro) continue
+    counts.set(row.bairro, (counts.get(row.bairro) || 0) + row.count)
+  }
+  return Array.from(counts.entries())
+    .map(([dbName, count]) => ({ dbName, count, slug: bairroDbNameToSlug(dbName) }))
+    .filter(b => b.slug && BAIRROS[b.slug])
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5)
+    .map(b => ({ slug: b.slug, nome: BAIRROS[b.slug].nome }))
+}
+
+export default async function Footer() {
   const year = new Date().getFullYear()
+  const topBairros = await getTopBairrosWithGuide()
 
   return (
     <footer className="bg-dark text-gray-400">
@@ -86,6 +105,27 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
+
+            {topBairros.length > 0 && (
+              <>
+                <h3 className={`${FOOTER_TITLE_CLASS} mt-8`}>Guias de bairro</h3>
+                <ul className="space-y-3">
+                  {topBairros.map(b => (
+                    <li key={b.slug}>
+                      <Link href={`/bairros/${b.slug}`} className={FOOTER_LINK_CLASS}>
+                        {FOOTER_BULLET}
+                        Morar no {b.nome}
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
+                    <Link href="/bairros" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
+                      Todos os bairros →
+                    </Link>
+                  </li>
+                </ul>
+              </>
+            )}
           </nav>
 
           <nav aria-label="Ajuda e contato">

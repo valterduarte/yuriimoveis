@@ -11,6 +11,8 @@ import {
   buildHierarchicalUrl,
   ACAO_LABELS,
   getAllCidadeSlugs,
+  bairroDbNameToSlug,
+  hasRichBairroContent,
   type AcaoSlug,
 } from '../../../lib/navigation'
 import { CATEGORIAS } from '../../../data/categorias'
@@ -79,13 +81,27 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
 
   const matrix = await fetchNavigationMatrix()
   const categoriaCounts = new Map<PropertyCategory, number>()
+  const bairroCounts = new Map<string, number>()
   for (const row of matrix) {
     if (row.tipo !== acaoToTipo(acao as AcaoSlug)) continue
     if (cidadeNameToSlug(row.cidade) !== cidade) continue
     const categoriaData = getCategoriaBySlug(row.categoria)
     if (!categoriaData) continue
     categoriaCounts.set(categoriaData.slug, (categoriaCounts.get(categoriaData.slug) || 0) + row.count)
+    if (row.bairro) {
+      bairroCounts.set(row.bairro, (bairroCounts.get(row.bairro) || 0) + row.count)
+    }
   }
+  const topBairros = Array.from(bairroCounts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 18)
+    .map(([nome, count]) => ({
+      nome,
+      count,
+      slug: bairroDbNameToSlug(nome),
+    }))
+    .filter(b => b.slug)
+    .map(b => ({ ...b, hasGuide: hasRichBairroContent(b.slug) }))
 
   const jsonLd = [
     {
@@ -151,6 +167,32 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
                   </li>
                 )
               })}
+            </ul>
+          </section>
+        )}
+
+        {topBairros.length > 0 && (
+          <section className="mb-10">
+            <div className="flex items-end justify-between gap-4 mb-4">
+              <h2 className="text-base font-bold text-dark uppercase tracking-wide">Imóveis por bairro em {cidadeName}</h2>
+              <Link href="/bairros" className="text-xs uppercase tracking-wider font-bold text-primary hover:underline whitespace-nowrap">
+                Todos os bairros →
+              </Link>
+            </div>
+            <ul className="flex flex-wrap gap-2">
+              {topBairros.map(b => (
+                <li key={b.slug}>
+                  <Link
+                    href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, bairro: b.slug })}
+                    className="inline-flex items-center gap-2 bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
+                  >
+                    <span>{b.nome} ({b.count})</span>
+                    {b.hasGuide && (
+                      <span className="text-[10px] uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5">Guia</span>
+                    )}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </section>
         )}
