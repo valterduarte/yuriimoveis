@@ -348,6 +348,27 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'jardim-california': {
+    nome: 'Jardim Califórnia',
+    slug: 'jardim-california',
+    dbMatch: 'Jardim Califórnia',
+    titulo: 'Imóveis no Jardim Califórnia, Barueri SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos no Jardim Califórnia em Barueri, SP. Lançamentos MCMV com lazer completo e fácil acesso à Castelo Branco e Estação Barueri. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Jardim Califórnia é um bairro residencial de Barueri localizado em região estratégica, a poucos minutos do centro da cidade e com acesso rápido à Rodovia Castelo Branco. A combinação de ruas tranquilas, comércio local ativo e proximidade com equipamentos públicos tem atraído novos empreendimentos verticais e famílias que buscam sair do aluguel. É um bairro consolidado, com perfil predominantemente familiar, que vem recebendo torres modernas inseridas no programa Minha Casa Minha Vida.',
+      infraestrutura:
+        'O Jardim Califórnia e arredores contam com supermercados (Lopes, São Vicente, Barbosa, Assaí Atacadista), farmácias, padarias e comércio de rua diversificado. Na saúde, a UBS Pastor José Roberto Rossi atende a região e há fácil acesso ao Hospital Dr. Francisco Moran. Parque Shopping Barueri e Shopping Tamboré estão a poucos minutos de carro, ampliando as opções de compras, cinema e serviços.',
+      transporte:
+        'O bairro tem acesso direto à Rodovia Presidente Castello Branco, a cerca de 4 km, com saída rápida para São Paulo, Osasco e o interior. A Estação Barueri da CPTM (Linha 8-Diamante) liga direto à Estação da Luz e é alcançada em poucos minutos por linhas municipais. Ônibus municipais e intermunicipais conectam o Jardim Califórnia ao Terminal Barueri, ao centro da cidade e a Alphaville.',
+      educacao:
+        'A região conta com o Complexo Educacional Prof. Carlos O. Lima a 700 metros, além da EMEI Lucinéia de Oliveira e da Escola Gilberto Florêncio. Há creches, escolas municipais e estaduais de ensino fundamental e médio no entorno, e a proximidade com Alphaville e o centro de Barueri dá acesso a colégios particulares tradicionais, ETEC Antônio Furlan e SENAI.',
+      porqueMorar:
+        'Morar no Jardim Califórnia combina preço competitivo, infraestrutura de bairro consolidado e mobilidade rápida para trabalhar em Barueri, Alphaville, Osasco ou São Paulo. Os lançamentos MCMV na região oferecem lazer completo — piscinas, quadra esportiva, academia, salão de festas, coworking, brinquedoteca, playground e espaço pet — com parcelas acessíveis via financiamento Caixa. É uma escolha sólida para famílias jovens que querem sair do aluguel, investidores atentos a valorização e primeiros compradores elegíveis ao programa habitacional.',
+    },
+  },
+
   'aldeia': {
     nome: 'Aldeia',
     slug: 'aldeia',
