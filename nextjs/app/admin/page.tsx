@@ -60,7 +60,8 @@ export default function AdminPage() {
   const handleFormSuccess = (successMessage: string) => {
     setMessage({ type: 'success', text: successMessage })
     loadProperties()
-    if (!editingId) setEditingId(null)
+    setEditingId(null)
+    setActiveView('list')
   }
 
   const handleDeactivate = async (id: number) => {
