@@ -390,6 +390,48 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'jardim-tupanci': {
+    nome: 'Jardim Tupanci',
+    slug: 'jardim-tupanci',
+    dbMatch: 'Jardim Tupanci',
+    titulo: 'Imóveis no Jardim Tupanci, Barueri SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos no Jardim Tupanci em Barueri, SP. Lançamentos MCMV e imóveis prontos para venda com fácil acesso à Castelo Branco e à CPTM. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Jardim Tupanci é um bairro residencial de Barueri em forte expansão, localizado em região estratégica com acesso rápido ao centro da cidade e à Rodovia Castelo Branco. O bairro tem atraído novos empreendimentos verticais — especialmente dentro do programa Minha Casa Minha Vida — pela combinação de preços competitivos, boa localização e infraestrutura crescente. É um bairro com perfil predominantemente familiar, que vem se consolidando como uma das principais opções de moradia em Barueri para quem busca sair do aluguel.',
+      infraestrutura:
+        'O Jardim Tupanci e arredores contam com supermercados, farmácias, padarias e comércio de rua ativo. O Shopping Barueri e o Parque Shopping Barueri estão a poucos minutos de carro, ampliando as opções de compras, cinema, alimentação e serviços. Na área de saúde, há UBS na região e fácil acesso ao Hospital Municipal de Barueri e a clínicas particulares no entorno.',
+      transporte:
+        'O bairro tem acesso à Rodovia Presidente Castelo Branco e conexão com o Rodoanel Mario Covas, facilitando deslocamentos para São Paulo, Osasco e o interior. A Estação Barueri da CPTM (Linha 8-Diamante) é acessível em poucos minutos por linhas de ônibus municipais, oferecendo ligação direta com a Estação da Luz. O Terminal Barueri conecta o bairro a toda a malha de transporte da região.',
+      educacao:
+        'A região conta com escolas municipais e estaduais de ensino fundamental e médio, além de creches e escolas de educação infantil. A proximidade com o centro de Barueri e com Alphaville dá acesso a colégios particulares tradicionais, à ETEC Antônio Furlan e ao SENAI. Para ensino superior, o acesso às rodovias facilita deslocamentos a faculdades em Osasco, Barueri e São Paulo.',
+      porqueMorar:
+        'Morar no Jardim Tupanci significa aproveitar preços acessíveis em Barueri com a comodidade de estar perto da Castelo Branco e da CPTM. Os lançamentos MCMV na região oferecem lazer completo — piscinas, academia, quadra esportiva, salão de festas, playground e espaço pet — com parcelas viáveis via financiamento Caixa. É uma escolha sólida para famílias jovens que querem o primeiro imóvel próprio, investidores atentos à valorização e trabalhadores que precisam de mobilidade para Barueri, Alphaville ou São Paulo.',
+    },
+  },
+
+  'jardim-silveira': {
+    nome: 'Jardim Silveira',
+    slug: 'jardim-silveira',
+    dbMatch: 'Jardim Silveira',
+    titulo: 'Imóveis no Jardim Silveira, Barueri SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos no Jardim Silveira em Barueri, SP. Imóveis prontos para morar e lançamentos com boa localização e acesso à Castelo Branco. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Jardim Silveira é um bairro residencial de Barueri com perfil familiar e tranquilo. Situado em região de fácil acesso ao centro da cidade e às principais vias expressas, o bairro tem atraído novos moradores em busca de qualidade de vida e preços mais acessíveis que endereços como Alphaville. A chegada de empreendimentos verticais recentes renovou o interesse pelo bairro, que combina ruas residenciais consolidadas com o dinamismo da Barueri em expansão.',
+      infraestrutura:
+        'O Jardim Silveira conta com comércio local, mercados, farmácias e prestadores de serviço no entorno. A proximidade com o centro de Barueri e com o Shopping Barueri amplia as opções de compras, alimentação e serviços. Na área de saúde, há UBS e clínicas na região, além de fácil acesso ao Hospital Municipal de Barueri.',
+      transporte:
+        'O bairro tem boa conectividade com as principais vias de Barueri, com acesso à Rodovia Castelo Branco facilitando deslocamentos para São Paulo, Osasco e o interior. Linhas de ônibus municipais conectam o Jardim Silveira ao Terminal Barueri e à Estação Barueri da CPTM (Linha 8-Diamante), que oferece ligação direta à Estação da Luz.',
+      educacao:
+        'A região conta com escolas municipais de ensino fundamental e creches. A proximidade com o centro de Barueri e com Alphaville dá acesso a escolas estaduais, colégios particulares e a instituições de ensino técnico como ETEC e SENAI. Para ensino superior, o acesso às rodovias facilita deslocamentos a faculdades da região metropolitana.',
+      porqueMorar:
+        'O Jardim Silveira oferece boa relação custo-benefício para quem quer morar em Barueri com mobilidade e tranquilidade. O bairro é uma alternativa acessível para famílias que precisam de acesso rápido à Castelo Branco ou à CPTM, sem abrir mão de infraestrutura básica e de um ambiente residencial consolidado. Uma escolha prática para quem busca sair do aluguel ou diversificar o portfólio imobiliário em Barueri.',
+    },
+  },
+
   'vila-ayrosa': {
     nome: 'Vila Ayrosa',
     slug: 'vila-ayrosa',
