@@ -11,6 +11,7 @@ import {
   fetchPropertiesByTypeCategory,
   fetchDistinctBairros,
   fetchSimilarProperties,
+  fetchNavigationMatrix,
 } from '../../../lib/api'
 import { imovelSlug, slugify, formatNeighborhoodName, buildSeoDescription, ogImageUrl } from '../../../utils/imovelUtils'
 import { BAIRROS, getBairroBySlug } from '../../../data/bairros'
@@ -182,6 +183,15 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
   const cidadeDisplay = imovel.cidade || ''
   const hasGuide = bairroSlug && hasRichBairroContent(bairroSlug)
 
+  const matrix = await fetchNavigationMatrix()
+  const bairroInventoryForCategory = matrix.find(row =>
+    row.tipo === imovel.tipo &&
+    row.cidade === imovel.cidade &&
+    row.categoria === imovel.categoria &&
+    row.bairro === imovel.bairro,
+  )?.count ?? 0
+  const bairroHasOwnPage = bairroInventoryForCategory >= 3 || (bairroInventoryForCategory >= 1 && hasGuide)
+
   const exploreLinks: { href: string; label: string }[] = []
   if (hasGuide) {
     exploreLinks.push({
@@ -189,14 +199,10 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
       label: `Guia do bairro ${bairroDisplay}`,
     })
   }
-  if (cidadeSupported && bairroSlug && bairroDisplay) {
+  if (cidadeSupported && bairroSlug && bairroDisplay && bairroHasOwnPage) {
     exploreLinks.push({
       href: buildHierarchicalUrl({ acao, cidade: cidadeSlug, categoria: imovel.categoria, bairro: bairroSlug }),
       label: `${categoriaPlural} para ${actionLabel} no ${bairroDisplay}`,
-    })
-    exploreLinks.push({
-      href: buildHierarchicalUrl({ acao, cidade: cidadeSlug, bairro: bairroSlug }),
-      label: `Todos os imóveis no ${bairroDisplay}`,
     })
   }
   if (cidadeSupported && cidadeDisplay) {

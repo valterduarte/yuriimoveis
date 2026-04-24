@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
 import PropertyCard from '../../../../../components/PropertyCard'
 import { fetchProperties, fetchNavigationMatrix } from '../../../../../lib/api'
+import { formatNeighborhoodName } from '../../../../../utils/imovelUtils'
 import { getBairroBySlug, BAIRROS } from '../../../../../data/bairros'
 import {
   acaoToTipo,
@@ -53,8 +54,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const bairroData = getBairroBySlug(bairro)
   if (!cidadeName || !categoriaData) return {}
 
-  const bairroName = bairroData?.nome || bairro
-  const bairroDbName = bairroSlugToDbName(bairro)
+  const bairroName = bairroData?.nome || formatNeighborhoodName(bairro)
+  const bairroDbName = bairroSlugToDbName(bairro) || bairroName
   const label = ACAO_LABELS[acao].preposicao
 
   const { total } = await fetchProperties({
@@ -96,8 +97,8 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
   if (!cidadeName || !categoriaData) notFound()
 
   const bairroData = getBairroBySlug(bairro)
-  const bairroDbName = bairroSlugToDbName(bairro)
-  const bairroName = bairroData?.nome || bairro
+  const bairroName = bairroData?.nome || formatNeighborhoodName(bairro)
+  const bairroDbName = bairroSlugToDbName(bairro) || bairroName
 
   const tipoFilter = acaoToTipo(acao as AcaoSlug)
   const { imoveis, total } = await fetchProperties({

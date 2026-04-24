@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
 import PropertyCard from '../../../../../../../components/PropertyCard'
 import { fetchProperties, fetchPriceBedroomMatrix } from '../../../../../../../lib/api'
+import { formatNeighborhoodName } from '../../../../../../../utils/imovelUtils'
 import { getBairroBySlug } from '../../../../../../../data/bairros'
 import {
   acaoToTipo,
@@ -94,8 +95,8 @@ async function resolveParams(p: { acao: string; cidade: string; categoria: strin
   const categoriaData = getCategoriaBySlug(p.categoria)
   if (!cidadeName || !categoriaData) return null
   const bairroData = getBairroBySlug(p.bairro)
-  const bairroDbName = bairroSlugToDbName(p.bairro)
-  const bairroName = bairroData?.nome || p.bairro
+  const bairroName = bairroData?.nome || formatNeighborhoodName(p.bairro)
+  const bairroDbName = bairroSlugToDbName(p.bairro) || bairroName
   const tipo = acaoToTipo(p.acao as AcaoSlug)
   const bedroom = getBedroomFilterBySlug(p.filtro)
   const amenity = getAmenityFilterBySlug(p.filtro)
