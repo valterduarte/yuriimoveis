@@ -12,6 +12,7 @@ import AdminPropertyForm from '../../components/admin/AdminPropertyForm'
 import AdminClickStats from '../../components/admin/AdminClickStats'
 import AdminBlogPostList from '../../components/admin/AdminBlogPostList'
 import AdminBlogPostForm from '../../components/admin/AdminBlogPostForm'
+import AdminBairroAudit from '../../components/admin/AdminBairroAudit'
 import type { Imovel } from '../../types'
 
 interface AdminMessage {
@@ -173,12 +174,15 @@ export default function AdminPage() {
         )}
 
         {activeView === 'list' && (
-          <AdminPropertyList
-            properties={properties}
-            onEdit={openEditForm}
-            onDeactivate={handleDeactivate}
-            onReactivate={handleReactivate}
-          />
+          <>
+            <AdminBairroAudit authHeader={authHeader} onAuthError={handleLogout} />
+            <AdminPropertyList
+              properties={properties}
+              onEdit={openEditForm}
+              onDeactivate={handleDeactivate}
+              onReactivate={handleReactivate}
+            />
+          </>
         )}
 
         {activeView === 'form' && (
