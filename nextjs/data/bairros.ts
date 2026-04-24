@@ -432,6 +432,48 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'vila-do-conde': {
+    nome: 'Vila do Conde',
+    slug: 'vila-do-conde',
+    dbMatch: 'Vila do Conde',
+    titulo: 'Imóveis na Vila do Conde, Barueri SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos na Vila do Conde em Barueri, SP. Lançamentos e imóveis prontos para morar próximos ao centro da cidade. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'A Vila do Conde é um bairro residencial de Barueri consolidado, com perfil familiar e boa localização entre o centro da cidade e os principais eixos de transporte. A região tem atraído novos empreendimentos verticais nos últimos anos, combinando o dinamismo de um bairro em valorização com a tranquilidade de ruas residenciais arborizadas. Os lançamentos recentes oferecem lazer completo e preços competitivos em relação a endereços como Alphaville, tornando a Vila do Conde uma alternativa interessante para quem quer morar em Barueri sem abrir mão de infraestrutura e mobilidade.',
+      infraestrutura:
+        'O bairro conta com comércio local ativo, supermercados, padarias, farmácias e prestadores de serviço variados. A proximidade com o centro de Barueri amplia o acesso a shoppings, bancos, restaurantes e hospitais. O Shopping Barueri e o Parque Shopping Barueri ficam a poucos minutos de carro. Na área de saúde, há UBS no bairro e acesso rápido ao Hospital Municipal de Barueri.',
+      transporte:
+        'A Vila do Conde tem excelente conectividade em Barueri, com acesso fácil à Rodovia Presidente Castelo Branco e ao Rodoanel Mario Covas. Linhas de ônibus municipais ligam o bairro ao Terminal Barueri e à Estação Barueri da CPTM (Linha 8-Diamante), que oferece ligação direta à Estação da Luz em São Paulo. A proximidade com as principais vias facilita o deslocamento para Alphaville, Osasco e a capital.',
+      educacao:
+        'A região conta com escolas municipais de ensino fundamental, creches e escolas de educação infantil. Nas imediações há escolas estaduais de ensino médio e colégios particulares. A proximidade com o centro de Barueri e com Alphaville amplia as opções de ensino técnico (ETEC, SENAI) e superior, além do acesso facilitado a faculdades em Osasco e São Paulo pelas rodovias.',
+      porqueMorar:
+        'Morar na Vila do Conde significa combinar preço acessível, localização prática e valorização. O bairro é ideal para famílias que buscam apartamentos novos com lazer completo em Barueri, para quem precisa de mobilidade para o centro da cidade ou Alphaville e para investidores atentos à expansão imobiliária da região. Os lançamentos recentes, com piscina, academia, churrasqueira e áreas de convivência, elevam o padrão de moradia sem pesar no bolso.',
+    },
+  },
+
+  'centro-comercial-jubran': {
+    nome: 'Centro Comercial Jubran',
+    slug: 'centro-comercial-jubran',
+    dbMatch: 'Centro Comercial Jubran',
+    titulo: 'Imóveis no Centro Comercial Jubran, Barueri SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos no Centro Comercial Jubran em Barueri, SP. Lançamentos de alto padrão em frente à Universidade Mackenzie e próximos a Alphaville. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Centro Comercial Jubran é uma região privilegiada de Barueri localizada em frente à Universidade Mackenzie e a poucos minutos de Alphaville. A área combina um eixo comercial pujante com novos empreendimentos residenciais de alto padrão, atraindo profissionais, famílias e investidores que buscam qualidade de vida aliada à praticidade de morar perto de serviços, educação e trabalho. A região é conhecida pela Avenida Mackenzie, um dos endereços mais valorizados da cidade, e vem se consolidando como um dos polos de lançamentos premium de Barueri.',
+      infraestrutura:
+        'A região oferece infraestrutura completa: supermercados, bancos, farmácias, restaurantes e comércio diversificado ao longo da Avenida Mackenzie e arredores. O Sam’s Club, o Carrefour e o Shopping Tamboré estão a poucos minutos, assim como o Centro Comercial de Alphaville e o Shopping Iguatemi Alphaville. Na área de saúde, há acesso rápido ao Hospital São Luiz, ao Hospital Albert Einstein e ao Laboratório Fleury Alphaville. Academias como Bluefit e Bodytech também ficam próximas.',
+      transporte:
+        'A localização do Centro Comercial Jubran garante fácil acesso à Rodovia Castello Branco e ao Rodoanel Mario Covas, facilitando deslocamentos para São Paulo, Osasco e o interior. Linhas de ônibus atendem a região, conectando com o Terminal Barueri e a Estação Barueri da CPTM (Linha 8-Diamante). A proximidade com Alphaville amplia a rede de transporte por aplicativo e fretados corporativos.',
+      educacao:
+        'A região tem a Universidade Mackenzie em frente, um dos nomes mais tradicionais do ensino superior brasileiro. Há fácil acesso à UNIP e ao Colégio Objetivo, além da rede de colégios particulares de Alphaville, como Escola Morumbi Alphaville e Colégio Visconde de Porto Seguro. Para ensino técnico, há ETEC e SENAI em Barueri.',
+      porqueMorar:
+        'Morar no Centro Comercial Jubran é combinar localização estratégica, alto padrão e valorização. É ideal para quem trabalha ou estuda no Mackenzie, Alphaville ou Tamboré e quer reduzir deslocamentos, para famílias que buscam proximidade de escolas e hospitais de referência, e para investidores interessados na valorização da Avenida Mackenzie. Os lançamentos da região entregam apartamentos modernos com lazer completo, arquitetura contemporânea e infraestrutura compatível com o perfil premium do entorno.',
+    },
+  },
+
   'vila-ayrosa': {
     nome: 'Vila Ayrosa',
     slug: 'vila-ayrosa',
