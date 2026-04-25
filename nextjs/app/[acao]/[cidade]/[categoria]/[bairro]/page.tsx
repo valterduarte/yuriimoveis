@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
 import PropertyCard from '../../../../../components/PropertyCard'
 import { fetchProperties, fetchNavigationMatrix } from '../../../../../lib/api'
-import { formatNeighborhoodName } from '../../../../../utils/imovelUtils'
+import { formatNeighborhoodName, emBairro, deBairro, sobreBairro } from '../../../../../utils/imovelUtils'
 import { getBairroBySlug, BAIRROS } from '../../../../../data/bairros'
 import {
   acaoToTipo,
@@ -66,9 +66,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     limit: 50,
   })
 
+  const nomeImovel = total === 1 ? categoriaData.singular : categoriaData.plural
   const countPrefix = total > 0 ? `${total} ` : ''
-  const title = `${countPrefix}${categoriaData.plural} ${label} no ${bairroName}, ${cidadeName} SP`
-  const description = `${categoriaData.plural} ${label.toLowerCase()} no ${bairroName} em ${cidadeName}, SP. Atendimento com o Corretor Yuri, CRECI 235509.`
+  const prep = emBairro(bairroName)
+  const title = `${countPrefix}${nomeImovel} ${label} ${prep} ${bairroName}, ${cidadeName} SP`
+  const description = `${nomeImovel} ${label.toLowerCase()} ${prep} ${bairroName} em ${cidadeName}, SP. Atendimento com o Corretor Yuri, CRECI 235509.`
   const url = `${SITE_URL}${buildHierarchicalUrl({ acao, cidade, categoria, bairro })}`
 
   return {
@@ -112,7 +114,9 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
   if (!threshold(total, bairro)) notFound()
 
   const label = ACAO_LABELS[acao as AcaoSlug].preposicao
-  const h1 = `${categoriaData.plural} ${label} no ${bairroName}, ${cidadeName}`
+  const nomeImovel = total === 1 ? categoriaData.singular : categoriaData.plural
+  const prep = emBairro(bairroName)
+  const h1 = `${nomeImovel} ${label} ${prep} ${bairroName}, ${cidadeName}`
   const canonicalUrl = `${SITE_URL}${buildHierarchicalUrl({ acao, cidade, categoria, bairro })}`
 
   const siblingBairros = Object.values(BAIRROS)
@@ -177,7 +181,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
       {bairroData && (
         <section className="container mx-auto px-6 pt-10 pb-2">
           <div className="bg-white border border-gray-200 p-6 md:p-8">
-            <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">Sobre o {bairroName}</h2>
+            <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">{sobreBairro(bairroName)} {bairroName}</h2>
             <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.sobre}</p>
             <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Infraestrutura</h3>
             <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.infraestrutura}</p>
@@ -187,7 +191,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
               href={`/bairros/${bairro}`}
               className="inline-flex items-center gap-1.5 mt-5 text-xs uppercase tracking-wider font-bold text-primary hover:text-primary-dark transition-colors"
             >
-              Ler guia completo do {bairroName} →
+              Ler guia completo {deBairro(bairroName)} {bairroName} →
             </Link>
           </div>
         </section>
@@ -208,7 +212,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
 
         {availableBedroomFilters.length > 0 && (
           <section className="mt-14">
-            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por quartos no {bairroName}</h2>
+            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por quartos {emBairro(bairroName)} {bairroName}</h2>
             <ul className="flex flex-wrap gap-2">
               {availableBedroomFilters.map(bf => (
                 <li key={bf.slug}>
@@ -234,7 +238,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
                     href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria, bairro: b.slug })}
                     className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
                   >
-                    {categoriaData.plural} {label.toLowerCase()} no {b.nome}
+                    {categoriaData.plural} {label.toLowerCase()} {emBairro(b.nome)} {b.nome}
                   </Link>
                 </li>
               ))}

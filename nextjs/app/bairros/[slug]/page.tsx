@@ -12,6 +12,7 @@ import {
   type AcaoSlug,
 } from '../../../lib/navigation'
 import { CATEGORIAS } from '../../../data/categorias'
+import { emBairro } from '../../../utils/imovelUtils'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
 import { AGENT_ID } from '../../../lib/jsonLd'
 import type { Metadata } from 'next'
@@ -244,7 +245,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
                       className="flex items-center justify-between bg-white border border-gray-200 hover:border-primary hover:bg-primary/5 transition-colors p-4 group"
                     >
                       <span className="text-sm font-semibold text-dark group-hover:text-primary">
-                        {categoriaData.plural} {label} no {bairro.nome}
+                        {categoriaData.plural} {label} {emBairro(bairro.nome)} {bairro.nome}
                       </span>
                       <span className="flex items-center gap-2 text-xs text-gray-500">
                         {count} imóve{count !== 1 ? 'is' : 'l'}

@@ -69,6 +69,28 @@ export function formatNeighborhoodName(slug: string): string {
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 
+const FEMININE_BAIRRO_FIRST_WORDS = new Set([
+  'vila', 'aldeia', 'praia', 'rua', 'avenida', 'travessa', 'alameda', 'cruz',
+  'conceição', 'conceicao', 'padroeira', 'bela', 'santa', 'chácara', 'chacara',
+])
+
+function isFeminineBairroName(nome: string): boolean {
+  const first = nome.trim().split(/\s+/)[0].toLowerCase()
+  return FEMININE_BAIRRO_FIRST_WORDS.has(first)
+}
+
+export function emBairro(nome: string): 'no' | 'na' {
+  return isFeminineBairroName(nome) ? 'na' : 'no'
+}
+
+export function deBairro(nome: string): 'do' | 'da' {
+  return isFeminineBairroName(nome) ? 'da' : 'do'
+}
+
+export function sobreBairro(nome: string): 'sobre o' | 'sobre a' {
+  return isFeminineBairroName(nome) ? 'sobre a' : 'sobre o'
+}
+
 export function formatListingAge(createdAt: string | null | undefined): string | null {
   if (!createdAt) return null
   const created = new Date(createdAt)
