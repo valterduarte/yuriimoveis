@@ -495,6 +495,27 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'tambore': {
+    nome: 'Tamboré',
+    slug: 'tambore',
+    dbMatch: 'Tamboré',
+    titulo: 'Imóveis em Tamboré, Barueri SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos de alto padrão em Tamboré, Barueri SP. Lançamentos na divisa com Alphaville, próximos aos shoppings Tamboré e Iguatemi Alphaville. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'Tamboré é um dos endereços mais valorizados de Barueri, vizinho direto de Alphaville e do Centro Empresarial Tamboré. A região consolidou um perfil de alto padrão, com avenidas largas, áreas verdes preservadas e empreendimentos contemporâneos que combinam arquitetura assinada, lazer rooftop e infraestrutura premium. Av. Piraíba, Av. Tamboré e Alameda Araguaia concentram lançamentos verticais que atendem famílias e profissionais que trabalham no polo corporativo de Alphaville.',
+      infraestrutura:
+        'Tamboré reúne infraestrutura completa de alto padrão: Shopping Tamboré, Iguatemi Alphaville e Shopping Alphaville a poucos minutos. Supermercados premium (Sam’s Club, Pão de Açúcar), restaurantes, academias e centros comerciais cercam o bairro. Na área de saúde há acesso rápido ao Hospital Albert Einstein Alphaville, Hospital São Luiz e Laboratório Fleury. O Centro Empresarial Tamboré é referência em escritórios corporativos da região metropolitana.',
+      transporte:
+        'O bairro tem acesso direto à Rodovia Castelo Branco (km 22–23), Rodoanel Mario Covas e Marginal Tietê, conectando-se rapidamente a São Paulo, Osasco e ao interior. A proximidade com Alphaville reforça a vocação corporativa, com linhas fretadas, circulares internas e fácil acesso ao Terminal Barueri e à Estação Barueri da CPTM (Linha 8-Diamante), que liga à Estação da Luz.',
+      educacao:
+        'Tamboré e arredores concentram algumas das melhores escolas da região metropolitana: Colégio Visconde de Porto Seguro, Escola Morumbi Alphaville, Colégio Concept e unidades bilíngues. Para ensino superior, há opções como Universidade Anhembi Morumbi e Faculdade Alphaville, além de fácil acesso a instituições da capital paulista.',
+      porqueMorar:
+        'Morar em Tamboré é escolher alto padrão com mobilidade premium para o polo corporativo de Alphaville. O bairro oferece imóveis com lazer rooftop completo (piscina aquecida, sauna, SPA, academia, fitness externo), arquitetura sofisticada e valorização consistente. Ideal para executivos que trabalham nos escritórios da região, famílias que buscam segurança e qualidade de vida, e investidores atentos a um dos eixos mais sólidos da Grande São Paulo.',
+    },
+  },
+
   'vila-ayrosa': {
     nome: 'Vila Ayrosa',
     slug: 'vila-ayrosa',
