@@ -474,6 +474,27 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'vila-yara': {
+    nome: 'Vila Yara',
+    slug: 'vila-yara',
+    dbMatch: 'Vila Yara',
+    titulo: 'Imóveis na Vila Yara, Osasco SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos na Vila Yara em Osasco, SP. Lançamentos no limite com São Paulo, próximos ao Continental Shopping e à USP. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'A Vila Yara é um dos bairros mais valorizados de Osasco, situado no limite com a cidade de São Paulo. A região combina o perfil residencial consolidado com a conveniência de ter shoppings, terminal rodoviário e fácil acesso às principais vias da capital. Nos últimos anos, novos empreendimentos verticais têm chegado ao bairro, impulsionados pela proximidade com Alphaville, USP, Marginal Pinheiros e Castelo Branco. É uma escolha sólida para quem trabalha em São Paulo mas busca preços mais acessíveis que bairros similares na capital, e para famílias que querem qualidade de vida com mobilidade.',
+      infraestrutura:
+        'O bairro tem infraestrutura completa, ancorada pelo Continental Shopping, com mais de 200 lojas, cinema, praça de alimentação e supermercado. Há academias, escolas, padarias, bancos e restaurantes ao longo das principais vias. Hospitais e clínicas particulares ficam a poucos minutos. O Terminal Rodoviário Vila Yara conecta o bairro a outras regiões de Osasco e cidades vizinhas, e o São Francisco Golf Club fica a apenas 4 minutos de carro.',
+      transporte:
+        'A Vila Yara tem excelente conectividade. O bairro fica a 10 minutos da Marginal Tietê e da Marginal Pinheiros, 15 min da Rodovia Castelo Branco e 4 min do São Francisco Golf Club. A USP é alcançada em 8 minutos de carro e o Parque Villa-Lobos em 18 min de bike. Linhas de ônibus municipais conectam o bairro ao Terminal Osasco e à Estação Osasco da CPTM (Linha 8-Diamante), com acesso direto à Estação da Luz em São Paulo.',
+      educacao:
+        'A região conta com escolas particulares de referência regional e instituições municipais e estaduais de ensino fundamental e médio. A proximidade com o Butantã e Pinheiros amplia o acesso a colégios tradicionais como Mackenzie e Magno. Para ensino superior, a USP fica a 8 minutos, e há acesso facilitado à Anhembi Morumbi, FMU, UNIFIEO Osasco e diversas outras faculdades da Grande São Paulo.',
+      porqueMorar:
+        'Morar na Vila Yara é combinar localização premium com preços competitivos. O bairro é ideal para profissionais que trabalham em São Paulo (Pinheiros, Butantã, Marginal Pinheiros) e querem reduzir o tempo de deslocamento, para famílias atraídas pela proximidade do Continental Shopping e qualidade urbana, e para investidores atentos à valorização da região no eixo Castelo–USP. Os lançamentos chegam com lazer completo no rooftop, varanda gourmet, fechadura eletrônica e infraestrutura para ar-condicionado, elevando o padrão de moradia em Osasco.',
+    },
+  },
+
   'vila-ayrosa': {
     nome: 'Vila Ayrosa',
     slug: 'vila-ayrosa',
