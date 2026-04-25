@@ -25,9 +25,6 @@ export default function HeroSection({ imageUrl }: HeroSectionProps) {
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-white leading-none mb-6 uppercase tracking-tight">
             Imóveis em<br />Osasco <span className="text-primary">e Região</span>
           </h1>
-          <p className="text-gray-200 text-base leading-relaxed max-w-lg">
-            Mais de 10 anos ajudando famílias a comprar, vender e alugar na Grande São Paulo. Atendimento direto com o corretor — sem intermediários.
-          </p>
         </div>
         <div className="max-w-2xl">
           <SearchBar />
