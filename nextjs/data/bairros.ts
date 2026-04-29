@@ -516,6 +516,46 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'jardim-audir': {
+    nome: 'Jardim Audir',
+    slug: 'jardim-audir',
+    titulo: 'Imóveis no Jardim Audir, Barueri SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos no Jardim Audir em Barueri, SP. Lançamentos e imóveis prontos para morar com fácil acesso a Alphaville e à Castelo Branco. Atendimento personalizado com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Jardim Audir é um bairro residencial de Barueri que vem ganhando força nos últimos anos com a chegada de novos empreendimentos verticais. Bem localizado em relação ao centro de Barueri e à região de Alphaville, o bairro combina perfil familiar e infraestrutura em expansão, atraindo quem busca apartamento novo na Grande São Paulo com boa relação custo-benefício.',
+      infraestrutura:
+        'O bairro conta com comércio local, mercados, padarias, farmácias e prestadores de serviço para o dia a dia. A proximidade com o centro de Barueri amplia o acesso a supermercados de rede, shoppings, agências bancárias e unidades de saúde. Novos lançamentos têm impulsionado melhorias urbanas e valorização da região.',
+      transporte:
+        'O Jardim Audir tem acesso facilitado à Rodovia Presidente Castelo Branco, principal eixo viário que liga Barueri ao centro de São Paulo, à Marginal Tietê e à região de Alphaville. Linhas de ônibus atendem o bairro com integração ao centro de Barueri e à Estação Barueri da CPTM (Linha 8-Diamante), que oferece ligação direta à Estação da Luz.',
+      educacao:
+        'A região conta com escolas públicas municipais e estaduais de ensino fundamental e médio. A proximidade com o centro de Barueri e Alphaville amplia o acesso a colégios particulares e cursos técnicos. Para ensino superior, o acesso pelas rodovias facilita deslocamentos a instituições em Barueri, Osasco e São Paulo.',
+      porqueMorar:
+        'Morar no Jardim Audir é combinar localização estratégica em Barueri com preços mais acessíveis que os endereços consolidados de Alphaville. Apartamentos novos com lazer completo estão chegando ao bairro, tornando-o uma opção prática para famílias que querem morar perto do polo corporativo de Alphaville e investidores atentos à valorização da região.',
+    },
+  },
+
+  'vila-sul-americana': {
+    nome: 'Vila Sul Americana',
+    slug: 'vila-sul-americana',
+    titulo: 'Imóveis na Vila Sul Americana, Carapicuíba SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos na Vila Sul Americana em Carapicuíba, SP. Lançamentos e imóveis prontos para morar com acesso à CPTM Linha 8-Diamante. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'A Vila Sul Americana é um bairro residencial de Carapicuíba com perfil familiar e infraestrutura em desenvolvimento. A região vem recebendo novos empreendimentos verticais que ampliam a oferta de apartamentos com lazer completo, atraindo quem busca o primeiro imóvel ou uma alternativa acessível na Grande São Paulo, próxima ao eixo Osasco–Barueri.',
+      infraestrutura:
+        'O bairro conta com comércio local, mercados, padarias, farmácias e prestadores de serviço para o cotidiano. A proximidade com o centro de Carapicuíba dá acesso a supermercados de rede, agências bancárias, unidades de saúde e o Hospital Geral de Carapicuíba. Áreas verdes como o Parque dos Paturis ampliam as opções de lazer da região.',
+      transporte:
+        'A Vila Sul Americana se beneficia da posição estratégica de Carapicuíba na Linha 8-Diamante da CPTM, com a Estação Carapicuíba conectando o bairro diretamente à Estação da Luz em São Paulo. Linhas de ônibus municipais e intermunicipais ligam a região ao centro de Carapicuíba, Osasco e Barueri. O acesso à Rodovia Castelo Branco está a poucos minutos.',
+      educacao:
+        'A região possui escolas municipais e estaduais de ensino fundamental e médio, além de creches e escolas de educação infantil. A proximidade com Osasco e Barueri amplia as opções de colégios particulares e cursos técnicos. Para ensino superior, o acesso pela CPTM e pelas rodovias facilita deslocamentos a faculdades de Osasco, Barueri e da capital.',
+      porqueMorar:
+        'A Vila Sul Americana é uma escolha prática para quem busca apartamento com bom custo-benefício em Carapicuíba, com a vantagem da CPTM a poucos minutos. Lançamentos com lazer completo (piscina, academia, espaço gourmet) têm chegado ao bairro, tornando-o atraente para famílias que querem qualidade de vida com proximidade do polo de Alphaville e da capital paulista.',
+    },
+  },
+
   'vila-ayrosa': {
     nome: 'Vila Ayrosa',
     slug: 'vila-ayrosa',

@@ -40,7 +40,7 @@ export function buildGlobalJsonLd(): Record<string, unknown>[] {
       name: 'Corretor Yuri Imóveis',
       legalName: 'Corretor Yuri Imóveis',
       description:
-        'Corretor de imóveis em Osasco e Barueri com mais de 10 anos de experiência. Casas, apartamentos, terrenos e imóveis comerciais para venda e aluguel. Atendimento personalizado e segurança jurídica.',
+        'Corretor de imóveis em Osasco, Barueri e Carapicuíba com mais de 10 anos de experiência. Casas, apartamentos, terrenos e imóveis comerciais para venda e aluguel. Atendimento personalizado e segurança jurídica.',
       url: SITE_URL,
       telephone: PHONE_STRUCTURED,
       image: OG_DEFAULT_IMAGE,

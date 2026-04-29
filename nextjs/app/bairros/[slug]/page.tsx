@@ -8,6 +8,7 @@ import {
   bairroSlugToDbName,
   buildHierarchicalUrl,
   cidadeNameToSlug,
+  inferCidadeFromBairro as inferCidade,
   ACAO_LABELS,
   type AcaoSlug,
 } from '../../../lib/navigation'
@@ -16,18 +17,12 @@ import { emBairro } from '../../../utils/imovelUtils'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
 import { AGENT_ID } from '../../../lib/jsonLd'
 import type { Metadata } from 'next'
-import type { BairroData, PropertyCategory } from '../../../types'
+import type { PropertyCategory } from '../../../types'
 
 export const revalidate = 300
 
 type PageProps = {
   params: Promise<{ slug: string }>
-}
-
-function inferCidade(bairro: BairroData): string {
-  const titulo = bairro.titulo.toLowerCase()
-  if (titulo.includes('barueri')) return 'Barueri'
-  return 'Osasco'
 }
 
 async function getCombosForBairro(bairroSlug: string, cidadeName: string) {

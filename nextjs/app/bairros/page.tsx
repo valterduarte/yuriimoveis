@@ -2,20 +2,16 @@ import Link from 'next/link'
 import { FiMapPin, FiArrowRight } from 'react-icons/fi'
 import { BAIRROS } from '../../data/bairros'
 import { fetchNavigationMatrix } from '../../lib/api'
-import { bairroSlugToDbName } from '../../lib/navigation'
+import { bairroSlugToDbName, inferCidadeFromBairro as inferCidade } from '../../lib/navigation'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import type { Metadata } from 'next'
 import type { BairroData } from '../../types'
 
 export const revalidate = 300
 
-const PAGE_TITLE = 'Guias de Bairro em Osasco e Barueri | Corretor Yuri'
+const PAGE_TITLE = 'Guias de Bairro em Osasco, Barueri e Carapicuíba | Corretor Yuri'
 const PAGE_DESCRIPTION =
-  'Conheça os bairros de Osasco e Barueri com guias completos: infraestrutura, transporte, educação e imóveis disponíveis. Atendimento com o Corretor Yuri, CRECI 235509.'
-
-function inferCidade(bairro: BairroData): string {
-  return bairro.titulo.toLowerCase().includes('barueri') ? 'Barueri' : 'Osasco'
-}
+  'Conheça os bairros de Osasco, Barueri e Carapicuíba com guias completos: infraestrutura, transporte, educação e imóveis disponíveis. Atendimento com o Corretor Yuri, CRECI 235509.'
 
 export function generateMetadata(): Metadata {
   const url = `${SITE_URL}/bairros`
@@ -83,7 +79,7 @@ export default async function BairrosIndexPage() {
           <span className="section-label">Conheça a região</span>
           <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">Guias de Bairro</h1>
           <p className="text-gray-400 text-sm mt-2 max-w-3xl">
-            Descubra como é morar nos principais bairros de Osasco e Barueri: infraestrutura, transporte, educação e imóveis disponíveis hoje.
+            Descubra como é morar nos principais bairros de Osasco, Barueri e Carapicuíba: infraestrutura, transporte, educação e imóveis disponíveis hoje.
           </p>
         </div>
       </div>

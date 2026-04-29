@@ -1,4 +1,4 @@
-import type { TransactionType } from '../types'
+import type { BairroData, TransactionType } from '../types'
 import { BAIRROS, getBairroBySlug } from '../data/bairros'
 import { CATEGORIAS, getCategoriaBySlug } from '../data/categorias'
 import { slugify } from '../utils/imovelUtils'
@@ -20,7 +20,16 @@ const TIPO_TO_ACAO: Record<TransactionType, AcaoSlug> = {
 const CIDADES_SUPORTADAS = new Map<string, string>([
   ['osasco', 'Osasco'],
   ['barueri', 'Barueri'],
+  ['carapicuiba', 'Carapicuíba'],
 ])
+
+export function inferCidadeFromBairro(bairro: BairroData): string {
+  const titulo = bairro.titulo.toLowerCase()
+  for (const cidade of CIDADES_SUPORTADAS.values()) {
+    if (titulo.includes(cidade.toLowerCase())) return cidade
+  }
+  return 'Osasco'
+}
 
 export function acaoToTipo(acao: AcaoSlug): TransactionType {
   return ACAO_TO_TIPO[acao]
