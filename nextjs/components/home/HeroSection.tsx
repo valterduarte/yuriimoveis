@@ -3,9 +3,10 @@ import SearchBar from '../SearchBar'
 
 interface HeroSectionProps {
   imageUrl: string
+  cidadesByTipo: Record<string, string[]>
 }
 
-export default function HeroSection({ imageUrl }: HeroSectionProps) {
+export default function HeroSection({ imageUrl, cidadesByTipo }: HeroSectionProps) {
   return (
     <section className="relative min-h-screen md:min-h-[85vh] flex items-center -mt-16 md:-mt-20 overflow-hidden">
       <Image
@@ -27,7 +28,7 @@ export default function HeroSection({ imageUrl }: HeroSectionProps) {
           </h1>
         </div>
         <div className="max-w-2xl">
-          <SearchBar />
+          <SearchBar cidadesByTipo={cidadesByTipo} />
         </div>
       </div>
     </section>

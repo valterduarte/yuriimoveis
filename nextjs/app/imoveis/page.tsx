@@ -74,7 +74,11 @@ export default async function ImoveisPage({ searchParams }: { searchParams: Prom
       </div>
       <div className="container mx-auto px-6 py-10">
         <ImoveisControls total={total} currentPage={currentPage} totalPages={totalPages} bairros={bairros}>
-          <PropertyGrid properties={imoveis} activeFilterCount={activeFilterCount} />
+          <PropertyGrid
+            properties={imoveis}
+            activeFilterCount={activeFilterCount}
+            filters={{ tipo: params.tipo, cidade: params.cidade, categoria: params.categoria, bairro: params.bairro }}
+          />
         </ImoveisControls>
       </div>
     </div>

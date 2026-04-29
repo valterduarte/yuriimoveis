@@ -128,6 +128,26 @@ const fetchDistinctBairrosCached = unstable_cache(
   { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
 )
 
+const fetchCidadesByTipoCached = unstable_cache(
+  async (): Promise<Record<string, string[]>> => {
+    const result = await getDb().query(
+      `SELECT DISTINCT tipo, cidade FROM imoveis
+       WHERE ativo = true
+         AND tipo IS NOT NULL AND tipo != ''
+         AND cidade IS NOT NULL AND cidade != ''
+       ORDER BY cidade`
+    )
+    const grouped: Record<string, string[]> = {}
+    for (const row of result.rows as { tipo: string; cidade: string }[]) {
+      if (!grouped[row.tipo]) grouped[row.tipo] = []
+      grouped[row.tipo].push(row.cidade)
+    }
+    return grouped
+  },
+  ['fetchCidadesByTipo'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
+)
+
 const fetchSimilarPropertiesCached = unstable_cache(
   async (imovel: Pick<Imovel, 'id' | 'categoria' | 'cidade' | 'tipo'>): Promise<Imovel[]> => {
     const result = await getDb().query(
@@ -298,6 +318,15 @@ export async function fetchDistinctBairros(): Promise<string[]> {
   } catch (err) {
     logDbError('fetchDistinctBairros', err)
     return []
+  }
+}
+
+export async function fetchCidadesByTipo(): Promise<Record<string, string[]>> {
+  try {
+    return await fetchCidadesByTipoCached()
+  } catch (err) {
+    logDbError('fetchCidadesByTipo', err)
+    return {}
   }
 }
 

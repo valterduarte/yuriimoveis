@@ -1,16 +1,34 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { FiSearch } from 'react-icons/fi'
 import { PROPERTY_CATEGORIES, TRANSACTION_TYPES, SALE_PRICE_OPTIONS, RENT_PRICE_OPTIONS } from '../lib/constants'
 
-export default function SearchBar() {
+interface SearchBarProps {
+  cidadesByTipo?: Record<string, string[]>
+}
+
+export default function SearchBar({ cidadesByTipo = {} }: SearchBarProps) {
   const router = useRouter()
-  const [tipo, setTipo] = useState('venda')
+
+  const availableTransactionTypes = useMemo(
+    () => TRANSACTION_TYPES.filter(t => (cidadesByTipo[t.value]?.length ?? 0) > 0),
+    [cidadesByTipo]
+  )
+
+  const initialTipo = availableTransactionTypes[0]?.value ?? 'venda'
+  const [tipo, setTipo] = useState(initialTipo)
   const [categoria, setCategoria] = useState('')
   const [cidade, setCidade] = useState('')
   const [precoMax, setPrecoMax] = useState('')
+
+  const cidadesForTipo = cidadesByTipo[tipo] ?? []
+
+  const handleTipoChange = (next: string) => {
+    setTipo(next)
+    if (cidade && !(cidadesByTipo[next] ?? []).includes(cidade)) setCidade('')
+  }
 
   const handleSearch = (e: React.SyntheticEvent) => {
     e.preventDefault()
@@ -22,24 +40,28 @@ export default function SearchBar() {
     router.push(`/imoveis?${params.toString()}`)
   }
 
+  const tabsToRender = availableTransactionTypes.length > 0 ? availableTransactionTypes : TRANSACTION_TYPES
+
   return (
     <form onSubmit={handleSearch} className="bg-white shadow-2xl">
-      <div className="flex">
-        {TRANSACTION_TYPES.map(t => (
-          <button
-            key={t.value}
-            type="button"
-            onClick={() => setTipo(t.value)}
-            className={`flex-1 py-4 text-xs uppercase tracking-widest font-bold transition-all duration-200 border-b-2 ${
-              tipo === t.value
-                ? 'bg-primary text-white border-primary'
-                : 'text-gray-600 hover:text-dark bg-white border-gray-200'
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
+      {tabsToRender.length > 1 && (
+        <div className="flex">
+          {tabsToRender.map(t => (
+            <button
+              key={t.value}
+              type="button"
+              onClick={() => handleTipoChange(t.value)}
+              className={`flex-1 py-4 text-xs uppercase tracking-widest font-bold transition-all duration-200 border-b-2 ${
+                tipo === t.value
+                  ? 'bg-primary text-white border-primary'
+                  : 'text-gray-600 hover:text-dark bg-white border-gray-200'
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200">
         <div className="p-5">
@@ -61,7 +83,9 @@ export default function SearchBar() {
           <select id="sb-cidade" value={cidade} onChange={e => setCidade(e.target.value)}
             className="w-full text-sm text-dark focus:outline-none focus-visible:outline-2 focus-visible:outline-primary bg-white cursor-pointer">
             <option value="">Todas as cidades</option>
-            <option value="Osasco">Osasco</option>
+            {cidadesForTipo.map(c => (
+              <option key={c} value={c}>{c}</option>
+            ))}
           </select>
         </div>
         <div className="p-5">
