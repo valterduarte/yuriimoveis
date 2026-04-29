@@ -40,25 +40,34 @@ export default function SearchBar({ cidadesByTipo = {} }: SearchBarProps) {
     router.push(`/imoveis?${params.toString()}`)
   }
 
-  const tabsToRender = availableTransactionTypes.length > 0 ? availableTransactionTypes : TRANSACTION_TYPES
+  const isTipoAvailable = (value: string) => (cidadesByTipo[value]?.length ?? 0) > 0
 
   return (
     <form onSubmit={handleSearch} className="bg-white shadow-2xl">
       <div className="flex">
-        {tabsToRender.map(t => (
-          <button
-            key={t.value}
-            type="button"
-            onClick={() => handleTipoChange(t.value)}
-            className={`flex-1 py-4 text-xs uppercase tracking-widest font-bold transition-all duration-200 border-b-2 ${
-              tipo === t.value
-                ? 'bg-primary text-white border-primary'
-                : 'text-gray-600 hover:text-dark bg-white border-gray-200'
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
+        {TRANSACTION_TYPES.map(t => {
+          const available = isTipoAvailable(t.value)
+          const isActive = tipo === t.value
+          return (
+            <button
+              key={t.value}
+              type="button"
+              disabled={!available}
+              onClick={() => available && handleTipoChange(t.value)}
+              title={available ? undefined : 'Em breve'}
+              className={`flex-1 py-4 text-xs uppercase tracking-widest font-bold transition-all duration-200 border-b-2 ${
+                isActive
+                  ? 'bg-primary text-white border-primary'
+                  : available
+                    ? 'text-gray-600 hover:text-dark bg-white border-gray-200 cursor-pointer'
+                    : 'text-gray-300 bg-gray-50 border-gray-100 cursor-not-allowed'
+              }`}
+            >
+              {t.label}
+              {!available && <span className="ml-2 text-[10px] tracking-normal normal-case">(em breve)</span>}
+            </button>
+          )
+        })}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200">
