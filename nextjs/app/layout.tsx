@@ -21,11 +21,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Corretor Yuri Imóveis — Imóveis em Osasco e Região',
+    default: 'Corretor Yuri — Imóveis em Osasco, Barueri e Carapicuíba',
     template: '%s | Corretor Yuri Imóveis',
   },
   description:
-    'Corretor de imóveis em Osasco com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para venda e aluguel. Atendimento personalizado.',
+    'Corretor de imóveis em Osasco, Barueri e Carapicuíba com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para compra e aluguel.',
   openGraph: {
     type: 'website',
     locale: 'pt_BR',

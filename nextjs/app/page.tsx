@@ -11,24 +11,24 @@ const FALLBACK_HERO = 'https://res.cloudinary.com/dfl3eskr9/image/upload/v177508
 export const revalidate = 300
 
 export const metadata = {
-  title: 'Corretor Yuri Imóveis — Imóveis em Osasco e Região',
+  title: 'Corretor Yuri — Imóveis em Osasco, Barueri e Carapicuíba',
   description:
-    'Corretor de imóveis em Osasco com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para venda e aluguel. Atendimento personalizado.',
+    'Corretor de imóveis em Osasco, Barueri e Carapicuíba com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para compra e aluguel.',
   alternates: { canonical: SITE_URL },
   openGraph: {
-    title: 'Corretor Yuri Imóveis — Imóveis em Osasco e Região',
+    title: 'Corretor Yuri — Imóveis em Osasco, Barueri e Carapicuíba',
     description:
-      'Corretor de imóveis em Osasco com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para venda e aluguel.',
+      'Corretor de imóveis em Osasco, Barueri e Carapicuíba com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para compra e aluguel.',
     url: SITE_URL,
     siteName: 'Corretor Yuri Imóveis',
     locale: 'pt_BR',
-    images: [{ url: FALLBACK_HERO, width: 1280, height: 853, alt: 'Ponte Metálica de Osasco' }],
+    images: [{ url: FALLBACK_HERO, width: 1280, height: 853, alt: 'Ponte Metálica de Osasco — atendimento em Osasco, Barueri e Carapicuíba' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Corretor Yuri Imóveis — Imóveis em Osasco e Região',
+    title: 'Corretor Yuri — Imóveis em Osasco, Barueri e Carapicuíba',
     description:
-      'Corretor de imóveis em Osasco com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para venda e aluguel.',
+      'Corretor de imóveis em Osasco, Barueri e Carapicuíba com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para compra e aluguel.',
     images: [FALLBACK_HERO],
   },
 }
