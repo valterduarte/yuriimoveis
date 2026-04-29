@@ -44,24 +44,22 @@ export default function SearchBar({ cidadesByTipo = {} }: SearchBarProps) {
 
   return (
     <form onSubmit={handleSearch} className="bg-white shadow-2xl">
-      {tabsToRender.length > 1 && (
-        <div className="flex">
-          {tabsToRender.map(t => (
-            <button
-              key={t.value}
-              type="button"
-              onClick={() => handleTipoChange(t.value)}
-              className={`flex-1 py-4 text-xs uppercase tracking-widest font-bold transition-all duration-200 border-b-2 ${
-                tipo === t.value
-                  ? 'bg-primary text-white border-primary'
-                  : 'text-gray-600 hover:text-dark bg-white border-gray-200'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="flex">
+        {tabsToRender.map(t => (
+          <button
+            key={t.value}
+            type="button"
+            onClick={() => handleTipoChange(t.value)}
+            className={`flex-1 py-4 text-xs uppercase tracking-widest font-bold transition-all duration-200 border-b-2 ${
+              tipo === t.value
+                ? 'bg-primary text-white border-primary'
+                : 'text-gray-600 hover:text-dark bg-white border-gray-200'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200">
         <div className="p-5">
