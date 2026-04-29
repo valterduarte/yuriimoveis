@@ -30,3 +30,5 @@ Thumbs.db
 # IA
 tasks
 .vercel
+.claude/
+.codex
