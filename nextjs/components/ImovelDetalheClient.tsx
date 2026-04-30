@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { FiMapPin, FiPhone, FiArrowLeft, FiCalendar } from 'react-icons/fi'
+import { FiPhone, FiArrowLeft, FiCalendar } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import WhatsAppLink from './WhatsAppLink'
 import ScheduleVisitModal from './ScheduleVisitModal'
@@ -11,6 +11,7 @@ import PropertyLightbox from './property/PropertyLightbox'
 import PropertySidebar from './property/PropertySidebar'
 import PropertyOverview from './property/PropertyOverview'
 import PropertyGallery from './property/PropertyGallery'
+import PropertyLocationSection from './property/PropertyLocationSection'
 import { imovelSlug } from '../utils/imovelUtils'
 import { PHONE_WA_BASE, PHONE_TEL, PHONE_DISPLAY, SITE_URL } from '../lib/config'
 import { PLACEHOLDER_IMAGE } from '../lib/constants'
@@ -88,31 +89,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
       <PropertyGallery imovel={imovel} images={images} onImageClick={setLightboxIndex} />
 
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-14 space-y-14">
-        <section id="localizacao">
-          <span className="section-label">Localização</span>
-          <h2 className="section-title mb-8">Onde fica</h2>
-          <div className="bg-white border border-gray-200 p-6 mb-4">
-            <p className="flex items-start gap-2.5 text-sm text-gray-600">
-              <FiMapPin size={16} className="text-primary flex-shrink-0 mt-0.5" />
-              <span><strong>{imovel.bairro}</strong>, {imovel.cidade} — SP</span>
-            </p>
-          </div>
-          <div className="bg-dark flex items-center justify-center" style={{ height: 300 }}>
-            <div className="text-center">
-              <FiMapPin size={40} className="mx-auto mb-3 text-primary" />
-              <p className="text-white font-bold uppercase tracking-widest text-sm">{imovel.cidade} — SP</p>
-              <p className="text-gray-400 text-xs mt-1 uppercase tracking-wider">{imovel.bairro}</p>
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${imovel.bairro}, ${imovel.cidade}, SP`)}`}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-5 inline-block text-[10px] uppercase tracking-widest font-bold text-primary border border-primary px-5 py-2 hover:bg-primary hover:text-white transition-colors"
-              >
-                Ver no Google Maps
-              </a>
-            </div>
-          </div>
-        </section>
+        <PropertyLocationSection imovel={imovel} />
 
         <section id="contato">
           <span className="section-label">Contato</span>
