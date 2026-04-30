@@ -13,9 +13,10 @@ import {
   type AcaoSlug,
 } from '../../../lib/navigation'
 import { CATEGORIAS } from '../../../data/categorias'
-import { emBairro, deBairro, articuloBairro, aoBairro } from '../../../utils/imovelUtils'
+import { emBairro, pluralizeImoveis } from '../../../utils/imovelUtils'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
 import { AGENT_ID } from '../../../lib/jsonLd'
+import { buildBairroFaqs } from '../../../lib/bairroFaqs'
 import type { Metadata } from 'next'
 import type { PropertyCategory } from '../../../types'
 
@@ -89,6 +90,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
   if (combos.length === 0) notFound()
 
   const totalImoveis = combos.reduce((acc, c) => acc + c.count, 0)
+  const totalLabel = pluralizeImoveis(totalImoveis)
 
   const { imoveis: featured } = await fetchProperties({
     cidade: cidadeName,
@@ -104,84 +106,13 @@ export default async function BairroGuidePage({ params }: PageProps) {
   const canonicalUrl = `${SITE_URL}/bairros/${slug}`
   const guideTitle = `Morar no ${bairro.nome}, ${cidadeName}`
 
-  const categoriasUnicas = Array.from(new Set(combos.map(c => c.categoria)))
-  const acoesUnicas = Array.from(new Set(combos.map(c => c.acao)))
-  const categoriasNomes = categoriasUnicas
-    .map(c => CATEGORIAS[c as PropertyCategory]?.plural.toLowerCase())
-    .filter((c): c is string => Boolean(c))
-
-  const formatList = (items: string[]): string => {
-    if (items.length === 0) return 'imóveis'
-    if (items.length === 1) return items[0]
-    return `${items.slice(0, -1).join(', ')} e ${items[items.length - 1]}`
-  }
-  const tipoListagem = formatList(categoriasNomes)
-
-  const linkListagem = categoriasUnicas.length === 1 && acoesUnicas.length === 1
-    ? buildHierarchicalUrl({
-        acao: acoesUnicas[0],
-        cidade: cidadeSlug,
-        categoria: categoriasUnicas[0],
-        bairro: slug,
-      })
-    : `/imoveis?cidade=${encodeURIComponent(cidadeName)}&bairro=${encodeURIComponent(bairroDbName || bairro.nome)}`
-
-  const artigo = articuloBairro(bairro.nome)
-  const em = emBairro(bairro.nome)
-  const de = deBairro(bairro.nome)
-  const ao = aoBairro(bairro.nome)
-
-  const faqs: Array<{ q: string; a: string; aJsx?: React.ReactNode }> = [
-    {
-      q: `O que é ${artigo} ${bairro.nome} e onde fica?`,
-      a: bairro.conteudo.sobre,
-    },
-    {
-      q: `Como é a infraestrutura ${de} ${bairro.nome}?`,
-      a: bairro.conteudo.infraestrutura,
-    },
-    {
-      q: `Quais são os acessos e transporte público ${em} ${bairro.nome}?`,
-      a: bairro.conteudo.transporte,
-    },
-    {
-      q: `Quais escolas ficam próximas ${ao} ${bairro.nome}?`,
-      a: bairro.conteudo.educacao,
-    },
-    {
-      q: `Como é morar ${em} ${bairro.nome}?`,
-      a: bairro.conteudo.porqueMorar,
-    },
-    {
-      q: `Que tipo de imóvel encontro ${em} ${bairro.nome}?`,
-      a: `${em.charAt(0).toUpperCase() + em.slice(1)} ${bairro.nome}, o portfólio do Corretor Yuri é composto por ${tipoListagem}. Para ver opções com filtros de dormitórios, metragem e diferenciais, acesse a lista completa de imóveis ${em} ${bairro.nome}.`,
-      aJsx: (
-        <>
-          {em.charAt(0).toUpperCase() + em.slice(1)} {bairro.nome}, o portfólio do Corretor Yuri é composto por {tipoListagem}. Para ver opções com filtros de dormitórios, metragem e diferenciais,{' '}
-          <Link href={linkListagem} className="text-primary underline hover:no-underline">
-            acesse a lista completa de imóveis {em} {bairro.nome}
-          </Link>.
-        </>
-      ),
-    },
-    {
-      q: `Quanto custa um imóvel ${em} ${bairro.nome}?`,
-      a: `Os imóveis ${em} ${bairro.nome} variam conforme metragem, padrão de acabamento e diferenciais de cada empreendimento. Para ver os valores atualizados de cada unidade disponível, acesse a lista completa — você pode filtrar por faixa de preço, número de dormitórios e itens de lazer.`,
-      aJsx: (
-        <>
-          Os imóveis {em} {bairro.nome} variam conforme metragem, padrão de acabamento e diferenciais de cada empreendimento. Para ver os valores atualizados de cada unidade disponível,{' '}
-          <Link href={linkListagem} className="text-primary underline hover:no-underline">
-            acesse a lista completa
-          </Link>{' '}
-          — você pode filtrar por faixa de preço, número de dormitórios e itens de lazer.
-        </>
-      ),
-    },
-    {
-      q: `Quantos imóveis estão disponíveis ${em} ${bairro.nome}?`,
-      a: `No momento há ${totalImoveis} imóve${totalImoveis !== 1 ? 'is' : 'l'} disponíve${totalImoveis !== 1 ? 'is' : 'l'} ${em} ${bairro.nome}, ${cidadeName}, entre compra e aluguel. Entre em contato com o Corretor Yuri, CRECI 235509, para agendar uma visita.`,
-    },
-  ]
+  const faqs = buildBairroFaqs({
+    bairro,
+    cidadeName,
+    cidadeSlug,
+    bairroDbName,
+    combos,
+  })
 
   const jsonLd = [
     {
@@ -220,10 +151,10 @@ export default async function BairroGuidePage({ params }: PageProps) {
     {
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      mainEntity: faqs.map(f => ({
+      mainEntity: faqs.map(faq => ({
         '@type': 'Question',
-        name: f.q,
-        acceptedAnswer: { '@type': 'Answer', text: f.a },
+        name: faq.question,
+        acceptedAnswer: { '@type': 'Answer', text: faq.answer },
       })),
     },
   ]
@@ -246,7 +177,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
           <span className="section-label flex items-center gap-2"><FiMapPin size={12} /> {cidadeName}, SP</span>
           <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{guideTitle}</h1>
           <p className="text-gray-400 text-sm mt-2 max-w-3xl">{bairro.descricaoMeta}</p>
-          <p className="text-xs text-gray-500 mt-3">{totalImoveis} imóve{totalImoveis !== 1 ? 'is' : 'l'} disponíve{totalImoveis !== 1 ? 'is' : 'l'} no bairro</p>
+          <p className="text-xs text-gray-500 mt-3">{totalImoveis} {totalLabel.noun} {totalLabel.adjective} no bairro</p>
         </div>
       </div>
 
@@ -328,13 +259,13 @@ export default async function BairroGuidePage({ params }: PageProps) {
         <section className="mt-12">
           <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">Perguntas frequentes sobre o {bairro.nome}</h2>
           <div className="space-y-3">
-            {faqs.map((f, i) => (
-              <details key={i} className="group bg-white border border-gray-200 p-4">
+            {faqs.map(faq => (
+              <details key={faq.question} className="group bg-white border border-gray-200 p-4">
                 <summary className="cursor-pointer text-sm font-semibold text-dark list-none flex items-center justify-between">
-                  {f.q}
+                  {faq.question}
                   <span className="text-primary text-xs group-open:rotate-45 transition-transform">+</span>
                 </summary>
-                <p className="text-gray-700 text-sm leading-relaxed mt-3">{f.aJsx ?? f.a}</p>
+                <p className="text-gray-700 text-sm leading-relaxed mt-3">{faq.answerJsx ?? faq.answer}</p>
               </details>
             ))}
           </div>

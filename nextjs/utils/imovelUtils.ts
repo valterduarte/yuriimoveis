@@ -99,6 +99,17 @@ export function aoBairro(nome: string): 'ao' | 'à' {
   return isFeminineBairroName(nome) ? 'à' : 'ao'
 }
 
+export function capitalize(text: string): string {
+  if (!text) return text
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
+export function pluralizeImoveis(count: number): { noun: string; adjective: string } {
+  return count === 1
+    ? { noun: 'imóvel', adjective: 'disponível' }
+    : { noun: 'imóveis', adjective: 'disponíveis' }
+}
+
 export function formatListingAge(createdAt: string | null | undefined): string | null {
   if (!createdAt) return null
   const created = new Date(createdAt)
