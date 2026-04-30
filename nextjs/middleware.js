@@ -52,7 +52,7 @@ export function middleware(request) {
   // Removing it breaks the site unless a full nonce pipeline is implemented in layout.jsx.
   response.headers.set(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://res.cloudinary.com https://valterduarte.github.io; font-src 'self' data:; connect-src 'self' https://api.cloudinary.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://res.cloudinary.com https://valterduarte.github.io https://*.tile.openstreetmap.org; font-src 'self' data:; connect-src 'self' https://api.cloudinary.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
   )
 
   return response
