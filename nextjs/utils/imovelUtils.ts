@@ -91,6 +91,14 @@ export function sobreBairro(nome: string): 'sobre o' | 'sobre a' {
   return isFeminineBairroName(nome) ? 'sobre a' : 'sobre o'
 }
 
+export function articuloBairro(nome: string): 'o' | 'a' {
+  return isFeminineBairroName(nome) ? 'a' : 'o'
+}
+
+export function aoBairro(nome: string): 'ao' | 'à' {
+  return isFeminineBairroName(nome) ? 'à' : 'ao'
+}
+
 export function formatListingAge(createdAt: string | null | undefined): string | null {
   if (!createdAt) return null
   const created = new Date(createdAt)

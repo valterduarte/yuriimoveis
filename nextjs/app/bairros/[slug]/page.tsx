@@ -13,7 +13,7 @@ import {
   type AcaoSlug,
 } from '../../../lib/navigation'
 import { CATEGORIAS } from '../../../data/categorias'
-import { emBairro } from '../../../utils/imovelUtils'
+import { emBairro, deBairro, articuloBairro, aoBairro } from '../../../utils/imovelUtils'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
 import { AGENT_ID } from '../../../lib/jsonLd'
 import type { Metadata } from 'next'
@@ -104,22 +104,82 @@ export default async function BairroGuidePage({ params }: PageProps) {
   const canonicalUrl = `${SITE_URL}/bairros/${slug}`
   const guideTitle = `Morar no ${bairro.nome}, ${cidadeName}`
 
-  const faqs = [
+  const categoriasUnicas = Array.from(new Set(combos.map(c => c.categoria)))
+  const acoesUnicas = Array.from(new Set(combos.map(c => c.acao)))
+  const categoriasNomes = categoriasUnicas
+    .map(c => CATEGORIAS[c as PropertyCategory]?.plural.toLowerCase())
+    .filter((c): c is string => Boolean(c))
+
+  const formatList = (items: string[]): string => {
+    if (items.length === 0) return 'imóveis'
+    if (items.length === 1) return items[0]
+    return `${items.slice(0, -1).join(', ')} e ${items[items.length - 1]}`
+  }
+  const tipoListagem = formatList(categoriasNomes)
+
+  const linkListagem = categoriasUnicas.length === 1 && acoesUnicas.length === 1
+    ? buildHierarchicalUrl({
+        acao: acoesUnicas[0],
+        cidade: cidadeSlug,
+        categoria: categoriasUnicas[0],
+        bairro: slug,
+      })
+    : `/imoveis?cidade=${encodeURIComponent(cidadeName)}&bairro=${encodeURIComponent(bairroDbName || bairro.nome)}`
+
+  const artigo = articuloBairro(bairro.nome)
+  const em = emBairro(bairro.nome)
+  const de = deBairro(bairro.nome)
+  const ao = aoBairro(bairro.nome)
+
+  const faqs: Array<{ q: string; a: string; aJsx?: React.ReactNode }> = [
     {
-      q: `Como é morar no ${bairro.nome}?`,
-      a: bairro.conteudo.porqueMorar,
+      q: `O que é ${artigo} ${bairro.nome} e onde fica?`,
+      a: bairro.conteudo.sobre,
     },
     {
-      q: `Quais são os acessos e transporte público no ${bairro.nome}?`,
+      q: `Como é a infraestrutura ${de} ${bairro.nome}?`,
+      a: bairro.conteudo.infraestrutura,
+    },
+    {
+      q: `Quais são os acessos e transporte público ${em} ${bairro.nome}?`,
       a: bairro.conteudo.transporte,
     },
     {
-      q: `Quais escolas ficam próximas ao ${bairro.nome}?`,
+      q: `Quais escolas ficam próximas ${ao} ${bairro.nome}?`,
       a: bairro.conteudo.educacao,
     },
     {
-      q: `Quantos imóveis estão disponíveis no ${bairro.nome}?`,
-      a: `No momento há ${totalImoveis} imóve${totalImoveis !== 1 ? 'is' : 'l'} disponíve${totalImoveis !== 1 ? 'is' : 'l'} no ${bairro.nome}, ${cidadeName}, entre compra e aluguel. Entre em contato com o Corretor Yuri, CRECI 235509, para agendar uma visita.`,
+      q: `Como é morar ${em} ${bairro.nome}?`,
+      a: bairro.conteudo.porqueMorar,
+    },
+    {
+      q: `Que tipo de imóvel encontro ${em} ${bairro.nome}?`,
+      a: `${em.charAt(0).toUpperCase() + em.slice(1)} ${bairro.nome}, o portfólio do Corretor Yuri é composto por ${tipoListagem}. Para ver opções com filtros de dormitórios, metragem e diferenciais, acesse a lista completa de imóveis ${em} ${bairro.nome}.`,
+      aJsx: (
+        <>
+          {em.charAt(0).toUpperCase() + em.slice(1)} {bairro.nome}, o portfólio do Corretor Yuri é composto por {tipoListagem}. Para ver opções com filtros de dormitórios, metragem e diferenciais,{' '}
+          <Link href={linkListagem} className="text-primary underline hover:no-underline">
+            acesse a lista completa de imóveis {em} {bairro.nome}
+          </Link>.
+        </>
+      ),
+    },
+    {
+      q: `Quanto custa um imóvel ${em} ${bairro.nome}?`,
+      a: `Os imóveis ${em} ${bairro.nome} variam conforme metragem, padrão de acabamento e diferenciais de cada empreendimento. Para ver os valores atualizados de cada unidade disponível, acesse a lista completa — você pode filtrar por faixa de preço, número de dormitórios e itens de lazer.`,
+      aJsx: (
+        <>
+          Os imóveis {em} {bairro.nome} variam conforme metragem, padrão de acabamento e diferenciais de cada empreendimento. Para ver os valores atualizados de cada unidade disponível,{' '}
+          <Link href={linkListagem} className="text-primary underline hover:no-underline">
+            acesse a lista completa
+          </Link>{' '}
+          — você pode filtrar por faixa de preço, número de dormitórios e itens de lazer.
+        </>
+      ),
+    },
+    {
+      q: `Quantos imóveis estão disponíveis ${em} ${bairro.nome}?`,
+      a: `No momento há ${totalImoveis} imóve${totalImoveis !== 1 ? 'is' : 'l'} disponíve${totalImoveis !== 1 ? 'is' : 'l'} ${em} ${bairro.nome}, ${cidadeName}, entre compra e aluguel. Entre em contato com o Corretor Yuri, CRECI 235509, para agendar uma visita.`,
     },
   ]
 
@@ -274,7 +334,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
                   {f.q}
                   <span className="text-primary text-xs group-open:rotate-45 transition-transform">+</span>
                 </summary>
-                <p className="text-gray-700 text-sm leading-relaxed mt-3">{f.a}</p>
+                <p className="text-gray-700 text-sm leading-relaxed mt-3">{f.aJsx ?? f.a}</p>
               </details>
             ))}
           </div>
