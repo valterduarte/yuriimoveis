@@ -15,6 +15,7 @@ import {
   bairroDbNameToSlug,
   hasRichBairroContent,
   buildHierarchicalUrl,
+  inferCidadeFromBairro,
   ACAO_LABELS,
   type AcaoSlug,
 } from '../../../../../lib/navigation'
@@ -119,8 +120,19 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
   const h1 = `${nomeImovel} ${label} ${prep} ${bairroName}, ${cidadeName}`
   const canonicalUrl = `${SITE_URL}${buildHierarchicalUrl({ acao, cidade, categoria, bairro })}`
 
+  const matrix = await fetchNavigationMatrix()
+  const bairrosWithStock = new Set(
+    matrix
+      .filter(row =>
+        row.cidade === cidadeName &&
+        row.categoria === categoria &&
+        row.tipo === tipoFilter &&
+        row.count > 0
+      )
+      .map(row => bairroDbNameToSlug(row.bairro))
+  )
   const siblingBairros = Object.values(BAIRROS)
-    .filter(b => b.slug !== bairro)
+    .filter(b => b.slug !== bairro && inferCidadeFromBairro(b) === cidadeName && bairrosWithStock.has(b.slug))
     .slice(0, 8)
 
   const bedroomCounts = new Map<string, number>()
