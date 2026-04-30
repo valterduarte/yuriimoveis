@@ -160,7 +160,7 @@ export default function MapaClient({ imoveis }: MapaClientProps) {
               Venda
             </div>
             <div className="flex items-center gap-2">
-              <span className="inline-block w-3 h-3 rounded-full bg-dark border-2 border-white ring-1 ring-gray-300" />
+              <span className="inline-block w-3 h-3 rounded-full border-2 border-white ring-1 ring-gray-300" style={{ backgroundColor: '#10b981' }} />
               Aluguel
             </div>
           </div>
