@@ -3,39 +3,61 @@ import { FaWhatsapp } from 'react-icons/fa'
 import PropertyCard from '../PropertyCard'
 import { PHONE_WA_BASE } from '../../lib/config'
 import WhatsAppLink from '../WhatsAppLink'
-import type { Imovel } from '../../types'
+import { CATEGORIAS } from '../../data/categorias'
+import type { Imovel, PropertyCategory } from '../../types'
+
+interface PropertyFilterParams {
+  tipo?: string
+  cidade?: string
+  categoria?: string
+  bairro?: string
+}
 
 interface PropertyGridProps {
   properties: Imovel[]
   activeFilterCount: number
-  filters?: { tipo?: string; cidade?: string; categoria?: string; bairro?: string }
+  filters?: PropertyFilterParams
 }
 
-const TIPO_LABEL: Record<string, string> = { venda: 'à venda', aluguel: 'para alugar' }
-const CATEGORIA_LABEL: Record<string, string> = {
-  apartamento: 'apartamentos',
-  casa: 'casas',
-  terreno: 'terrenos',
-  comercial: 'imóveis comerciais',
-  construcao: 'imóveis em construção',
-  planta: 'imóveis na planta',
+const TIPO_HEADLINE_LABEL: Record<string, string> = {
+  venda: 'à venda',
+  aluguel: 'para alugar',
 }
 
-function buildEmptyHeadline(filters: PropertyGridProps['filters']): string {
+const TIPO_WHATSAPP_LABEL: Record<string, string> = {
+  venda: 'à venda',
+  aluguel: 'para alugar',
+}
+
+function getCategoriaPlural(categoria: string | undefined): string {
+  if (!categoria) return 'imóveis'
+  return CATEGORIAS[categoria as PropertyCategory]?.plural.toLowerCase() ?? 'imóveis'
+}
+
+function buildEmptyHeadline(filters: PropertyFilterParams | undefined): string {
   if (!filters) return 'Nenhum imóvel encontrado'
-  const { tipo, cidade, bairro, categoria } = filters
-  const what = (categoria && CATEGORIA_LABEL[categoria]) || 'imóveis'
-  const action = (tipo && TIPO_LABEL[tipo]) || 'disponíveis'
-  const where = bairro ? ` em ${bairro}` : cidade ? ` em ${cidade}` : ''
-  return `Não encontramos ${what} ${action}${where} no momento`
+  const noun = getCategoriaPlural(filters.categoria)
+  const action = (filters.tipo && TIPO_HEADLINE_LABEL[filters.tipo]) || 'disponíveis'
+  const place = filters.bairro
+    ? ` em ${filters.bairro}`
+    : filters.cidade
+      ? ` em ${filters.cidade}`
+      : ''
+  return `Não encontramos ${noun} ${action}${place} no momento`
+}
+
+function buildWhatsAppMessage(filters: PropertyFilterParams | undefined): string {
+  if (!filters?.cidade) {
+    return 'Olá! Não encontrei o imóvel que procuro no site. Pode me ajudar?'
+  }
+  const action = (filters.tipo && TIPO_WHATSAPP_LABEL[filters.tipo]) || 'à venda'
+  return `Olá! Estou procurando imóveis ${action} em ${filters.cidade}. Pode me ajudar?`
 }
 
 export default function PropertyGrid({ properties, activeFilterCount, filters }: PropertyGridProps) {
   if (properties.length === 0) {
     const headline = buildEmptyHeadline(filters)
-    const waMessage = filters?.cidade
-      ? `Olá! Estou procurando imóveis ${filters.tipo === 'aluguel' ? 'para alugar' : 'à venda'} em ${filters.cidade}. Pode me ajudar?`
-      : 'Olá! Não encontrei o imóvel que procuro no site. Pode me ajudar?'
+    const waMessage = buildWhatsAppMessage(filters)
     return (
       <div className="text-center py-20 bg-white border border-gray-200 px-6">
         <div className="text-5xl mb-4" aria-hidden="true">🏠</div>

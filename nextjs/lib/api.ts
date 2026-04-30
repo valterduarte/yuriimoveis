@@ -330,6 +330,15 @@ export async function fetchCidadesByTipo(): Promise<Record<string, string[]>> {
   }
 }
 
+export async function fetchDistinctCidades(): Promise<string[]> {
+  const grouped = await fetchCidadesByTipo()
+  const unique = new Set<string>()
+  for (const list of Object.values(grouped)) {
+    for (const cidade of list) unique.add(cidade)
+  }
+  return Array.from(unique).sort((a, b) => a.localeCompare(b, 'pt-BR'))
+}
+
 export async function fetchSimilarProperties(imovel: Pick<Imovel, 'id' | 'categoria' | 'cidade' | 'tipo'>): Promise<Imovel[]> {
   try {
     return await fetchSimilarPropertiesCached(imovel)

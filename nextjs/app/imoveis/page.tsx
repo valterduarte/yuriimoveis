@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import ImoveisControls from '../../components/imoveis/ImoveisControls'
 import PropertyGrid from '../../components/imoveis/PropertyGrid'
-import { fetchProperties, fetchDistinctBairros, fetchCidadesByTipo } from '../../lib/api'
+import { fetchProperties, fetchDistinctBairros, fetchDistinctCidades } from '../../lib/api'
 import { ITEMS_PER_PAGE } from '../../lib/constants'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import type { Metadata } from 'next'
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 
 export default async function ImoveisPage({ searchParams }: { searchParams: Promise<Record<string, string>> }) {
   const params = await searchParams
-  const [{ imoveis, total }, bairros, cidadesByTipo] = await Promise.all([
+  const [{ imoveis, total }, bairros, cidades] = await Promise.all([
     fetchProperties({
       ...Object.fromEntries(FILTER_KEYS.filter(k => params[k]).map(k => [k, params[k]])),
       ordem: params.ordem || 'recente',
@@ -39,9 +39,8 @@ export default async function ImoveisPage({ searchParams }: { searchParams: Prom
       limit: ITEMS_PER_PAGE,
     }),
     fetchDistinctBairros(),
-    fetchCidadesByTipo(),
+    fetchDistinctCidades(),
   ])
-  const cidades = Array.from(new Set(Object.values(cidadesByTipo).flat())).sort((a, b) => a.localeCompare(b, 'pt-BR'))
   const currentPage = Number(params.page || 1)
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE)
   const activeFilterCount = FILTER_KEYS.filter(k => params[k]).length

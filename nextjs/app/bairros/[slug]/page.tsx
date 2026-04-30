@@ -8,7 +8,7 @@ import {
   bairroSlugToDbName,
   buildHierarchicalUrl,
   cidadeNameToSlug,
-  inferCidadeFromBairro as inferCidade,
+  inferCidadeFromBairro,
   ACAO_LABELS,
   type AcaoSlug,
 } from '../../../lib/navigation'
@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const bairro = getBairroBySlug(slug)
   if (!bairro) return {}
 
-  const cidadeName = inferCidade(bairro)
+  const cidadeName = inferCidadeFromBairro(bairro)
   const title = `Morar no ${bairro.nome}, ${cidadeName}: Guia Completo`
   const description = bairro.descricaoMeta
   const url = `${SITE_URL}/bairros/${bairro.slug}`
@@ -82,7 +82,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
   const bairro = getBairroBySlug(slug)
   if (!bairro) notFound()
 
-  const cidadeName = inferCidade(bairro)
+  const cidadeName = inferCidadeFromBairro(bairro)
   const cidadeSlug = cidadeNameToSlug(cidadeName)
   const bairroDbName = bairroSlugToDbName(slug)
 
@@ -100,7 +100,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
   })
 
   const siblingBairros = Object.values(BAIRROS)
-    .filter(b => b.slug !== slug && inferCidade(b) === cidadeName)
+    .filter(b => b.slug !== slug && inferCidadeFromBairro(b) === cidadeName)
     .slice(0, 8)
 
   const canonicalUrl = `${SITE_URL}/bairros/${slug}`

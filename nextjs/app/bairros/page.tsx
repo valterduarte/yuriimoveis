@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { FiMapPin, FiArrowRight } from 'react-icons/fi'
 import { BAIRROS } from '../../data/bairros'
 import { fetchNavigationMatrix } from '../../lib/api'
-import { bairroSlugToDbName, inferCidadeFromBairro as inferCidade } from '../../lib/navigation'
+import { bairroSlugToDbName, inferCidadeFromBairro } from '../../lib/navigation'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import type { Metadata } from 'next'
 import type { BairroData } from '../../types'
@@ -44,7 +44,7 @@ export default async function BairrosIndexPage() {
     const dbName = bairroSlugToDbName(bairro.slug) ?? bairro.nome
     const count = countsByBairro.get(dbName) ?? 0
     if (count === 0) continue
-    const cidade = inferCidade(bairro)
+    const cidade = inferCidadeFromBairro(bairro)
     const list = guidesByCidade.get(cidade) ?? []
     list.push({ bairro, count })
     guidesByCidade.set(cidade, list)
