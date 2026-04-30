@@ -12,10 +12,11 @@ interface ImoveisControlsProps {
   currentPage: number
   totalPages: number
   bairros?: string[]
+  cidades?: string[]
   children: ReactNode
 }
 
-export default function ImoveisControls({ total, currentPage, totalPages, bairros = [], children }: ImoveisControlsProps) {
+export default function ImoveisControls({ total, currentPage, totalPages, bairros = [], cidades = [], children }: ImoveisControlsProps) {
   const [showFilters, setShowFilters] = useState(false)
   const {
     tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, codigo, ordem,
@@ -39,6 +40,7 @@ export default function ImoveisControls({ total, currentPage, totalPages, bairro
           cidade={cidade}
           bairro={bairro}
           bairros={bairros}
+          cidades={cidades}
           precoMinInput={precoMinInput}
           precoMaxInput={precoMaxInput}
           quartos={quartos}

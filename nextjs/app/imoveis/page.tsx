@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import ImoveisControls from '../../components/imoveis/ImoveisControls'
 import PropertyGrid from '../../components/imoveis/PropertyGrid'
-import { fetchProperties, fetchDistinctBairros } from '../../lib/api'
+import { fetchProperties, fetchDistinctBairros, fetchCidadesByTipo } from '../../lib/api'
 import { ITEMS_PER_PAGE } from '../../lib/constants'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import type { Metadata } from 'next'
@@ -9,29 +9,29 @@ import type { Metadata } from 'next'
 const FILTER_KEYS = ['tipo', 'categoria', 'cidade', 'bairro', 'precoMin', 'precoMax', 'quartos', 'codigo']
 
 export const metadata: Metadata = {
-  title: 'Imóveis Disponíveis em Osasco SP — Corretor Yuri',
-  description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco e região. Atendimento com o Corretor Yuri, CRECI-SP 235509.',
+  title: 'Imóveis em Osasco, Barueri e Carapicuíba — Corretor Yuri',
+  description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco, Barueri e Carapicuíba. Atendimento com o Corretor Yuri, CRECI-SP 235509.',
   alternates: { canonical: `${SITE_URL}/imoveis` },
   openGraph: {
-    title: 'Imóveis Disponíveis em Osasco SP — Corretor Yuri',
-    description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco e região.',
+    title: 'Imóveis em Osasco, Barueri e Carapicuíba — Corretor Yuri',
+    description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco, Barueri e Carapicuíba.',
     url: `${SITE_URL}/imoveis`,
     siteName: 'Corretor Yuri Imóveis',
     locale: 'pt_BR',
     type: 'website',
-    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: 'Imóveis em Osasco e Região' }],
+    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: 'Imóveis em Osasco, Barueri e Carapicuíba' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Imóveis Disponíveis em Osasco SP — Corretor Yuri',
-    description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco e região.',
+    title: 'Imóveis em Osasco, Barueri e Carapicuíba — Corretor Yuri',
+    description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco, Barueri e Carapicuíba.',
     images: [OG_DEFAULT_IMAGE],
   },
 }
 
 export default async function ImoveisPage({ searchParams }: { searchParams: Promise<Record<string, string>> }) {
   const params = await searchParams
-  const [{ imoveis, total }, bairros] = await Promise.all([
+  const [{ imoveis, total }, bairros, cidadesByTipo] = await Promise.all([
     fetchProperties({
       ...Object.fromEntries(FILTER_KEYS.filter(k => params[k]).map(k => [k, params[k]])),
       ordem: params.ordem || 'recente',
@@ -39,7 +39,9 @@ export default async function ImoveisPage({ searchParams }: { searchParams: Prom
       limit: ITEMS_PER_PAGE,
     }),
     fetchDistinctBairros(),
+    fetchCidadesByTipo(),
   ])
+  const cidades = Array.from(new Set(Object.values(cidadesByTipo).flat())).sort((a, b) => a.localeCompare(b, 'pt-BR'))
   const currentPage = Number(params.page || 1)
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE)
   const activeFilterCount = FILTER_KEYS.filter(k => params[k]).length
@@ -73,7 +75,7 @@ export default async function ImoveisPage({ searchParams }: { searchParams: Prom
         </div>
       </div>
       <div className="container mx-auto px-6 py-10">
-        <ImoveisControls total={total} currentPage={currentPage} totalPages={totalPages} bairros={bairros}>
+        <ImoveisControls total={total} currentPage={currentPage} totalPages={totalPages} bairros={bairros} cidades={cidades}>
           <PropertyGrid
             properties={imoveis}
             activeFilterCount={activeFilterCount}

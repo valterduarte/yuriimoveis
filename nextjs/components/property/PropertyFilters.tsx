@@ -15,6 +15,7 @@ interface PropertyFiltersProps {
   cidade: string
   bairro: string
   bairros?: string[]
+  cidades?: string[]
   precoMinInput: string
   precoMaxInput: string
   quartos: string
@@ -27,7 +28,7 @@ interface PropertyFiltersProps {
 }
 
 export default function PropertyFilters({
-  tipo, categoria, cidade, bairro, bairros = [],
+  tipo, categoria, cidade, bairro, bairros = [], cidades = [],
   precoMinInput, precoMaxInput, quartos, codigo,
   activeFilterCount,
   onUpdateFilter,
@@ -107,7 +108,9 @@ export default function PropertyFilters({
             className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
           >
             <option value="">Todas</option>
-            <option value="Osasco">Osasco</option>
+            {cidades.map(c => (
+              <option key={c} value={c}>{c}</option>
+            ))}
           </select>
         </div>
 
