@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { ApiError, apiClient, isAuthError } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
 import type { BlogPost } from '../../types'
 
@@ -37,9 +37,8 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
 
   useEffect(() => {
     if (editingId) {
-      axios.get(`${API_URL}/api/blog/${editingId}`, { headers: authHeader() })
-        .then(res => {
-          const post: BlogPost = res.data
+      apiClient.get<BlogPost>(`${API_URL}/api/blog/${editingId}`, { headers: authHeader() })
+        .then(post => {
           setTitulo(post.titulo)
           setSlug(post.slug)
           setSlugManual(true)
@@ -52,7 +51,7 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
           setPublicado(post.publicado)
         })
         .catch(err => {
-          if (err.response?.status === 401) onAuthError()
+          if (isAuthError(err)) onAuthError()
           else setError('Erro ao carregar post.')
         })
     }
@@ -84,18 +83,22 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
 
     try {
       if (editingId) {
-        await axios.put(`${API_URL}/api/blog/${editingId}`, payload, { headers: authHeader() })
+        await apiClient.put(`${API_URL}/api/blog/${editingId}`, payload, { headers: authHeader() })
         onSuccess('Post atualizado com sucesso!')
       } else {
-        await axios.post(`${API_URL}/api/blog`, payload, { headers: authHeader() })
+        await apiClient.post(`${API_URL}/api/blog`, payload, { headers: authHeader() })
         onSuccess('Post criado com sucesso!')
         setTitulo(''); setSlug(''); setSlugManual(false); setResumo(''); setConteudo('')
         setImagemCapa(''); setMetaTitulo(''); setMetaDescricao(''); setTagsText(''); setPublicado(false)
       }
     } catch (err) {
-      const axiosErr = err as import('axios').AxiosError<{ error: string }>
-      if (axiosErr.response?.status === 401) onAuthError()
-      else setError(axiosErr.response?.data?.error || 'Erro ao salvar post.')
+      if (isAuthError(err)) {
+        onAuthError()
+      } else if (err instanceof ApiError && typeof err.data === 'object' && err.data !== null && 'error' in err.data) {
+        setError(String((err.data as { error: unknown }).error) || 'Erro ao salvar post.')
+      } else {
+        setError('Erro ao salvar post.')
+      }
     } finally {
       setLoading(false)
     }

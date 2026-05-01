@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, type ChangeEvent } from 'react'
 import { FiUpload, FiX } from 'react-icons/fi'
-import axios, { type AxiosError } from 'axios'
+import { ApiError, apiClient, isAuthError } from '../../lib/apiClient'
 import { calcParcela } from '../../utils/imovelUtils'
 import { API_URL, CLOUDINARY_CLOUD, CLOUDINARY_PRESET } from '../../lib/config'
 import { PROPERTY_CATEGORIES } from '../../lib/constants'
@@ -101,10 +101,10 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
 
   useEffect(() => {
     if (!editingId) return
-    axios.get(`${API_URL}/api/imoveis/${editingId}`)
-      .then(res => {
-        setForm(propertyToForm(res.data))
-        setImageUrls(Array.isArray(res.data.imagens) ? res.data.imagens : [])
+    apiClient.get<Imovel>(`${API_URL}/api/imoveis/${editingId}`)
+      .then(imovel => {
+        setForm(propertyToForm(imovel))
+        setImageUrls(Array.isArray(imovel.imagens) ? imovel.imagens : [])
       })
       .catch(() => setError('Erro ao carregar imóvel.'))
   }, [editingId])
@@ -124,11 +124,11 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
         const data = new FormData()
         data.append('file', file)
         data.append('upload_preset', CLOUDINARY_PRESET)
-        const res = await axios.post(
+        const result = await apiClient.post<{ secure_url: string }>(
           `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,
-          data
+          data,
         )
-        return res.data.secure_url as string
+        return result.secure_url
       }))
       setImageUrls(prev => [...prev, ...uploaded])
     } catch {
@@ -160,16 +160,20 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
           : [],
       }
       if (editingId) {
-        await axios.put(`${API_URL}/api/imoveis/${editingId}`, payload, { headers: authHeader() })
+        await apiClient.put(`${API_URL}/api/imoveis/${editingId}`, payload, { headers: authHeader() })
         onSuccess('Imóvel atualizado com sucesso!')
       } else {
-        const res = await axios.post(`${API_URL}/api/imoveis`, payload, { headers: authHeader() })
-        onSuccess(`Imóvel cadastrado com sucesso! ID: ${res.data.id}`)
+        const created = await apiClient.post<{ id: number }>(`${API_URL}/api/imoveis`, payload, { headers: authHeader() })
+        onSuccess(`Imóvel cadastrado com sucesso! ID: ${created.id}`)
       }
     } catch (err) {
-      const axiosError = err as AxiosError<{ error?: string }>
-      if (axiosError.response?.status === 401) onAuthError()
-      else setError(axiosError.response?.data?.error || 'Erro ao salvar.')
+      if (isAuthError(err)) {
+        onAuthError()
+      } else if (err instanceof ApiError && typeof err.data === 'object' && err.data !== null && 'error' in err.data) {
+        setError(String((err.data as { error: unknown }).error) || 'Erro ao salvar.')
+      } else {
+        setError('Erro ao salvar.')
+      }
     } finally {
       setLoading(false)
     }

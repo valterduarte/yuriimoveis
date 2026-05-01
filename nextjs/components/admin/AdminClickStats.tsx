@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { apiClient, isAuthError } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
 
 interface ClickStats {
@@ -43,11 +43,11 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
 
   useEffect(() => {
     setLoading(true)
-    axios
-      .get(`${API_URL}/api/track-click?days=${days}`, { headers: authHeader() })
-      .then(res => setStats(res.data))
+    apiClient
+      .get<ClickStats>(`${API_URL}/api/track-click?days=${days}`, { headers: authHeader() })
+      .then(setStats)
       .catch(err => {
-        if (err.response?.status === 401) onAuthError()
+        if (isAuthError(err)) onAuthError()
       })
       .finally(() => setLoading(false))
   }, [days, authHeader, onAuthError])

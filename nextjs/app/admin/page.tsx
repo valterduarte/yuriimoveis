@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { FiPlus, FiBarChart2, FiFileText } from 'react-icons/fi'
-import axios from 'axios'
+import { apiClient, isAuthError } from '../../lib/apiClient'
 import { ADMIN_PROPERTIES_LIMIT } from '../../lib/constants'
 import { API_URL } from '../../lib/config'
 import { useAdminAuth } from '../../hooks/useAdminAuth'
@@ -35,8 +35,10 @@ export default function AdminPage() {
 
   const loadProperties = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/imoveis?limit=${ADMIN_PROPERTIES_LIMIT}&ordem=recente&todos=true`)
-      setProperties(res.data.imoveis || [])
+      const data = await apiClient.get<{ imoveis?: Imovel[] }>(
+        `${API_URL}/api/imoveis?limit=${ADMIN_PROPERTIES_LIMIT}&ordem=recente&todos=true`
+      )
+      setProperties(data.imoveis || [])
     } catch {
       setProperties([])
     }
@@ -65,27 +67,18 @@ export default function AdminPage() {
     setActiveView('list')
   }
 
-  const handleDeactivate = async (id: number) => {
+  const setActiveStatus = async (id: number, ativo: boolean, errorMessage: string) => {
     try {
-      await axios.put(`${API_URL}/api/imoveis/${id}`, { ativo: false }, { headers: authHeader() })
+      await apiClient.put(`${API_URL}/api/imoveis/${id}`, { ativo }, { headers: authHeader() })
       loadProperties()
     } catch (err) {
-      const axiosError = err as import('axios').AxiosError
-      if (axiosError.response?.status === 401) handleLogout()
-      else setMessage({ type: 'error', text: 'Erro ao desativar.' })
+      if (isAuthError(err)) handleLogout()
+      else setMessage({ type: 'error', text: errorMessage })
     }
   }
 
-  const handleReactivate = async (id: number) => {
-    try {
-      await axios.put(`${API_URL}/api/imoveis/${id}`, { ativo: true }, { headers: authHeader() })
-      loadProperties()
-    } catch (err) {
-      const axiosError = err as import('axios').AxiosError
-      if (axiosError.response?.status === 401) handleLogout()
-      else setMessage({ type: 'error', text: 'Erro ao reativar.' })
-    }
-  }
+  const handleDeactivate = (id: number) => setActiveStatus(id, false, 'Erro ao desativar.')
+  const handleReactivate = (id: number) => setActiveStatus(id, true,  'Erro ao reativar.')
 
   if (!isAuthenticated) {
     return (

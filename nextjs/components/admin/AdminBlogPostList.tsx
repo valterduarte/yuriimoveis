@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import { FiEdit2, FiEye, FiEyeOff } from 'react-icons/fi'
+import { apiClient, isAuthError } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
 import type { BlogPost } from '../../types'
 
@@ -18,8 +18,8 @@ export default function AdminBlogPostList({ authHeader, onEdit, onAuthError }: A
 
   const loadPosts = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/blog?todos=true&limit=50`)
-      setPosts(res.data.posts || [])
+      const data = await apiClient.get<{ posts?: BlogPost[] }>(`${API_URL}/api/blog?todos=true&limit=50`)
+      setPosts(data.posts || [])
     } catch {
       setPosts([])
     } finally {
@@ -31,11 +31,10 @@ export default function AdminBlogPostList({ authHeader, onEdit, onAuthError }: A
 
   const togglePublicado = async (post: BlogPost) => {
     try {
-      await axios.put(`${API_URL}/api/blog/${post.id}`, { publicado: !post.publicado }, { headers: authHeader() })
+      await apiClient.put(`${API_URL}/api/blog/${post.id}`, { publicado: !post.publicado }, { headers: authHeader() })
       loadPosts()
     } catch (err) {
-      const axiosErr = err as import('axios').AxiosError
-      if (axiosErr.response?.status === 401) onAuthError()
+      if (isAuthError(err)) onAuthError()
     }
   }
 

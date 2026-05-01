@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { FiAlertTriangle, FiCheckCircle, FiXCircle, FiChevronDown, FiChevronUp } from 'react-icons/fi'
-import axios from 'axios'
+import { apiClient, isAuthError } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
 
 type AuditStatus = 'ok' | 'weak' | 'broken'
@@ -41,14 +41,14 @@ export default function AdminBairroAudit({ authHeader, onAuthError }: Props) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    axios
-      .get(`${API_URL}/api/admin/bairros-audit`, { headers: authHeader() })
-      .then(res => {
-        setSummary(res.data.summary)
-        setRows(res.data.rows)
+    apiClient
+      .get<{ summary: AuditSummary; rows: AuditRow[] }>(`${API_URL}/api/admin/bairros-audit`, { headers: authHeader() })
+      .then(data => {
+        setSummary(data.summary)
+        setRows(data.rows)
       })
       .catch(err => {
-        if (err.response?.status === 401) onAuthError()
+        if (isAuthError(err)) onAuthError()
       })
       .finally(() => setLoading(false))
   }, [authHeader, onAuthError])

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import axios, { type AxiosError } from 'axios'
+import { ApiError, apiClient } from '../lib/apiClient'
 import { API_URL } from '../lib/config'
 
 export function useAdminAuth() {
@@ -23,14 +23,19 @@ export function useAdminAuth() {
     setLoading(true)
     setError(null)
     try {
-      const res = await axios.post(`${API_URL}/api/auth/login`, { usuario: username, senha: password })
-      const newToken = res.data.token
+      const { token: newToken } = await apiClient.post<{ token: string }>(
+        `${API_URL}/api/auth/login`,
+        { usuario: username, senha: password },
+      )
       sessionStorage.setItem('admin_token', newToken)
       setToken(newToken)
       setIsAuthenticated(true)
     } catch (err) {
-      const axiosError = err as AxiosError<{ error?: string }>
-      setError(axiosError.response?.data?.error || 'Erro ao autenticar.')
+      if (err instanceof ApiError && typeof err.data === 'object' && err.data !== null && 'error' in err.data) {
+        setError(String((err.data as { error: unknown }).error) || 'Erro ao autenticar.')
+      } else {
+        setError('Erro ao autenticar.')
+      }
     } finally {
       setLoading(false)
     }
