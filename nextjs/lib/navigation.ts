@@ -24,11 +24,7 @@ const CIDADES_SUPORTADAS = new Map<string, string>([
 ])
 
 export function inferCidadeFromBairro(bairro: BairroData): string {
-  const titulo = bairro.titulo.toLowerCase()
-  for (const cidade of CIDADES_SUPORTADAS.values()) {
-    if (titulo.includes(cidade.toLowerCase())) return cidade
-  }
-  return 'Osasco'
+  return bairro.cidade
 }
 
 export function acaoToTipo(acao: AcaoSlug): TransactionType {

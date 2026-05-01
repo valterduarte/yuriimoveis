@@ -17,7 +17,6 @@ import {
   buildHierarchicalUrl,
   inferCidadeFromBairro,
   ACAO_LABELS,
-  type AcaoSlug,
 } from '../../../../../lib/navigation'
 import { BEDROOM_FILTERS } from '../../../../../data/priceRanges'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../../lib/config'
@@ -60,7 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const label = ACAO_LABELS[acao].preposicao
 
   const { total } = await fetchProperties({
-    tipo: acaoToTipo(acao as AcaoSlug),
+    tipo: acaoToTipo(acao),
     categoria,
     cidade: cidadeName,
     bairro: bairroDbName,
@@ -103,7 +102,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
   const bairroName = bairroData?.nome || formatNeighborhoodName(bairro)
   const bairroDbName = bairroSlugToDbName(bairro) || bairroName
 
-  const tipoFilter = acaoToTipo(acao as AcaoSlug)
+  const tipoFilter = acaoToTipo(acao)
   const { imoveis, total } = await fetchProperties({
     tipo: tipoFilter,
     categoria,
@@ -114,7 +113,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
 
   if (!threshold(total, bairro)) notFound()
 
-  const label = ACAO_LABELS[acao as AcaoSlug].preposicao
+  const label = ACAO_LABELS[acao].preposicao
   const nomeImovel = total === 1 ? categoriaData.singular : categoriaData.plural
   const prep = emBairro(bairroName)
   const h1 = `${nomeImovel} ${label} ${prep} ${bairroName}, ${cidadeName}`
@@ -152,8 +151,8 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-        { '@type': 'ListItem', position: 2, name: `${acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${cidadeName}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade })}` },
-        { '@type': 'ListItem', position: 3, name: `${categoriaData.plural} ${label}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria })}` },
+        { '@type': 'ListItem', position: 2, name: `${acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${cidadeName}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: acao, cidade })}` },
+        { '@type': 'ListItem', position: 3, name: `${categoriaData.plural} ${label}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: acao, cidade, categoria })}` },
         { '@type': 'ListItem', position: 4, name: bairroName, item: canonicalUrl },
       ],
     },
@@ -178,9 +177,9 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
           <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4 flex-wrap" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
             <span aria-hidden="true">/</span>
-            <Link href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade })} className="hover:text-white transition-colors">{cidadeName}</Link>
+            <Link href={buildHierarchicalUrl({ acao: acao, cidade })} className="hover:text-white transition-colors">{cidadeName}</Link>
             <span aria-hidden="true">/</span>
-            <Link href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria })} className="hover:text-white transition-colors">{categoriaData.plural} {label}</Link>
+            <Link href={buildHierarchicalUrl({ acao: acao, cidade, categoria })} className="hover:text-white transition-colors">{categoriaData.plural} {label}</Link>
             <span aria-hidden="true">/</span>
             <span className="text-white" aria-current="page">{bairroName}</span>
           </nav>
@@ -211,7 +210,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
 
       <div className="container mx-auto px-6 py-10">
         <div className="mb-6">
-          <Link href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria })} className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
+          <Link href={buildHierarchicalUrl({ acao: acao, cidade, categoria })} className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
             <FiArrowLeft size={13} /> Ver todos os {categoriaData.plural.toLowerCase()} {label.toLowerCase()}
           </Link>
         </div>
@@ -229,7 +228,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
               {availableBedroomFilters.map(bf => (
                 <li key={bf.slug}>
                   <Link
-                    href={`${buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria, bairro })}/filtro/${bf.slug}`}
+                    href={`${buildHierarchicalUrl({ acao: acao, cidade, categoria, bairro })}/filtro/${bf.slug}`}
                     className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
                   >
                     {categoriaData.plural} {label.toLowerCase()} com {bf.shortLabel || bf.label}
@@ -247,7 +246,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
               {siblingBairros.map(b => (
                 <li key={b.slug}>
                   <Link
-                    href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria, bairro: b.slug })}
+                    href={buildHierarchicalUrl({ acao: acao, cidade, categoria, bairro: b.slug })}
                     className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
                   >
                     {categoriaData.plural} {label.toLowerCase()} {emBairro(b.nome)} {b.nome}

@@ -32,10 +32,10 @@ async function getCombosForBairro(bairroSlug: string, cidadeName: string) {
   return matrix
     .filter(row => row.cidade === cidadeName && row.bairro === bairroDbName && row.count > 0)
     .map(row => ({
-      acao: (row.tipo === 'venda' ? 'comprar' : 'alugar') as AcaoSlug,
+      acao: row.tipo === 'venda' ? 'comprar' : 'alugar',
       categoria: row.categoria,
       count: row.count,
-    }))
+    } as const))
     .sort((a, b) => b.count - a.count)
 }
 

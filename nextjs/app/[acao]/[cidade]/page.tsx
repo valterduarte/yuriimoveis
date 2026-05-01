@@ -13,7 +13,6 @@ import {
   getAllCidadeSlugs,
   bairroDbNameToSlug,
   hasRichBairroContent,
-  type AcaoSlug,
 } from '../../../lib/navigation'
 import { CATEGORIAS } from '../../../data/categorias'
 import { getAllPriceRanges, BEDROOM_FILTERS } from '../../../data/priceRanges'
@@ -68,14 +67,14 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
   if (!cidadeName) notFound()
 
   const { imoveis, total } = await fetchProperties({
-    tipo: acaoToTipo(acao as AcaoSlug),
+    tipo: acaoToTipo(acao),
     cidade: cidadeName,
     limit: 50,
   })
 
   if (total === 0) notFound()
 
-  const label = ACAO_LABELS[acao as AcaoSlug].preposicao
+  const label = ACAO_LABELS[acao].preposicao
   const h1 = `Imóveis ${label} em ${cidadeName}`
   const canonicalUrl = `${SITE_URL}${buildHierarchicalUrl({ acao, cidade })}`
 
@@ -83,7 +82,7 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
   const categoriaCounts = new Map<PropertyCategory, number>()
   const bairroCounts = new Map<string, number>()
   for (const row of matrix) {
-    if (row.tipo !== acaoToTipo(acao as AcaoSlug)) continue
+    if (row.tipo !== acaoToTipo(acao)) continue
     if (cidadeNameToSlug(row.cidade) !== cidade) continue
     const categoriaData = getCategoriaBySlug(row.categoria)
     if (!categoriaData) continue
@@ -159,7 +158,7 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
                 return (
                   <li key={catSlug}>
                     <Link
-                      href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria: catSlug })}
+                      href={buildHierarchicalUrl({ acao: acao, cidade, categoria: catSlug })}
                       className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
                     >
                       {cat.plural} {label.toLowerCase()} ({count})
@@ -183,7 +182,7 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
               {topBairros.map(b => (
                 <li key={b.slug}>
                   <Link
-                    href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, bairro: b.slug })}
+                    href={buildHierarchicalUrl({ acao: acao, cidade, bairro: b.slug })}
                     className="inline-flex items-center gap-2 bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
                   >
                     <span>{b.nome} ({b.count})</span>
@@ -206,7 +205,7 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
         <section className="mt-14">
           <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por faixa de preço</h2>
           <ul className="flex flex-wrap gap-2">
-            {getAllPriceRanges(acaoToTipo(acao as AcaoSlug)).map(range => (
+            {getAllPriceRanges(acaoToTipo(acao)).map(range => (
               <li key={range.slug}>
                 <Link
                   href={`/${acao}/${cidade}/filtro/${range.slug}`}

@@ -109,6 +109,7 @@ export interface BairroContent {
 export interface BairroData {
   nome: string
   slug: string
+  cidade: string
   titulo: string
   descricaoMeta: string
   imagem?: string

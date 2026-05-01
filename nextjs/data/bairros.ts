@@ -9,6 +9,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'bela-vista': {
     nome: 'Bela Vista',
     slug: 'bela-vista',
+    cidade: 'Osasco',
     titulo: 'Imóveis na Bela Vista, Osasco SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos e casas na Bela Vista em Osasco, SP. Lançamentos e imóveis prontos para venda e aluguel. Atendimento personalizado com o Corretor Yuri.',
@@ -29,6 +30,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'centro': {
     nome: 'Centro',
     slug: 'centro',
+    cidade: 'Osasco',
     titulo: 'Imóveis no Centro de Osasco SP — Corretor Yuri',
     descricaoMeta:
       'Imóveis no Centro de Osasco, SP. Apartamentos e salas comerciais para venda e aluguel. Região com melhor infraestrutura da cidade.',
@@ -49,6 +51,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'cipava': {
     nome: 'Cipava',
     slug: 'cipava',
+    cidade: 'Osasco',
     titulo: 'Imóveis no Cipava, Osasco SP — Corretor Yuri',
     descricaoMeta:
       'Casas e apartamentos no Cipava em Osasco, SP. Imóveis para venda e aluguel com atendimento do Corretor Yuri Imóveis.',
@@ -69,6 +72,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'conceicao': {
     nome: 'Conceição',
     slug: 'conceicao',
+    cidade: 'Osasco',
     titulo: 'Imóveis na Conceição, Osasco SP — Corretor Yuri',
     descricaoMeta:
       'Imóveis na Conceição em Osasco, SP. Casas, apartamentos e terrenos para compra e aluguel. Fale com o Corretor Yuri.',
@@ -89,6 +93,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'jaguaribe': {
     nome: 'Jaguaribe',
     slug: 'jaguaribe',
+    cidade: 'Osasco',
     titulo: 'Imóveis no Jaguaribe, Osasco SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos e casas no Jaguaribe em Osasco, SP. Lançamentos e imóveis prontos para morar. Atendimento com o Corretor Yuri.',
@@ -109,6 +114,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'km-18': {
     nome: 'Km 18',
     slug: 'km-18',
+    cidade: 'Osasco',
     titulo: 'Imóveis no Km 18, Osasco SP — Corretor Yuri',
     descricaoMeta:
       'Imóveis no Km 18 em Osasco, SP. Casas, apartamentos e terrenos para venda e aluguel. Fale com o Corretor Yuri Imóveis.',
@@ -129,6 +135,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'presidente-altino': {
     nome: 'Presidente Altino',
     slug: 'presidente-altino',
+    cidade: 'Osasco',
     titulo: 'Imóveis em Presidente Altino, Osasco SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos e casas em Presidente Altino, Osasco SP. Imóveis próximos à CPTM para venda e aluguel. Corretor Yuri Imóveis.',
@@ -149,6 +156,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'santa-maria': {
     nome: 'Santa Maria',
     slug: 'santa-maria',
+    cidade: 'Osasco',
     titulo: 'Imóveis em Santa Maria, Osasco SP — Corretor Yuri',
     descricaoMeta:
       'Imóveis em Santa Maria, Osasco SP. Apartamentos e casas para venda e aluguel. Atendimento personalizado com o Corretor Yuri.',
@@ -169,6 +177,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'vila-isabel': {
     nome: 'Vila Isabel',
     slug: 'vila-isabel',
+    cidade: 'Osasco',
     titulo: 'Imóveis na Vila Isabel, Osasco SP — Corretor Yuri',
     descricaoMeta:
       'Casas e apartamentos na Vila Isabel em Osasco, SP. Imóveis para compra e aluguel com o Corretor Yuri Imóveis.',
@@ -189,6 +198,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'metalurgicos': {
     nome: 'Metalúrgicos',
     slug: 'metalurgicos',
+    cidade: 'Osasco',
     titulo: 'Imóveis no Metalúrgicos, Osasco SP',
     descricaoMeta:
       'Casas, apartamentos e terrenos no bairro Metalúrgicos em Osasco, SP. Veja opções de venda e aluguel com o Corretor Yuri Imóveis.',
@@ -209,6 +219,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'jardim-roberto': {
     nome: 'Jardim Roberto',
     slug: 'jardim-roberto',
+    cidade: 'Osasco',
     dbMatch: 'Jd Roberto',
     titulo: 'Imóveis no Jardim Roberto, Osasco SP',
     descricaoMeta:
@@ -230,6 +241,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'padroeira': {
     nome: 'Padroeira',
     slug: 'padroeira',
+    cidade: 'Osasco',
     titulo: 'Imóveis na Padroeira, Osasco SP',
     descricaoMeta:
       'Imóveis na Padroeira em Osasco, SP. Casas, apartamentos e terrenos para compra e aluguel. Fale com o Corretor Yuri Imóveis.',
@@ -250,6 +262,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'rochdale': {
     nome: 'Rochdale',
     slug: 'rochdale',
+    cidade: 'Osasco',
     titulo: 'Imóveis no Rochdale, Osasco SP',
     descricaoMeta:
       'Imóveis no bairro Rochdale em Osasco, SP. Veja casas e apartamentos disponíveis para venda e aluguel com o Corretor Yuri.',
@@ -270,6 +283,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'jardim-esperanca': {
     nome: 'Jardim Esperança',
     slug: 'jardim-esperanca',
+    cidade: 'Barueri',
     titulo: 'Imóveis no Jardim Esperança, Barueri SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos no Jardim Esperança em Barueri, SP. Imóveis prontos para morar e lançamentos. Atendimento personalizado com o Corretor Yuri.',
@@ -290,6 +304,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'cruz-preta': {
     nome: 'Cruz Preta',
     slug: 'cruz-preta',
+    cidade: 'Barueri',
     titulo: 'Imóveis no Cruz Preta, Barueri SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos no Cruz Preta em Barueri, SP. Lançamentos e imóveis prontos para morar. Atendimento personalizado com o Corretor Yuri.',
@@ -310,6 +325,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'alphaville': {
     nome: 'Alphaville',
     slug: 'alphaville',
+    cidade: 'Barueri',
     titulo: 'Imóveis em Alphaville, Barueri SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos em Alphaville, Barueri SP. Lançamentos de alto padrão para venda e aluguel. Atendimento personalizado com o Corretor Yuri.',
@@ -330,6 +346,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'jardim-julio': {
     nome: 'Jardim Julio',
     slug: 'jardim-julio',
+    cidade: 'Barueri',
     dbMatch: 'Jardim Julio',
     titulo: 'Imóveis no Jardim Julio, Barueri SP — Corretor Yuri',
     descricaoMeta:
@@ -351,6 +368,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'jardim-california': {
     nome: 'Jardim Califórnia',
     slug: 'jardim-california',
+    cidade: 'Barueri',
     dbMatch: 'Jardim Califórnia',
     titulo: 'Imóveis no Jardim Califórnia, Barueri SP — Corretor Yuri',
     descricaoMeta:
@@ -372,6 +390,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'aldeia': {
     nome: 'Aldeia',
     slug: 'aldeia',
+    cidade: 'Barueri',
     dbMatch: 'Aldeia',
     titulo: 'Imóveis na Aldeia, Barueri SP — Corretor Yuri',
     descricaoMeta:
@@ -393,6 +412,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'jardim-tupanci': {
     nome: 'Jardim Tupanci',
     slug: 'jardim-tupanci',
+    cidade: 'Barueri',
     dbMatch: 'Jardim Tupanci',
     titulo: 'Imóveis no Jardim Tupanci, Barueri SP — Corretor Yuri',
     descricaoMeta:
@@ -414,6 +434,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'jardim-silveira': {
     nome: 'Jardim Silveira',
     slug: 'jardim-silveira',
+    cidade: 'Barueri',
     dbMatch: 'Jardim Silveira',
     titulo: 'Imóveis no Jardim Silveira, Barueri SP — Corretor Yuri',
     descricaoMeta:
@@ -435,6 +456,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'vila-do-conde': {
     nome: 'Vila do Conde',
     slug: 'vila-do-conde',
+    cidade: 'Barueri',
     dbMatch: 'Vila do Conde',
     titulo: 'Imóveis na Vila do Conde, Barueri SP — Corretor Yuri',
     descricaoMeta:
@@ -456,6 +478,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'centro-comercial-jubran': {
     nome: 'Centro Comercial Jubran',
     slug: 'centro-comercial-jubran',
+    cidade: 'Barueri',
     dbMatch: 'Centro Comercial Jubran',
     titulo: 'Imóveis no Centro Comercial Jubran, Barueri SP — Corretor Yuri',
     descricaoMeta:
@@ -477,6 +500,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'vila-yara': {
     nome: 'Vila Yara',
     slug: 'vila-yara',
+    cidade: 'Osasco',
     dbMatch: 'Vila Yara',
     titulo: 'Imóveis na Vila Yara, Osasco SP — Corretor Yuri',
     descricaoMeta:
@@ -498,6 +522,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'tambore': {
     nome: 'Tamboré',
     slug: 'tambore',
+    cidade: 'Barueri',
     dbMatch: 'Tamboré',
     titulo: 'Imóveis em Tamboré, Barueri SP — Corretor Yuri',
     descricaoMeta:
@@ -519,6 +544,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'jardim-audir': {
     nome: 'Jardim Audir',
     slug: 'jardim-audir',
+    cidade: 'Barueri',
     titulo: 'Imóveis no Jardim Audir, Barueri SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos no Jardim Audir em Barueri, SP. Lançamentos e imóveis prontos para morar com fácil acesso a Alphaville e à Castelo Branco. Atendimento personalizado com o Corretor Yuri.',
@@ -539,6 +565,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'vila-sul-americana': {
     nome: 'Vila Sul Americana',
     slug: 'vila-sul-americana',
+    cidade: 'Carapicuíba',
     titulo: 'Imóveis na Vila Sul Americana, Carapicuíba SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos na Vila Sul Americana em Carapicuíba, SP. Lançamentos e imóveis prontos para morar com acesso à CPTM Linha 8-Diamante. Atendimento com o Corretor Yuri.',
@@ -559,6 +586,7 @@ export const BAIRROS: Record<string, BairroData> = {
   'vila-ayrosa': {
     nome: 'Vila Ayrosa',
     slug: 'vila-ayrosa',
+    cidade: 'Osasco',
     titulo: 'Imóveis na Vila Ayrosa, Osasco SP',
     descricaoMeta:
       'Casas e apartamentos na Vila Ayrosa em Osasco, SP. Opções de venda e aluguel com atendimento personalizado do Corretor Yuri.',

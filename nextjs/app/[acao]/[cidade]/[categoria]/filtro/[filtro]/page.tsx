@@ -11,7 +11,6 @@ import {
   getCategoriaBySlug,
   buildHierarchicalUrl,
   ACAO_LABELS,
-  type AcaoSlug,
 } from '../../../../../../lib/navigation'
 import {
   getPriceRangeBySlug,
@@ -112,7 +111,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const categoriaData = getCategoriaBySlug(categoria)
   if (!cidadeName || !categoriaData) return {}
 
-  const tipo = acaoToTipo(acao as AcaoSlug)
+  const tipo = acaoToTipo(acao)
   const filter = parseFilter(filtro, tipo)
   if (!filter) return {}
 
@@ -159,11 +158,11 @@ export default async function CategoryFilterPage({ params }: PageProps) {
   const categoriaData = getCategoriaBySlug(categoria)
   if (!cidadeName || !categoriaData) notFound()
 
-  const tipo = acaoToTipo(acao as AcaoSlug)
+  const tipo = acaoToTipo(acao)
   const filter = parseFilter(filtro, tipo)
   if (!filter) notFound()
 
-  const label = ACAO_LABELS[acao as AcaoSlug].preposicao
+  const label = ACAO_LABELS[acao].preposicao
   const filterLabel = filter.price?.label || filter.bedroom?.label || filter.amenity?.label || ''
   const filterConnector = filter.bedroom ? 'com ' : ''
 
@@ -182,7 +181,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
 
   const h1 = `${categoriaData.plural} ${label} ${filterConnector}${filterLabel} em ${cidadeName}`
   const canonicalUrl = `${SITE_URL}${buildCategoryFilterUrl(acao, cidade, categoria, filtro)}`
-  const categoryUrl = buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria })
+  const categoryUrl = buildHierarchicalUrl({ acao: acao, cidade, categoria })
 
   const relatedFilters = filter.price ? BEDROOM_FILTERS : getAllPriceRanges(tipo)
   const relatedSectionTitle = filter.price ? 'Filtrar por quartos' : 'Filtrar por preço'
@@ -193,7 +192,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-        { '@type': 'ListItem', position: 2, name: `${acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${cidadeName}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade })}` },
+        { '@type': 'ListItem', position: 2, name: `${acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${cidadeName}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: acao, cidade })}` },
         { '@type': 'ListItem', position: 3, name: `${categoriaData.plural} ${label}`, item: `${SITE_URL}${categoryUrl}` },
         { '@type': 'ListItem', position: 4, name: filterLabel, item: canonicalUrl },
       ],
@@ -220,7 +219,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
           <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4 flex-wrap" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
             <span aria-hidden="true">/</span>
-            <Link href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade })} className="hover:text-white transition-colors">{cidadeName}</Link>
+            <Link href={buildHierarchicalUrl({ acao: acao, cidade })} className="hover:text-white transition-colors">{cidadeName}</Link>
             <span aria-hidden="true">/</span>
             <Link href={categoryUrl} className="hover:text-white transition-colors">{categoriaData.plural} {label}</Link>
             <span aria-hidden="true">/</span>

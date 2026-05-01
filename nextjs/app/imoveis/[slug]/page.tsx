@@ -23,14 +23,13 @@ import {
   bairroDbNameToSlug,
   buildHierarchicalUrl,
   cidadeNameToSlug,
+  cidadeSlugToName,
   hasRichBairroContent,
   tipoToAcao,
 } from '../../../lib/navigation'
 import { CATEGORIAS } from '../../../data/categorias'
 import WhatsAppLink from '../../../components/WhatsAppLink'
 import type { Metadata } from 'next'
-
-const SUPPORTED_CIDADE_SLUGS = new Set(['osasco', 'barueri'])
 
 export const revalidate = 60
 
@@ -175,7 +174,7 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
   const acao = tipoToAcao(imovel.tipo)
   const cidadeSlug = imovel.cidade ? cidadeNameToSlug(imovel.cidade) : ''
   const bairroSlug = imovel.bairro ? bairroDbNameToSlug(imovel.bairro) : ''
-  const cidadeSupported = SUPPORTED_CIDADE_SLUGS.has(cidadeSlug)
+  const cidadeSupported = !!cidadeSlugToName(cidadeSlug)
   const categoriaData = CATEGORIAS[imovel.categoria]
   const categoriaPlural = categoriaData?.plural ?? 'Imóveis'
   const actionLabel = acao === 'alugar' ? 'aluguel' : 'venda'

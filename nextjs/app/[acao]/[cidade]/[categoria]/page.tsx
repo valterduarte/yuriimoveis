@@ -23,6 +23,7 @@ import type { Metadata } from 'next'
 const ITBI_RATE_BY_CITY: Record<string, string> = {
   Osasco: '2%',
   Barueri: '3%',
+  Carapicuíba: '2%',
 }
 
 interface Faq {
@@ -125,7 +126,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const label = ACAO_LABELS[acao].preposicao
   const { total } = await fetchProperties({
-    tipo: acaoToTipo(acao as AcaoSlug),
+    tipo: acaoToTipo(acao),
     categoria,
     cidade: cidadeName,
     limit: 50,
@@ -162,7 +163,7 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
   if (!cidadeName || !categoriaData) notFound()
 
   const { imoveis, total } = await fetchProperties({
-    tipo: acaoToTipo(acao as AcaoSlug),
+    tipo: acaoToTipo(acao),
     categoria,
     cidade: cidadeName,
     limit: 50,
@@ -170,14 +171,14 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
 
   if (total === 0) notFound()
 
-  const label = ACAO_LABELS[acao as AcaoSlug].preposicao
+  const label = ACAO_LABELS[acao].preposicao
   const h1 = `${categoriaData.plural} ${label} em ${cidadeName}`
   const canonicalUrl = `${SITE_URL}${buildHierarchicalUrl({ acao, cidade, categoria })}`
 
   const matrix = await fetchNavigationMatrix()
   const bairrosWithCount = matrix
     .filter(r =>
-      r.tipo === acaoToTipo(acao as AcaoSlug) &&
+      r.tipo === acaoToTipo(acao) &&
       r.categoria === categoria &&
       cidadeNameToSlug(r.cidade) === cidade
     )
@@ -187,7 +188,7 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
   const topBairros = [...bairrosWithCount].sort((a, b) => b.count - a.count)
 
   const faqs = buildFaqs({
-    acao: acao as AcaoSlug,
+    acao: acao,
     cidadeName,
     categoriaData,
     label,
@@ -201,7 +202,7 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-        { '@type': 'ListItem', position: 2, name: `${acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${cidadeName}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade })}` },
+        { '@type': 'ListItem', position: 2, name: `${acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${cidadeName}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: acao, cidade })}` },
         { '@type': 'ListItem', position: 3, name: `${categoriaData.plural} ${label}`, item: canonicalUrl },
       ],
     },
@@ -235,7 +236,7 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
           <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4 flex-wrap" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
             <span aria-hidden="true">/</span>
-            <Link href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade })} className="hover:text-white transition-colors">{cidadeName}</Link>
+            <Link href={buildHierarchicalUrl({ acao: acao, cidade })} className="hover:text-white transition-colors">{cidadeName}</Link>
             <span aria-hidden="true">/</span>
             <span className="text-white" aria-current="page">{categoriaData.plural} {label}</span>
           </nav>
@@ -247,7 +248,7 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
 
       <div className="container mx-auto px-6 py-10">
         <div className="mb-6">
-          <Link href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade })} className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
+          <Link href={buildHierarchicalUrl({ acao: acao, cidade })} className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
             <FiArrowLeft size={13} /> Ver todos os imóveis {label.toLowerCase()} em {cidadeName}
           </Link>
         </div>
@@ -289,7 +290,7 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
               {categoriaData.plural} {label} por preço
             </h2>
             <ul className="flex flex-wrap gap-2">
-              {getAllPriceRanges(acaoToTipo(acao as AcaoSlug)).map(pr => (
+              {getAllPriceRanges(acaoToTipo(acao)).map(pr => (
                 <li key={pr.slug}>
                   <Link
                     href={`/${acao}/${cidade}/${categoria}/filtro/${pr.slug}`}
@@ -321,7 +322,7 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
                 return (
                   <li key={b.slug}>
                     <Link
-                      href={buildHierarchicalUrl({ acao: acao as AcaoSlug, cidade, categoria, bairro: b.slug })}
+                      href={buildHierarchicalUrl({ acao: acao, cidade, categoria, bairro: b.slug })}
                       className="inline-flex items-center gap-2 bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
                     >
                       <span>{displayName} ({b.count})</span>
