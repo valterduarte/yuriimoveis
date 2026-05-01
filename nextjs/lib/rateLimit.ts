@@ -16,8 +16,11 @@ const stores = new Map<string, Map<string, RateLimitRecord>>()
  * For multi-instance, replace with Redis/Upstash.
  */
 export function rateLimit({ name, maxAttempts, windowMs }: RateLimitConfig): (key: string) => boolean {
-  if (!stores.has(name)) stores.set(name, new Map())
-  const attempts = stores.get(name)!
+  let attempts = stores.get(name)
+  if (!attempts) {
+    attempts = new Map()
+    stores.set(name, attempts)
+  }
 
   return function isRateLimited(key: string): boolean {
     const now = Date.now()

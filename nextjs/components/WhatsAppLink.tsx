@@ -1,8 +1,8 @@
 'use client'
 
-import type { ReactNode, MouseEvent } from 'react'
 import { track } from '@vercel/analytics'
 import { trackEvent } from './GoogleAnalytics'
+import type { ReactNode, MouseEvent } from 'react'
 
 interface WhatsAppLinkProps {
   href: string

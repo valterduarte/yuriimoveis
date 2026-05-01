@@ -1,7 +1,7 @@
-import type { BairroData, TransactionType } from '../types'
 import { BAIRROS, getBairroBySlug } from '../data/bairros'
 import { CATEGORIAS, getCategoriaBySlug } from '../data/categorias'
 import { slugify } from '../utils/imovelUtils'
+import type { BairroData, TransactionType } from '../types'
 
 export type AcaoSlug = 'comprar' | 'alugar'
 

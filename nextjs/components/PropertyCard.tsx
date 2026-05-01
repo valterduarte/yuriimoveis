@@ -5,8 +5,8 @@ import { FaCar, FaBath } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
 import { formatPrice, imovelSlug } from '../utils/imovelUtils'
 import { PLACEHOLDER_IMAGE, PROPERTY_STATUSES, CARD_IMAGE_HEIGHT } from '../lib/constants'
-import type { Imovel } from '../types'
 import CompareToggleButton from './compare/CompareToggleButton'
+import type { Imovel } from '../types'
 
 interface PropertyCardProps {
   imovel: Imovel

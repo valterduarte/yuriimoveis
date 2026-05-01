@@ -1,5 +1,5 @@
-import { SITE_URL, PHONE_STRUCTURED, PHONE_WA, INSTAGRAM_URL, OG_DEFAULT_IMAGE, CRECI } from './config'
 import { HOMEPAGE_FAQ } from '../data/faq'
+import { SITE_URL, PHONE_STRUCTURED, PHONE_WA, INSTAGRAM_URL, OG_DEFAULT_IMAGE, CRECI } from './config'
 
 export const AGENT_ID = `${SITE_URL}/#agent`
 export const WEBSITE_ID = `${SITE_URL}/#website`

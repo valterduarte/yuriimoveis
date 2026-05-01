@@ -1,6 +1,6 @@
-import type { Metadata } from 'next'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import SimuladorClient from '../../components/simulador/SimuladorClient'
+import type { Metadata } from 'next'
 
 const TITLE = 'Simulador de Financiamento Imobiliário — Corretor Yuri'
 const DESCRIPTION =

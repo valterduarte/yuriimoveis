@@ -47,7 +47,8 @@ export default function PropertyLightbox({ images, activeIndex, onClose, onNext,
   const handleTouchEnd = (e: React.TouchEvent) => {
     const deltaX = e.changedTouches[0].clientX - touchStartX
     if (Math.abs(deltaX) > SWIPE_THRESHOLD) {
-      deltaX < 0 ? onNext() : onPrev()
+      if (deltaX < 0) onNext()
+      else onPrev()
     }
   }
 

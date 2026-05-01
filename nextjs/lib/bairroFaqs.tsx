@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { CATEGORIAS } from '../data/categorias'
 import {
@@ -10,6 +9,7 @@ import {
   pluralizeImoveis,
 } from '../utils/imovelUtils'
 import { buildHierarchicalUrl, type AcaoSlug } from './navigation'
+import type { ReactNode } from 'react'
 import type { BairroData, PropertyCategory } from '../types'
 
 export interface BairroFaq {

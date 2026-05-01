@@ -50,7 +50,7 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
         if (err.response?.status === 401) onAuthError()
       })
       .finally(() => setLoading(false))
-  }, [days])
+  }, [days, authHeader, onAuthError])
 
   if (loading) {
     return <p className="text-sm text-gray-500 py-10 text-center">Carregando estatísticas...</p>

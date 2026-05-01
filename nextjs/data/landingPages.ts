@@ -10,8 +10,6 @@ export interface LandingPageData {
   introTexto: string
 }
 
-const CITY = 'Osasco'
-
 export const LANDING_PAGES: LandingPageData[] = [
   {
     slug: 'casas-a-venda-em-osasco',

@@ -2,10 +2,10 @@
 
 import { useState, type ReactNode } from 'react'
 import PropertyFilters from '../property/PropertyFilters'
+import { usePropertyFilters } from '../../hooks/usePropertyFilters'
 import SortBar from './SortBar'
 import ActiveFilters from './ActiveFilters'
 import Pagination from './Pagination'
-import { usePropertyFilters } from '../../hooks/usePropertyFilters'
 
 interface ImoveisControlsProps {
   total: number
@@ -58,7 +58,6 @@ export default function ImoveisControls({ total, currentPage, totalPages, bairro
           total={total}
           ordem={ordem}
           activeFilterCount={activeFilterCount}
-          showFilters={showFilters}
           onToggleFilters={() => setShowFilters(prev => !prev)}
           onSortChange={value => updateFilter('ordem', value)}
         />

@@ -1,7 +1,7 @@
-import { config } from 'dotenv'
 import { readdir, readFile } from 'node:fs/promises'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { config } from 'dotenv'
 import matter from 'gray-matter'
 import { marked } from 'marked'
 import { Pool } from '@neondatabase/serverless'

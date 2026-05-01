@@ -5,11 +5,11 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FiMenu, FiX, FiPhone } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
+import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL } from '../lib/config'
+import { NAVIGATION_LINKS, SCROLL_THRESHOLD } from '../lib/constants'
 import Logo from './Logo'
 import CodeSearch from './CodeSearch'
 import WhatsAppLink from './WhatsAppLink'
-import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL } from '../lib/config'
-import { NAVIGATION_LINKS, SCROLL_THRESHOLD } from '../lib/constants'
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)

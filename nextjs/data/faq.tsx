@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import type { ReactNode } from 'react'
 import { PHONE_WA } from '../lib/config'
+import type { ReactNode } from 'react'
 
 export interface FaqItem {
   question: string

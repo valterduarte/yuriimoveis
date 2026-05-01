@@ -1,8 +1,6 @@
 import Link from 'next/link'
 import { FiPhone, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
-import Logo from './Logo'
-import WhatsAppLink from './WhatsAppLink'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI } from '../lib/config'
 import { NAVIGATION_LINKS, FOOTER_TOOL_LINKS } from '../lib/constants'
 import { LANDING_PAGES } from '../data/landingPages'
@@ -10,6 +8,8 @@ import { AJUDA_ARTIGOS, fullH1 } from '../data/ajudaArtigos'
 import { BAIRROS } from '../data/bairros'
 import { fetchNavigationMatrix } from '../lib/api'
 import { bairroDbNameToSlug } from '../lib/navigation'
+import WhatsAppLink from './WhatsAppLink'
+import Logo from './Logo'
 
 const FOOTER_LINK_CLASS =
   'text-xs text-gray-400 hover:text-primary transition-colors flex items-center gap-2'

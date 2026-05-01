@@ -3,9 +3,9 @@
 import { useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { FiMapPin } from 'react-icons/fi'
-import type { MapImovel } from '../../lib/api'
 import { coordsForImovel } from '../../lib/bairroCoords'
 import { PROPERTY_CATEGORIES } from '../../lib/constants'
+import type { MapImovel } from '../../lib/api'
 
 const MapaLeaflet = dynamic(() => import('./MapaLeaflet'), {
   ssr: false,

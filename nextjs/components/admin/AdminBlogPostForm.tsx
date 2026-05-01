@@ -56,7 +56,7 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
           else setError('Erro ao carregar post.')
         })
     }
-  }, [editingId])
+  }, [editingId, authHeader, onAuthError])
 
   useEffect(() => {
     if (!slugManual && titulo) {

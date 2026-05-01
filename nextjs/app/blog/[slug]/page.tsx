@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { FaWhatsapp } from 'react-icons/fa'
 import { fetchBlogPostBySlug, fetchAllBlogSlugs, fetchRelatedBlogPosts } from '../../../lib/api'
 import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA } from '../../../lib/config'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
 import WhatsAppLink from '../../../components/WhatsAppLink'
-import { FaWhatsapp } from 'react-icons/fa'
 import type { Metadata } from 'next'
 
 export const revalidate = 60

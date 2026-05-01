@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import { FiX, FiCalendar, FiClock, FiUser, FiPhone, FiHome, FiCheck } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { track } from '@vercel/analytics'
-import { trackEvent } from './GoogleAnalytics'
 import { PHONE_WA_BASE } from '../lib/config'
+import { trackEvent } from './GoogleAnalytics'
 
 interface ScheduleVisitModalProps {
   imovelTitulo: string

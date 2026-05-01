@@ -7,12 +7,11 @@ interface SortBarProps {
   total: number
   ordem: string
   activeFilterCount: number
-  showFilters: boolean
   onToggleFilters: () => void
   onSortChange: (value: string) => void
 }
 
-export default function SortBar({ total, ordem, activeFilterCount, showFilters, onToggleFilters, onSortChange }: SortBarProps) {
+export default function SortBar({ total, ordem, activeFilterCount, onToggleFilters, onSortChange }: SortBarProps) {
   return (
     <div className="flex items-center justify-between mb-6 bg-white border border-gray-200 px-4 py-3">
       <div className="flex items-center gap-3">

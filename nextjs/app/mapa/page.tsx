@@ -1,7 +1,7 @@
-import type { Metadata } from 'next'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import { fetchPropertiesForMap } from '../../lib/api'
 import MapaClient from '../../components/mapa/MapaClient'
+import type { Metadata } from 'next'
 
 const TITLE = 'Mapa de Imóveis em Osasco e Região — Corretor Yuri'
 const DESCRIPTION =
