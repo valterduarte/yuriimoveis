@@ -9,7 +9,11 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
-    "seed:blog": "tsx scripts/seed-blog.ts"
+    "seed:blog": "tsx scripts/seed-blog.ts",
+    "prepare": "cd .. && git config core.hooksPath nextjs/.husky || true"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs,cjs}": "eslint --fix"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -40,6 +44,8 @@
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.1.0",
     "gray-matter": "^4.0.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "marked": "^18.0.1",
     "postcss": "^8.4.49",
     "sharp": "^0.34.5",

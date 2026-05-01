@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+# Pre-commit hook entrypoint.
+# The git repo lives one level above the npm project (./nextjs), so we
+# step into the npm project before delegating to lint-staged.
+cd "$(dirname "$0")/.." || exit 1
+npx lint-staged
