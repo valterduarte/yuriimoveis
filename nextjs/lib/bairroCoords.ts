@@ -10,39 +10,43 @@ const CITY_CENTROIDS: Record<string, LatLng> = {
   cotia:       { lat: -23.6037, lng: -46.9191 },
 }
 
+// Coordinates sourced from OpenStreetMap Nominatim (see
+// scripts/fetch-bairro-coords.ts). Centro fell back to the city centroid
+// because Nominatim resolved "Centro, Osasco" to a different region;
+// Vila Isabel and Vila Ayrosa were not found by Nominatim and keep
+// hand-curated values.
 const BAIRRO_CENTROIDS: Record<string, LatLng> = {
   // Osasco
-  'centro':                  { lat: -23.5329, lng: -46.7917 },
-  'bela-vista':              { lat: -23.5400, lng: -46.7820 },
-  'cipava':                  { lat: -23.5180, lng: -46.7780 },
-  'conceicao':               { lat: -23.5400, lng: -46.7700 },
-  'jaguaribe':               { lat: -23.5500, lng: -46.7600 },
-  'km-18':                   { lat: -23.5670, lng: -46.8260 },
-  'presidente-altino':       { lat: -23.5240, lng: -46.7560 },
-  'santa-maria':             { lat: -23.5180, lng: -46.7670 },
-  'vila-isabel':             { lat: -23.5310, lng: -46.7990 },
-  'metalurgicos':            { lat: -23.5210, lng: -46.7820 },
-  'jardim-roberto':          { lat: -23.5190, lng: -46.8060 },
-  'padroeira':               { lat: -23.5500, lng: -46.7920 },
-  'rochdale':                { lat: -23.5430, lng: -46.7790 },
-  'vila-ayrosa':             { lat: -23.5350, lng: -46.7830 },
-  'vila-yara':               { lat: -23.5430, lng: -46.7620 },
+  'centro':                  { lat: -23.5329, lng: -46.7917 }, // city centroid (Nominatim fallback)
+  'bela-vista':              { lat: -23.5540, lng: -46.7827 },
+  'cipava':                  { lat: -23.5426, lng: -46.7870 },
+  'conceicao':               { lat: -23.5777, lng: -46.8013 },
+  'jaguaribe':               { lat: -23.5567, lng: -46.7875 },
+  'km-18':                   { lat: -23.5249, lng: -46.8043 },
+  'presidente-altino':       { lat: -23.5312, lng: -46.7617 },
+  'santa-maria':             { lat: -23.5832, lng: -46.8111 },
+  'vila-isabel':             { lat: -23.5310, lng: -46.7990 }, // hand-curated (not in Nominatim)
+  'metalurgicos':            { lat: -23.5748, lng: -46.7986 },
+  'jardim-roberto':          { lat: -23.5440, lng: -46.8026 },
+  'padroeira':               { lat: -23.5566, lng: -46.8122 },
+  'rochdale':                { lat: -23.5074, lng: -46.7777 },
+  'vila-ayrosa':             { lat: -23.5350, lng: -46.7830 }, // hand-curated (not in Nominatim)
+  'vila-yara':               { lat: -23.5508, lng: -46.7617 },
   // Barueri
-  'jardim-esperanca':        { lat: -23.5260, lng: -46.8780 },
-  'cruz-preta':              { lat: -23.5160, lng: -46.8950 },
-  'alphaville':              { lat: -23.5050, lng: -46.8520 },
-  'parque-barueri':          { lat: -23.5070, lng: -46.8840 },
-  'tambore':                 { lat: -23.5150, lng: -46.8450 },
-  'jardim-julio':            { lat: -23.5170, lng: -46.8830 },
-  'jardim-california':       { lat: -23.5180, lng: -46.8810 },
-  'aldeia':                  { lat: -23.5340, lng: -46.8600 },
-  'jardim-tupanci':          { lat: -23.5230, lng: -46.8770 },
-  'jardim-silveira':         { lat: -23.5290, lng: -46.8780 },
-  'vila-do-conde':           { lat: -23.5180, lng: -46.8740 },
-  'centro-comercial-jubran': { lat: -23.5160, lng: -46.8770 },
-  'jardim-audir':            { lat: -23.5210, lng: -46.8830 },
+  'jardim-esperanca':        { lat: -23.4914, lng: -46.8779 },
+  'cruz-preta':              { lat: -23.4931, lng: -46.8805 },
+  'alphaville':              { lat: -23.4990, lng: -46.8478 },
+  'jardim-julio':            { lat: -23.5486, lng: -46.8852 },
+  'jardim-california':       { lat: -23.4946, lng: -46.8958 },
+  'aldeia':                  { lat: -23.5296, lng: -46.8702 },
+  'jardim-tupanci':          { lat: -23.4939, lng: -46.8701 },
+  'jardim-silveira':         { lat: -23.5235, lng: -46.8935 },
+  'vila-do-conde':           { lat: -23.5327, lng: -46.8654 },
+  'centro-comercial-jubran': { lat: -23.5048, lng: -46.8380 },
+  'tambore':                 { lat: -23.5099, lng: -46.8253 },
+  'jardim-audir':            { lat: -23.5251, lng: -46.8880 },
   // Carapicuíba
-  'vila-sul-americana':      { lat: -23.5230, lng: -46.8330 },
+  'vila-sul-americana':      { lat: -23.5239, lng: -46.8580 },
 }
 
 const slugify = (input: string): string =>
@@ -66,12 +70,19 @@ export function coordsForBairro(bairro: string | null | undefined, cidade: strin
   return null
 }
 
+// Deterministic jitter applied to each imovel so multiple listings in the
+// same bairro don't stack on the same pin. The privacy intent is preserved
+// while keeping the pin within ~50m of the bairro centroid (vs. the
+// previous ~220m, which was wide enough to push pins into neighbouring
+// bairros). Imoveis with their own lat/lng skip this entirely
+// (PropertyLocationSection prefers the explicit coord).
+const JITTER_DIVISOR = 200000 // ~±0.0005 deg ~ ±55m
+
 export function coordsForImovel(id: number, bairro: string, cidade: string): LatLng | null {
   const base = coordsForBairro(bairro, cidade)
   if (!base) return null
-  // Deterministic jitter so multiple imoveis in the same bairro don't stack
-  const offsetLat = ((id * 37) % 200 - 100) / 50000  // ~±0.002 deg ~ ±220m
-  const offsetLng = ((id * 53) % 200 - 100) / 50000
+  const offsetLat = ((id * 37) % 200 - 100) / JITTER_DIVISOR
+  const offsetLng = ((id * 53) % 200 - 100) / JITTER_DIVISOR
   return { lat: base.lat + offsetLat, lng: base.lng + offsetLng }
 }
 
