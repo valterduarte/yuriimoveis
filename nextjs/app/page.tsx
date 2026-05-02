@@ -1,5 +1,6 @@
 import { fetchFeaturedProperties, fetchSiteConfig, fetchCidadesByTipo } from '../lib/api'
 import { buildHomepageJsonLd } from '../lib/jsonLd'
+import { HOMEPAGE_FAQ } from '../data/faq'
 import { SITE_URL } from '../lib/config'
 import HeroSection from '../components/home/HeroSection'
 import FeaturedProperties from '../components/home/FeaturedProperties'
@@ -40,7 +41,9 @@ export default async function Home() {
     fetchCidadesByTipo(),
   ])
   const hero = heroImageUrl || FALLBACK_HERO
-  const jsonLd = buildHomepageJsonLd(hero)
+  const jsonLd = buildHomepageJsonLd(
+    HOMEPAGE_FAQ.map(faq => ({ question: faq.question, answer: faq.answerText }))
+  )
 
   return (
     <div className="pb-16 md:pb-0">

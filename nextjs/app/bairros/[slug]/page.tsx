@@ -10,12 +10,16 @@ import {
   cidadeNameToSlug,
   inferCidadeFromBairro,
   ACAO_LABELS,
-  type AcaoSlug,
 } from '../../../lib/navigation'
 import { CATEGORIAS } from '../../../data/categorias'
 import { emBairro, pluralizeImoveis } from '../../../utils/imovelUtils'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
-import { AGENT_ID } from '../../../lib/jsonLd'
+import {
+  buildArticleSchema,
+  buildBreadcrumb,
+  buildFaqPageSchema,
+  buildPlaceSchema,
+} from '../../../lib/jsonLd'
 import { buildBairroFaqs } from '../../../lib/bairroFaqs'
 import type { Metadata } from 'next'
 import type { PropertyCategory } from '../../../types'
@@ -115,48 +119,23 @@ export default async function BairroGuidePage({ params }: PageProps) {
   })
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-        { '@type': 'ListItem', position: 2, name: 'Guias de bairro', item: `${SITE_URL}/bairros` },
-        { '@type': 'ListItem', position: 3, name: bairro.nome, item: canonicalUrl },
-      ],
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Place',
+    buildBreadcrumb([
+      { name: 'Início',          path: '/' },
+      { name: 'Guias de bairro', path: '/bairros' },
+      { name: bairro.nome,       path: `/bairros/${slug}` },
+    ]),
+    buildPlaceSchema({
       name: `${bairro.nome}, ${cidadeName}`,
       description: bairro.conteudo.sobre,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: cidadeName,
-        addressRegion: 'SP',
-        addressCountry: 'BR',
-      },
       url: canonicalUrl,
-      containedInPlace: { '@type': 'City', name: cidadeName, address: { '@type': 'PostalAddress', addressRegion: 'SP', addressCountry: 'BR' } },
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
+      cidade: cidadeName,
+    }),
+    buildArticleSchema({
       headline: guideTitle,
       description: bairro.descricaoMeta,
-      author: { '@id': AGENT_ID },
-      publisher: { '@id': AGENT_ID },
-      mainEntityOfPage: canonicalUrl,
-      image: OG_DEFAULT_IMAGE,
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: faqs.map(faq => ({
-        '@type': 'Question',
-        name: faq.question,
-        acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-      })),
-    },
+      url: canonicalUrl,
+    }),
+    buildFaqPageSchema(faqs),
   ]
 
   return (

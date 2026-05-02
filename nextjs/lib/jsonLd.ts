@@ -1,10 +1,14 @@
-import { HOMEPAGE_FAQ } from '../data/faq'
 import { SITE_URL, PHONE_STRUCTURED, PHONE_WA, INSTAGRAM_URL, OG_DEFAULT_IMAGE, CRECI } from './config'
 
 export const AGENT_ID = `${SITE_URL}/#agent`
 export const WEBSITE_ID = `${SITE_URL}/#website`
 
-export function buildBreadcrumb(items: { name: string; path: string }[]): Record<string, unknown> {
+export interface BreadcrumbItem {
+  name: string
+  path: string
+}
+
+export function buildBreadcrumb(items: BreadcrumbItem[]): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -14,6 +18,110 @@ export function buildBreadcrumb(items: { name: string; path: string }[]): Record
       name: item.name,
       item: `${SITE_URL}${item.path}`,
     })),
+  }
+}
+
+export interface CollectionPageInput {
+  name: string
+  url: string
+  description?: string
+  numberOfItems?: number
+  itemNames?: string[]
+}
+
+export function buildCollectionPage({
+  name,
+  url,
+  description,
+  numberOfItems,
+  itemNames,
+}: CollectionPageInput): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name,
+    url,
+    ...(description ? { description } : {}),
+    ...(numberOfItems !== undefined ? { numberOfItems } : {}),
+    ...(itemNames && itemNames.length
+      ? { itemListElement: itemNames.map((n, i) => ({ '@type': 'ListItem', position: i + 1, name: n })) }
+      : {}),
+  }
+}
+
+export interface ArticleSchemaInput {
+  headline: string
+  description: string
+  url: string
+  image?: string
+  datePublished?: string
+  dateModified?: string
+}
+
+export function buildArticleSchema({
+  headline,
+  description,
+  url,
+  image = OG_DEFAULT_IMAGE,
+  datePublished,
+  dateModified,
+}: ArticleSchemaInput): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline,
+    description,
+    image,
+    author: { '@id': AGENT_ID },
+    publisher: { '@id': AGENT_ID },
+    mainEntityOfPage: url,
+    ...(datePublished ? { datePublished } : {}),
+    ...(dateModified ? { dateModified } : {}),
+  }
+}
+
+export interface FaqEntry {
+  question: string
+  answer: string
+}
+
+export function buildFaqPageSchema(faqs: FaqEntry[]): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  }
+}
+
+export interface PlaceSchemaInput {
+  name: string
+  description: string
+  url: string
+  cidade: string
+}
+
+export function buildPlaceSchema({ name, description, url, cidade }: PlaceSchemaInput): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Place',
+    name,
+    description,
+    url,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: cidade,
+      addressRegion: 'SP',
+      addressCountry: 'BR',
+    },
+    containedInPlace: {
+      '@type': 'City',
+      name: cidade,
+      address: { '@type': 'PostalAddress', addressRegion: 'SP', addressCountry: 'BR' },
+    },
   }
 }
 
@@ -98,19 +206,6 @@ export function buildGlobalJsonLd(): Record<string, unknown>[] {
   ]
 }
 
-export function buildHomepageJsonLd(_heroImageUrl: string): Record<string, unknown>[] {
-  return [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: HOMEPAGE_FAQ.map(item => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: item.answerText,
-        },
-      })),
-    },
-  ]
+export function buildHomepageJsonLd(faqs: FaqEntry[]): Record<string, unknown>[] {
+  return [buildFaqPageSchema(faqs)]
 }
