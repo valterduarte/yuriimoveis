@@ -27,6 +27,8 @@ export const imovelCreateSchema = z.object({
   vagas_display:   z.string().trim().max(50).optional().default(''),
   parcela_display: z.string().trim().max(50).optional().default(''),
   parcela_label:   z.string().trim().max(50).optional().default(''),
+  lat:             z.coerce.number().min(-90).max(90).optional().nullable(),
+  lng:             z.coerce.number().min(-180).max(180).optional().nullable(),
 })
 
 export const imovelUpdateSchema = z.object({
@@ -53,6 +55,8 @@ export const imovelUpdateSchema = z.object({
   vagas_display:   z.string().trim().max(50).optional(),
   parcela_display: z.string().trim().max(50).optional(),
   parcela_label:   z.string().trim().max(50).optional(),
+  lat:             z.coerce.number().min(-90).max(90).optional().nullable(),
+  lng:             z.coerce.number().min(-180).max(180).optional().nullable(),
 })
 
 export const blogPostCreateSchema = z.object({

@@ -33,8 +33,8 @@ export async function POST(request: NextRequest) {
 
   try {
     const result = await getDb().query(`
-      INSERT INTO imoveis (titulo, descricao, descricao_seo, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, area_display, vagas_display, parcela_display, parcela_label)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)
+      INSERT INTO imoveis (titulo, descricao, descricao_seo, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, area_display, vagas_display, parcela_display, parcela_label, lat, lng)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24)
       RETURNING id
     `, [
       d.titulo, d.descricao, d.descricao_seo, d.tipo, d.categoria, d.preco,
@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
       JSON.stringify(d.imagens),
       JSON.stringify(d.diferenciais),
       d.status, d.area_display, d.vagas_display, d.parcela_display, d.parcela_label,
+      d.lat ?? null, d.lng ?? null,
     ])
     revalidateTag(CACHE_TAG_IMOVEIS)
     return NextResponse.json({ id: result.rows[0].id, message: 'Imóvel criado com sucesso' }, { status: 201 })

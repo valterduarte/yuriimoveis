@@ -69,8 +69,10 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
         vagas_display   = COALESCE($21, vagas_display),
         parcela_display = COALESCE($22, parcela_display),
         parcela_label   = COALESCE($23, parcela_label),
+        lat             = COALESCE($24, lat),
+        lng             = COALESCE($25, lng),
         updated_at      = NOW()
-      WHERE id = $24
+      WHERE id = $26
     `, [
       d.titulo        ?? null,
       d.descricao     ?? null,
@@ -95,6 +97,8 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
       d.vagas_display   ?? null,
       d.parcela_display ?? null,
       d.parcela_label   ?? null,
+      d.lat ?? null,
+      d.lng ?? null,
       id,
     ])
 

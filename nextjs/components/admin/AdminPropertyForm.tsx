@@ -1,12 +1,22 @@
 'use client'
 
 import { useState, useEffect, useRef, type ChangeEvent } from 'react'
+import dynamic from 'next/dynamic'
 import { FiUpload, FiX } from 'react-icons/fi'
 import { ApiError, apiClient, isAuthError } from '../../lib/apiClient'
 import { calcParcela } from '../../utils/imovelUtils'
 import { API_URL, CLOUDINARY_CLOUD, CLOUDINARY_PRESET } from '../../lib/config'
 import { PROPERTY_CATEGORIES } from '../../lib/constants'
 import type { Imovel } from '../../types'
+
+const AdminLocationPicker = dynamic(() => import('./AdminLocationPicker'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-full w-full flex items-center justify-center bg-gray-100 text-gray-400 text-xs uppercase tracking-widest">
+      Carregando mapa…
+    </div>
+  ),
+})
 
 const DESCRIPTION_TEMPLATE = `🏢 NOME DO EMPREENDIMENTO – CIDADE
 
@@ -48,6 +58,8 @@ interface FormState {
   cep: string
   destaque: boolean
   diferenciais: string
+  lat: string
+  lng: string
 }
 
 const EMPTY_FORM: FormState = {
@@ -56,6 +68,7 @@ const EMPTY_FORM: FormState = {
   preco: '', parcela_display: '', parcela_label: '', area: '', area_display: '', quartos: '', banheiros: '', vagas: '', vagas_display: '',
   endereco: '', bairro: '', cidade: 'Osasco', cep: '',
   destaque: false, diferenciais: '',
+  lat: '', lng: '',
 }
 
 function propertyToForm(property: Imovel): FormState {
@@ -81,6 +94,8 @@ function propertyToForm(property: Imovel): FormState {
     cep:             property.cep             || '',
     destaque:        property.destaque        || false,
     diferenciais:    Array.isArray(property.diferenciais) ? property.diferenciais.join('\n') : '',
+    lat:             property.lat != null ? String(property.lat) : '',
+    lng:             property.lng != null ? String(property.lng) : '',
   }
 }
 
@@ -158,6 +173,8 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
         diferenciais: form.diferenciais
           ? form.diferenciais.split('\n').map(s => s.trim()).filter(Boolean)
           : [],
+        lat: form.lat ? Number(form.lat) : null,
+        lng: form.lng ? Number(form.lng) : null,
       }
       if (editingId) {
         await apiClient.put(`${API_URL}/api/imoveis/${editingId}`, payload, { headers: authHeader() })
@@ -320,6 +337,62 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
               <input value={form.cidade} onChange={e => updateField('cidade', e.target.value)}
                 className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary" />
             </div>
+          </div>
+
+          <div className="pt-2">
+            <div className="flex items-baseline justify-between mb-2">
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                Posição no mapa
+              </label>
+              <p className="text-[10px] text-gray-400">
+                Clique no mapa pra fixar o pino. Arraste pra ajustar.
+              </p>
+            </div>
+            <div className="border border-gray-200" style={{ height: 320 }}>
+              <AdminLocationPicker
+                value={
+                  form.lat && form.lng
+                    ? { lat: Number(form.lat), lng: Number(form.lng) }
+                    : null
+                }
+                bairro={form.bairro}
+                cidade={form.cidade}
+                onChange={(coords) =>
+                  setForm(f => ({ ...f, lat: coords.lat.toFixed(6), lng: coords.lng.toFixed(6) }))
+                }
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4 mt-3">
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Latitude</label>
+                <input
+                  value={form.lat}
+                  onChange={e => updateField('lat', e.target.value)}
+                  inputMode="decimal"
+                  placeholder="-23.5329"
+                  className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">Longitude</label>
+                <input
+                  value={form.lng}
+                  onChange={e => updateField('lng', e.target.value)}
+                  inputMode="decimal"
+                  placeholder="-46.7917"
+                  className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+            {form.lat && form.lng && (
+              <button
+                type="button"
+                onClick={() => setForm(f => ({ ...f, lat: '', lng: '' }))}
+                className="mt-2 text-[10px] uppercase tracking-widest text-gray-500 hover:text-primary font-bold"
+              >
+                Limpar coordenadas (volta ao centroide do bairro)
+              </button>
+            )}
           </div>
         </div>
       </div>
