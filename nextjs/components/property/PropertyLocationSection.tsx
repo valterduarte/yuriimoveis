@@ -59,19 +59,6 @@ export default function PropertyLocationSection({ imovel }: PropertyLocationSect
               tipo={imovel.tipo}
             />
           </div>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-3 px-1">
-            <p className="text-xs text-gray-500">
-              Posição aproximada por bairro para preservar a privacidade.
-            </p>
-            <a
-              href={googleMapsUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest font-bold text-gray-600 hover:text-primary transition-colors"
-            >
-              Abrir no Google Maps <FiExternalLink size={12} />
-            </a>
-          </div>
         </>
       ) : (
         <div className="bg-dark flex items-center justify-center" style={{ height: MAP_HEIGHT_PX }}>
