@@ -1,7 +1,6 @@
 export type TransactionType = 'venda' | 'aluguel'
 export type PropertyCategory = 'casa' | 'apartamento' | 'terreno' | 'chale' | 'comercial' | 'chacara'
 export type PropertyStatus = 'pronto' | 'construcao' | 'planta'
-export type SortOrder = 'recente' | 'menor_preco' | 'maior_preco' | 'maior_area'
 
 export interface Imovel {
   id: number

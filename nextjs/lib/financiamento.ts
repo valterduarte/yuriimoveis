@@ -101,10 +101,6 @@ export function detectCreditProgram(propertyValue: number, monthlyIncome: number
   return SBPE
 }
 
-export const ALL_CREDIT_PROGRAMS: CreditProgram[] = [
-  MCMV_FAIXA_1, MCMV_FAIXA_2, MCMV_FAIXA_3, MCMV_ESTIMADO, ASSOCIATIVO, SBPE,
-]
-
 export const TERM_OPTIONS = [
   { value: 240, label: '240 meses' },
   { value: 300, label: '300 meses' },

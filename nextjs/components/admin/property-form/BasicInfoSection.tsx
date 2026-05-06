@@ -1,6 +1,5 @@
 'use client'
 
-import { calcParcela } from '../../../utils/imovelUtils'
 import { PROPERTY_CATEGORIES } from '../../../lib/constants'
 import type { FormState, UpdateField } from './types'
 
@@ -12,12 +11,6 @@ interface BasicInfoSectionProps {
 
 const inputClass = 'w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary'
 const labelClass = 'block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5'
-
-export function buildPriceChangeHandler(setForm: (updater: (f: FormState) => FormState) => void) {
-  return (value: string) => {
-    setForm(f => ({ ...f, preco: value, parcela_display: value ? calcParcela(Number(value)) : '' }))
-  }
-}
 
 export default function BasicInfoSection({ form, updateField, onPriceChange }: BasicInfoSectionProps) {
   return (

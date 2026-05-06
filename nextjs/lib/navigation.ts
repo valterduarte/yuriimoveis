@@ -1,5 +1,5 @@
 import { BAIRROS, getBairroBySlug } from '../data/bairros'
-import { CATEGORIAS, getCategoriaBySlug } from '../data/categorias'
+import { getCategoriaBySlug } from '../data/categorias'
 import { slugify } from '../utils/imovelUtils'
 import type { BairroData, TransactionType } from '../types'
 
@@ -49,10 +49,6 @@ export function cidadeNameToSlug(name: string): string {
 
 export function getAllCidadeSlugs(): string[] {
   return Array.from(CIDADES_SUPORTADAS.keys())
-}
-
-export function getAllCategoriaSlugs(): string[] {
-  return Object.keys(CATEGORIAS)
 }
 
 export function bairroSlugToDbName(slug: string): string | undefined {

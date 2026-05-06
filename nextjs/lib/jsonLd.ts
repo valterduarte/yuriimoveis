@@ -1,7 +1,7 @@
 import { SITE_URL, PHONE_STRUCTURED, PHONE_WA, INSTAGRAM_URL, OG_DEFAULT_IMAGE, CRECI } from './config'
 
 export const AGENT_ID = `${SITE_URL}/#agent`
-export const WEBSITE_ID = `${SITE_URL}/#website`
+const WEBSITE_ID = `${SITE_URL}/#website`
 
 export interface BreadcrumbItem {
   name: string
