@@ -1,11 +1,17 @@
 'use client'
 
 import Link from 'next/link'
-import { FiCalendar, FiTrendingUp } from 'react-icons/fi'
+import { FiCalendar, FiTrendingUp, FiCheck, FiPlus } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { PHONE_WA_BASE } from '../../lib/config'
 import WhatsAppLink from '../WhatsAppLink'
-import { formatPrice } from '../../utils/imovelUtils'
+import { formatPrice, imovelSlug } from '../../utils/imovelUtils'
+import {
+  COMPARE_MAX_ITEMS,
+  buildCompareItem,
+  toggleCompareItem,
+  useCompareItems,
+} from '../../lib/compareStore'
 import type { Imovel } from '../../types'
 
 interface PropertySidebarProps {
@@ -14,6 +20,15 @@ interface PropertySidebarProps {
 }
 
 export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySidebarProps) {
+  const compareItems = useCompareItems()
+  const isInCompare = compareItems.some(item => item.id === imovel.id)
+  const compareIsFull = compareItems.length >= COMPARE_MAX_ITEMS && !isInCompare
+
+  const handleToggleCompare = () => {
+    if (compareIsFull) return
+    toggleCompareItem(buildCompareItem(imovel, imovelSlug(imovel)))
+  }
+
   const simulationMessage = encodeURIComponent(
     `Olá! Gostaria de fazer uma simulação de financiamento para o imóvel: ${imovel.titulo} — Código #${imovel.id}`
   )
@@ -71,6 +86,26 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
             <FiTrendingUp size={14} /> Simular Financiamento
           </Link>
         )}
+        <button
+          onClick={handleToggleCompare}
+          disabled={compareIsFull}
+          aria-pressed={isInCompare}
+          title={
+            compareIsFull
+              ? `Limite de ${COMPARE_MAX_ITEMS} imóveis no comparador`
+              : isInCompare
+                ? 'Remover do comparador'
+                : 'Adicionar ao comparador'
+          }
+          className={`w-full flex items-center justify-center gap-2 border font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors ${
+            isInCompare
+              ? 'bg-primary border-primary text-white hover:bg-primary/90'
+              : 'border-gray-300 text-dark hover:border-primary hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-300 disabled:hover:text-dark'
+          }`}
+        >
+          {isInCompare ? <FiCheck size={14} /> : <FiPlus size={14} />}
+          {isInCompare ? 'No Comparador' : 'Comparar Imóvel'}
+        </button>
       </div>
 
       <div className="border-t border-gray-100 px-7 pb-7">

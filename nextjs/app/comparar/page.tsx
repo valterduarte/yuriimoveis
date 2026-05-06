@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { FiArrowLeft, FiCheck, FiX } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
@@ -147,12 +148,15 @@ export default function CompararPage() {
                         </button>
                         <Link href={`/imoveis/${item.slug}`} className="block group">
                           {item.imagem ? (
-                            <img
-                              src={item.imagem}
-                              alt={item.titulo}
-                              className="w-full h-32 object-cover mb-3"
-                              loading="lazy"
-                            />
+                            <div className="relative w-full h-32 mb-3 overflow-hidden">
+                              <Image
+                                src={item.imagem}
+                                alt={item.titulo}
+                                fill
+                                sizes="(max-width: 768px) 50vw, 200px"
+                                className="object-cover"
+                              />
+                            </div>
                           ) : (
                             <div className="w-full h-32 bg-gray-200 mb-3" />
                           )}
