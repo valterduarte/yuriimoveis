@@ -1,6 +1,6 @@
 import type { PropertyCategory } from '../types'
 
-export interface CategoriaData {
+interface CategoriaData {
   slug: PropertyCategory
   singular: string
   plural: string

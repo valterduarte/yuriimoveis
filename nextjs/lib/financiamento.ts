@@ -1,4 +1,4 @@
-export interface SimulationInput {
+interface SimulationInput {
   propertyValue: number
   downPayment: number
   termMonths: number
@@ -17,13 +17,12 @@ export interface SimulationResult {
   upfrontCostsTotal: number
 }
 
-export const SAC_RATE_DEFAULT_ANNUAL = 11.49
+const SAC_RATE_DEFAULT_ANNUAL = 11.49
 export const ITBI_RATE = 0.02
 export const REGISTRATION_RATE = 0.025
-export const MCMV_INCOME_LIMIT = 8000
-export const MCMV_PROPERTY_LIMIT = 350000
+const MCMV_INCOME_LIMIT = 8000
+const MCMV_PROPERTY_LIMIT = 350000
 export const MIN_DOWN_PAYMENT_RATE = 0.20
-export const MAX_TERM_MONTHS = 420
 
 /* ── Credit programs ─────────────────────────────────────────────────────────── */
 

@@ -6,7 +6,7 @@ export interface PriceRange {
   max?: number
 }
 
-export const PRICE_RANGES_VENDA: PriceRange[] = [
+const PRICE_RANGES_VENDA: PriceRange[] = [
   { slug: 'ate-200-mil',       label: 'até R$ 200 mil',             shortLabel: 'até R$ 200k',    max: 200_000 },
   { slug: 'ate-300-mil',       label: 'até R$ 300 mil',             shortLabel: 'até R$ 300k',    max: 300_000 },
   { slug: 'ate-500-mil',       label: 'até R$ 500 mil',             shortLabel: 'até R$ 500k',    max: 500_000 },
@@ -15,7 +15,7 @@ export const PRICE_RANGES_VENDA: PriceRange[] = [
   { slug: 'acima-de-1-milhao', label: 'acima de R$ 1 milhão',       shortLabel: 'acima de R$ 1M',  min: 1_000_000 },
 ]
 
-export const PRICE_RANGES_ALUGUEL: PriceRange[] = [
+const PRICE_RANGES_ALUGUEL: PriceRange[] = [
   { slug: 'ate-1500',          label: 'até R$ 1.500',               shortLabel: 'até R$ 1.500',   max: 1_500 },
   { slug: 'ate-2500',          label: 'até R$ 2.500',               shortLabel: 'até R$ 2.500',   max: 2_500 },
   { slug: '1500-a-3000',       label: 'de R$ 1.500 a R$ 3.000',    shortLabel: 'R$ 1.500–3.000', min: 1_500, max: 3_000 },

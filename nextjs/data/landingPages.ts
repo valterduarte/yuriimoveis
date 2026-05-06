@@ -1,6 +1,6 @@
 import type { PropertyCategory, TransactionType } from '../types'
 
-export interface LandingPageData {
+interface LandingPageData {
   slug: string
   tipo: TransactionType
   categoria: PropertyCategory

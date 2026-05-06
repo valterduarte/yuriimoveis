@@ -17,7 +17,7 @@ export interface Cartorio {
   telefone: string
 }
 
-export interface AjudaFAQ {
+interface AjudaFAQ {
   pergunta: string
   resposta: string
 }

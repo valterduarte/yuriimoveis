@@ -12,7 +12,7 @@
  * directly rather than extending this module.
  */
 
-export interface ApiRequestInit extends Omit<RequestInit, 'body'> {
+interface ApiRequestInit extends Omit<RequestInit, 'body'> {
   body?: unknown
 }
 
