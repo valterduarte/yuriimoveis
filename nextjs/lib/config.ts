@@ -3,7 +3,7 @@ export const SITE_URL: string =
   process.env.NODE_ENV === 'production'
     ? PRODUCTION_URL
     : (process.env.NEXT_PUBLIC_SITE_URL || PRODUCTION_URL)
-export const PHONE_NUMBER: string     = '5511972563420'
+const PHONE_NUMBER: string            = '5511972563420'
 export const PHONE_DISPLAY: string    = '(11) 97256-3420'
 export const PHONE_STRUCTURED: string = '+55-11-97256-3420'
 export const PHONE_WA_BASE: string     = `https://wa.me/${PHONE_NUMBER}`

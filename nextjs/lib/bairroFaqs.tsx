@@ -12,13 +12,13 @@ import { buildHierarchicalUrl, type AcaoSlug } from './navigation'
 import type { ReactNode } from 'react'
 import type { BairroData, PropertyCategory } from '../types'
 
-export interface BairroFaq {
+interface BairroFaq {
   question: string
   answer: string
   answerJsx?: ReactNode
 }
 
-export interface BairroFaqCombo {
+interface BairroFaqCombo {
   acao: AcaoSlug
   categoria: string
   count: number

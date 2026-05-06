@@ -97,7 +97,7 @@ export interface BlogPostRow extends Omit<BlogPost, 'tags'> {
   tags: string
 }
 
-export interface BairroContent {
+interface BairroContent {
   sobre: string
   infraestrutura: string
   transporte: string

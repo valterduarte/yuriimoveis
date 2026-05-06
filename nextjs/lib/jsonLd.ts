@@ -3,7 +3,7 @@ import { SITE_URL, PHONE_STRUCTURED, PHONE_WA, INSTAGRAM_URL, OG_DEFAULT_IMAGE, 
 export const AGENT_ID = `${SITE_URL}/#agent`
 const WEBSITE_ID = `${SITE_URL}/#website`
 
-export interface BreadcrumbItem {
+interface BreadcrumbItem {
   name: string
   path: string
 }
@@ -21,7 +21,7 @@ export function buildBreadcrumb(items: BreadcrumbItem[]): Record<string, unknown
   }
 }
 
-export interface CollectionPageInput {
+interface CollectionPageInput {
   name: string
   url: string
   description?: string
@@ -49,7 +49,7 @@ export function buildCollectionPage({
   }
 }
 
-export interface ArticleSchemaInput {
+interface ArticleSchemaInput {
   headline: string
   description: string
   url: string
@@ -80,7 +80,7 @@ export function buildArticleSchema({
   }
 }
 
-export interface FaqEntry {
+interface FaqEntry {
   question: string
   answer: string
 }
@@ -97,7 +97,7 @@ export function buildFaqPageSchema(faqs: FaqEntry[]): Record<string, unknown> {
   }
 }
 
-export interface PlaceSchemaInput {
+interface PlaceSchemaInput {
   name: string
   description: string
   url: string

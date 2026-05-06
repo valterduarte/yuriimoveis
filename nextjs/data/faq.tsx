@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { PHONE_WA } from '../lib/config'
 import type { ReactNode } from 'react'
 
-export interface FaqItem {
+interface FaqItem {
   question: string
   answerText: string
   answerNode: ReactNode

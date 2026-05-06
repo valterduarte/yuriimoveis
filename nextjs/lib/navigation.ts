@@ -5,7 +5,7 @@ import type { BairroData, TransactionType } from '../types'
 
 export type AcaoSlug = 'comprar' | 'alugar'
 
-export const VALID_ACOES: AcaoSlug[] = ['comprar', 'alugar']
+const VALID_ACOES: AcaoSlug[] = ['comprar', 'alugar']
 
 const ACAO_TO_TIPO: Record<AcaoSlug, TransactionType> = {
   comprar: 'venda',
