@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FiArrowRight, FiX } from 'react-icons/fi'
@@ -20,11 +21,12 @@ export default function CompareBar() {
             {items.map((item) => (
               <div key={item.id} className="relative w-12 h-12 bg-gray-800 overflow-hidden">
                 {item.imagem && (
-                  <img
+                  <Image
                     src={item.imagem}
                     alt={item.titulo}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
+                    fill
+                    sizes="48px"
+                    className="object-cover"
                   />
                 )}
                 <button
