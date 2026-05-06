@@ -95,10 +95,6 @@ export function useCompareItems(): CompareItem[] {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 }
 
-export function isInCompare(id: number): boolean {
-  return items.some((item) => item.id === id)
-}
-
 export function toggleCompareItem(item: CompareItem): boolean {
   ensureHydrated()
   const exists = items.some((existing) => existing.id === item.id)

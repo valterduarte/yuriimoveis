@@ -29,7 +29,3 @@ function emit(level: LogLevel, message: string, context: LogContext, error?: unk
 export function logDbError(operation: string, error: unknown, extra: Record<string, unknown> = {}): void {
   emit('error', `Database query failed: ${operation}`, { operation, ...extra }, error)
 }
-
-export function logWarn(operation: string, message: string, extra: Record<string, unknown> = {}): void {
-  emit('warn', message, { operation, ...extra })
-}
