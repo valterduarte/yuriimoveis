@@ -1,6 +1,9 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useEffect, useId, useState } from 'react'
+import { apiClient, isAuthError } from '../../../lib/apiClient'
+import { API_URL } from '../../../lib/config'
 import type { FormState, UpdateField } from './types'
 
 const AdminLocationPicker = dynamic(() => import('../AdminLocationPicker'), {
@@ -17,6 +20,8 @@ interface LocationSectionProps {
   updateField: UpdateField
   onCoordsChange: (coords: { lat: number; lng: number }) => void
   onClearCoords: () => void
+  authHeader: () => Record<string, string>
+  onAuthError: () => void
 }
 
 const inputClass = 'w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary'
@@ -24,10 +29,27 @@ const labelClass = 'block text-[10px] font-bold uppercase tracking-widest text-g
 
 const MAP_HEIGHT_PX = 320
 
-export default function LocationSection({ form, updateField, onCoordsChange, onClearCoords }: LocationSectionProps) {
+export default function LocationSection({ form, updateField, onCoordsChange, onClearCoords, authHeader, onAuthError }: LocationSectionProps) {
   const pickerValue = form.lat && form.lng
     ? { lat: Number(form.lat), lng: Number(form.lng) }
     : null
+
+  const bairrosListId = useId()
+  const cidadesListId = useId()
+  const [bairros, setBairros] = useState<string[]>([])
+  const [cidades, setCidades] = useState<string[]>([])
+
+  useEffect(() => {
+    apiClient
+      .get<{ bairros: string[]; cidades: string[] }>(`${API_URL}/api/admin/bairros`, { headers: authHeader() })
+      .then(data => {
+        setBairros(data.bairros)
+        setCidades(data.cidades)
+      })
+      .catch(err => {
+        if (isAuthError(err)) onAuthError()
+      })
+  }, [authHeader, onAuthError])
 
   return (
     <div className="bg-white border border-gray-200 p-6">
@@ -41,11 +63,30 @@ export default function LocationSection({ form, updateField, onCoordsChange, onC
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className={labelClass}>Bairro</label>
-            <input value={form.bairro} onChange={e => updateField('bairro', e.target.value)} className={inputClass} />
+            <input
+              list={bairrosListId}
+              value={form.bairro}
+              onChange={e => updateField('bairro', e.target.value)}
+              className={inputClass}
+              autoComplete="off"
+            />
+            <datalist id={bairrosListId}>
+              {bairros.map(b => <option key={b} value={b} />)}
+            </datalist>
+            <p className="text-[10px] text-gray-400 mt-1">Selecione um existente ou digite um novo. A capitalização é normalizada ao salvar.</p>
           </div>
           <div>
             <label className={labelClass}>Cidade</label>
-            <input value={form.cidade} onChange={e => updateField('cidade', e.target.value)} className={inputClass} />
+            <input
+              list={cidadesListId}
+              value={form.cidade}
+              onChange={e => updateField('cidade', e.target.value)}
+              className={inputClass}
+              autoComplete="off"
+            />
+            <datalist id={cidadesListId}>
+              {cidades.map(c => <option key={c} value={c} />)}
+            </datalist>
           </div>
         </div>
 

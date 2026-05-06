@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { normalizeBairro, normalizeCidade } from './textNormalization'
 
 const TIPOS = ['venda', 'aluguel'] as const
 const CATEGORIAS = ['casa', 'apartamento', 'terreno', 'chale', 'comercial', 'chacara'] as const
@@ -16,8 +17,8 @@ export const imovelCreateSchema = z.object({
   banheiros:       z.coerce.number().int().min(0).optional().default(0),
   vagas:           z.coerce.number().int().min(0).optional().default(0),
   endereco:        z.string().trim().max(300).optional().default(''),
-  bairro:          z.string().trim().max(100).optional().default(''),
-  cidade:          z.string().trim().max(100).optional().default('Osasco'),
+  bairro:          z.string().trim().max(100).optional().default('').transform(normalizeBairro),
+  cidade:          z.string().trim().max(100).optional().default('Osasco').transform(normalizeCidade),
   cep:             z.string().trim().max(10).optional().default(''),
   status:          z.enum(STATUSES).optional().default('pronto'),
   destaque:        z.coerce.boolean().optional().default(false),
@@ -43,8 +44,8 @@ export const imovelUpdateSchema = z.object({
   banheiros:       z.coerce.number().int().min(0).optional(),
   vagas:           z.coerce.number().int().min(0).optional(),
   endereco:        z.string().trim().max(300).optional(),
-  bairro:          z.string().trim().max(100).optional(),
-  cidade:          z.string().trim().max(100).optional(),
+  bairro:          z.string().trim().max(100).optional().transform(v => v === undefined ? v : normalizeBairro(v)),
+  cidade:          z.string().trim().max(100).optional().transform(v => v === undefined ? v : normalizeCidade(v)),
   cep:             z.string().trim().max(10).optional(),
   status:          z.enum(STATUSES).optional(),
   destaque:        z.coerce.boolean().optional(),

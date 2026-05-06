@@ -159,6 +159,8 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
         updateField={updateField}
         onCoordsChange={handleCoordsChange}
         onClearCoords={handleClearCoords}
+        authHeader={authHeader}
+        onAuthError={onAuthError}
       />
       <DescriptionSection form={form} updateField={updateField} />
       <DescriptionSeoSection form={form} updateField={updateField} />
