@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
 import PropertyCard from '../../../../../components/PropertyCard'
 import { fetchProperties, fetchNavigationMatrix } from '../../../../../lib/api'
-import { formatNeighborhoodName, emBairro, deBairro, sobreBairro } from '../../../../../utils/imovelUtils'
+import { formatNeighborhoodName, emBairro, deBairro, sobreBairro, imovelSlug } from '../../../../../utils/imovelUtils'
 import { getBairroBySlug, BAIRROS } from '../../../../../data/bairros'
 import {
   acaoToTipo,
@@ -162,7 +162,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
       name: h1,
       url: canonicalUrl,
       numberOfItems: total,
-      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.titulo, url: `${SITE_URL}/imoveis/${p.titulo.toLowerCase().replace(/\s+/g, '-')}-${p.id}` })),
+      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.titulo, url: `${SITE_URL}/imoveis/${imovelSlug(p)}` })),
     },
   ]
 

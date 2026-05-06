@@ -80,7 +80,7 @@ const fetchPropertiesCached = unstable_cache(
     if (tipo)     { conditions.push(`tipo = $${idx++}`);       params.push(tipo) }
     if (categoria){ conditions.push(`categoria = $${idx++}`);  params.push(categoria) }
     if (cidade)   { conditions.push(`cidade = $${idx++}`);     params.push(cidade) }
-    if (bairro)   { conditions.push(`bairro = $${idx++}`);     params.push(bairro) }
+    if (bairro)   { conditions.push(`bairro ILIKE $${idx++}`); params.push(bairro) }
     if (precoMin) { conditions.push(`preco >= $${idx++}`);     params.push(Number(precoMin)) }
     if (precoMax) { conditions.push(`preco <= $${idx++}`);     params.push(Number(precoMax)) }
     if (destaque) { conditions.push('destaque = true') }
