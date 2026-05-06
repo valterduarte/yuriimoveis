@@ -2,7 +2,7 @@
 
 import { track } from '@vercel/analytics'
 import { trackEvent } from './GoogleAnalytics'
-import type { ReactNode, MouseEvent } from 'react'
+import type { ReactNode } from 'react'
 
 interface WhatsAppLinkProps {
   href: string
@@ -20,7 +20,7 @@ function getDevice(): string {
 }
 
 export default function WhatsAppLink({ href, source, children, ...rest }: WhatsAppLinkProps) {
-  function handleClick(e: MouseEvent<HTMLAnchorElement>) {
+  function handleClick() {
     const device = getDevice()
     const page = window.location.pathname
     const payload = JSON.stringify({ source, page, device })

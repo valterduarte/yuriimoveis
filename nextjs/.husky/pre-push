@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Pre-push hook: run the slow checks before publishing the work.
+# lint-staged covers fast feedback on commit; this catches everything else.
+cd "$(dirname "$0")/.." || exit 1
+npm run typecheck && npm test
