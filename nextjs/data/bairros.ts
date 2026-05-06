@@ -583,6 +583,27 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'cidade-de-deus': {
+    nome: 'Cidade de Deus',
+    slug: 'cidade-de-deus',
+    cidade: 'Osasco',
+    titulo: 'Imóveis na Cidade de Deus, Osasco SP — Corretor Yuri',
+    descricaoMeta:
+      'Casas e apartamentos na Cidade de Deus em Osasco, SP. Imóveis para venda e aluguel com atendimento personalizado do Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'A Cidade de Deus é um bairro residencial de Osasco com perfil popular e comunitário, localizado em região de fácil acesso ao centro da cidade. O bairro tem crescido nos últimos anos com novos empreendimentos e melhorias de infraestrutura, tornando-se uma opção acessível para quem busca o primeiro imóvel ou quer morar em Osasco sem pagar os preços dos bairros mais valorizados. A identidade do bairro é marcada pela convivência entre moradores antigos e famílias que chegam atraídas pelos preços competitivos e pela proximidade com serviços essenciais.',
+      infraestrutura:
+        'O bairro conta com comércio local ativo: mercados, padarias, farmácias e prestadores de serviço que atendem as necessidades do cotidiano. Há unidades básicas de saúde (UBS) na região e acesso a hospitais no centro de Osasco. Praças e espaços de convivência compõem a vida comunitária do bairro.',
+      transporte:
+        'A Cidade de Deus tem acesso a linhas de ônibus municipais que conectam o bairro ao Terminal Osasco e ao centro da cidade. A Estação Osasco da CPTM (Linha 8-Diamante), que faz conexão direta com a Estação da Luz em São Paulo, fica a poucos minutos de ônibus. O acesso às principais vias de Osasco facilita o deslocamento de carro pela cidade e para São Paulo.',
+      educacao:
+        'O bairro possui escolas municipais de ensino fundamental e creches para educação infantil. Para ensino médio e superior, os moradores contam com as opções no centro de Osasco, acessíveis por transporte público. A proximidade com instituições como UNIFIEO e IFSP Osasco é uma vantagem para quem estuda ou planeja estudar.',
+      porqueMorar:
+        'A Cidade de Deus é uma escolha para quem busca imóveis acessíveis em Osasco, com a vantagem de estar próximo ao centro da cidade e ao transporte público. O bairro tem boa relação custo-benefício, especialmente para famílias que compram o primeiro imóvel ou investidores em busca de imóveis com potencial de valorização. A tendência de crescimento de Osasco como polo econômico da região metropolitana favorece bairros como a Cidade de Deus no longo prazo.',
+    },
+  },
+
   'vila-ayrosa': {
     nome: 'Vila Ayrosa',
     slug: 'vila-ayrosa',
