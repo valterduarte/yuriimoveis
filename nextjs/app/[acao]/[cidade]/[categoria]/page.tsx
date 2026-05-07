@@ -19,13 +19,9 @@ import {
 import { getBairroBySlug } from '../../../../data/bairros'
 import { BEDROOM_FILTERS, getAllPriceRanges } from '../../../../data/priceRanges'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../lib/config'
+import { buildPropertyProduct } from '../../../../lib/jsonLd'
+import { ITBI_RATE_BY_CITY } from '../../../../lib/constants'
 import type { Metadata } from 'next'
-
-const ITBI_RATE_BY_CITY: Record<string, string> = {
-  Osasco: '2%',
-  Barueri: '3%',
-  Carapicuíba: '2%',
-}
 
 interface Faq {
   q: string
@@ -215,7 +211,7 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
       name: h1,
       url: canonicalUrl,
       numberOfItems: total,
-      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.titulo })),
+      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: buildPropertyProduct(p) })),
     },
     {
       '@context': 'https://schema.org',

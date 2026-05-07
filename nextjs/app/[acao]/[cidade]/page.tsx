@@ -18,6 +18,7 @@ import {
 import { CATEGORIAS } from '../../../data/categorias'
 import { getAllPriceRanges, BEDROOM_FILTERS } from '../../../data/priceRanges'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
+import { buildPropertyProduct } from '../../../lib/jsonLd'
 import type { PropertyCategory } from '../../../types'
 import type { Metadata } from 'next'
 
@@ -120,7 +121,7 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
       name: h1,
       url: canonicalUrl,
       numberOfItems: total,
-      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.titulo })),
+      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: buildPropertyProduct(p) })),
     },
   ]
 

@@ -4,11 +4,13 @@ import { FiArrowLeft } from 'react-icons/fi'
 import PropertyCard from '../../../../../components/PropertyCard'
 import LazyPropertyGrid from '../../../../../components/LazyPropertyGrid'
 import { fetchProperties, fetchNavigationMatrix } from '../../../../../lib/api'
-import { formatNeighborhoodName, emBairro, deBairro, sobreBairro, imovelSlug } from '../../../../../utils/imovelUtils'
+import { formatNeighborhoodName, emBairro, deBairro, sobreBairro, formatPrice } from '../../../../../utils/imovelUtils'
 import { getBairroBySlug, BAIRROS } from '../../../../../data/bairros'
+import { ITBI_RATE_BY_CITY } from '../../../../../lib/constants'
 import {
   acaoToTipo,
   isValidAcao,
+  type AcaoSlug,
   cidadeSlugToName,
   cidadeNameToSlug,
   getCategoriaBySlug,
@@ -21,6 +23,7 @@ import {
 } from '../../../../../lib/navigation'
 import { BEDROOM_FILTERS } from '../../../../../data/priceRanges'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../../lib/config'
+import { buildPropertyProduct } from '../../../../../lib/jsonLd'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -33,6 +36,80 @@ type PageProps = {
 
 function threshold(count: number, bairroSlug: string): boolean {
   return count >= 3 || (count >= 1 && hasRichBairroContent(bairroSlug))
+}
+
+function formatPriceRange(prices: number[], tipo: 'venda' | 'aluguel'): string {
+  if (prices.length === 0) return ''
+  const min = Math.min(...prices)
+  const max = Math.max(...prices)
+  if (min === max) return formatPrice(min, tipo)
+  return `de ${formatPrice(min, tipo)} a ${formatPrice(max, tipo)}`
+}
+
+interface BairroFaq {
+  q: string
+  a: string
+}
+
+function buildBairroFaqs(args: {
+  acao: AcaoSlug
+  cidadeName: string
+  bairroName: string
+  categoriaData: { singular: string; plural: string }
+  label: string
+  prep: 'no' | 'na'
+  total: number
+  priceRange: string
+  transporte?: string
+}): BairroFaq[] {
+  const { acao, cidadeName, bairroName, categoriaData, label, prep, total, priceRange, transporte } = args
+  const pluralLc = categoriaData.plural.toLowerCase()
+  const labelLc = label.toLowerCase()
+  const itbi = ITBI_RATE_BY_CITY[cidadeName]
+  const faqs: BairroFaq[] = []
+
+  faqs.push({
+    q: `Quantos ${pluralLc} ${labelLc} há ${prep} ${bairroName}?`,
+    a: total > 0
+      ? `Hoje temos ${total} ${pluralLc} ${labelLc} ${prep} ${bairroName}, em ${cidadeName}. O estoque é atualizado diariamente; chame no WhatsApp para receber opções ainda não publicadas.`
+      : `O estoque muda diariamente. Fale com o Corretor Yuri pelo WhatsApp para receber novidades de ${pluralLc} ${labelLc} ${prep} ${bairroName} assim que aparecerem.`,
+  })
+
+  if (priceRange) {
+    faqs.push({
+      q: `Qual a faixa de preço dos ${pluralLc} ${labelLc} ${prep} ${bairroName}?`,
+      a: `Os ${pluralLc} ${labelLc} ${prep} ${bairroName} variam ${priceRange}. Use o simulador para projetar parcela, entrada e elegibilidade ao Minha Casa Minha Vida.`,
+    })
+  }
+
+  if (transporte) {
+    const sentence = transporte.split('. ')[0].trim()
+    const trimmed = sentence.endsWith('.') ? sentence : `${sentence}.`
+    faqs.push({
+      q: `Como é o transporte público ${prep} ${bairroName}?`,
+      a: trimmed,
+    })
+  }
+
+  if (acao === 'comprar') {
+    faqs.push({
+      q: 'Posso financiar pela Caixa ou pelo Minha Casa Minha Vida?',
+      a: 'Sim. Atendemos com SBPE da Caixa e Minha Casa Minha Vida para renda até R$ 12 mil. O simulador do site mostra a parcela estimada e a elegibilidade ao MCMV para cada imóvel.',
+    })
+    if (itbi) {
+      faqs.push({
+        q: `Quanto custa o ITBI ao comprar um imóvel em ${cidadeName}?`,
+        a: `A alíquota de ITBI em ${cidadeName} é de ${itbi} sobre o valor de compra (ou o valor venal, o que for maior). Confira o guia completo de ITBI no blog.`,
+      })
+    }
+  } else {
+    faqs.push({
+      q: 'Quais garantias locatícias são aceitas?',
+      a: 'Aceitamos fiador, seguro-fiança, caução e título de capitalização. A garantia exigida varia conforme o imóvel e o perfil do locatário.',
+    })
+  }
+
+  return faqs
 }
 
 export async function generateStaticParams() {
@@ -61,8 +138,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const bairroDbName = bairroSlugToDbName(bairro) || bairroName
   const label = ACAO_LABELS[acao].preposicao
 
-  const { total } = await fetchProperties({
-    tipo: acaoToTipo(acao),
+  const tipoFilter = acaoToTipo(acao)
+  const { imoveis, total } = await fetchProperties({
+    tipo: tipoFilter,
     categoria,
     cidade: cidadeName,
     bairro: bairroDbName,
@@ -73,7 +151,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const countPrefix = total > 0 ? `${total} ` : ''
   const prep = emBairro(bairroName)
   const title = `${countPrefix}${nomeImovel} ${label} ${prep} ${bairroName}, ${cidadeName} SP`
-  const description = `${nomeImovel} ${label.toLowerCase()} ${prep} ${bairroName} em ${cidadeName}, SP. Atendimento com o Corretor Yuri, CRECI 235509.`
+
+  const priceRange = formatPriceRange(imoveis.map(p => p.preco), tipoFilter)
+  const itbi = ITBI_RATE_BY_CITY[cidadeName]
+  const itbiPart = acao === 'comprar' && itbi ? ` ITBI ${itbi}.` : ''
+  const pricePart = priceRange ? `, ${priceRange}.` : '.'
+  const description = total > 0
+    ? `${total} ${nomeImovel.toLowerCase()} ${label.toLowerCase()} ${prep} ${bairroName} em ${cidadeName} SP${pricePart}${itbiPart} Atendimento Corretor Yuri (CRECI 235509).`
+    : `${nomeImovel} ${label.toLowerCase()} ${prep} ${bairroName} em ${cidadeName} SP. Atendimento Corretor Yuri (CRECI 235509).`
   const url = `${SITE_URL}${buildHierarchicalUrl({ acao, cidade, categoria, bairro })}`
 
   return {
@@ -148,6 +233,19 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
   }
   const availableBedroomFilters = BEDROOM_FILTERS.filter(bf => (bedroomCounts.get(bf.slug) ?? 0) > 0)
 
+  const priceRange = formatPriceRange(imoveis.map(p => p.preco), tipoFilter)
+  const faqs = buildBairroFaqs({
+    acao,
+    cidadeName,
+    bairroName,
+    categoriaData,
+    label,
+    prep,
+    total,
+    priceRange,
+    transporte: bairroData?.conteudo.transporte,
+  })
+
   const jsonLd = [
     {
       '@context': 'https://schema.org',
@@ -165,7 +263,16 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
       name: h1,
       url: canonicalUrl,
       numberOfItems: total,
-      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.titulo, url: `${SITE_URL}/imoveis/${imovelSlug(p)}` })),
+      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: buildPropertyProduct(p) })),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(f => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
     },
   ]
 
@@ -260,6 +367,23 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
             </ul>
           </section>
         )}
+
+        <section className="mt-14" aria-labelledby="faq-heading">
+          <h2 id="faq-heading" className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
+            Perguntas frequentes
+          </h2>
+          <div className="divide-y divide-gray-200 border border-gray-200 bg-white">
+            {faqs.map((faq, i) => (
+              <details key={i} className="group">
+                <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none text-sm font-bold text-dark hover:text-primary">
+                  <span>{faq.q}</span>
+                  <span className="text-primary text-lg leading-none transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+                </summary>
+                <p className="px-5 pb-4 text-sm text-gray-700 leading-relaxed">{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   )
