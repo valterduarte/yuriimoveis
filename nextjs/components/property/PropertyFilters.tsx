@@ -52,9 +52,10 @@ export default function PropertyFilters({
 
       <div className="space-y-6">
         <div>
-          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Código do Imóvel</label>
+          <label htmlFor="filter-codigo" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Código do Imóvel</label>
           <div className="relative">
             <input
+              id="filter-codigo"
               type="text"
               inputMode="numeric"
               placeholder="Ex: 42"
@@ -65,30 +66,33 @@ export default function PropertyFilters({
               }}
               className="w-full border border-gray-200 px-3 py-2.5 pr-9 text-sm focus:outline-none focus:border-primary"
             />
-            <FiSearch size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <FiSearch size={14} aria-hidden className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Finalidade</label>
-          <div className="flex gap-1">
+        <fieldset>
+          <legend className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Finalidade</legend>
+          <div className="flex gap-1" role="group">
             {TRANSACTION_TYPE_OPTIONS.map(option => (
               <button
                 key={option.value}
+                type="button"
                 onClick={() => onUpdateFilter('tipo', option.value)}
+                aria-pressed={tipo === option.value}
                 className={`flex-1 py-2 text-[10px] uppercase tracking-wider font-bold transition-colors ${
-                  tipo === option.value ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  tipo === option.value ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
                 {option.label}
               </button>
             ))}
           </div>
-        </div>
+        </fieldset>
 
         <div>
-          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Tipo</label>
+          <label htmlFor="filter-categoria" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Tipo</label>
           <select
+            id="filter-categoria"
             value={categoria}
             onChange={e => onUpdateFilter('categoria', e.target.value)}
             className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
@@ -101,8 +105,9 @@ export default function PropertyFilters({
         </div>
 
         <div>
-          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Cidade</label>
+          <label htmlFor="filter-cidade" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Cidade</label>
           <select
+            id="filter-cidade"
             value={cidade}
             onChange={e => onUpdateFilter('cidade', e.target.value)}
             className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
@@ -116,8 +121,9 @@ export default function PropertyFilters({
 
         {bairros.length > 0 && (
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Bairro</label>
+            <label htmlFor="filter-bairro" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Bairro</label>
             <select
+              id="filter-bairro"
               value={bairro}
               onChange={e => onUpdateFilter('bairro', e.target.value)}
               className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
@@ -130,40 +136,47 @@ export default function PropertyFilters({
           </div>
         )}
 
-        <div>
-          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Faixa de Preço</label>
+        <fieldset>
+          <legend className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Faixa de Preço</legend>
+          <label htmlFor="filter-preco-min" className="sr-only">Preço mínimo</label>
           <input
+            id="filter-preco-min"
             type="number"
             placeholder="Mínimo (R$)"
             value={precoMinInput}
             onChange={e => onUpdatePriceMin(e.target.value)}
             className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary mb-2"
           />
+          <label htmlFor="filter-preco-max" className="sr-only">Preço máximo</label>
           <input
+            id="filter-preco-max"
             type="number"
             placeholder="Máximo (R$)"
             value={precoMaxInput}
             onChange={e => onUpdatePriceMax(e.target.value)}
             className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
           />
-        </div>
+        </fieldset>
 
-        <div>
-          <label className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Quartos</label>
-          <div className="flex gap-1">
+        <fieldset>
+          <legend className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Quartos</legend>
+          <div className="flex gap-1" role="group">
             {BEDROOM_OPTIONS.map(option => (
               <button
                 key={option}
+                type="button"
                 onClick={() => onUpdateFilter('quartos', option)}
+                aria-pressed={quartos === option}
+                aria-label={option ? `${option} quartos` : 'Qualquer quantidade de quartos'}
                 className={`flex-1 py-2 text-[10px] font-bold transition-colors ${
-                  quartos === option ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  quartos === option ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
                 {option || 'Todos'}
               </button>
             ))}
           </div>
-        </div>
+        </fieldset>
       </div>
     </div>
   )
