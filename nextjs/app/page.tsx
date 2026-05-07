@@ -17,6 +17,7 @@ export const metadata = {
     'Corretor de imóveis em Osasco, Barueri e Carapicuíba com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para compra e aluguel.',
   alternates: { canonical: SITE_URL },
   openGraph: {
+    type: 'website',
     title: 'Corretor Yuri — Imóveis em Osasco, Barueri e Carapicuíba',
     description:
       'Corretor de imóveis em Osasco, Barueri e Carapicuíba com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para compra e aluguel.',

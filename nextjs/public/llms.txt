@@ -1,0 +1,44 @@
+# Corretor Yuri Imóveis
+
+> Corretor de imóveis em Osasco, Barueri e Carapicuíba (Grande São Paulo). CRECI-SP 235509. Mais de 10 anos atendendo compra, venda e locação de casas, apartamentos, terrenos e imóveis comerciais.
+
+Atendimento personalizado para imóveis residenciais e comerciais. Especialista em financiamento Caixa SBPE, Minha Casa Minha Vida e uso de FGTS. Áreas atendidas: Osasco, Barueri, Carapicuíba, Cotia e demais cidades da Zona Oeste da Grande São Paulo.
+
+Contato: WhatsApp (11) 97256-3420 — atendimento de segunda a sexta das 9h às 18h e sábado das 9h às 12h.
+
+## Páginas principais
+
+- [Imóveis disponíveis](https://corretoryuri.com.br/imoveis): catálogo completo de casas, apartamentos, terrenos e comerciais para compra e aluguel
+- [Mapa de imóveis](https://corretoryuri.com.br/mapa): busca geográfica por imóveis nas cidades atendidas
+- [Simulador de financiamento](https://corretoryuri.com.br/simulador): cálculo de parcelas pelo sistema SAC, ITBI e custos de cartório, com checagem de elegibilidade Minha Casa Minha Vida
+- [Sobre o Corretor Yuri](https://corretoryuri.com.br/sobre): credenciais (CRECI-SP 235509), experiência e atuação
+- [Contato](https://corretoryuri.com.br/contato): formulário, WhatsApp, telefone e e-mail
+
+## Buscas por cidade
+
+- [Comprar em Osasco](https://corretoryuri.com.br/comprar/osasco): casas e apartamentos à venda em Osasco/SP
+- [Comprar em Barueri](https://corretoryuri.com.br/comprar/barueri): casas e apartamentos à venda em Barueri/SP, incluindo Alphaville
+- [Comprar em Carapicuíba](https://corretoryuri.com.br/comprar/carapicuiba): casas e apartamentos à venda em Carapicuíba/SP
+- [Alugar em Osasco](https://corretoryuri.com.br/alugar/osasco): casas e apartamentos para alugar em Osasco/SP
+
+## Guias e conteúdo educacional
+
+- [Bairros atendidos](https://corretoryuri.com.br/bairros): guia completo dos bairros de Osasco, Barueri e Carapicuíba
+- [Documentos para comprar imóvel](https://corretoryuri.com.br/ajuda/documentos-para-comprar-imovel): lista oficial de documentos do comprador, vendedor e do imóvel
+- [Custos para comprar imóvel em Osasco](https://corretoryuri.com.br/ajuda/custos-para-comprar-imovel-em-osasco): ITBI, escritura, registro, certidões e comissão
+- [Cartórios de imóveis em Osasco](https://corretoryuri.com.br/ajuda/cartorios-de-imoveis-em-osasco): cartórios de registro de imóveis com endereço e área de atuação
+
+## Blog
+
+- [Blog Corretor Yuri](https://corretoryuri.com.br/blog): conteúdo atualizado sobre mercado imobiliário, MCMV, ITBI, financiamento e bairros da Grande SP
+- [Morar em Carapicuíba 2026: bairros, preços e acesso a São Paulo](https://corretoryuri.com.br/blog/morar-em-carapicuiba-bairros-precos-2026)
+- [Minha Casa Minha Vida 2026: faixas e subsídios](https://corretoryuri.com.br/blog/minha-casa-minha-vida-2026-faixas-subsidio)
+- [ITBI em Osasco, Barueri, Carapicuíba e São Paulo 2026](https://corretoryuri.com.br/blog/itbi-osasco-barueri-carapicuiba-sao-paulo-2026)
+- [Documentos para financiar imóvel 2026](https://corretoryuri.com.br/blog/documentos-para-financiar-imovel-2026)
+- [Apartamento em Osasco — Centro, Quitaúna, Novo Osasco 2026](https://corretoryuri.com.br/blog/apartamento-em-osasco-centro-quitauna-novo-osasco-2026)
+- [Alphaville ou Barueri: qual vale mais a pena 2026](https://corretoryuri.com.br/blog/alphaville-ou-barueri-qual-vale-mais-a-pena-2026)
+
+## Optional
+
+- [Sitemap XML](https://corretoryuri.com.br/sitemap.xml)
+- [robots.txt](https://corretoryuri.com.br/robots.txt)
