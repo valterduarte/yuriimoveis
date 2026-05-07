@@ -60,6 +60,9 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
             Simule sua parcela abaixo
           </p>
         )}
+        <p className="text-[10px] text-gray-400 mt-2 leading-snug">
+          Valores sujeitos a alteração. Consulte disponibilidade.
+        </p>
       </div>
 
       <div className="p-7 space-y-3">
