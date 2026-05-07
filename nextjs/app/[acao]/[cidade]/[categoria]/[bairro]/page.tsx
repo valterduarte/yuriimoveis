@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
 import PropertyCard from '../../../../../components/PropertyCard'
+import LazyPropertyGrid from '../../../../../components/LazyPropertyGrid'
 import { fetchProperties, fetchNavigationMatrix } from '../../../../../lib/api'
 import { formatNeighborhoodName, emBairro, deBairro, sobreBairro, imovelSlug } from '../../../../../utils/imovelUtils'
 import { getBairroBySlug, BAIRROS } from '../../../../../data/bairros'
@@ -23,6 +24,8 @@ import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../../lib/config'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
+
+const INITIAL_VISIBLE = 12
 
 type PageProps = {
   params: Promise<{ acao: string; cidade: string; categoria: string; bairro: string }>
@@ -216,9 +219,10 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {imoveis.map(property => (
+          {imoveis.slice(0, INITIAL_VISIBLE).map(property => (
             <PropertyCard key={property.id} imovel={property} />
           ))}
+          <LazyPropertyGrid items={imoveis.slice(INITIAL_VISIBLE)} />
         </div>
 
         {availableBedroomFilters.length > 0 && (

@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import PropertyCard from '../../../components/PropertyCard'
+import LazyPropertyGrid from '../../../components/LazyPropertyGrid'
 import { fetchProperties, fetchNavigationMatrix } from '../../../lib/api'
 import {
   acaoToTipo,
@@ -21,6 +22,8 @@ import type { PropertyCategory } from '../../../types'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
+
+const INITIAL_VISIBLE = 12
 
 type PageProps = {
   params: Promise<{ acao: string; cidade: string }>
@@ -197,9 +200,10 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {imoveis.map(property => (
+          {imoveis.slice(0, INITIAL_VISIBLE).map(property => (
             <PropertyCard key={property.id} imovel={property} />
           ))}
+          <LazyPropertyGrid items={imoveis.slice(INITIAL_VISIBLE)} />
         </div>
 
         <section className="mt-14">
