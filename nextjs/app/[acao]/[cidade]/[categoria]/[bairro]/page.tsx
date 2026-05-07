@@ -38,12 +38,17 @@ function threshold(count: number, bairroSlug: string): boolean {
   return count >= 3 || (count >= 1 && hasRichBairroContent(bairroSlug))
 }
 
-function formatPriceRange(prices: number[], tipo: 'venda' | 'aluguel'): string {
-  if (prices.length === 0) return ''
+interface PriceRange {
+  text: string
+  isRange: boolean
+}
+
+function formatPriceRange(prices: number[], tipo: 'venda' | 'aluguel'): PriceRange | null {
+  if (prices.length === 0) return null
   const min = Math.min(...prices)
   const max = Math.max(...prices)
-  if (min === max) return formatPrice(min, tipo)
-  return `de ${formatPrice(min, tipo)} a ${formatPrice(max, tipo)}`
+  if (min === max) return { text: formatPrice(min, tipo), isRange: false }
+  return { text: `${formatPrice(min, tipo)} a ${formatPrice(max, tipo)}`, isRange: true }
 }
 
 interface BairroFaq {
@@ -59,11 +64,12 @@ function buildBairroFaqs(args: {
   label: string
   prep: 'no' | 'na'
   total: number
-  priceRange: string
+  priceRange: PriceRange | null
   transporte?: string
 }): BairroFaq[] {
   const { acao, cidadeName, bairroName, categoriaData, label, prep, total, priceRange, transporte } = args
   const pluralLc = categoriaData.plural.toLowerCase()
+  const singularLc = categoriaData.singular.toLowerCase()
   const labelLc = label.toLowerCase()
   const itbi = ITBI_RATE_BY_CITY[cidadeName]
   const faqs: BairroFaq[] = []
@@ -76,10 +82,22 @@ function buildBairroFaqs(args: {
   })
 
   if (priceRange) {
-    faqs.push({
-      q: `Qual a faixa de preço dos ${pluralLc} ${labelLc} ${prep} ${bairroName}?`,
-      a: `Os ${pluralLc} ${labelLc} ${prep} ${bairroName} variam ${priceRange}. Use o simulador para projetar parcela, entrada e elegibilidade ao Minha Casa Minha Vida.`,
-    })
+    if (priceRange.isRange) {
+      faqs.push({
+        q: `Qual a faixa de preço dos ${pluralLc} ${labelLc} ${prep} ${bairroName}?`,
+        a: `Os ${pluralLc} ${labelLc} ${prep} ${bairroName} variam de ${priceRange.text}. Use o simulador para projetar parcela, entrada e elegibilidade ao Minha Casa Minha Vida.`,
+      })
+    } else if (total === 1) {
+      faqs.push({
+        q: `Quanto custa o ${singularLc} ${labelLc} ${prep} ${bairroName}?`,
+        a: `O ${singularLc} ${labelLc} disponível ${prep} ${bairroName} está anunciado por ${priceRange.text}. Use o simulador para projetar parcela, entrada e elegibilidade ao Minha Casa Minha Vida.`,
+      })
+    } else {
+      faqs.push({
+        q: `Quanto custam os ${pluralLc} ${labelLc} ${prep} ${bairroName}?`,
+        a: `Os ${pluralLc} ${labelLc} ${prep} ${bairroName} estão anunciados por ${priceRange.text}. Use o simulador para projetar parcela, entrada e elegibilidade ao Minha Casa Minha Vida.`,
+      })
+    }
   }
 
   if (transporte) {
@@ -155,7 +173,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const priceRange = formatPriceRange(imoveis.map(p => p.preco), tipoFilter)
   const itbi = ITBI_RATE_BY_CITY[cidadeName]
   const itbiPart = acao === 'comprar' && itbi ? ` ITBI ${itbi}.` : ''
-  const pricePart = priceRange ? `, ${priceRange}.` : '.'
+  const pricePart = priceRange
+    ? `, ${priceRange.isRange ? 'de ' : ''}${priceRange.text}.`
+    : '.'
   const description = total > 0
     ? `${total} ${nomeImovel.toLowerCase()} ${label.toLowerCase()} ${prep} ${bairroName} em ${cidadeName} SP${pricePart}${itbiPart} Atendimento Corretor Yuri (CRECI 235509).`
     : `${nomeImovel} ${label.toLowerCase()} ${prep} ${bairroName} em ${cidadeName} SP. Atendimento Corretor Yuri (CRECI 235509).`
