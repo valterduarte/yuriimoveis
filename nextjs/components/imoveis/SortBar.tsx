@@ -31,7 +31,9 @@ export default function SortBar({ total, ordem, activeFilterCount, onToggleFilte
           {`${total} imóvel${total !== 1 ? 'is' : ''}`}
         </p>
       </div>
+      <label htmlFor="sort-imoveis" className="sr-only">Ordenar imóveis</label>
       <select
+        id="sort-imoveis"
         value={ordem}
         onChange={e => onSortChange(e.target.value)}
         className="text-xs border border-gray-200 px-3 py-2 focus:outline-none focus:border-primary"
