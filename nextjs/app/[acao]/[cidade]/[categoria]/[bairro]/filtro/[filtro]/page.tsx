@@ -32,6 +32,7 @@ import {
   type AmenityFilter,
 } from '../../../../../../../data/amenityFilters'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../../../../lib/config'
+import { buildPropertyProduct } from '../../../../../../../lib/jsonLd'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -214,7 +215,7 @@ export default async function BairroFilterPage({ params }: PageProps) {
       url: canonicalUrl,
       numberOfItems: total,
       description: `${ctx.categoriaData.plural} ${label.toLowerCase()} ${ctx.filter.fragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP.`,
-      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.titulo })),
+      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: buildPropertyProduct(p) })),
     },
   ]
 
