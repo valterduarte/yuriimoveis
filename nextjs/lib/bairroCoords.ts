@@ -1,3 +1,5 @@
+import { stripDiacritics } from './textNormalization'
+
 export interface LatLng {
   lat: number
   lng: number
@@ -50,10 +52,7 @@ const BAIRRO_CENTROIDS: Record<string, LatLng> = {
 }
 
 const slugify = (input: string): string =>
-  input
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+  stripDiacritics(input.toLowerCase())
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-')

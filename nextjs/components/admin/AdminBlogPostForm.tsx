@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { ApiError, apiClient, isAuthError } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
+import { slugify } from '../../utils/imovelUtils'
 import type { BlogPost } from '../../types'
 
 interface AdminBlogPostFormProps {
@@ -10,15 +11,6 @@ interface AdminBlogPostFormProps {
   authHeader: () => Record<string, string>
   onSuccess: (message: string) => void
   onAuthError: () => void
-}
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
 }
 
 export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, onAuthError }: AdminBlogPostFormProps) {

@@ -12,6 +12,10 @@ export function formatBRL(value: number): string {
   })
 }
 
+export function formatPrice(price: number, tipo: string): string {
+  return tipo === 'aluguel' ? `${formatBRL(price)}/mês` : formatBRL(price)
+}
+
 export function formatBRLInteger(value: number): string {
   return Math.floor(value).toLocaleString('pt-BR', {
     style: 'currency',

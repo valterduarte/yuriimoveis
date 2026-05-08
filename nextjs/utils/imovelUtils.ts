@@ -1,4 +1,6 @@
+import { stripDiacritics } from '../lib/textNormalization'
 import type { Imovel } from '../types'
+export { formatPrice } from '../lib/formatters'
 
 export function optimizeCloudinaryUrl(url: string, width?: number): string {
   if (!url || !url.includes('res.cloudinary.com')) return url
@@ -7,10 +9,7 @@ export function optimizeCloudinaryUrl(url: string, width?: number): string {
 }
 
 export function slugify(text: string): string {
-  return String(text)
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+  return stripDiacritics(String(text).toLowerCase())
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-')
@@ -19,15 +18,6 @@ export function slugify(text: string): string {
 
 export function imovelSlug(imovel: Pick<Imovel, 'titulo' | 'id'>): string {
   return `${slugify(imovel.titulo)}-${imovel.id}`
-}
-
-export function formatPrice(price: number, tipo: string): string {
-  const formatted = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    maximumFractionDigits: 0,
-  }).format(price)
-  return tipo === 'aluguel' ? `${formatted}/mês` : formatted
 }
 
 // Financiamento: Caixa Econômica Federal

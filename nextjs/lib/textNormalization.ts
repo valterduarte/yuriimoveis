@@ -3,6 +3,10 @@ const LOWERCASE_WORDS = new Set([
   'e', 'em', 'na', 'no', 'a', 'o',
 ])
 
+export function stripDiacritics(input: string): string {
+  return input.normalize('NFD').replace(/[̀-ͯ]/g, '')
+}
+
 function titleCaseWord(word: string, isFirst: boolean): string {
   if (!word) return word
   if (!isFirst && LOWERCASE_WORDS.has(word)) return word
