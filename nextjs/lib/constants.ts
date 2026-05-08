@@ -50,6 +50,7 @@ export const FOOTER_TOOL_LINKS = [
 ]
 
 export const ITEMS_PER_PAGE       = 9
+export const LISTING_INITIAL_VISIBLE = 12
 export const SCROLL_THRESHOLD     = 60
 export const CARD_IMAGE_HEIGHT    = 260
 export const ADMIN_PROPERTIES_LIMIT = 50

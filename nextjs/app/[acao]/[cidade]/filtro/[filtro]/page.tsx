@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
-import PropertyCard from '../../../../../components/PropertyCard'
-import LazyPropertyGrid from '../../../../../components/LazyPropertyGrid'
 import { fetchProperties, fetchPriceBedroomMatrix } from '../../../../../lib/api'
+import ListingPageShell, { type BreadcrumbItem } from '../../../../../components/ListingPageShell'
+import PropertyResultsGrid from '../../../../../components/PropertyResultsGrid'
+import { FilterChip, FilterChipList } from '../../../../../components/FilterChip'
 import {
   acaoToTipo,
   isValidAcao,
@@ -33,8 +34,6 @@ import { buildListingMetadata } from '../../../../../lib/seo'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
-
-const INITIAL_VISIBLE = 12
 
 type PageProps = {
   params: Promise<{ acao: string; cidade: string; filtro: string }>
@@ -161,6 +160,12 @@ export default async function FilterPage({ params }: PageProps) {
   const relatedFilters = filter.price ? BEDROOM_FILTERS : getAllPriceRanges(tipo)
   const relatedSectionTitle = filter.price ? 'Filtrar por quartos' : 'Filtrar por preço'
 
+  const breadcrumb: BreadcrumbItem[] = [
+    { name: 'Início', path: '/' },
+    { name: cidadeName, path: buildHierarchicalUrl({ acao, cidade }) },
+    { name: filterLabel, path: buildFilterUrl(acao, cidade, filtro) },
+  ]
+
   const jsonLd = [
     buildBreadcrumb([
       { name: 'Início', path: '/' },
@@ -182,125 +187,78 @@ export default async function FilterPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {jsonLd.map((schema, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      ))}
-
-      <div className="bg-dark text-white py-12">
-        <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4 flex-wrap" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white transition-colors">Início</Link>
-            <span aria-hidden="true">/</span>
-            <Link href={buildHierarchicalUrl({ acao: acao, cidade })} className="hover:text-white transition-colors">{cidadeName}</Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-white" aria-current="page">{filterLabel}</span>
-          </nav>
-          <span className="section-label">{label}</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{h1}</h1>
-          <p className="text-gray-400 text-sm mt-2">{total} imóve{total !== 1 ? 'is' : 'l'} disponíve{total !== 1 ? 'is' : 'l'}</p>
-        </div>
-      </div>
-
+    <ListingPageShell jsonLd={jsonLd} breadcrumb={breadcrumb} label={label} h1={h1} total={total}>
       <div className="container mx-auto px-6 py-10">
-        <div className="bg-white border border-gray-200 p-6 md:p-8 mb-8">
-          <p className="text-gray-700 text-sm leading-relaxed">
-            {filter.price ? (
-              <>
-                Encontre imóveis {label.toLowerCase()} com preço {filterLabel} em {cidadeName}, SP.
-                Trabalhamos com diversas opções de casas, apartamentos e terrenos nessa faixa de preço,
-                sempre com documentação verificada e atendimento personalizado do Corretor Yuri.
-              </>
-            ) : filter.amenity ? (
-              <>
-                Imóveis {label.toLowerCase()} {filterLabel} em {cidadeName}, SP. Listagens com {filter.amenity.heroLabel} no condomínio,
-                de diversas construtoras e em vários bairros da cidade. Documentação verificada e atendimento do Corretor Yuri.
-              </>
-            ) : (
-              <>
-                Encontre imóveis {label.toLowerCase()} com {filterLabel} em {cidadeName}, SP.
-                Confira nossas opções de casas, apartamentos e outros imóveis com essa configuração,
-                em diversos bairros da cidade. Atendimento personalizado com o Corretor Yuri.
-              </>
-            )}
-          </p>
-        </div>
-
-        <div className="mb-6">
-          <Link href={buildHierarchicalUrl({ acao: acao, cidade })} className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
-            <FiArrowLeft size={13} /> Ver todos os imóveis {label.toLowerCase()} em {cidadeName}
-          </Link>
-        </div>
-
-        {categoriasCounts.size > 1 && (
-          <section className="mb-10">
-            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Por categoria</h2>
-            <ul className="flex flex-wrap gap-2">
-              {Array.from(categoriasCounts.entries()).map(([cat, count]) => {
-                const catData = CATEGORIAS[cat as keyof typeof CATEGORIAS]
-                if (!catData) return null
-                return (
-                  <li key={cat}>
-                    <Link
-                      href={buildHierarchicalUrl({ acao: acao, cidade, categoria: cat })}
-                      className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
-                    >
-                      {catData.plural} ({count})
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </section>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {imoveis.slice(0, INITIAL_VISIBLE).map(property => (
-            <PropertyCard key={property.id} imovel={property} />
-          ))}
-          <LazyPropertyGrid items={imoveis.slice(INITIAL_VISIBLE)} />
-        </div>
-
-        <section className="mt-14">
-          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">{relatedSectionTitle}</h2>
-          <ul className="flex flex-wrap gap-2">
-            {relatedFilters.map(f => (
-              <li key={f.slug}>
-                <Link
-                  href={buildFilterUrl(acao, cidade, f.slug)}
-                  className={`inline-block border px-3 py-2 text-xs transition-colors ${
-                    f.slug === filtro
-                      ? 'bg-primary border-primary text-white'
-                      : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'
-                  }`}
-                >
-                  {f.shortLabel || f.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="mt-10">
-          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por comodidade</h2>
-          <ul className="flex flex-wrap gap-2">
-            {AMENITY_FILTERS.map(a => (
-              <li key={a.slug}>
-                <Link
-                  href={buildFilterUrl(acao, cidade, a.slug)}
-                  className={`inline-block border px-3 py-2 text-xs transition-colors ${
-                    a.slug === filtro
-                      ? 'bg-primary border-primary text-white'
-                      : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'
-                  }`}
-                >
-                  {a.shortLabel}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
+      <div className="bg-white border border-gray-200 p-6 md:p-8 mb-8">
+        <p className="text-gray-700 text-sm leading-relaxed">
+          {filter.price ? (
+            <>
+              Encontre imóveis {label.toLowerCase()} com preço {filterLabel} em {cidadeName}, SP.
+              Trabalhamos com diversas opções de casas, apartamentos e terrenos nessa faixa de preço,
+              sempre com documentação verificada e atendimento personalizado do Corretor Yuri.
+            </>
+          ) : filter.amenity ? (
+            <>
+              Imóveis {label.toLowerCase()} {filterLabel} em {cidadeName}, SP. Listagens com {filter.amenity.heroLabel} no condomínio,
+              de diversas construtoras e em vários bairros da cidade. Documentação verificada e atendimento do Corretor Yuri.
+            </>
+          ) : (
+            <>
+              Encontre imóveis {label.toLowerCase()} com {filterLabel} em {cidadeName}, SP.
+              Confira nossas opções de casas, apartamentos e outros imóveis com essa configuração,
+              em diversos bairros da cidade. Atendimento personalizado com o Corretor Yuri.
+            </>
+          )}
+        </p>
       </div>
-    </div>
+
+      <div className="mb-6">
+        <Link href={buildHierarchicalUrl({ acao, cidade })} className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
+          <FiArrowLeft size={13} /> Ver todos os imóveis {label.toLowerCase()} em {cidadeName}
+        </Link>
+      </div>
+
+      {categoriasCounts.size > 1 && (
+        <section className="mb-10">
+          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Por categoria</h2>
+          <FilterChipList>
+            {Array.from(categoriasCounts.entries()).map(([cat, count]) => {
+              const catData = CATEGORIAS[cat as keyof typeof CATEGORIAS]
+              if (!catData) return null
+              return (
+                <FilterChip key={cat} href={buildHierarchicalUrl({ acao, cidade, categoria: cat })}>
+                  {catData.plural} ({count})
+                </FilterChip>
+              )
+            })}
+          </FilterChipList>
+        </section>
+      )}
+
+      <PropertyResultsGrid imoveis={imoveis} />
+
+      <section className="mt-14">
+        <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">{relatedSectionTitle}</h2>
+        <FilterChipList>
+          {relatedFilters.map(f => (
+            <FilterChip key={f.slug} href={buildFilterUrl(acao, cidade, f.slug)} active={f.slug === filtro}>
+              {f.shortLabel || f.label}
+            </FilterChip>
+          ))}
+        </FilterChipList>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por comodidade</h2>
+        <FilterChipList>
+          {AMENITY_FILTERS.map(a => (
+            <FilterChip key={a.slug} href={buildFilterUrl(acao, cidade, a.slug)} active={a.slug === filtro}>
+              {a.shortLabel}
+            </FilterChip>
+          ))}
+        </FilterChipList>
+      </section>
+      </div>
+    </ListingPageShell>
   )
 }

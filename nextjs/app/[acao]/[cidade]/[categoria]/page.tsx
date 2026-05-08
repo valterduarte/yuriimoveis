@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
-import PropertyCard from '../../../../components/PropertyCard'
-import LazyPropertyGrid from '../../../../components/LazyPropertyGrid'
 import { fetchProperties, fetchNavigationMatrix } from '../../../../lib/api'
+import ListingPageShell, { type BreadcrumbItem } from '../../../../components/ListingPageShell'
+import PropertyResultsGrid from '../../../../components/PropertyResultsGrid'
+import { FilterChip, FilterChipList } from '../../../../components/FilterChip'
 import {
   acaoToTipo,
   isValidAcao,
@@ -93,8 +94,6 @@ function buildFaqs(args: {
 }
 
 export const revalidate = 300
-
-const INITIAL_VISIBLE = 12
 
 type PageProps = {
   params: Promise<{ acao: string; cidade: string; categoria: string }>
@@ -202,121 +201,88 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
     buildFaqPageSchema(faqs.map(f => ({ question: f.q, answer: f.a }))),
   ]
 
+  const breadcrumb: BreadcrumbItem[] = [
+    { name: 'Início',                              path: '/' },
+    { name: cidadeName,                            path: buildHierarchicalUrl({ acao, cidade }) },
+    { name: `${categoriaData.plural} ${label}`,    path: buildHierarchicalUrl({ acao, cidade, categoria }) },
+  ]
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {jsonLd.map((schema, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      ))}
-
-      <div className="bg-dark text-white py-12">
-        <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4 flex-wrap" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white transition-colors">Início</Link>
-            <span aria-hidden="true">/</span>
-            <Link href={buildHierarchicalUrl({ acao: acao, cidade })} className="hover:text-white transition-colors">{cidadeName}</Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-white" aria-current="page">{categoriaData.plural} {label}</span>
-          </nav>
-          <span className="section-label">{label}</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{h1}</h1>
-          <p className="text-gray-400 text-sm mt-2">{total} imóve{total !== 1 ? 'is' : 'l'} disponíve{total !== 1 ? 'is' : 'l'}</p>
-        </div>
-      </div>
-
+    <ListingPageShell jsonLd={jsonLd} breadcrumb={breadcrumb} label={label} h1={h1} total={total}>
       <div className="container mx-auto px-6 py-10">
-        <div className="mb-6">
-          <Link href={buildHierarchicalUrl({ acao: acao, cidade })} className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
-            <FiArrowLeft size={13} /> Ver todos os imóveis {label.toLowerCase()} em {cidadeName}
-          </Link>
-        </div>
-
-        <div className="bg-white border border-gray-200 p-6 md:p-8 mb-8">
-          <p className="text-gray-700 text-sm leading-relaxed">
-            Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} em {cidadeName} nos melhores bairros da cidade.
-            Temos opções em diversas faixas de preço e metragens, todas com atendimento personalizado do Corretor Yuri e
-            documentação verificada. Navegue pelos bairros abaixo ou veja todos os imóveis disponíveis.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {imoveis.slice(0, INITIAL_VISIBLE).map(property => (
-            <PropertyCard key={property.id} imovel={property} />
-          ))}
-          <LazyPropertyGrid items={imoveis.slice(INITIAL_VISIBLE)} />
-        </div>
-
-        <section className="mt-14 grid gap-8 md:grid-cols-2">
-          <div>
-            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
-              {categoriaData.plural} {label} por quartos
-            </h2>
-            <ul className="flex flex-wrap gap-2">
-              {BEDROOM_FILTERS.map(bf => (
-                <li key={bf.slug}>
-                  <Link
-                    href={`/${acao}/${cidade}/${categoria}/filtro/${bf.slug}`}
-                    className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
-                  >
-                    {bf.shortLabel || bf.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
-              {categoriaData.plural} {label} por preço
-            </h2>
-            <ul className="flex flex-wrap gap-2">
-              {getAllPriceRanges(acaoToTipo(acao)).map(pr => (
-                <li key={pr.slug}>
-                  <Link
-                    href={`/${acao}/${cidade}/${categoria}/filtro/${pr.slug}`}
-                    className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
-                  >
-                    {pr.shortLabel || pr.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {bairrosWithCount.length > 0 && (
-          <section className="mt-14">
-            <div className="flex items-end justify-between gap-4 mb-4">
-              <h2 className="text-base font-bold text-dark uppercase tracking-wide">
-                {categoriaData.plural} {label} por bairro
-              </h2>
-              <Link href="/bairros" className="text-xs uppercase tracking-wider font-bold text-primary hover:underline whitespace-nowrap">
-                Guias de bairro →
-              </Link>
-            </div>
-            <ul className="flex flex-wrap gap-2">
-              {bairrosWithCount.map(b => {
-                const bairroData = getBairroBySlug(b.slug)
-                const displayName = bairroData?.nome || b.slug
-                const hasGuide = hasRichBairroContent(b.slug)
-                return (
-                  <li key={b.slug}>
-                    <Link
-                      href={buildHierarchicalUrl({ acao: acao, cidade, categoria, bairro: b.slug })}
-                      className="inline-flex items-center gap-2 bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
-                    >
-                      <span>{displayName} ({b.count})</span>
-                      {hasGuide && (
-                        <span className="text-[10px] uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5">Guia</span>
-                      )}
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </section>
-        )}
-
-        <FaqAccordion faqs={faqs} />
+      <div className="mb-6">
+        <Link href={buildHierarchicalUrl({ acao, cidade })} className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
+          <FiArrowLeft size={13} /> Ver todos os imóveis {label.toLowerCase()} em {cidadeName}
+        </Link>
       </div>
-    </div>
+
+      <div className="bg-white border border-gray-200 p-6 md:p-8 mb-8">
+        <p className="text-gray-700 text-sm leading-relaxed">
+          Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} em {cidadeName} nos melhores bairros da cidade.
+          Temos opções em diversas faixas de preço e metragens, todas com atendimento personalizado do Corretor Yuri e
+          documentação verificada. Navegue pelos bairros abaixo ou veja todos os imóveis disponíveis.
+        </p>
+      </div>
+
+      <PropertyResultsGrid imoveis={imoveis} />
+
+      <section className="mt-14 grid gap-8 md:grid-cols-2">
+        <div>
+          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
+            {categoriaData.plural} {label} por quartos
+          </h2>
+          <FilterChipList>
+            {BEDROOM_FILTERS.map(bf => (
+              <FilterChip key={bf.slug} href={`/${acao}/${cidade}/${categoria}/filtro/${bf.slug}`}>
+                {bf.shortLabel || bf.label}
+              </FilterChip>
+            ))}
+          </FilterChipList>
+        </div>
+        <div>
+          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
+            {categoriaData.plural} {label} por preço
+          </h2>
+          <FilterChipList>
+            {getAllPriceRanges(acaoToTipo(acao)).map(pr => (
+              <FilterChip key={pr.slug} href={`/${acao}/${cidade}/${categoria}/filtro/${pr.slug}`}>
+                {pr.shortLabel || pr.label}
+              </FilterChip>
+            ))}
+          </FilterChipList>
+        </div>
+      </section>
+
+      {bairrosWithCount.length > 0 && (
+        <section className="mt-14">
+          <div className="flex items-end justify-between gap-4 mb-4">
+            <h2 className="text-base font-bold text-dark uppercase tracking-wide">
+              {categoriaData.plural} {label} por bairro
+            </h2>
+            <Link href="/bairros" className="text-xs uppercase tracking-wider font-bold text-primary hover:underline whitespace-nowrap">
+              Guias de bairro →
+            </Link>
+          </div>
+          <FilterChipList>
+            {bairrosWithCount.map(b => {
+              const bairroData = getBairroBySlug(b.slug)
+              const displayName = bairroData?.nome || b.slug
+              const hasGuide = hasRichBairroContent(b.slug)
+              return (
+                <FilterChip key={b.slug} href={buildHierarchicalUrl({ acao, cidade, categoria, bairro: b.slug })}>
+                  <span>{displayName} ({b.count})</span>
+                  {hasGuide && (
+                    <span className="text-[10px] uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5">Guia</span>
+                  )}
+                </FilterChip>
+              )
+            })}
+          </FilterChipList>
+        </section>
+      )}
+
+      <FaqAccordion faqs={faqs} />
+      </div>
+    </ListingPageShell>
   )
 }

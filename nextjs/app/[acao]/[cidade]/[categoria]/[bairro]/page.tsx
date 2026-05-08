@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
-import PropertyCard from '../../../../../components/PropertyCard'
-import LazyPropertyGrid from '../../../../../components/LazyPropertyGrid'
 import { fetchProperties, fetchNavigationMatrix } from '../../../../../lib/api'
+import ListingPageShell, { type BreadcrumbItem } from '../../../../../components/ListingPageShell'
+import PropertyResultsGrid from '../../../../../components/PropertyResultsGrid'
+import { FilterChip, FilterChipList } from '../../../../../components/FilterChip'
 import { formatNeighborhoodName, emBairro, deBairro, sobreBairro, formatPrice } from '../../../../../utils/imovelUtils'
 import { getBairroBySlug, BAIRROS } from '../../../../../data/bairros'
 import { ITBI_RATE_BY_CITY } from '../../../../../lib/constants'
@@ -29,8 +30,6 @@ import FaqAccordion from '../../../../../components/FaqAccordion'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
-
-const INITIAL_VISIBLE = 12
 
 type PageProps = {
   params: Promise<{ acao: string; cidade: string; categoria: string; bairro: string }>
@@ -272,29 +271,15 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
     buildFaqPageSchema(faqs.map(f => ({ question: f.q, answer: f.a }))),
   ]
 
+  const breadcrumb: BreadcrumbItem[] = [
+    { name: 'Início',                              path: '/' },
+    { name: cidadeName,                            path: buildHierarchicalUrl({ acao, cidade }) },
+    { name: `${categoriaData.plural} ${label}`,    path: buildHierarchicalUrl({ acao, cidade, categoria }) },
+    { name: bairroName,                            path: buildHierarchicalUrl({ acao, cidade, categoria, bairro }) },
+  ]
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {jsonLd.map((schema, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      ))}
-
-      <div className="bg-dark text-white py-12">
-        <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4 flex-wrap" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white transition-colors">Início</Link>
-            <span aria-hidden="true">/</span>
-            <Link href={buildHierarchicalUrl({ acao: acao, cidade })} className="hover:text-white transition-colors">{cidadeName}</Link>
-            <span aria-hidden="true">/</span>
-            <Link href={buildHierarchicalUrl({ acao: acao, cidade, categoria })} className="hover:text-white transition-colors">{categoriaData.plural} {label}</Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-white" aria-current="page">{bairroName}</span>
-          </nav>
-          <span className="section-label">{label}</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{h1}</h1>
-          <p className="text-gray-400 text-sm mt-2">{total} imóve{total !== 1 ? 'is' : 'l'} disponíve{total !== 1 ? 'is' : 'l'}</p>
-        </div>
-      </div>
-
+    <ListingPageShell jsonLd={jsonLd} breadcrumb={breadcrumb} label={label} h1={h1} total={total}>
       {bairroData && (
         <section className="container mx-auto px-6 pt-10 pb-2">
           <div className="bg-white border border-gray-200 p-6 md:p-8">
@@ -316,56 +301,41 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
 
       <div className="container mx-auto px-6 py-10">
         <div className="mb-6">
-          <Link href={buildHierarchicalUrl({ acao: acao, cidade, categoria })} className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
+          <Link href={buildHierarchicalUrl({ acao, cidade, categoria })} className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500 hover:text-primary transition-colors">
             <FiArrowLeft size={13} /> Ver todos os {categoriaData.plural.toLowerCase()} {label.toLowerCase()}
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {imoveis.slice(0, INITIAL_VISIBLE).map(property => (
-            <PropertyCard key={property.id} imovel={property} />
-          ))}
-          <LazyPropertyGrid items={imoveis.slice(INITIAL_VISIBLE)} />
-        </div>
+        <PropertyResultsGrid imoveis={imoveis} />
 
         {availableBedroomFilters.length > 0 && (
           <section className="mt-14">
             <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por quartos {emBairro(bairroName)} {bairroName}</h2>
-            <ul className="flex flex-wrap gap-2">
+            <FilterChipList>
               {availableBedroomFilters.map(bf => (
-                <li key={bf.slug}>
-                  <Link
-                    href={`${buildHierarchicalUrl({ acao: acao, cidade, categoria, bairro })}/filtro/${bf.slug}`}
-                    className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
-                  >
-                    {categoriaData.plural} {label.toLowerCase()} com {bf.shortLabel || bf.label}
-                  </Link>
-                </li>
+                <FilterChip key={bf.slug} href={`${buildHierarchicalUrl({ acao, cidade, categoria, bairro })}/filtro/${bf.slug}`}>
+                  {categoriaData.plural} {label.toLowerCase()} com {bf.shortLabel || bf.label}
+                </FilterChip>
               ))}
-            </ul>
+            </FilterChipList>
           </section>
         )}
 
         {siblingBairros.length > 0 && (
           <section className="mt-14">
             <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Outros bairros em {cidadeName}</h2>
-            <ul className="flex flex-wrap gap-2">
+            <FilterChipList>
               {siblingBairros.map(b => (
-                <li key={b.slug}>
-                  <Link
-                    href={buildHierarchicalUrl({ acao: acao, cidade, categoria, bairro: b.slug })}
-                    className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
-                  >
-                    {categoriaData.plural} {label.toLowerCase()} {emBairro(b.nome)} {b.nome}
-                  </Link>
-                </li>
+                <FilterChip key={b.slug} href={buildHierarchicalUrl({ acao, cidade, categoria, bairro: b.slug })}>
+                  {categoriaData.plural} {label.toLowerCase()} {emBairro(b.nome)} {b.nome}
+                </FilterChip>
               ))}
-            </ul>
+            </FilterChipList>
           </section>
         )}
 
         <FaqAccordion faqs={faqs} />
       </div>
-    </div>
+    </ListingPageShell>
   )
 }

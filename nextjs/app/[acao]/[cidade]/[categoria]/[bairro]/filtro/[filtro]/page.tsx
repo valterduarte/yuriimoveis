@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
-import PropertyCard from '../../../../../../../components/PropertyCard'
-import LazyPropertyGrid from '../../../../../../../components/LazyPropertyGrid'
 import { fetchProperties, fetchPriceBedroomMatrix } from '../../../../../../../lib/api'
+import ListingPageShell, { type BreadcrumbItem } from '../../../../../../../components/ListingPageShell'
+import PropertyResultsGrid from '../../../../../../../components/PropertyResultsGrid'
+import { FilterChip, FilterChipList } from '../../../../../../../components/FilterChip'
 import { formatNeighborhoodName } from '../../../../../../../utils/imovelUtils'
 import { getBairroBySlug } from '../../../../../../../data/bairros'
 import {
@@ -37,8 +38,6 @@ import { buildListingMetadata } from '../../../../../../../lib/seo'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
-
-const INITIAL_VISIBLE = 12
 
 type PageProps = {
   params: Promise<{ acao: string; cidade: string; categoria: string; bairro: string; filtro: string }>
@@ -202,31 +201,16 @@ export default async function BairroFilterPage({ params }: PageProps) {
     }),
   ]
 
+  const breadcrumb: BreadcrumbItem[] = [
+    { name: 'Início',                                  path: '/' },
+    { name: ctx.cidadeName,                            path: buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade }) },
+    { name: `${ctx.categoriaData.plural} ${label}`,    path: buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade, categoria: raw.categoria }) },
+    { name: ctx.bairroName,                            path: bairroUrl },
+    { name: ctx.filter.label,                          path: buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro) },
+  ]
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {jsonLd.map((schema, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      ))}
-
-      <div className="bg-dark text-white py-12">
-        <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4 flex-wrap" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white transition-colors">Início</Link>
-            <span aria-hidden="true">/</span>
-            <Link href={buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade })} className="hover:text-white transition-colors">{ctx.cidadeName}</Link>
-            <span aria-hidden="true">/</span>
-            <Link href={buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade, categoria: raw.categoria })} className="hover:text-white transition-colors">{ctx.categoriaData.plural} {label}</Link>
-            <span aria-hidden="true">/</span>
-            <Link href={bairroUrl} className="hover:text-white transition-colors">{ctx.bairroName}</Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-white" aria-current="page">{ctx.filter.label}</span>
-          </nav>
-          <span className="section-label">{label}</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{h1}</h1>
-          <p className="text-gray-400 text-sm mt-2">{total} imóve{total !== 1 ? 'is' : 'l'} disponíve{total !== 1 ? 'is' : 'l'}</p>
-        </div>
-      </div>
-
+    <ListingPageShell jsonLd={jsonLd} breadcrumb={breadcrumb} label={label} h1={h1} total={total}>
       <div className="container mx-auto px-6 py-10">
         <div className="bg-white border border-gray-200 p-6 md:p-8 mb-8">
           <p className="text-gray-700 text-sm leading-relaxed">
@@ -255,73 +239,41 @@ export default async function BairroFilterPage({ params }: PageProps) {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {imoveis.slice(0, INITIAL_VISIBLE).map(property => (
-            <PropertyCard key={property.id} imovel={property} />
-          ))}
-          <LazyPropertyGrid items={imoveis.slice(INITIAL_VISIBLE)} />
-        </div>
+        <PropertyResultsGrid imoveis={imoveis} />
 
         <section className="mt-14">
           <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por quartos no {ctx.bairroName}</h2>
-          <ul className="flex flex-wrap gap-2">
+          <FilterChipList>
             {BEDROOM_FILTERS.map(f => (
-              <li key={f.slug}>
-                <Link
-                  href={buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, f.slug)}
-                  className={`inline-block border px-3 py-2 text-xs transition-colors ${
-                    f.slug === raw.filtro
-                      ? 'bg-primary border-primary text-white'
-                      : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'
-                  }`}
-                >
-                  {f.shortLabel || f.label}
-                </Link>
-              </li>
+              <FilterChip key={f.slug} href={buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, f.slug)} active={f.slug === raw.filtro}>
+                {f.shortLabel || f.label}
+              </FilterChip>
             ))}
-          </ul>
+          </FilterChipList>
         </section>
 
         <section className="mt-10">
           <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por preço no {ctx.bairroName}</h2>
-          <ul className="flex flex-wrap gap-2">
+          <FilterChipList>
             {getAllPriceRanges(acaoToTipo(ctx.acao)).map(r => (
-              <li key={r.slug}>
-                <Link
-                  href={buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, r.slug)}
-                  className={`inline-block border px-3 py-2 text-xs transition-colors ${
-                    r.slug === raw.filtro
-                      ? 'bg-primary border-primary text-white'
-                      : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'
-                  }`}
-                >
-                  {r.shortLabel || r.label}
-                </Link>
-              </li>
+              <FilterChip key={r.slug} href={buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, r.slug)} active={r.slug === raw.filtro}>
+                {r.shortLabel || r.label}
+              </FilterChip>
             ))}
-          </ul>
+          </FilterChipList>
         </section>
 
         <section className="mt-10">
           <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por comodidade no {ctx.bairroName}</h2>
-          <ul className="flex flex-wrap gap-2">
+          <FilterChipList>
             {AMENITY_FILTERS.map(a => (
-              <li key={a.slug}>
-                <Link
-                  href={buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, a.slug)}
-                  className={`inline-block border px-3 py-2 text-xs transition-colors ${
-                    a.slug === raw.filtro
-                      ? 'bg-primary border-primary text-white'
-                      : 'bg-white border-gray-200 text-gray-700 hover:border-primary hover:text-primary'
-                  }`}
-                >
-                  {a.shortLabel}
-                </Link>
-              </li>
+              <FilterChip key={a.slug} href={buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, a.slug)} active={a.slug === raw.filtro}>
+                {a.shortLabel}
+              </FilterChip>
             ))}
-          </ul>
+          </FilterChipList>
         </section>
       </div>
-    </div>
+    </ListingPageShell>
   )
 }
