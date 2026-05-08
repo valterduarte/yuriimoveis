@@ -19,7 +19,7 @@ import {
 import { getBairroBySlug } from '../../../../data/bairros'
 import { BEDROOM_FILTERS, getAllPriceRanges } from '../../../../data/priceRanges'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../lib/config'
-import { buildPropertyProduct } from '../../../../lib/jsonLd'
+import { buildBreadcrumb, buildCollectionPage, buildFaqPageSchema, buildPropertyProduct } from '../../../../lib/jsonLd'
 import { ITBI_RATE_BY_CITY } from '../../../../lib/constants'
 import type { Metadata } from 'next'
 
@@ -196,32 +196,18 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
   })
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-        { '@type': 'ListItem', position: 2, name: `${acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${cidadeName}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: acao, cidade })}` },
-        { '@type': 'ListItem', position: 3, name: `${categoriaData.plural} ${label}`, item: canonicalUrl },
-      ],
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'CollectionPage',
+    buildBreadcrumb([
+      { name: 'Início', path: '/' },
+      { name: `${acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${cidadeName}`, path: buildHierarchicalUrl({ acao, cidade }) },
+      { name: `${categoriaData.plural} ${label}`,                              path: buildHierarchicalUrl({ acao, cidade, categoria }) },
+    ]),
+    buildCollectionPage({
       name: h1,
       url: canonicalUrl,
       numberOfItems: total,
-      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: buildPropertyProduct(p) })),
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: faqs.map(f => ({
-        '@type': 'Question',
-        name: f.q,
-        acceptedAnswer: { '@type': 'Answer', text: f.a },
-      })),
-    },
+      items: imoveis.map(buildPropertyProduct),
+    }),
+    buildFaqPageSchema(faqs.map(f => ({ question: f.q, answer: f.a }))),
   ]
 
   return (

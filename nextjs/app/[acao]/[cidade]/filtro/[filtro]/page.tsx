@@ -28,7 +28,7 @@ import {
   type AmenityFilter,
 } from '../../../../../data/amenityFilters'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../../lib/config'
-import { buildPropertyProduct } from '../../../../../lib/jsonLd'
+import { buildBreadcrumb, buildCollectionPage, buildPropertyProduct } from '../../../../../lib/jsonLd'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -171,24 +171,18 @@ export default async function FilterPage({ params }: PageProps) {
   const relatedSectionTitle = filter.price ? 'Filtrar por quartos' : 'Filtrar por preço'
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-        { '@type': 'ListItem', position: 2, name: `${acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${cidadeName}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: acao, cidade })}` },
-        { '@type': 'ListItem', position: 3, name: filterLabel, item: canonicalUrl },
-      ],
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'CollectionPage',
+    buildBreadcrumb([
+      { name: 'Início', path: '/' },
+      { name: `${acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${cidadeName}`, path: buildHierarchicalUrl({ acao, cidade }) },
+      { name: filterLabel,                                                     path: buildFilterUrl(acao, cidade, filtro) },
+    ]),
+    buildCollectionPage({
       name: h1,
       url: canonicalUrl,
       numberOfItems: total,
       description: `Imóveis ${label.toLowerCase()} ${filterLabel} em ${cidadeName}, SP.`,
-      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: buildPropertyProduct(p) })),
-    },
+      items: imoveis.map(buildPropertyProduct),
+    }),
   ]
 
   const categoriasCounts = new Map<string, number>()

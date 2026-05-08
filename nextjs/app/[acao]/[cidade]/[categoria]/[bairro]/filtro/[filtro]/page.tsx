@@ -32,7 +32,7 @@ import {
   type AmenityFilter,
 } from '../../../../../../../data/amenityFilters'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../../../../lib/config'
-import { buildPropertyProduct } from '../../../../../../../lib/jsonLd'
+import { buildBreadcrumb, buildCollectionPage, buildPropertyProduct } from '../../../../../../../lib/jsonLd'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -197,26 +197,20 @@ export default async function BairroFilterPage({ params }: PageProps) {
   const bairroUrl = buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade, categoria: raw.categoria, bairro: raw.bairro })
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-        { '@type': 'ListItem', position: 2, name: `${ctx.acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${ctx.cidadeName}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade })}` },
-        { '@type': 'ListItem', position: 3, name: `${ctx.categoriaData.plural} ${label}`, item: `${SITE_URL}${buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade, categoria: raw.categoria })}` },
-        { '@type': 'ListItem', position: 4, name: ctx.bairroName, item: `${SITE_URL}${bairroUrl}` },
-        { '@type': 'ListItem', position: 5, name: ctx.filter.label, item: canonicalUrl },
-      ],
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'CollectionPage',
+    buildBreadcrumb([
+      { name: 'Início', path: '/' },
+      { name: `${ctx.acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${ctx.cidadeName}`, path: buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade }) },
+      { name: `${ctx.categoriaData.plural} ${label}`,                                  path: buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade, categoria: raw.categoria }) },
+      { name: ctx.bairroName,                                                          path: bairroUrl },
+      { name: ctx.filter.label,                                                        path: buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro) },
+    ]),
+    buildCollectionPage({
       name: h1,
       url: canonicalUrl,
       numberOfItems: total,
       description: `${ctx.categoriaData.plural} ${label.toLowerCase()} ${ctx.filter.fragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP.`,
-      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: buildPropertyProduct(p) })),
-    },
+      items: imoveis.map(buildPropertyProduct),
+    }),
   ]
 
   return (

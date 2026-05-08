@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { FaWhatsapp } from 'react-icons/fa'
 import { fetchBlogPostBySlug, fetchAllBlogSlugs, fetchRelatedBlogPosts } from '../../../lib/api'
 import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA } from '../../../lib/config'
+import { buildBreadcrumb } from '../../../lib/jsonLd'
 import WhatsAppLink from '../../../components/WhatsAppLink'
 import type { Metadata } from 'next'
 
@@ -53,15 +54,11 @@ export default async function BlogPostPage({ params }: PageProps) {
   const relatedPosts = await fetchRelatedBlogPosts(post.slug, post.tags, 3)
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
-        { '@type': 'ListItem', position: 3, name: post.titulo, item: `${SITE_URL}/blog/${post.slug}` },
-      ],
-    },
+    buildBreadcrumb([
+      { name: 'Início',     path: '/' },
+      { name: 'Blog',       path: '/blog' },
+      { name: post.titulo,  path: `/blog/${post.slug}` },
+    ]),
     {
       '@context': 'https://schema.org',
       '@type': 'Article',

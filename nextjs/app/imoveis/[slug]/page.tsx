@@ -18,7 +18,7 @@ import { BAIRROS, getBairroBySlug } from '../../../data/bairros'
 import { findLandingPage, LANDING_PAGES } from '../../../data/landingPages'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
 import { SITE_URL, PHONE_WA_BASE, OG_DEFAULT_IMAGE } from '../../../lib/config'
-import { AGENT_ID } from '../../../lib/jsonLd'
+import { AGENT_ID, buildBreadcrumb } from '../../../lib/jsonLd'
 import {
   bairroDbNameToSlug,
   buildHierarchicalUrl,
@@ -222,15 +222,11 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
   const imovelDescription = buildSeoDescription(imovel)
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Início',  item: `${SITE_URL}/`        },
-        { '@type': 'ListItem', position: 2, name: 'Imóveis', item: `${SITE_URL}/imoveis`  },
-        { '@type': 'ListItem', position: 3, name: imovel.titulo, item: `${SITE_URL}/imoveis/${imovelSlug(imovel)}` },
-      ],
-    },
+    buildBreadcrumb([
+      { name: 'Início',        path: '/' },
+      { name: 'Imóveis',       path: '/imoveis' },
+      { name: imovel.titulo,   path: `/imoveis/${imovelSlug(imovel)}` },
+    ]),
     {
       '@context': 'https://schema.org',
       '@type': 'RealEstateListing',
@@ -342,15 +338,11 @@ async function BairroPage({ slug }: { slug: string }) {
   const hasProperties = properties.length > 0
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Início',  item: `${SITE_URL}/`       },
-        { '@type': 'ListItem', position: 2, name: 'Imóveis', item: `${SITE_URL}/imoveis` },
-        { '@type': 'ListItem', position: 3, name: neighborhoodName, item: `${SITE_URL}/imoveis/${slug}` },
-      ],
-    },
+    buildBreadcrumb([
+      { name: 'Início',          path: '/' },
+      { name: 'Imóveis',         path: '/imoveis' },
+      { name: neighborhoodName,  path: `/imoveis/${slug}` },
+    ]),
     ...(hasProperties ? [{
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
@@ -485,15 +477,11 @@ async function LandingPage({ slug }: { slug: string }) {
   const tipoLabel = landing.tipo === 'venda' ? 'à Venda' : 'para Alugar'
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-        { '@type': 'ListItem', position: 2, name: 'Imóveis', item: `${SITE_URL}/imoveis` },
-        { '@type': 'ListItem', position: 3, name: landing.h1, item: `${SITE_URL}/imoveis/${slug}` },
-      ],
-    },
+    buildBreadcrumb([
+      { name: 'Início',     path: '/' },
+      { name: 'Imóveis',    path: '/imoveis' },
+      { name: landing.h1,   path: `/imoveis/${slug}` },
+    ]),
     ...(hasProperties ? [{
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',

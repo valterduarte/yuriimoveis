@@ -57,6 +57,33 @@ describe('buildCollectionPage', () => {
       { '@type': 'ListItem', position: 2, name: 'Imóvel 2' },
     ])
   })
+
+  it('wraps pre-built items as ListItem entries when items are provided', () => {
+    const schema = buildCollectionPage({
+      name: 'Imóveis',
+      url: 'https://x.com/i',
+      items: [
+        { '@type': 'Product', name: 'Casa A' },
+        { '@type': 'Product', name: 'Casa B' },
+      ],
+    })
+    expect(schema.itemListElement).toEqual([
+      { '@type': 'ListItem', position: 1, item: { '@type': 'Product', name: 'Casa A' } },
+      { '@type': 'ListItem', position: 2, item: { '@type': 'Product', name: 'Casa B' } },
+    ])
+  })
+
+  it('prefers items over itemNames when both are provided', () => {
+    const schema = buildCollectionPage({
+      name: 'X',
+      url: 'https://x.com/x',
+      itemNames: ['Should be ignored'],
+      items: [{ '@type': 'Product', name: 'Wins' }],
+    })
+    expect(schema.itemListElement).toEqual([
+      { '@type': 'ListItem', position: 1, item: { '@type': 'Product', name: 'Wins' } },
+    ])
+  })
 })
 
 describe('buildArticleSchema', () => {

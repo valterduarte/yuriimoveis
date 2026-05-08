@@ -18,7 +18,7 @@ import {
 import { CATEGORIAS } from '../../../data/categorias'
 import { getAllPriceRanges, BEDROOM_FILTERS } from '../../../data/priceRanges'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
-import { buildPropertyProduct } from '../../../lib/jsonLd'
+import { buildBreadcrumb, buildCollectionPage, buildPropertyProduct } from '../../../lib/jsonLd'
 import type { PropertyCategory } from '../../../types'
 import type { Metadata } from 'next'
 
@@ -107,22 +107,16 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
     .map(b => ({ ...b, hasGuide: hasRichBairroContent(b.slug) }))
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-        { '@type': 'ListItem', position: 2, name: h1, item: canonicalUrl },
-      ],
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'CollectionPage',
+    buildBreadcrumb([
+      { name: 'Início', path: '/' },
+      { name: h1,       path: buildHierarchicalUrl({ acao, cidade }) },
+    ]),
+    buildCollectionPage({
       name: h1,
       url: canonicalUrl,
       numberOfItems: total,
-      itemListElement: imoveis.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: buildPropertyProduct(p) })),
-    },
+      items: imoveis.map(buildPropertyProduct),
+    }),
   ]
 
   return (

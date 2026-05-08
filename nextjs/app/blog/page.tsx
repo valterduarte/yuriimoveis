@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { fetchPublishedBlogPosts } from '../../lib/api'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import { PLACEHOLDER_IMAGE } from '../../lib/constants'
+import { buildBreadcrumb, buildCollectionPage } from '../../lib/jsonLd'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -26,21 +27,15 @@ export default async function BlogListPage() {
   const posts = await fetchPublishedBlogPosts()
 
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
-      ],
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'CollectionPage',
+    buildBreadcrumb([
+      { name: 'Início', path: '/' },
+      { name: 'Blog',   path: '/blog' },
+    ]),
+    buildCollectionPage({
       name: 'Blog — Corretor Yuri Imóveis',
       url: `${SITE_URL}/blog`,
       numberOfItems: posts.length,
-    },
+    }),
   ]
 
   return (

@@ -4,6 +4,7 @@ import { BAIRROS } from '../../data/bairros'
 import { fetchNavigationMatrix } from '../../lib/api'
 import { bairroSlugToDbName, inferCidadeFromBairro } from '../../lib/navigation'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
+import { buildCollectionPage } from '../../lib/jsonLd'
 import type { Metadata } from 'next'
 import type { BairroData } from '../../types'
 
@@ -56,14 +57,12 @@ export default async function BairrosIndexPage() {
   const canonicalUrl = `${SITE_URL}/bairros`
   const totalGuides = Array.from(guidesByCidade.values()).reduce((acc, l) => acc + l.length, 0)
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
+  const jsonLd = buildCollectionPage({
     name: PAGE_TITLE,
     url: canonicalUrl,
     description: PAGE_DESCRIPTION,
     numberOfItems: totalGuides,
-  }
+  })
 
   return (
     <div className="min-h-screen bg-gray-50">

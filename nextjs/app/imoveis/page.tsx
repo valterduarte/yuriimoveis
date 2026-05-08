@@ -4,6 +4,7 @@ import PropertyGrid from '../../components/imoveis/PropertyGrid'
 import { fetchProperties, fetchDistinctBairros, fetchDistinctCidades } from '../../lib/api'
 import { ITEMS_PER_PAGE } from '../../lib/constants'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
+import { buildBreadcrumb } from '../../lib/jsonLd'
 import type { Metadata } from 'next'
 
 const FILTER_KEYS = ['tipo', 'categoria', 'cidade', 'bairro', 'precoMin', 'precoMax', 'quartos', 'codigo']
@@ -47,14 +48,10 @@ export default async function ImoveisPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Início', item: `${SITE_URL}/` },
-          { '@type': 'ListItem', position: 2, name: 'Imóveis', item: `${SITE_URL}/imoveis` },
-        ],
-      }) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumb([
+        { name: 'Início',  path: '/' },
+        { name: 'Imóveis', path: '/imoveis' },
+      ])) }} />
       <div className="bg-dark text-white py-12">
         <div className="container mx-auto px-6">
           <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
