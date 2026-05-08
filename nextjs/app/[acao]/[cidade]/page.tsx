@@ -17,8 +17,10 @@ import {
 } from '../../../lib/navigation'
 import { CATEGORIAS } from '../../../data/categorias'
 import { getAllPriceRanges, BEDROOM_FILTERS } from '../../../data/priceRanges'
-import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
+import { SITE_URL } from '../../../lib/config'
 import { buildBreadcrumb, buildCollectionPage, buildPropertyProduct } from '../../../lib/jsonLd'
+import { buildListingMetadata } from '../../../lib/seo'
+import { FilterChip, FilterChipList } from '../../../components/FilterChip'
 import type { PropertyCategory } from '../../../types'
 import type { Metadata } from 'next'
 
@@ -46,21 +48,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const label = ACAO_LABELS[acao].preposicao
   const title = `Imóveis ${label} em ${cidadeName} SP — Corretor Yuri`
   const description = `Imóveis ${label.toLowerCase()} em ${cidadeName}, SP. Casas, apartamentos, terrenos e imóveis comerciais. Atendimento com o Corretor Yuri, CRECI 235509.`
-  const url = `${SITE_URL}${buildHierarchicalUrl({ acao, cidade })}`
-
-  return {
+  return buildListingMetadata({
     title,
     description,
-    alternates: { canonical: url },
-    openGraph: {
-      title, description, url,
-      siteName: 'Corretor Yuri Imóveis',
-      locale: 'pt_BR',
-      type: 'website',
-      images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: title }],
-    },
-    twitter: { card: 'summary_large_image', title, description, images: [OG_DEFAULT_IMAGE] },
-  }
+    url: `${SITE_URL}${buildHierarchicalUrl({ acao, cidade })}`,
+  })
 }
 
 export default async function CidadeAcaoPage({ params }: PageProps) {
@@ -150,21 +142,16 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
         {categoriaCounts.size > 0 && (
           <section className="mb-10">
             <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Imóveis por categoria</h2>
-            <ul className="flex flex-wrap gap-2">
+            <FilterChipList>
               {Array.from(categoriaCounts.entries()).map(([catSlug, count]) => {
                 const cat = CATEGORIAS[catSlug]
                 return (
-                  <li key={catSlug}>
-                    <Link
-                      href={buildHierarchicalUrl({ acao: acao, cidade, categoria: catSlug })}
-                      className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
-                    >
-                      {cat.plural} {label.toLowerCase()} ({count})
-                    </Link>
-                  </li>
+                  <FilterChip key={catSlug} href={buildHierarchicalUrl({ acao, cidade, categoria: catSlug })}>
+                    {cat.plural} {label.toLowerCase()} ({count})
+                  </FilterChip>
                 )
               })}
-            </ul>
+            </FilterChipList>
           </section>
         )}
 
@@ -176,21 +163,16 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
                 Todos os bairros →
               </Link>
             </div>
-            <ul className="flex flex-wrap gap-2">
+            <FilterChipList>
               {topBairros.map(b => (
-                <li key={b.slug}>
-                  <Link
-                    href={buildHierarchicalUrl({ acao: acao, cidade, bairro: b.slug })}
-                    className="inline-flex items-center gap-2 bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
-                  >
-                    <span>{b.nome} ({b.count})</span>
-                    {b.hasGuide && (
-                      <span className="text-[10px] uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5">Guia</span>
-                    )}
-                  </Link>
-                </li>
+                <FilterChip key={b.slug} href={buildHierarchicalUrl({ acao, cidade, bairro: b.slug })}>
+                  <span>{b.nome} ({b.count})</span>
+                  {b.hasGuide && (
+                    <span className="text-[10px] uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5">Guia</span>
+                  )}
+                </FilterChip>
               ))}
-            </ul>
+            </FilterChipList>
           </section>
         )}
 
@@ -203,34 +185,24 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
 
         <section className="mt-14">
           <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por faixa de preço</h2>
-          <ul className="flex flex-wrap gap-2">
+          <FilterChipList>
             {getAllPriceRanges(acaoToTipo(acao)).map(range => (
-              <li key={range.slug}>
-                <Link
-                  href={`/${acao}/${cidade}/filtro/${range.slug}`}
-                  className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
-                >
-                  {range.shortLabel}
-                </Link>
-              </li>
+              <FilterChip key={range.slug} href={`/${acao}/${cidade}/filtro/${range.slug}`}>
+                {range.shortLabel}
+              </FilterChip>
             ))}
-          </ul>
+          </FilterChipList>
         </section>
 
         <section className="mt-8">
           <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por quartos</h2>
-          <ul className="flex flex-wrap gap-2">
+          <FilterChipList>
             {BEDROOM_FILTERS.map(bf => (
-              <li key={bf.slug}>
-                <Link
-                  href={`/${acao}/${cidade}/filtro/${bf.slug}`}
-                  className="inline-block bg-white border border-gray-200 px-3 py-2 text-xs text-gray-700 hover:border-primary hover:text-primary transition-colors"
-                >
-                  {bf.shortLabel}
-                </Link>
-              </li>
+              <FilterChip key={bf.slug} href={`/${acao}/${cidade}/filtro/${bf.slug}`}>
+                {bf.shortLabel}
+              </FilterChip>
             ))}
-          </ul>
+          </FilterChipList>
         </section>
       </div>
     </div>

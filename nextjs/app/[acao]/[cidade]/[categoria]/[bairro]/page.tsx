@@ -22,8 +22,10 @@ import {
   ACAO_LABELS,
 } from '../../../../../lib/navigation'
 import { BEDROOM_FILTERS } from '../../../../../data/priceRanges'
-import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../../lib/config'
+import { SITE_URL } from '../../../../../lib/config'
 import { buildBreadcrumb, buildCollectionPage, buildFaqPageSchema, buildPropertyProduct } from '../../../../../lib/jsonLd'
+import { buildListingMetadata } from '../../../../../lib/seo'
+import FaqAccordion from '../../../../../components/FaqAccordion'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -179,23 +181,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = total > 0
     ? `${total} ${nomeImovel.toLowerCase()} ${label.toLowerCase()} ${prep} ${bairroName} em ${cidadeName} SP${pricePart}${itbiPart} Atendimento Corretor Yuri (CRECI 235509).`
     : `${nomeImovel} ${label.toLowerCase()} ${prep} ${bairroName} em ${cidadeName} SP. Atendimento Corretor Yuri (CRECI 235509).`
-  const url = `${SITE_URL}${buildHierarchicalUrl({ acao, cidade, categoria, bairro })}`
-
-  return {
+  return buildListingMetadata({
     title,
     description,
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      siteName: 'Corretor Yuri Imóveis',
-      locale: 'pt_BR',
-      type: 'website',
-      images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: title }],
-    },
-    twitter: { card: 'summary_large_image', title, description, images: [OG_DEFAULT_IMAGE] },
-  }
+    url: `${SITE_URL}${buildHierarchicalUrl({ acao, cidade, categoria, bairro })}`,
+  })
 }
 
 export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
@@ -374,22 +364,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
           </section>
         )}
 
-        <section className="mt-14" aria-labelledby="faq-heading">
-          <h2 id="faq-heading" className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
-            Perguntas frequentes
-          </h2>
-          <div className="divide-y divide-gray-200 border border-gray-200 bg-white">
-            {faqs.map((faq, i) => (
-              <details key={i} className="group">
-                <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none text-sm font-bold text-dark hover:text-primary">
-                  <span>{faq.q}</span>
-                  <span className="text-primary text-lg leading-none transition-transform group-open:rotate-45" aria-hidden="true">+</span>
-                </summary>
-                <p className="px-5 pb-4 text-sm text-gray-700 leading-relaxed">{faq.a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
+        <FaqAccordion faqs={faqs} />
       </div>
     </div>
   )

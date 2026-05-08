@@ -31,8 +31,9 @@ import {
   imovelMatchesAmenity,
   type AmenityFilter,
 } from '../../../../../../../data/amenityFilters'
-import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../../../../../lib/config'
+import { SITE_URL } from '../../../../../../../lib/config'
 import { buildBreadcrumb, buildCollectionPage, buildPropertyProduct } from '../../../../../../../lib/jsonLd'
+import { buildListingMetadata } from '../../../../../../../lib/seo'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -163,23 +164,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const countPrefix = total > 0 ? `${total} ` : ''
   const title = `${countPrefix}${ctx.categoriaData.plural} ${label} ${ctx.filter.fragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP`
   const description = `${ctx.categoriaData.plural} ${label.toLowerCase()} ${ctx.filter.fragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP. Financiamento, documentação e atendimento com o Corretor Yuri (CRECI 235509).`
-  const url = `${SITE_URL}${buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro)}`
-
-  return {
+  return buildListingMetadata({
     title,
     description,
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      siteName: 'Corretor Yuri Imóveis',
-      locale: 'pt_BR',
-      type: 'website',
-      images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: title }],
-    },
-    twitter: { card: 'summary_large_image', title, description, images: [OG_DEFAULT_IMAGE] },
-  }
+    url: `${SITE_URL}${buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro)}`,
+  })
 }
 
 export default async function BairroFilterPage({ params }: PageProps) {
