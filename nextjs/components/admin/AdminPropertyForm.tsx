@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect, type ChangeEvent } from 'react'
-import { ApiError, apiClient, isAuthError } from '../../lib/apiClient'
+import { apiClient } from '../../lib/apiClient'
 import { calcParcela } from '../../utils/imovelUtils'
 import { API_URL, CLOUDINARY_CLOUD, CLOUDINARY_PRESET } from '../../lib/config'
+import { useApiSubmit } from '../../hooks/useApiSubmit'
 import BasicInfoSection from './property-form/BasicInfoSection'
 import LocationSection from './property-form/LocationSection'
 import DescriptionSection from './property-form/DescriptionSection'
@@ -51,9 +52,8 @@ interface AdminPropertyFormProps {
 export default function AdminPropertyForm({ editingId, authHeader, onSuccess, onAuthError }: AdminPropertyFormProps) {
   const [form, setForm] = useState<FormState>(EMPTY_FORM)
   const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [loading, setLoading] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const { loading, error, setError, submit } = useApiSubmit({ onAuthError, fallbackError: 'Erro ao salvar.' })
 
   useEffect(() => {
     if (!editingId) return
@@ -63,7 +63,7 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
         setImageUrls(Array.isArray(imovel.imagens) ? imovel.imagens : [])
       })
       .catch(() => setError('Erro ao carregar imóvel.'))
-  }, [editingId])
+  }, [editingId, setError])
 
   const updateField: UpdateField = (key, value) => setForm(f => ({ ...f, [key]: value }))
 
@@ -107,24 +107,22 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setError(null)
-    try {
-      const payload = {
-        ...form,
-        descricao_seo: form.descricao_seo || '',
-        preco:      Number(form.preco),
-        area:       Number(form.area)      || 0,
-        quartos:    Number(form.quartos)   || 0,
-        banheiros:  Number(form.banheiros) || 0,
-        vagas:      Number(form.vagas)     || 0,
-        imagens:    imageUrls,
-        diferenciais: form.diferenciais
-          ? form.diferenciais.split('\n').map(s => s.trim()).filter(Boolean)
-          : [],
-        lat: form.lat ? Number(form.lat) : null,
-        lng: form.lng ? Number(form.lng) : null,
-      }
+    const payload = {
+      ...form,
+      descricao_seo: form.descricao_seo || '',
+      preco:      Number(form.preco),
+      area:       Number(form.area)      || 0,
+      quartos:    Number(form.quartos)   || 0,
+      banheiros:  Number(form.banheiros) || 0,
+      vagas:      Number(form.vagas)     || 0,
+      imagens:    imageUrls,
+      diferenciais: form.diferenciais
+        ? form.diferenciais.split('\n').map(s => s.trim()).filter(Boolean)
+        : [],
+      lat: form.lat ? Number(form.lat) : null,
+      lng: form.lng ? Number(form.lng) : null,
+    }
+    await submit(async () => {
       if (editingId) {
         await apiClient.put(`${API_URL}/api/imoveis/${editingId}`, payload, { headers: authHeader() })
         onSuccess('Imóvel atualizado com sucesso!')
@@ -132,17 +130,7 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
         const created = await apiClient.post<{ id: number }>(`${API_URL}/api/imoveis`, payload, { headers: authHeader() })
         onSuccess(`Imóvel cadastrado com sucesso! ID: ${created.id}`)
       }
-    } catch (err) {
-      if (isAuthError(err)) {
-        onAuthError()
-      } else if (err instanceof ApiError && typeof err.data === 'object' && err.data !== null && 'error' in err.data) {
-        setError(String((err.data as { error: unknown }).error) || 'Erro ao salvar.')
-      } else {
-        setError('Erro ao salvar.')
-      }
-    } finally {
-      setLoading(false)
-    }
+    })
   }
 
   return (

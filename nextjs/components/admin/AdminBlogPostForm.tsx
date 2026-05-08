@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ApiError, apiClient, isAuthError } from '../../lib/apiClient'
+import { apiClient, isAuthError } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
 import { slugify } from '../../utils/imovelUtils'
+import { useApiSubmit } from '../../hooks/useApiSubmit'
 import type { BlogPost } from '../../types'
 
 interface AdminBlogPostFormProps {
@@ -24,8 +25,7 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
   const [metaDescricao, setMetaDescricao] = useState('')
   const [tagsText, setTagsText] = useState('')
   const [publicado, setPublicado] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const { loading, error, setError, submit } = useApiSubmit({ onAuthError, fallbackError: 'Erro ao salvar post.' })
 
   useEffect(() => {
     if (editingId) {
@@ -47,7 +47,7 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
           else setError('Erro ao carregar post.')
         })
     }
-  }, [editingId, authHeader, onAuthError])
+  }, [editingId, authHeader, onAuthError, setError])
 
   useEffect(() => {
     if (!slugManual && titulo) {
@@ -57,8 +57,6 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setError('')
 
     const tags = tagsText
       .split(',')
@@ -73,7 +71,7 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
       tags, publicado,
     }
 
-    try {
+    await submit(async () => {
       if (editingId) {
         await apiClient.put(`${API_URL}/api/blog/${editingId}`, payload, { headers: authHeader() })
         onSuccess('Post atualizado com sucesso!')
@@ -83,17 +81,7 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
         setTitulo(''); setSlug(''); setSlugManual(false); setResumo(''); setConteudo('')
         setImagemCapa(''); setMetaTitulo(''); setMetaDescricao(''); setTagsText(''); setPublicado(false)
       }
-    } catch (err) {
-      if (isAuthError(err)) {
-        onAuthError()
-      } else if (err instanceof ApiError && typeof err.data === 'object' && err.data !== null && 'error' in err.data) {
-        setError(String((err.data as { error: unknown }).error) || 'Erro ao salvar post.')
-      } else {
-        setError('Erro ao salvar post.')
-      }
-    } finally {
-      setLoading(false)
-    }
+    })
   }
 
   const inputClass = 'w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-primary'

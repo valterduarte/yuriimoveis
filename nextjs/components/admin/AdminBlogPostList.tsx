@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { FiEdit2, FiEye, FiEyeOff } from 'react-icons/fi'
 import { apiClient, isAuthError } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
+import AdminListItem from './AdminListItem'
 import type { BlogPost } from '../../types'
 
 interface AdminBlogPostListProps {
@@ -44,23 +45,27 @@ export default function AdminBlogPostList({ authHeader, onEdit, onAuthError }: A
   return (
     <div className="space-y-3">
       {posts.map(post => (
-        <div key={post.id} className={`bg-white border border-gray-200 p-4 flex items-center justify-between gap-4 ${!post.publicado ? 'opacity-60' : ''}`}>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-bold text-dark truncate">{post.titulo}</h3>
-            <p className="text-xs text-gray-400 mt-0.5">
+        <AdminListItem
+          key={post.id}
+          inactive={!post.publicado}
+          title={post.titulo}
+          meta={
+            <>
               /blog/{post.slug} &middot; {new Date(post.created_at).toLocaleDateString('pt-BR')}
               {!post.publicado && <span className="ml-2 text-amber-600 font-bold">RASCUNHO</span>}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => togglePublicado(post)} className="p-2 text-gray-400 hover:text-primary transition-colors" title={post.publicado ? 'Despublicar' : 'Publicar'}>
-              {post.publicado ? <FiEye size={14} /> : <FiEyeOff size={14} />}
-            </button>
-            <button onClick={() => onEdit(post.id)} className="p-2 text-gray-400 hover:text-primary transition-colors" title="Editar">
-              <FiEdit2 size={14} />
-            </button>
-          </div>
-        </div>
+            </>
+          }
+          actions={
+            <>
+              <button onClick={() => togglePublicado(post)} className="p-2 text-gray-400 hover:text-primary transition-colors" title={post.publicado ? 'Despublicar' : 'Publicar'}>
+                {post.publicado ? <FiEye size={14} /> : <FiEyeOff size={14} />}
+              </button>
+              <button onClick={() => onEdit(post.id)} className="p-2 text-gray-400 hover:text-primary transition-colors" title="Editar">
+                <FiEdit2 size={14} />
+              </button>
+            </>
+          }
+        />
       ))}
     </div>
   )
