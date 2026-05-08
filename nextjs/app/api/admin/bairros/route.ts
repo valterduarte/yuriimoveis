@@ -1,21 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '../../../../lib/requireAuth'
 import { fetchDistinctBairros, fetchDistinctCidades } from '../../../../lib/api'
+import { requireUser, withErrorHandler } from '../../../../lib/apiHandler'
 
-export async function GET(request: NextRequest) {
-  const user = requireAuth(request)
-  if (!user) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+export const GET = withErrorHandler('GET /api/admin/bairros', async (request: NextRequest) => {
+  const user = requireUser(request)
+  if (user instanceof NextResponse) return user
 
-  try {
-    const [bairros, cidades] = await Promise.all([
-      fetchDistinctBairros(),
-      fetchDistinctCidades(),
-    ])
-    return NextResponse.json({ bairros, cidades }, {
-      headers: { 'Cache-Control': 'private, max-age=60' },
-    })
-  } catch (err) {
-    console.error('GET /api/admin/bairros error:', err)
-    return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
-  }
-}
+  const [bairros, cidades] = await Promise.all([
+    fetchDistinctBairros(),
+    fetchDistinctCidades(),
+  ])
+  return NextResponse.json({ bairros, cidades }, {
+    headers: { 'Cache-Control': 'private, max-age=60' },
+  })
+})

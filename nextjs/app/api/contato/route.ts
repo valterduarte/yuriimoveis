@@ -1,69 +1,53 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDb } from '../../../lib/db'
-import { requireAuth } from '../../../lib/requireAuth'
 import { contatoSchema } from '../../../lib/schemas'
 import { rateLimit } from '../../../lib/rateLimit'
+import { parseSchema, requireUser, tooManyRequests, withErrorHandler } from '../../../lib/apiHandler'
 
 const isRateLimited = rateLimit({ name: 'contato', maxAttempts: 5, windowMs: 15 * 60 * 1000 })
 
-export async function POST(request: NextRequest) {
+export const POST = withErrorHandler('POST /api/contato', async (request: NextRequest) => {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
   if (isRateLimited(ip)) {
-    return NextResponse.json(
-      { error: 'Muitas mensagens enviadas. Tente novamente em 15 minutos.' },
-      { status: 429 }
-    )
+    return tooManyRequests('Muitas mensagens enviadas. Tente novamente em 15 minutos.')
   }
 
-  const body = await request.json()
-  const parsed = contatoSchema.safeParse(body)
-  if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
-  }
-  const { nome, email, telefone, assunto, mensagem, imovel_id } = parsed.data
+  const data = parseSchema(contatoSchema, await request.json())
+  if (data instanceof NextResponse) return data
+  const { nome, email, telefone, assunto, mensagem, imovel_id } = data
 
-  try {
-    const result = await getDb().query(`
-      INSERT INTO contatos (nome, email, telefone, assunto, mensagem, imovel_id)
-      VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id
-    `, [nome, email, telefone, assunto, mensagem, imovel_id ?? null])
+  const result = await getDb().query(`
+    INSERT INTO contatos (nome, email, telefone, assunto, mensagem, imovel_id)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING id
+  `, [nome, email, telefone, assunto, mensagem, imovel_id ?? null])
 
-    return NextResponse.json(
-      { id: result.rows[0].id, message: 'Mensagem enviada com sucesso!' },
-      { status: 201 }
-    )
-  } catch (err) {
-    console.error('POST /api/contato error:', err)
-    return NextResponse.json({ error: 'Erro ao processar mensagem' }, { status: 500 })
-  }
-}
+  return NextResponse.json(
+    { id: result.rows[0].id, message: 'Mensagem enviada com sucesso!' },
+    { status: 201 }
+  )
+})
 
-export async function GET(request: NextRequest) {
-  const user = requireAuth(request)
-  if (!user) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+export const GET = withErrorHandler('GET /api/contato', async (request: NextRequest) => {
+  const user = requireUser(request)
+  if (user instanceof NextResponse) return user
 
   const { searchParams } = new URL(request.url)
   const page  = Math.max(1, Number(searchParams.get('page'))  || 1)
   const limit = Math.min(50, Math.max(1, Number(searchParams.get('limit')) || 20))
   const offset = (page - 1) * limit
 
-  try {
-    const countResult = await getDb().query('SELECT COUNT(*) as total FROM contatos')
-    const total = parseInt(countResult.rows[0].total)
+  const countResult = await getDb().query('SELECT COUNT(*) as total FROM contatos')
+  const total = parseInt(countResult.rows[0].total)
 
-    const result = await getDb().query(
-      'SELECT * FROM contatos ORDER BY created_at DESC LIMIT $1 OFFSET $2',
-      [limit, offset]
-    )
+  const result = await getDb().query(
+    'SELECT * FROM contatos ORDER BY created_at DESC LIMIT $1 OFFSET $2',
+    [limit, offset]
+  )
 
-    return NextResponse.json({
-      contatos: result.rows,
-      total, page, limit,
-      pages: Math.ceil(total / limit),
-    })
-  } catch (err) {
-    console.error('GET /api/contato error:', err)
-    return NextResponse.json({ error: 'Erro interno' }, { status: 500 })
-  }
-}
+  return NextResponse.json({
+    contatos: result.rows,
+    total, page, limit,
+    pages: Math.ceil(total / limit),
+  })
+})
