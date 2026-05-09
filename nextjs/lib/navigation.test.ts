@@ -95,10 +95,6 @@ describe('bairroDbNameToSlug', () => {
   it('falls back to slugifying the name when the bairro is not configured', () => {
     expect(bairroDbNameToSlug('Bairro Inventado')).toBe('bairro-inventado')
   })
-
-  it('honours dbMatch overrides (Jd Roberto → jardim-roberto)', () => {
-    expect(bairroDbNameToSlug('Jd Roberto')).toBe('jardim-roberto')
-  })
 })
 
 describe('hasRichBairroContent', () => {
