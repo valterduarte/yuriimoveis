@@ -220,7 +220,6 @@ export const BAIRROS: Record<string, BairroData> = {
     nome: 'Jardim Roberto',
     slug: 'jardim-roberto',
     cidade: 'Osasco',
-    dbMatch: 'Jd Roberto',
     titulo: 'Imóveis no Jardim Roberto, Osasco SP',
     descricaoMeta:
       'Encontre imóveis no Jardim Roberto em Osasco, SP. Casas e apartamentos para venda e aluguel. Atendimento com o Corretor Yuri.',
@@ -277,27 +276,6 @@ export const BAIRROS: Record<string, BairroData> = {
         'A região possui escolas municipais e estaduais de ensino fundamental e médio. A proximidade com Pirituba e o centro de Osasco amplia as opções de ensino técnico e superior para os moradores.',
       porqueMorar:
         'O Rochdale é indicado para quem busca imóveis em Osasco com boa relação custo-benefício e proximidade com São Paulo. A localização na divisa entre as duas cidades é estratégica para trabalhadores que precisam transitar entre Osasco e a capital. O perfil tranquilo do bairro e a presença de áreas verdes são diferenciais para famílias.',
-    },
-  },
-
-  'jardim-esperanca': {
-    nome: 'Jardim Esperança',
-    slug: 'jardim-esperanca',
-    cidade: 'Barueri',
-    titulo: 'Imóveis no Jardim Esperança, Barueri SP — Corretor Yuri',
-    descricaoMeta:
-      'Apartamentos no Jardim Esperança em Barueri, SP. Imóveis prontos para morar e lançamentos. Atendimento personalizado com o Corretor Yuri.',
-    conteudo: {
-      sobre:
-        'O Jardim Esperança é um bairro residencial de Barueri em expansão, com novos empreendimentos de médio e alto padrão chegando à região. Bem localizado em relação ao centro de Barueri e à área de Alphaville, o bairro atrai famílias e investidores em busca de apartamentos com boa infraestrutura e preços competitivos na Grande São Paulo.',
-      infraestrutura:
-        'O bairro conta com comércio local, supermercados, farmácias e acesso fácil a serviços no centro de Barueri. A proximidade com Alphaville e o eixo da Castelo Branco ampliam o acesso a shoppings, restaurantes, clínicas e hospitais. Novos empreendimentos têm impulsionado melhorias urbanas na região.',
-      transporte:
-        'O Jardim Esperança tem acesso às principais vias de Barueri e conexão com a Rodovia Castelo Branco, facilitando o deslocamento para São Paulo e para a região de Alphaville. Linhas de ônibus atendem o bairro com integração ao centro de Barueri e aos terminais da região.',
-      educacao:
-        'A região conta com escolas públicas municipais de ensino fundamental. A proximidade com o centro de Barueri e com Alphaville amplia as opções de colégios particulares e cursos técnicos. Para ensino superior, o acesso às rodovias facilita deslocamentos a instituições em Osasco, Barueri e São Paulo.',
-      porqueMorar:
-        'O Jardim Esperança oferece boa relação custo-benefício para quem deseja morar em Barueri com fácil acesso a Alphaville e à capital. Empreendimentos prontos para morar com lazer completo, como academia, piscinas e espaços rooftop, tornam o bairro uma escolha prática para famílias que buscam qualidade de vida sem abrir mão da localização.',
     },
   },
 
@@ -428,28 +406,6 @@ export const BAIRROS: Record<string, BairroData> = {
         'A região conta com escolas municipais e estaduais de ensino fundamental e médio, além de creches e escolas de educação infantil. A proximidade com o centro de Barueri e com Alphaville dá acesso a colégios particulares tradicionais, à ETEC Antônio Furlan e ao SENAI. Para ensino superior, o acesso às rodovias facilita deslocamentos a faculdades em Osasco, Barueri e São Paulo.',
       porqueMorar:
         'Morar no Jardim Tupanci significa aproveitar preços acessíveis em Barueri com a comodidade de estar perto da Castelo Branco e da CPTM. Os lançamentos MCMV na região oferecem lazer completo — piscinas, academia, quadra esportiva, salão de festas, playground e espaço pet — com parcelas viáveis via financiamento Caixa. É uma escolha sólida para famílias jovens que querem o primeiro imóvel próprio, investidores atentos à valorização e trabalhadores que precisam de mobilidade para Barueri, Alphaville ou São Paulo.',
-    },
-  },
-
-  'jardim-silveira': {
-    nome: 'Jardim Silveira',
-    slug: 'jardim-silveira',
-    cidade: 'Barueri',
-    dbMatch: 'Jardim Silveira',
-    titulo: 'Imóveis no Jardim Silveira, Barueri SP — Corretor Yuri',
-    descricaoMeta:
-      'Apartamentos no Jardim Silveira em Barueri, SP. Imóveis prontos para morar e lançamentos com boa localização e acesso à Castelo Branco. Atendimento com o Corretor Yuri.',
-    conteudo: {
-      sobre:
-        'O Jardim Silveira é um bairro residencial de Barueri com perfil familiar e tranquilo. Situado em região de fácil acesso ao centro da cidade e às principais vias expressas, o bairro tem atraído novos moradores em busca de qualidade de vida e preços mais acessíveis que endereços como Alphaville. A chegada de empreendimentos verticais recentes renovou o interesse pelo bairro, que combina ruas residenciais consolidadas com o dinamismo da Barueri em expansão.',
-      infraestrutura:
-        'O Jardim Silveira conta com comércio local, mercados, farmácias e prestadores de serviço no entorno. A proximidade com o centro de Barueri e com o Shopping Barueri amplia as opções de compras, alimentação e serviços. Na área de saúde, há UBS e clínicas na região, além de fácil acesso ao Hospital Municipal de Barueri.',
-      transporte:
-        'O bairro tem boa conectividade com as principais vias de Barueri, com acesso à Rodovia Castelo Branco facilitando deslocamentos para São Paulo, Osasco e o interior. Linhas de ônibus municipais conectam o Jardim Silveira ao Terminal Barueri e à Estação Barueri da CPTM (Linha 8-Diamante), que oferece ligação direta à Estação da Luz.',
-      educacao:
-        'A região conta com escolas municipais de ensino fundamental e creches. A proximidade com o centro de Barueri e com Alphaville dá acesso a escolas estaduais, colégios particulares e a instituições de ensino técnico como ETEC e SENAI. Para ensino superior, o acesso às rodovias facilita deslocamentos a faculdades da região metropolitana.',
-      porqueMorar:
-        'O Jardim Silveira oferece boa relação custo-benefício para quem quer morar em Barueri com mobilidade e tranquilidade. O bairro é uma alternativa acessível para famílias que precisam de acesso rápido à Castelo Branco ou à CPTM, sem abrir mão de infraestrutura básica e de um ambiente residencial consolidado. Uma escolha prática para quem busca sair do aluguel ou diversificar o portfólio imobiliário em Barueri.',
     },
   },
 
