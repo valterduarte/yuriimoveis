@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { FiX, FiCalendar, FiClock, FiUser, FiPhone, FiHome, FiCheck } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-import { track } from '@vercel/analytics'
 import { PHONE_WA_BASE } from '../lib/config'
 import { trackEvent } from './GoogleAnalytics'
 
@@ -76,7 +75,6 @@ export default function ScheduleVisitModal({ imovelTitulo, imovelId, onClose }: 
       `*Horário:* ${horario}`,
     ].join('\n')
 
-    track('schedule_visit', { imovel_id: String(imovelId), source: 'modal' })
     trackEvent('schedule_visit', 'lead', `imovel_${imovelId}`)
 
     window.open(`${PHONE_WA_BASE}?text=${encodeURIComponent(message)}`, '_blank')

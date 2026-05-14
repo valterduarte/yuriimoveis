@@ -9,6 +9,8 @@ import type { Metadata } from 'next'
 
 const FILTER_KEYS = ['tipo', 'categoria', 'cidade', 'bairro', 'precoMin', 'precoMax', 'quartos', 'codigo']
 
+export const revalidate = 60
+
 export const metadata: Metadata = {
   title: 'Imóveis em Osasco, Barueri e Carapicuíba — Corretor Yuri',
   description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco, Barueri e Carapicuíba. Atendimento com o Corretor Yuri, CRECI-SP 235509.',

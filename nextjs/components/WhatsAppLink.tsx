@@ -1,6 +1,5 @@
 'use client'
 
-import { track } from '@vercel/analytics'
 import { trackEvent } from './GoogleAnalytics'
 import type { ReactNode } from 'react'
 
@@ -31,7 +30,6 @@ export default function WhatsAppLink({ href, source, children, ...rest }: WhatsA
       fetch('/api/track-click', { method: 'POST', body: payload, keepalive: true })
     }
 
-    track('whatsapp_click', { source, device })
     trackEvent('click', 'whatsapp', source)
   }
 
