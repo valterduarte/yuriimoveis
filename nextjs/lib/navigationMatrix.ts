@@ -9,6 +9,7 @@ export interface NavigationMatrixRow {
   categoria: string
   bairro: string
   count: number
+  lastModified: string
 }
 
 export interface PriceBedroomMatrixRow {
@@ -24,7 +25,9 @@ export interface PriceBedroomMatrixRow {
 const fetchNavigationMatrixCached = unstable_cache(
   async (): Promise<NavigationMatrixRow[]> => {
     const result = await getDb().query(
-      `SELECT tipo, cidade, categoria, bairro, COUNT(*)::int AS count
+      `SELECT tipo, cidade, categoria, bairro,
+              COUNT(*)::int AS count,
+              MAX(updated_at) AS last_modified
        FROM imoveis
        WHERE ativo = true
          AND tipo IS NOT NULL AND tipo != ''
@@ -33,12 +36,13 @@ const fetchNavigationMatrixCached = unstable_cache(
          AND bairro IS NOT NULL AND bairro != ''
        GROUP BY tipo, cidade, categoria, bairro`
     )
-    return result.rows.map((r: NavigationMatrixRow) => ({
+    return result.rows.map((r: { tipo: string; cidade: string; categoria: string; bairro: string; count: number | string; last_modified: string | Date | null }) => ({
       tipo:      r.tipo,
       cidade:    r.cidade,
       categoria: r.categoria,
       bairro:    r.bairro,
       count:     Number(r.count),
+      lastModified: r.last_modified ? new Date(r.last_modified).toISOString() : new Date().toISOString(),
     }))
   },
   ['fetchNavigationMatrix'],

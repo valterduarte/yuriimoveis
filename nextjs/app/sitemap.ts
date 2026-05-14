@@ -19,6 +19,13 @@ import type { MetadataRoute } from 'next'
 
 export const revalidate = 3600
 
+function pickLatest(current: Date | undefined, incoming: string | undefined): Date | undefined {
+  if (!incoming) return current
+  const next = new Date(incoming)
+  if (!current || next > current) return next
+  return current
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [properties, bairros, matrix, priceMatrix, blogSlugs] = await Promise.all([
     fetchAllPropertySlugs(),
@@ -32,6 +39,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     throw new Error('sitemap: database returned no data — refusing to serve empty sitemap')
   }
 
+  const now = new Date()
+  let propertiesLatest: Date | undefined
+  for (const p of properties) propertiesLatest = pickLatest(propertiesLatest, p.updated_at)
+
   const propertyUrls: MetadataRoute.Sitemap = properties.map(p => {
     const images = (p.imagens || [])
       .slice(0, 10)
@@ -39,9 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .filter(Boolean)
     return {
       url: `${SITE_URL}/imoveis/${imovelSlug(p)}`,
-      lastModified: p.updated_at ? new Date(p.updated_at) : new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
+      lastModified: p.updated_at ? new Date(p.updated_at) : now,
       ...(images.length > 0 && { images }),
     }
   })
@@ -49,11 +58,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const MIN_PROPERTIES_FOR_INDEXING = 3
 
   const bairroCountByDbName = new Map<string, number>()
+  const bairroLastModByDbName = new Map<string, Date>()
   const landingCountByTipoCategoria = new Map<string, number>()
+  const cidadeLatest = new Map<string, Date>()
+  const cidadeCategoriaLatest = new Map<string, Date>()
+  const hierarchicalLatest = new Map<string, Date>()
+
   for (const row of matrix) {
     bairroCountByDbName.set(row.bairro, (bairroCountByDbName.get(row.bairro) ?? 0) + row.count)
     const landingKey = `${row.tipo}|${row.categoria}`
     landingCountByTipoCategoria.set(landingKey, (landingCountByTipoCategoria.get(landingKey) ?? 0) + row.count)
+
+    const lastMod = pickLatest(undefined, row.lastModified) ?? now
+    const prev = bairroLastModByDbName.get(row.bairro)
+    if (!prev || lastMod > prev) bairroLastModByDbName.set(row.bairro, lastMod)
+
+    const acao: AcaoSlug = row.tipo === 'venda' ? 'comprar' : 'alugar'
+    const cidadeSlug = cidadeNameToSlug(row.cidade)
+    const cidadeKey = `${acao}|${cidadeSlug}`
+    const ccKey = `${acao}|${cidadeSlug}|${row.categoria}`
+    const leafKey = `${acao}|${cidadeSlug}|${row.categoria}|${bairroDbNameToSlug(row.bairro)}`
+
+    for (const [key, map] of [
+      [cidadeKey, cidadeLatest] as const,
+      [ccKey, cidadeCategoriaLatest] as const,
+      [leafKey, hierarchicalLatest] as const,
+    ]) {
+      const cur = map.get(key)
+      if (!cur || lastMod > cur) map.set(key, lastMod)
+    }
   }
 
   const configuredBairros = Object.values(BAIRROS)
@@ -70,9 +103,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter(b => bairroHasEnoughStock(b.slug, b.dbMatch))
     .map(b => ({
       url: `${SITE_URL}/imoveis/${b.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
+      lastModified: (b.dbMatch && bairroLastModByDbName.get(b.dbMatch)) || now,
     }))
 
   const dbBairroUrls: MetadataRoute.Sitemap = bairros
@@ -80,9 +111,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter(b => (bairroCountByDbName.get(b) ?? 0) >= MIN_PROPERTIES_FOR_INDEXING)
     .map(b => ({
       url: `${SITE_URL}/imoveis/${slugify(b)}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
+      lastModified: bairroLastModByDbName.get(b) || now,
     }))
 
   const bairroUrls: MetadataRoute.Sitemap = [...configuredBairroUrls, ...dbBairroUrls]
@@ -91,9 +120,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter(lp => (landingCountByTipoCategoria.get(`${lp.tipo}|${lp.categoria}`) ?? 0) >= MIN_PROPERTIES_FOR_INDEXING)
     .map(lp => ({
       url: `${SITE_URL}/imoveis/${lp.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.85,
+      lastModified: propertiesLatest || now,
     }))
 
   const hierarchicalUrls: MetadataRoute.Sitemap = []
@@ -113,20 +140,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       cidadeSeen.add(cidadeKey)
       hierarchicalUrls.push({
         url: `${SITE_URL}${buildHierarchicalUrl({ acao, cidade: cidadeSlug })}`,
-        lastModified: new Date(),
-        changeFrequency: 'daily',
-        priority: 0.9,
+        lastModified: cidadeLatest.get(cidadeKey) || now,
       })
     }
 
-    const cidadeCategoriaKey = `${acao}|${cidadeSlug}|${row.categoria}`
-    if (!cidadeCategoriaSeen.has(cidadeCategoriaKey)) {
-      cidadeCategoriaSeen.add(cidadeCategoriaKey)
+    const ccKey = `${acao}|${cidadeSlug}|${row.categoria}`
+    if (!cidadeCategoriaSeen.has(ccKey)) {
+      cidadeCategoriaSeen.add(ccKey)
       hierarchicalUrls.push({
         url: `${SITE_URL}${buildHierarchicalUrl({ acao, cidade: cidadeSlug, categoria: row.categoria })}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.85,
+        lastModified: cidadeCategoriaLatest.get(ccKey) || now,
       })
     }
 
@@ -138,13 +161,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     hierarchicalSeen.add(leafKey)
     hierarchicalUrls.push({
       url: `${SITE_URL}${buildHierarchicalUrl({ acao, cidade: cidadeSlug, categoria: row.categoria, bairro: bairroSlug })}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
+      lastModified: hierarchicalLatest.get(leafKey) || now,
     })
   }
 
-  // Filter pages (price ranges + bedroom counts) — city-wide, category-scoped, and bairro-scoped
   const filterUrls: MetadataRoute.Sitemap = []
   const filterSeen = new Set<string>()
   const categoryFilterSeen = new Set<string>()
@@ -156,6 +176,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!cidadeSlugToName(cidadeSlug)) continue
     const hasCategoria = !!getCategoriaBySlug(row.categoria)
     const bairroSlug = bairroDbNameToSlug(row.bairro)
+    const lastMod = cidadeCategoriaLatest.get(`${acao}|${cidadeSlug}|${row.categoria}`)
+      || cidadeLatest.get(`${acao}|${cidadeSlug}`)
+      || now
 
     const priceRanges = getAllPriceRanges(row.tipo as 'venda' | 'aluguel')
     for (const range of priceRanges) {
@@ -167,9 +190,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         filterSeen.add(key)
         filterUrls.push({
           url: `${SITE_URL}/${acao}/${cidadeSlug}/filtro/${range.slug}`,
-          lastModified: new Date(),
-          changeFrequency: 'weekly',
-          priority: 0.75,
+          lastModified: lastMod,
         })
       }
 
@@ -179,9 +200,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           categoryFilterSeen.add(catKey)
           filterUrls.push({
             url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/filtro/${range.slug}`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
+            lastModified: lastMod,
           })
         }
 
@@ -191,9 +210,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             bairroFilterSeen.add(bairroKey)
             filterUrls.push({
               url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/${bairroSlug}/filtro/${range.slug}`,
-              lastModified: new Date(),
-              changeFrequency: 'weekly',
-              priority: 0.78,
+              lastModified: lastMod,
             })
           }
         }
@@ -208,9 +225,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         filterSeen.add(key)
         filterUrls.push({
           url: `${SITE_URL}/${acao}/${cidadeSlug}/filtro/${amenity.slug}`,
-          lastModified: new Date(),
-          changeFrequency: 'weekly',
-          priority: 0.75,
+          lastModified: lastMod,
         })
       }
 
@@ -220,9 +235,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           categoryFilterSeen.add(catKey)
           filterUrls.push({
             url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/filtro/${amenity.slug}`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
+            lastModified: lastMod,
           })
         }
 
@@ -232,9 +245,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             bairroFilterSeen.add(bairroKey)
             filterUrls.push({
               url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/${bairroSlug}/filtro/${amenity.slug}`,
-              lastModified: new Date(),
-              changeFrequency: 'weekly',
-              priority: 0.78,
+              lastModified: lastMod,
             })
           }
         }
@@ -251,9 +262,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         filterSeen.add(key)
         filterUrls.push({
           url: `${SITE_URL}/${acao}/${cidadeSlug}/filtro/${bf.slug}`,
-          lastModified: new Date(),
-          changeFrequency: 'weekly',
-          priority: 0.75,
+          lastModified: lastMod,
         })
       }
 
@@ -263,9 +272,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           categoryFilterSeen.add(catKey)
           filterUrls.push({
             url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/filtro/${bf.slug}`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
+            lastModified: lastMod,
           })
         }
 
@@ -275,9 +282,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             bairroFilterSeen.add(bairroKey)
             filterUrls.push({
               url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/${bairroSlug}/filtro/${bf.slug}`,
-              lastModified: new Date(),
-              changeFrequency: 'weekly',
-              priority: 0.78,
+              lastModified: lastMod,
             })
           }
         }
@@ -290,78 +295,39 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter(b => activeBairroDbNames.has(b.dbMatch || b.nome))
     .map(b => ({
       url: `${SITE_URL}/bairros/${b.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.78,
+      lastModified: (b.dbMatch && bairroLastModByDbName.get(b.dbMatch)) || now,
     }))
 
+  const ajudaLatest = AJUDA_ARTIGOS.reduce<Date | undefined>((latest, a) => {
+    const d = new Date(a.atualizadoEm)
+    return !latest || d > latest ? d : latest
+  }, undefined) || now
+
+  const blogLatest = blogSlugs.reduce<Date | undefined>((latest, b) => {
+    if (!b.updated_at) return latest
+    const d = new Date(b.updated_at)
+    return !latest || d > latest ? d : latest
+  }, undefined) || now
+
   return [
-    {
-      url: SITE_URL,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1.0,
-    },
-    {
-      url: `${SITE_URL}/imoveis`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/mapa`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.85,
-    },
-    {
-      url: `${SITE_URL}/simulador`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/sobre`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/contato`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${SITE_URL}/ajuda`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
+    { url: SITE_URL, lastModified: propertiesLatest || now },
+    { url: `${SITE_URL}/imoveis`, lastModified: propertiesLatest || now },
+    { url: `${SITE_URL}/alugar`, lastModified: now },
+    { url: `${SITE_URL}/mapa`, lastModified: propertiesLatest || now },
+    { url: `${SITE_URL}/simulador`, lastModified: now },
+    { url: `${SITE_URL}/sobre`, lastModified: now },
+    { url: `${SITE_URL}/contato`, lastModified: now },
+    { url: `${SITE_URL}/ajuda`, lastModified: ajudaLatest },
     ...AJUDA_ARTIGOS.map(a => ({
       url: `${SITE_URL}/ajuda/${a.slug}`,
       lastModified: new Date(a.atualizadoEm),
-      changeFrequency: 'monthly' as const,
-      priority: 0.75,
     })),
-    ...(blogSlugs.length > 0 ? [{
-      url: `${SITE_URL}/blog`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    }] : []),
+    ...(blogSlugs.length > 0 ? [{ url: `${SITE_URL}/blog`, lastModified: blogLatest }] : []),
     ...blogSlugs.map(b => ({
       url: `${SITE_URL}/blog/${b.slug}`,
-      lastModified: b.updated_at ? new Date(b.updated_at) : new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.75,
+      lastModified: b.updated_at ? new Date(b.updated_at) : now,
     })),
-    {
-      url: `${SITE_URL}/bairros`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
+    { url: `${SITE_URL}/bairros`, lastModified: propertiesLatest || now },
     ...hierarchicalUrls,
     ...filterUrls,
     ...landingUrls,
