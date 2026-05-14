@@ -229,6 +229,14 @@ export default async function BairroGuidePage({ params }: PageProps) {
           <section className="bg-gray-50 border border-gray-200 p-5 md:p-6">
             <h2 className="text-xl font-bold text-dark mb-3 uppercase tracking-wide">Por que morar no {bairro.nome}</h2>
             <p className="text-gray-700 text-sm md:text-base leading-relaxed">{bairro.conteudo.porqueMorar}</p>
+            {bairro.relatedPost && (
+              <Link
+                href={bairro.relatedPost.href}
+                className="inline-block mt-4 text-xs font-bold uppercase tracking-wider text-primary hover:underline"
+              >
+                {bairro.relatedPost.label}
+              </Link>
+            )}
           </section>
         </article>
 

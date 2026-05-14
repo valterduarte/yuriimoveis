@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import SimuladorClient from '../../components/simulador/SimuladorClient'
 import { buildFaqPageSchema } from '../../lib/jsonLd'
@@ -155,6 +156,9 @@ export default async function SimuladorPage({ searchParams }: { searchParams: Pr
                 imóvel. Você pode usar saldo do FGTS para compor essa entrada se o imóvel for residencial e dentro
                 das regras do SFH.
               </p>
+              <Link href="/blog/documentos-para-financiar-imovel-2026" className="inline-block mt-2 text-xs font-bold uppercase tracking-wider text-primary hover:underline">
+                Checklist de documentos para aprovação do financiamento →
+              </Link>
             </div>
 
             <div>
@@ -182,6 +186,9 @@ export default async function SimuladorPage({ searchParams }: { searchParams: Pr
                 enquadrar no programa Minha Casa Minha Vida, com juros bem menores que o mercado e, em alguns
                 casos, subsídio direto na entrada. As faixas vão de 4% a.a. (Faixa 1) até 7,66% a.a. (Faixa 3).
               </p>
+              <Link href="/blog/minha-casa-minha-vida-2026-faixas-subsidio" className="inline-block mt-2 text-xs font-bold uppercase tracking-wider text-primary hover:underline">
+                Faixas, subsídios e regras do MCMV 2026 →
+              </Link>
             </div>
           </div>
         </div>

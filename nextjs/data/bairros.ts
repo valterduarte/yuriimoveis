@@ -331,6 +331,10 @@ export const BAIRROS: Record<string, BairroData> = {
       porqueMorar:
         'Morar em Alphaville é escolher alto padrão, segurança e valorização imobiliária consistente. Os lançamentos atuais oferecem lazer elevado em rooftops, academias equipadas, piscinas, espaços gourmet e áreas corporativas como coworking. A combinação de áreas verdes, segurança 24h e infraestrutura de primeira faz do bairro um dos destinos mais sólidos para morar e investir na grande São Paulo.',
     },
+    relatedPost: {
+      href: '/blog/alphaville-ou-barueri-qual-vale-mais-a-pena-2026',
+      label: 'Alphaville ou Barueri? Quanto custa morar em cada em 2026 →',
+    },
   },
 
   'jardim-julio': {

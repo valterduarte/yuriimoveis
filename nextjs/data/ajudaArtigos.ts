@@ -132,6 +132,14 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
 
       {
         type: 'callout',
+        text: 'Vai financiar pelo banco? A lista muda um pouco: veja o checklist específico para aprovação de financiamento imobiliário na Caixa e nos demais bancos.',
+        link: {
+          href: '/blog/documentos-para-financiar-imovel-2026',
+          label: 'Documentos para financiar imóvel em 2026 →',
+        },
+      },
+      {
+        type: 'callout',
         text: 'Cada negociação tem suas particularidades. Antes de iniciar a compra, faço uma análise gratuita da documentação completa para garantir segurança jurídica do começo ao fim.',
       },
     ],

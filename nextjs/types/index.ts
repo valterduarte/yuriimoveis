@@ -122,5 +122,6 @@ export interface BairroData {
   imagem?: string
   dbMatch?: string
   precoMedio?: BairroPriceInsight
+  relatedPost?: { href: string; label: string }
   conteudo: BairroContent
 }
