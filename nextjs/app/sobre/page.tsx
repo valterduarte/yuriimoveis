@@ -7,10 +7,9 @@ import {
   PHONE_WA_BASE,
   PHONE_DISPLAY,
   PHONE_TEL,
-  PHONE_STRUCTURED,
   CRECI,
-  INSTAGRAM_URL,
 } from '../../lib/config'
+import { buildPersonSchema } from '../../lib/jsonLd'
 import WhatsAppLink from '../../components/WhatsAppLink'
 import type { Metadata } from 'next'
 
@@ -47,43 +46,10 @@ const breadcrumbJsonLd = {
   ],
 }
 
-const personJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: 'Corretor Yuri',
-  jobTitle: 'Corretor de Imóveis',
-  description:
-    'Corretor de imóveis com mais de 10 anos de experiência em Osasco e Grande São Paulo. Especialista em imóveis residenciais e comerciais.',
-  url: SITE_URL,
-  telephone: PHONE_STRUCTURED,
-  sameAs: [INSTAGRAM_URL],
-  worksFor: {
-    '@type': 'RealEstateAgent',
-    name: 'Corretor Yuri Imóveis',
-    url: SITE_URL,
-  },
-  knowsAbout: [
-    'Mercado imobiliário de Osasco',
-    'Financiamento imobiliário',
-    'Minha Casa Minha Vida',
-    'Imóveis residenciais e comerciais',
-  ],
-  hasCredential: {
-    '@type': 'EducationalOccupationalCredential',
-    credentialCategory: 'Professional License',
-    name: `CRECI-SP ${CRECI}`,
-    recognizedBy: {
-      '@type': 'Organization',
-      name: 'CRECI-SP — Conselho Regional de Corretores de Imóveis de São Paulo',
-    },
-  },
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Osasco',
-    addressRegion: 'SP',
-    addressCountry: 'BR',
-  },
-}
+const personJsonLd = buildPersonSchema({
+  name: 'Yuri Duarte',
+  alternateName: 'Corretor Yuri',
+})
 
 const DIFERENCIAIS = [
   {
@@ -138,16 +104,27 @@ export default function SobrePage() {
           <div className="max-w-3xl">
             <h2 className="text-xs font-bold uppercase tracking-widest text-dark mb-6">Sobre o Corretor</h2>
             <p className="text-gray-700 text-sm leading-relaxed mb-4">
-              Sou o Corretor Yuri, registrado no <strong>CRECI-SP</strong>, atuando há mais de 10 anos no mercado imobiliário de Osasco e Grande São Paulo.
+              Sou o Corretor Yuri, registrado no <strong>CRECI-SP {CRECI}</strong>, atuando há mais de 10 anos no mercado imobiliário de Osasco, Barueri, Carapicuíba e cidades da Grande São Paulo. Você pode confirmar meu registro diretamente no{' '}
+              <a
+                href="https://www.crecisp.gov.br/atendimento/profissionais"
+                target="_blank"
+                rel="noreferrer noopener"
+                className="text-primary underline hover:no-underline"
+              >
+                site oficial do CRECI-SP
+              </a>.
             </p>
             <p className="text-gray-700 text-sm leading-relaxed mb-4">
-              Minha trajetória começou pela paixão em ajudar pessoas a realizarem o sonho da casa própria. Ao longo dos anos, me especializei no mercado local de Osasco, acompanhando a evolução dos bairros, os lançamentos imobiliários e as melhores oportunidades de investimento na região.
+              Minha trajetória começou pela paixão em ajudar pessoas a realizarem o sonho da casa própria. Ao longo dos anos, me especializei no mercado local de Osasco, acompanhando a evolução dos bairros, os lançamentos imobiliários e as melhores oportunidades de investimento na região. Esse trabalho de campo — visitar bairros toda semana, conversar com porteiros, síndicos e moradores antigos — é o que me permite identificar quando um anúncio está acima do preço justo e quando uma oportunidade vale a corrida.
             </p>
             <p className="text-gray-700 text-sm leading-relaxed mb-4">
-              Trabalho com todos os tipos de imóveis — casas, apartamentos, terrenos, chalés, chácaras e comerciais — tanto para venda quanto para aluguel. Meu diferencial é o atendimento personalizado: entendo as necessidades de cada cliente e busco as melhores opções dentro do perfil e orçamento desejados.
+              Trabalho com todos os tipos de imóveis — casas, apartamentos, terrenos, chalés, chácaras e comerciais — tanto para venda quanto para aluguel. Meu diferencial é o atendimento personalizado: entendo as necessidades de cada cliente e busco as melhores opções dentro do perfil e orçamento desejados. Não é incomum eu sugerir um bairro diferente do que o cliente imaginou inicialmente quando percebo que o perfil de transporte, escola ou tempo até o trabalho casa melhor com a vida dele.
+            </p>
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">
+              Ofereço assessoria completa em todas as etapas da negociação: análise de documentação, simulação de financiamento (incluindo <Link href="/simulador" className="text-primary underline hover:no-underline">Minha Casa Minha Vida e Caixa SBPE</Link>), acompanhamento na visita aos imóveis, conferência de matrícula no cartório, cálculo de ITBI e suporte até a entrega das chaves.
             </p>
             <p className="text-gray-700 text-sm leading-relaxed">
-              Ofereço assessoria completa em todas as etapas da negociação: análise de documentação, simulação de financiamento (incluindo Minha Casa Minha Vida), acompanhamento na visita aos imóveis e suporte até a entrega das chaves.
+              Acredito que comprar imóvel é uma das decisões mais importantes da vida — e que o papel do corretor é encurtar a jornada do cliente sem atalhos perigosos. Por isso recuso intermediar negócios sem documentação completa, explico em linguagem clara o que está escrito em cada cláusula do contrato e prefiro perder uma venda hoje a fechar um negócio que vai gerar dor de cabeça depois.
             </p>
           </div>
         </div>

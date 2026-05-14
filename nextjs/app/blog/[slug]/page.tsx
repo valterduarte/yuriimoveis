@@ -4,9 +4,24 @@ import Image from 'next/image'
 import { FaWhatsapp } from 'react-icons/fa'
 import { fetchBlogPostBySlug, fetchAllBlogSlugs, fetchRelatedBlogPosts } from '../../../lib/api'
 import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA } from '../../../lib/config'
-import { buildBreadcrumb } from '../../../lib/jsonLd'
+import { buildBreadcrumb, buildArticleSchema, buildFaqPageSchema } from '../../../lib/jsonLd'
+import { extractFaqsFromHtml } from '../../../lib/blogFaqs'
 import WhatsAppLink from '../../../components/WhatsAppLink'
+import ItbiCalculator from '../../../components/ItbiCalculator'
 import type { Metadata } from 'next'
+
+const ITBI_CALC_SENTINEL = '<!-- itbi-calc -->'
+
+const PROSE_CLASSES =
+  'prose prose-gray max-w-none ' +
+  'prose-headings:font-bold prose-headings:text-dark prose-headings:uppercase prose-headings:tracking-wide ' +
+  'prose-h2:text-lg prose-h2:mt-8 prose-h2:mb-4 ' +
+  'prose-h3:text-base prose-h3:mt-6 prose-h3:mb-3 ' +
+  'prose-p:text-sm prose-p:leading-relaxed prose-p:text-gray-700 ' +
+  'prose-li:text-sm prose-li:text-gray-700 ' +
+  'prose-a:text-primary prose-a:no-underline hover:prose-a:underline ' +
+  'prose-strong:text-dark ' +
+  'prose-img:rounded-none'
 
 export const revalidate = 60
 
@@ -52,35 +67,28 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!post) notFound()
 
   const relatedPosts = await fetchRelatedBlogPosts(post.slug, post.tags, 3)
+  const url = `${SITE_URL}/blog/${post.slug}`
+  const faqs = extractFaqsFromHtml(post.conteudo)
 
-  const jsonLd = [
+  const article = buildArticleSchema({
+    headline: post.titulo,
+    description: post.meta_descricao || post.resumo,
+    url,
+    image: post.imagem_capa || OG_DEFAULT_IMAGE,
+    datePublished: post.created_at,
+    dateModified: post.updated_at,
+  })
+  if (post.tags.length > 0) article.keywords = post.tags.join(', ')
+
+  const jsonLd: Record<string, unknown>[] = [
     buildBreadcrumb([
       { name: 'Início',     path: '/' },
       { name: 'Blog',       path: '/blog' },
       { name: post.titulo,  path: `/blog/${post.slug}` },
     ]),
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: post.titulo,
-      description: post.meta_descricao || post.resumo,
-      image: post.imagem_capa || OG_DEFAULT_IMAGE,
-      url: `${SITE_URL}/blog/${post.slug}`,
-      datePublished: post.created_at,
-      dateModified: post.updated_at,
-      author: {
-        '@type': 'RealEstateAgent',
-        name: 'Corretor Yuri Imóveis',
-        url: SITE_URL,
-      },
-      publisher: {
-        '@type': 'Organization',
-        name: 'Corretor Yuri Imóveis',
-        url: SITE_URL,
-      },
-      ...(post.tags.length > 0 ? { keywords: post.tags.join(', ') } : {}),
-    },
+    article,
   ]
+  if (faqs.length > 0) jsonLd.push(buildFaqPageSchema(faqs))
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -127,18 +135,20 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div>
         )}
 
-        <div
-          className="prose prose-gray max-w-none
-            prose-headings:font-bold prose-headings:text-dark prose-headings:uppercase prose-headings:tracking-wide
-            prose-h2:text-lg prose-h2:mt-8 prose-h2:mb-4
-            prose-h3:text-base prose-h3:mt-6 prose-h3:mb-3
-            prose-p:text-sm prose-p:leading-relaxed prose-p:text-gray-700
-            prose-li:text-sm prose-li:text-gray-700
-            prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-            prose-strong:text-dark
-            prose-img:rounded-none"
-          dangerouslySetInnerHTML={{ __html: post.conteudo }}
-        />
+        {post.conteudo.includes(ITBI_CALC_SENTINEL) ? (
+          (() => {
+            const [before, after] = post.conteudo.split(ITBI_CALC_SENTINEL)
+            return (
+              <>
+                <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: before }} />
+                <ItbiCalculator />
+                <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: after }} />
+              </>
+            )
+          })()
+        ) : (
+          <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: post.conteudo }} />
+        )}
 
         <div className="mt-12 pt-8 border-t border-gray-200">
           <div className="bg-white border border-gray-200 p-6 text-center">

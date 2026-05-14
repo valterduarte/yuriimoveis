@@ -259,6 +259,17 @@ export default async function AjudaArtigoPage({ params }: PageProps) {
       <section className="py-16">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl">
+            {artigo.resumo && (
+              <aside
+                role="note"
+                aria-label="Resumo"
+                className="border-l-4 border-primary bg-gray-50 px-5 py-4 mb-10 text-sm md:text-base text-dark leading-relaxed"
+              >
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-2">Em resumo</p>
+                <p>{artigo.resumo}</p>
+              </aside>
+            )}
+
             {artigo.blocks.map(renderBlock)}
 
             {artigo.cartorios && <CartoriosList cartorios={artigo.cartorios} />}

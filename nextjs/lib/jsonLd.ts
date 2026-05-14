@@ -1,8 +1,9 @@
 import { imovelSlug } from '../utils/imovelUtils'
-import { SITE_URL, PHONE_STRUCTURED, PHONE_WA, INSTAGRAM_URL, OG_DEFAULT_IMAGE, CRECI } from './config'
+import { SITE_URL, PHONE_STRUCTURED, INSTAGRAM_URL, OG_DEFAULT_IMAGE, CRECI } from './config'
 import type { Imovel } from '../types'
 
 export const AGENT_ID = `${SITE_URL}/#agent`
+export const PERSON_ID = `${SITE_URL}/sobre#person`
 const WEBSITE_ID = `${SITE_URL}/#website`
 
 interface BreadcrumbItem {
@@ -81,11 +82,51 @@ export function buildArticleSchema({
     headline,
     description,
     image,
-    author: { '@id': AGENT_ID },
+    author: { '@id': PERSON_ID },
     publisher: { '@id': AGENT_ID },
     mainEntityOfPage: url,
     ...(datePublished ? { datePublished } : {}),
     ...(dateModified ? { dateModified } : {}),
+  }
+}
+
+interface PersonSchemaInput {
+  name: string
+  alternateName?: string
+  image?: string
+}
+
+export function buildPersonSchema({ name, alternateName, image }: PersonSchemaInput): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': PERSON_ID,
+    name,
+    ...(alternateName ? { alternateName } : {}),
+    url: `${SITE_URL}/sobre`,
+    jobTitle: 'Corretor de Imóveis',
+    telephone: PHONE_STRUCTURED,
+    ...(image ? { image } : {}),
+    worksFor: { '@id': AGENT_ID },
+    hasCredential: {
+      '@type': 'EducationalOccupationalCredential',
+      credentialCategory: 'Professional License',
+      name: `CRECI-SP ${CRECI}`,
+      recognizedBy: {
+        '@type': 'Organization',
+        name: 'CRECI-SP — Conselho Regional de Corretores de Imóveis de São Paulo',
+      },
+    },
+    knowsAbout: [
+      'Mercado imobiliário de Osasco',
+      'Mercado imobiliário de Barueri e Alphaville',
+      'Mercado imobiliário de Carapicuíba',
+      'Financiamento imobiliário Caixa SBPE',
+      'Minha Casa Minha Vida',
+      'ITBI e impostos imobiliários',
+      'Imóveis residenciais e comerciais',
+    ],
+    sameAs: [INSTAGRAM_URL],
   }
 }
 
@@ -152,7 +193,7 @@ export function buildGlobalJsonLd(): Record<string, unknown>[] {
     },
     {
       '@context': 'https://schema.org',
-      '@type': ['LocalBusiness', 'RealEstateAgent'],
+      '@type': 'RealEstateAgent',
       '@id': AGENT_ID,
       name: 'Corretor Yuri Imóveis',
       legalName: 'Corretor Yuri Imóveis',
@@ -168,18 +209,27 @@ export function buildGlobalJsonLd(): Record<string, unknown>[] {
         addressLocality: 'Osasco',
         addressRegion: 'SP',
         addressCountry: 'BR',
+        postalCode: '06010-000',
       },
       geo: {
         '@type': 'GeoCoordinates',
-        latitude: -23.5329,
-        longitude: -46.7917,
+        latitude: -23.53296,
+        longitude: -46.79173,
       },
-      openingHoursSpecification: {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        opens: '09:00',
-        closes: '18:00',
-      },
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+          opens: '09:00',
+          closes: '18:00',
+        },
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: 'Saturday',
+          opens: '09:00',
+          closes: '12:00',
+        },
+      ],
       areaServed: [
         { '@type': 'City', name: 'Osasco' },
         { '@type': 'City', name: 'Barueri' },
@@ -203,14 +253,9 @@ export function buildGlobalJsonLd(): Record<string, unknown>[] {
           name: 'CRECI-SP — Conselho Regional de Corretores de Imóveis de São Paulo',
         },
       },
-      founder: {
-        '@type': 'Person',
-        name: 'Corretor Yuri',
-        jobTitle: 'Corretor de Imóveis',
-        url: `${SITE_URL}/sobre`,
-        sameAs: [INSTAGRAM_URL],
-      },
-      sameAs: [INSTAGRAM_URL, PHONE_WA],
+      founder: { '@id': PERSON_ID },
+      employee: [{ '@id': PERSON_ID }],
+      sameAs: [INSTAGRAM_URL],
     },
   ]
 }

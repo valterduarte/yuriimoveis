@@ -87,14 +87,14 @@ describe('buildCollectionPage', () => {
 })
 
 describe('buildArticleSchema', () => {
-  it('attributes the article to the global agent id', () => {
+  it('attributes the article to the person and the agent as publisher', () => {
     const schema = buildArticleSchema({
       headline: 'Morar no Tamboré',
       description: 'Guia completo do bairro',
       url: 'https://x.com/bairros/tambore',
     })
     expect(schema['@type']).toBe('Article')
-    expect(schema.author).toEqual({ '@id': AGENT_ID })
+    expect(schema.author).toEqual({ '@id': `${SITE_URL}/sobre#person` })
     expect(schema.publisher).toEqual({ '@id': AGENT_ID })
   })
 
