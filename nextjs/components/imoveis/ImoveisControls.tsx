@@ -26,7 +26,10 @@ export default function ImoveisControls({ total, currentPage, totalPages, bairro
     clearFilters, activeFilterCount,
   } = usePropertyFilters()
 
-  const bairros = cidade ? bairrosPorCidade[cidade] ?? [] : []
+  const bairros = cidade
+    ? bairrosPorCidade[cidade] ?? []
+    : Array.from(new Set(Object.values(bairrosPorCidade).flat()))
+        .sort((a, b) => a.localeCompare(b, 'pt-BR'))
 
   const goToPage = (page: number) => {
     navigatePage(page)
