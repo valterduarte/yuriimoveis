@@ -25,6 +25,7 @@ export interface MapImovel {
 export function parseImovel(row: ImovelRow): Imovel {
   return {
     ...row,
+    preco:        Number(row.preco),
     imagens:      JSON.parse(row.imagens      || '[]'),
     diferenciais: JSON.parse(row.diferenciais || '[]'),
   }
@@ -191,7 +192,7 @@ const fetchPropertiesForMapCached = unstable_cache(
       return {
         id: row.id,
         titulo: row.titulo,
-        preco: row.preco,
+        preco: Number(row.preco),
         tipo: row.tipo,
         categoria: row.categoria,
         quartos: row.quartos,
