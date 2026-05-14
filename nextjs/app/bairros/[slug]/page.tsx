@@ -169,6 +169,44 @@ export default async function BairroGuidePage({ params }: PageProps) {
             <p className="text-gray-700 text-sm md:text-base leading-relaxed">{bairro.conteudo.sobre}</p>
           </section>
 
+          {bairro.precoMedio && (
+            <aside
+              role="note"
+              aria-label="Preço médio do metro quadrado"
+              className="border border-gray-200 bg-gray-50 p-5 md:p-6"
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-3">Preço de referência</p>
+              <dl className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <dt className="text-xs uppercase tracking-wider text-gray-500 mb-1">Metro quadrado</dt>
+                  <dd className="font-bold text-dark text-lg">
+                    R$ {bairro.precoMedio.m2.toLocaleString('pt-BR')}/m²
+                  </dd>
+                </div>
+                {bairro.precoMedio.apartamento2qts && (
+                  <div>
+                    <dt className="text-xs uppercase tracking-wider text-gray-500 mb-1">Apartamento 2 dorm.</dt>
+                    <dd className="font-bold text-dark text-lg">
+                      a partir de R$ {bairro.precoMedio.apartamento2qts.toLocaleString('pt-BR')}
+                    </dd>
+                  </div>
+                )}
+                {bairro.precoMedio.casa3qts && (
+                  <div>
+                    <dt className="text-xs uppercase tracking-wider text-gray-500 mb-1">Casa 3 dorm.</dt>
+                    <dd className="font-bold text-dark text-lg">
+                      a partir de R$ {bairro.precoMedio.casa3qts.toLocaleString('pt-BR')}
+                    </dd>
+                  </div>
+                )}
+              </dl>
+              <p className="text-[11px] text-gray-500 mt-3 leading-relaxed">
+                {bairro.precoMedio.fonte ? `${bairro.precoMedio.fonte}. ` : ''}
+                Atualizado em {new Date(bairro.precoMedio.atualizadoEm).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}.
+              </p>
+            </aside>
+          )}
+
           <section>
             <h2 className="text-xl font-bold text-dark mb-3 uppercase tracking-wide flex items-center gap-2">
               <FiHome size={16} className="text-primary" /> Infraestrutura e comércio

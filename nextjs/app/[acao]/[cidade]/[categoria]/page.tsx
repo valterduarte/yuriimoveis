@@ -19,11 +19,13 @@ import {
 } from '../../../../lib/navigation'
 import { getBairroBySlug } from '../../../../data/bairros'
 import { BEDROOM_FILTERS, getAllPriceRanges } from '../../../../data/priceRanges'
+import { getListingCopy } from '../../../../data/listingCopy'
 import { SITE_URL } from '../../../../lib/config'
 import { buildBreadcrumb, buildCollectionPage, buildFaqPageSchema, buildPropertyProduct } from '../../../../lib/jsonLd'
 import { buildListingMetadata } from '../../../../lib/seo'
 import FaqAccordion from '../../../../components/FaqAccordion'
 import { ITBI_RATE_BY_CITY } from '../../../../lib/constants'
+import type { PropertyCategory } from '../../../../types'
 import type { Metadata } from 'next'
 
 interface Faq {
@@ -135,8 +137,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const countPrefix = total > 0 ? `${total} ` : ''
   const title = `${countPrefix}${categoriaData.plural} ${label} em ${cidadeName} SP`
   const description = total > 0
-    ? `${total} ${categoriaData.plural.toLowerCase()} ${label.toLowerCase()} em ${cidadeName}, SP. Financiamento Caixa, Minha Casa Minha Vida e atendimento com o Corretor Yuri (CRECI 235509).`
-    : `${categoriaData.plural} ${label.toLowerCase()} em ${cidadeName}, SP. Encontre imóveis nos melhores bairros com o Corretor Yuri, CRECI 235509.`
+    ? `${total} ${categoriaData.plural.toLowerCase()} ${label.toLowerCase()} em ${cidadeName}, SP, com fotos, preço e bairro. Financiamento Caixa SBPE e MCMV. Atendimento direto com Corretor Yuri (CRECI 235509).`
+    : `${categoriaData.plural} ${label.toLowerCase()} em ${cidadeName}, SP. Catálogo curado por bairro, financiamento Caixa SBPE e MCMV, atendimento direto com Corretor Yuri (CRECI 235509).`
   return buildListingMetadata({
     title,
     description,
@@ -218,9 +220,8 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
 
       <div className="bg-white border border-gray-200 p-6 md:p-8 mb-8">
         <p className="text-gray-700 text-sm leading-relaxed">
-          Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} em {cidadeName} nos melhores bairros da cidade.
-          Temos opções em diversas faixas de preço e metragens, todas com atendimento personalizado do Corretor Yuri e
-          documentação verificada. Navegue pelos bairros abaixo ou veja todos os imóveis disponíveis.
+          {getListingCopy(cidade, categoria as PropertyCategory, acaoToTipo(acao)) ??
+            `Encontre ${categoriaData.plural.toLowerCase()} ${label.toLowerCase()} em ${cidadeName} nos melhores bairros da cidade. Temos opções em diversas faixas de preço e metragens, todas com atendimento personalizado do Corretor Yuri e documentação verificada. Navegue pelos bairros abaixo ou veja todos os imóveis disponíveis.`}
         </p>
       </div>
 

@@ -31,6 +31,12 @@ export const BAIRROS: Record<string, BairroData> = {
     nome: 'Centro',
     slug: 'centro',
     cidade: 'Osasco',
+    precoMedio: {
+      m2: 7800,
+      apartamento2qts: 410000,
+      fonte: 'Levantamento de prontos e novos no entorno da Estação Osasco (2026)',
+      atualizadoEm: '2026-05-14',
+    },
     titulo: 'Imóveis no Centro de Osasco SP — Corretor Yuri',
     descricaoMeta:
       'Imóveis no Centro de Osasco, SP. Apartamentos e salas comerciais para venda e aluguel. Região com melhor infraestrutura da cidade.',
@@ -307,6 +313,12 @@ export const BAIRROS: Record<string, BairroData> = {
     titulo: 'Imóveis em Alphaville, Barueri SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos em Alphaville, Barueri SP. Lançamentos de alto padrão para venda e aluguel. Atendimento personalizado com o Corretor Yuri.',
+    precoMedio: {
+      m2: 14000,
+      apartamento2qts: 850000,
+      fonte: 'Levantamento de mercado em lançamentos e condomínios fechados (2026)',
+      atualizadoEm: '2026-05-14',
+    },
     conteudo: {
       sobre:
         'Alphaville é um dos endereços mais desejados da Região Metropolitana de São Paulo. Localizado entre Barueri e Santana de Parnaíba, o bairro se consolidou como referência em alto padrão, segurança e qualidade de vida. Abriga condomínios residenciais fechados, torres de lançamentos contemporâneos e um eixo comercial pujante que atrai empresas nacionais e multinacionais.',
@@ -373,6 +385,12 @@ export const BAIRROS: Record<string, BairroData> = {
     titulo: 'Imóveis na Aldeia, Barueri SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos e casas na Aldeia em Barueri, SP. Lançamentos e imóveis prontos para venda e aluguel ao lado do Shopping Barueri. Atendimento com o Corretor Yuri.',
+    precoMedio: {
+      m2: 7500,
+      apartamento2qts: 420000,
+      fonte: 'Levantamento de lançamentos verticais e apartamentos prontos (2026)',
+      atualizadoEm: '2026-05-14',
+    },
     conteudo: {
       sobre:
         'A Aldeia é um bairro central de Barueri com forte vocação residencial e comercial. É a região onde surgiu o núcleo histórico da cidade, hoje consolidada como endereço estratégico pela proximidade com o Shopping Barueri, o centro administrativo e o eixo da Rodovia Castelo Branco. O bairro concentra lançamentos recentes, prédios consolidados e casas em condomínio, atraindo famílias que querem combinar infraestrutura urbana com conveniência no dia a dia.',
@@ -457,6 +475,12 @@ export const BAIRROS: Record<string, BairroData> = {
     nome: 'Vila Yara',
     slug: 'vila-yara',
     cidade: 'Osasco',
+    precoMedio: {
+      m2: 9500,
+      apartamento2qts: 520000,
+      fonte: 'Levantamento de lançamentos e prontos no eixo Continental Shopping (2026)',
+      atualizadoEm: '2026-05-14',
+    },
     dbMatch: 'Vila Yara',
     titulo: 'Imóveis na Vila Yara, Osasco SP — Corretor Yuri',
     descricaoMeta:
@@ -483,6 +507,12 @@ export const BAIRROS: Record<string, BairroData> = {
     titulo: 'Imóveis em Tamboré, Barueri SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos de alto padrão em Tamboré, Barueri SP. Lançamentos na divisa com Alphaville, próximos aos shoppings Tamboré e Iguatemi Alphaville. Atendimento com o Corretor Yuri.',
+    precoMedio: {
+      m2: 12500,
+      apartamento2qts: 780000,
+      fonte: 'Levantamento de lançamentos de alto padrão na divisa com Alphaville (2026)',
+      atualizadoEm: '2026-05-14',
+    },
     conteudo: {
       sobre:
         'Tamboré é um dos endereços mais valorizados de Barueri, vizinho direto de Alphaville e do Centro Empresarial Tamboré. A região consolidou um perfil de alto padrão, com avenidas largas, áreas verdes preservadas e empreendimentos contemporâneos que combinam arquitetura assinada, lazer rooftop e infraestrutura premium. Av. Piraíba, Av. Tamboré e Alameda Araguaia concentram lançamentos verticais que atendem famílias e profissionais que trabalham no polo corporativo de Alphaville.',
@@ -525,6 +555,12 @@ export const BAIRROS: Record<string, BairroData> = {
     titulo: 'Imóveis na Vila Sul Americana, Carapicuíba SP — Corretor Yuri',
     descricaoMeta:
       'Apartamentos na Vila Sul Americana em Carapicuíba, SP. Lançamentos e imóveis prontos para morar com acesso à CPTM Linha 8-Diamante. Atendimento com o Corretor Yuri.',
+    precoMedio: {
+      m2: 4200,
+      apartamento2qts: 210000,
+      fonte: 'Levantamento de lançamentos MCMV em Carapicuíba (2026)',
+      atualizadoEm: '2026-05-14',
+    },
     conteudo: {
       sobre:
         'A Vila Sul Americana é um bairro residencial de Carapicuíba com perfil familiar e infraestrutura em desenvolvimento. A região vem recebendo novos empreendimentos verticais que ampliam a oferta de apartamentos com lazer completo, atraindo quem busca o primeiro imóvel ou uma alternativa acessível na Grande São Paulo, próxima ao eixo Osasco–Barueri.',

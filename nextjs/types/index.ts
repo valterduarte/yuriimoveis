@@ -105,6 +105,14 @@ interface BairroContent {
   porqueMorar: string
 }
 
+export interface BairroPriceInsight {
+  m2: number
+  apartamento2qts?: number
+  casa3qts?: number
+  fonte?: string
+  atualizadoEm: string
+}
+
 export interface BairroData {
   nome: string
   slug: string
@@ -113,5 +121,6 @@ export interface BairroData {
   descricaoMeta: string
   imagem?: string
   dbMatch?: string
+  precoMedio?: BairroPriceInsight
   conteudo: BairroContent
 }
