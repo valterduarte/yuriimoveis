@@ -1,4 +1,4 @@
-import { fetchFeaturedProperties, fetchSiteConfig, fetchCidadesByTipo } from '../lib/api'
+import { fetchFeaturedProperties, fetchSiteConfig, fetchCidadesByTipo, fetchBairrosByCidade } from '../lib/api'
 import { buildHomepageJsonLd } from '../lib/jsonLd'
 import { HOMEPAGE_FAQ } from '../data/faq'
 import { SITE_URL } from '../lib/config'
@@ -36,10 +36,11 @@ export const metadata = {
 }
 
 export default async function Home() {
-  const [featuredProperties, heroImageUrl, cidadesByTipo] = await Promise.all([
+  const [featuredProperties, heroImageUrl, cidadesByTipo, bairrosPorCidade] = await Promise.all([
     fetchFeaturedProperties(),
     fetchSiteConfig('hero_image_url'),
     fetchCidadesByTipo(),
+    fetchBairrosByCidade(),
   ])
   const hero = heroImageUrl || FALLBACK_HERO
   const jsonLd = buildHomepageJsonLd(
@@ -51,7 +52,7 @@ export default async function Home() {
       {jsonLd.map((schema, i) => (
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       ))}
-      <HeroSection imageUrl={hero} cidadesByTipo={cidadesByTipo} />
+      <HeroSection imageUrl={hero} cidadesByTipo={cidadesByTipo} bairrosPorCidade={bairrosPorCidade} />
       <FeaturedProperties properties={featuredProperties} />
       <FAQSection />
       <CTASection />

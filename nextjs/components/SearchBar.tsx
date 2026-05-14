@@ -7,9 +7,10 @@ import { PROPERTY_CATEGORIES, TRANSACTION_TYPES, SALE_PRICE_OPTIONS, RENT_PRICE_
 
 interface SearchBarProps {
   cidadesByTipo?: Record<string, string[]>
+  bairrosPorCidade?: Record<string, string[]>
 }
 
-export default function SearchBar({ cidadesByTipo = {} }: SearchBarProps) {
+export default function SearchBar({ cidadesByTipo = {}, bairrosPorCidade = {} }: SearchBarProps) {
   const router = useRouter()
 
   const availableTransactionTypes = useMemo(
@@ -21,13 +22,28 @@ export default function SearchBar({ cidadesByTipo = {} }: SearchBarProps) {
   const [tipo, setTipo] = useState(initialTipo)
   const [categoria, setCategoria] = useState('')
   const [cidade, setCidade] = useState('')
+  const [bairro, setBairro] = useState('')
   const [precoMax, setPrecoMax] = useState('')
 
   const cidadesForTipo = cidadesByTipo[tipo] ?? []
 
+  const bairrosForCidade = useMemo(() => {
+    if (cidade) return bairrosPorCidade[cidade] ?? []
+    return Array.from(new Set(Object.values(bairrosPorCidade).flat()))
+      .sort((a, b) => a.localeCompare(b, 'pt-BR'))
+  }, [cidade, bairrosPorCidade])
+
   const handleTipoChange = (next: string) => {
     setTipo(next)
-    if (cidade && !(cidadesByTipo[next] ?? []).includes(cidade)) setCidade('')
+    if (cidade && !(cidadesByTipo[next] ?? []).includes(cidade)) {
+      setCidade('')
+      setBairro('')
+    }
+  }
+
+  const handleCidadeChange = (next: string) => {
+    setCidade(next)
+    if (bairro && !(bairrosPorCidade[next] ?? []).includes(bairro)) setBairro('')
   }
 
   const handleSearch = (e: React.SyntheticEvent) => {
@@ -36,6 +52,7 @@ export default function SearchBar({ cidadesByTipo = {} }: SearchBarProps) {
     if (tipo)     params.set('tipo',     tipo)
     if (categoria) params.set('categoria', categoria)
     if (cidade)   params.set('cidade',   cidade)
+    if (bairro)   params.set('bairro',   bairro)
     if (precoMax) params.set('precoMax', precoMax)
     router.push(`/imoveis?${params.toString()}`)
   }
@@ -70,7 +87,7 @@ export default function SearchBar({ cidadesByTipo = {} }: SearchBarProps) {
         })}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
         <div className="p-5">
           <label htmlFor="sb-categoria" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">
             Tipo de Imóvel
@@ -87,11 +104,23 @@ export default function SearchBar({ cidadesByTipo = {} }: SearchBarProps) {
           <label htmlFor="sb-cidade" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">
             Cidade
           </label>
-          <select id="sb-cidade" value={cidade} onChange={e => setCidade(e.target.value)}
+          <select id="sb-cidade" value={cidade} onChange={e => handleCidadeChange(e.target.value)}
             className="w-full text-sm text-dark focus:outline-none focus-visible:outline-2 focus-visible:outline-primary bg-white cursor-pointer">
             <option value="">Todas as cidades</option>
             {cidadesForTipo.map(c => (
               <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+        <div className="p-5">
+          <label htmlFor="sb-bairro" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">
+            Bairro
+          </label>
+          <select id="sb-bairro" value={bairro} onChange={e => setBairro(e.target.value)}
+            className="w-full text-sm text-dark focus:outline-none focus-visible:outline-2 focus-visible:outline-primary bg-white cursor-pointer">
+            <option value="">Todos os bairros</option>
+            {bairrosForCidade.map(b => (
+              <option key={b} value={b}>{b}</option>
             ))}
           </select>
         </div>

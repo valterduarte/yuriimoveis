@@ -4,9 +4,10 @@ import SearchBar from '../SearchBar'
 interface HeroSectionProps {
   imageUrl: string
   cidadesByTipo: Record<string, string[]>
+  bairrosPorCidade: Record<string, string[]>
 }
 
-export default function HeroSection({ imageUrl, cidadesByTipo }: HeroSectionProps) {
+export default function HeroSection({ imageUrl, cidadesByTipo, bairrosPorCidade }: HeroSectionProps) {
   return (
     <section className="relative min-h-screen md:min-h-[85vh] flex items-center -mt-16 md:-mt-20 overflow-hidden">
       <Image
@@ -28,7 +29,7 @@ export default function HeroSection({ imageUrl, cidadesByTipo }: HeroSectionProp
           </h1>
         </div>
         <div className="max-w-2xl">
-          <SearchBar cidadesByTipo={cidadesByTipo} />
+          <SearchBar cidadesByTipo={cidadesByTipo} bairrosPorCidade={bairrosPorCidade} />
         </div>
       </div>
     </section>
