@@ -596,6 +596,153 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'centro-carapicuiba': {
+    nome: 'Centro',
+    slug: 'centro-carapicuiba',
+    cidade: 'Carapicuíba',
+    titulo: 'Imóveis no Centro de Carapicuíba SP — Corretor Yuri',
+    descricaoMeta:
+      'Casas e apartamentos no Centro de Carapicuíba, SP. Imóveis para venda e aluguel perto da CPTM, Plaza Shopping e serviços. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Centro de Carapicuíba é o coração comercial e administrativo da cidade, onde convivem comércio, serviços, órgãos públicos e moradia em alta densidade. A região concentra as principais avenidas, o terminal de ônibus e a Estação Carapicuíba da CPTM, tornando-se ponto de passagem obrigatório para boa parte dos moradores do município. O perfil imobiliário mistura sobrados antigos reformados, edifícios residenciais de médio padrão e imóveis comerciais, com preços por metro quadrado que ainda competem favoravelmente com cidades vizinhas como Osasco e Barueri.',
+      infraestrutura:
+        'A infraestrutura do Centro é a mais completa de Carapicuíba: supermercados de grandes redes, agências bancárias, cartórios, Fórum, Prefeitura Municipal, Hospital Geral de Carapicuíba, farmácias e uma grande variedade de comércio varejista estão todos a distância a pé. O Plaza Shopping Carapicuíba, a poucos minutos de carro, complementa a oferta com cinema, restaurantes e lojas âncora. O Parque dos Paturis, o principal espaço de lazer da cidade, fica nos arredores e atrai famílias nos finais de semana.',
+      transporte:
+        'A Estação Carapicuíba da Linha 8-Diamante da CPTM está integrada ao Centro, conectando diretamente à Estação da Luz em São Paulo em menos de 40 minutos nos horários de pico. O Terminal de Ônibus Central distribui linhas para todos os bairros da cidade e para municípios como Osasco, Barueri, Jandira e Itapevi. A Rodovia Castelo Branco é acessada em poucos minutos, oferecendo alternativa rápida para quem precisa de carro.',
+      educacao:
+        'O Centro concentra escolas municipais e estaduais de todos os níveis, além de cursos técnicos e profissionalizantes. Colégios particulares tradicionais da cidade têm sede na região central. Para ensino superior, a UNIFIEO em Osasco e diversas faculdades de Barueri são acessíveis pela CPTM, e a Faculdade de Carapicuíba atende parte da demanda local.',
+      porqueMorar:
+        'Morar no Centro de Carapicuíba é ter tudo na mesma quadra: emprego, serviço, escola e transporte. Para quem trabalha em São Paulo e quer fugir do preço da capital sem abrir mão da mobilidade, a CPTM Linha 8-Diamante transforma a distância em rotina administrável. O preço do metro quadrado na região ainda está bem abaixo da média de Osasco e muito abaixo de Barueri, o que torna o Centro uma das melhores relações custo-benefício da região oeste metropolitana.',
+    },
+  },
+
+  'jardim-planalto': {
+    nome: 'Jardim Planalto',
+    slug: 'jardim-planalto',
+    cidade: 'Carapicuíba',
+    titulo: 'Imóveis no Jardim Planalto, Carapicuíba SP — Corretor Yuri',
+    descricaoMeta:
+      'Casas e apartamentos no Jardim Planalto em Carapicuíba, SP. Bairro familiar perto do Plaza Shopping e Parque Planalto. Corretor Yuri Imóveis.',
+    conteudo: {
+      sobre:
+        'O Jardim Planalto é um bairro residencial de Carapicuíba com perfil familiar bem definido: ruas tranquilas, casas e sobrados em lotes generosos e uma comunidade consolidada ao longo de décadas. Localizado a cerca de 4 km do Centro, o bairro mantém autonomia de serviços locais sem se sentir isolado — o acesso ao Plaza Shopping Carapicuíba e ao Parque Planalto está a minutos, o que atrai famílias que valorizam lazer e conveniência dentro do próprio bairro.',
+      infraestrutura:
+        'O Jardim Planalto conta com mercados de bairro, padarias, farmácias, salões de beleza e prestadores de serviço que cobrem as necessidades cotidianas. O Plaza Shopping Carapicuíba, a poucos minutos, complementa com cinema, academia e restaurantes. O Parque Planalto oferece área verde para caminhada e lazer. Unidades de saúde da rede municipal atendem a região, com o Hospital Geral de Carapicuíba acessível em carro.',
+      transporte:
+        'O bairro é atendido por linhas de ônibus que conectam ao Centro de Carapicuíba e à Estação CPTM, de onde parte a Linha 8-Diamante em direção a São Paulo. Para quem usa carro, a Rodovia Castelo Branco é a principal saída para a capital e para o polo de Alphaville, acessada em trajeto rápido pela malha viária do bairro.',
+      educacao:
+        'O Jardim Planalto é atendido por escolas municipais de ensino fundamental e creches próximas. Escolas estaduais de ensino médio ficam na área do bairro ou nas imediações. A proximidade com o Centro amplia as opções de colégios particulares e cursos técnicos, e o acesso à CPTM permite deslocamento rápido a faculdades de Osasco e Barueri.',
+      porqueMorar:
+        'O Jardim Planalto combina o sossego de bairro residencial com a comodidade de ter shopping, parque e comércio a poucos minutos. Para famílias em busca do primeiro imóvel ou de trocar aluguel por casa própria, o bairro oferece imóveis com área maior que os encontrados em São Paulo na mesma faixa de preço. A valorização constante da região, impulsionada pelo eixo Castelo Branco e pelas melhorias na Linha 8-Diamante, torna o Jardim Planalto uma escolha segura tanto para moradia quanto para investimento.',
+    },
+  },
+
+  'vila-dirce': {
+    nome: 'Vila Dirce',
+    slug: 'vila-dirce',
+    cidade: 'Carapicuíba',
+    titulo: 'Imóveis na Vila Dirce, Carapicuíba SP — Corretor Yuri',
+    descricaoMeta:
+      'Casas e apartamentos na Vila Dirce em Carapicuíba, SP. Bairro residencial com boa localização e custo-benefício. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'A Vila Dirce é um bairro residencial de Carapicuíba com histórico de décadas, formado principalmente por casas e sobrados de perfil popular e médio. Sua localização favorável — entre o Centro de Carapicuíba e os limites com Osasco — faz do bairro uma escolha prática para quem trabalha nos dois municípios. O tecido urbano é denso e consolidado, com ruas residenciais que misturam imóveis antigos reformados e construções mais recentes impulsionadas pela demanda crescente por moradia na região.',
+      infraestrutura:
+        'O bairro possui comércio local variado, com mercadinhos, padarias, farmácias e serviços de saúde de proximidade. A pouca distância do Centro de Carapicuíba garante acesso fácil ao Hospital Geral, supermercados de rede e ao Plaza Shopping. O Parque dos Paturis, referência de lazer ao ar livre em Carapicuíba, é acessível em carro ou a pé dependendo da localização específica do imóvel.',
+      transporte:
+        'A Vila Dirce tem acesso a linhas de ônibus que conectam ao Centro de Carapicuíba e à Estação CPTM Carapicuíba da Linha 8-Diamante, eixo que liga a cidade à Estação da Luz em São Paulo. A fronteira com Osasco amplia as opções de transporte intermunicipal. Para quem usa carro, a Rodovia Castelo Branco fica a poucos minutos de distância.',
+      educacao:
+        'Escolas municipais de ensino fundamental e creches atendem o bairro e seu entorno imediato. A proximidade com Osasco e com o Centro de Carapicuíba amplia as opções de ensino médio e técnico, bem como colégios particulares. O acesso ao UNIFIEO em Osasco e a outras faculdades da região é facilitado pelo transporte público disponível.',
+      porqueMorar:
+        'A Vila Dirce é uma escolha pragmática para quem quer morar num bairro consolidado de Carapicuíba sem pagar o preço do Centro. A localização estratégica no limite com Osasco significa acesso a dois mercados de trabalho e a uma infraestrutura mais ampla, enquanto o preço por metro quadrado ainda reflete o perfil popular do bairro. Para compradores do Minha Casa Minha Vida, a região apresenta boa oferta de imóveis dentro das faixas do programa.',
+    },
+  },
+
+  'chacara-santa-lucia': {
+    nome: 'Chácara Santa Lucia',
+    slug: 'chacara-santa-lucia',
+    cidade: 'Carapicuíba',
+    titulo: 'Imóveis na Chácara Santa Lucia, Carapicuíba SP — Corretor Yuri',
+    descricaoMeta:
+      'Apartamentos e casas na Chácara Santa Lucia em Carapicuíba, SP. Área arborizada com lançamentos MCMV e imóveis prontos. Corretor Yuri Imóveis.',
+    conteudo: {
+      sobre:
+        'A Chácara Santa Lucia é um dos bairros de Carapicuíba que mais cresce em interesse imobiliário. Notavelmente arborizado, com ruas sombreadas e lotes que preservam algum verde entre as construções, o bairro atrai famílias que buscam qualidade de vida sem migrar para regiões mais caras. Nos últimos anos, a chegada de empreendimentos verticais — parte deles dentro das faixas do Minha Casa Minha Vida — transformou a paisagem do bairro, que agora convive entre o perfil de casas tradicionais e os novos condomínios com lazer completo.',
+      infraestrutura:
+        'O bairro tem comércio local para o dia a dia e fica próximo ao Centro de Carapicuíba, de onde o morador acessa supermercados de rede, o Hospital Geral e o Plaza Shopping. A arborização do bairro é um diferencial real de qualidade de vida: ruas com árvores adultas criam um ambiente mais fresco e agradável que a média dos bairros densamente urbanizados da região. Unidades de saúde da rede municipal atendem a área.',
+      transporte:
+        'A Chácara Santa Lucia é atendida por ônibus com conexão ao Terminal Central de Carapicuíba e à Estação CPTM Carapicuíba. A Linha 8-Diamante, que parte da Estação Carapicuíba até a Estação da Luz em São Paulo, é o principal ativo de mobilidade da cidade para quem trabalha na capital. O acesso à Rodovia Castelo Branco, que conecta Carapicuíba ao polo de Alphaville e ao centro de São Paulo, está disponível em trajeto de carro.',
+      educacao:
+        'Escolas municipais de ensino fundamental e creches atendem o bairro. A proximidade com o Centro de Carapicuíba amplia o acesso a colégios particulares e escolas técnicas. O SENAI e o SENAC têm unidades acessíveis pela região, e faculdades de Osasco e Barueri são alcançáveis via CPTM.',
+      porqueMorar:
+        'A Chácara Santa Lucia está no ponto certo da curva de valorização: ainda com preço acessível comparado a bairros mais centrais, mas com novos empreendimentos chegando que tendem a elevar o patamar do bairro. Para quem compra pelo MCMV, a região oferece imóveis novos com lazer completo e acabamento acima da média do programa. Para quem busca casa tradicional, as ruas arborizadas e o perfil tranquilo fazem do bairro uma alternativa real ao caos de bairros mais centrais.',
+    },
+  },
+
+  'parque-jandaia': {
+    nome: 'Parque Jandaia',
+    slug: 'parque-jandaia',
+    cidade: 'Carapicuíba',
+    titulo: 'Imóveis no Parque Jandaia, Carapicuíba SP — Corretor Yuri',
+    descricaoMeta:
+      'Casas e apartamentos no Parque Jandaia em Carapicuíba, SP. Bairro residencial com bom custo-benefício e acesso ao transporte público. Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Parque Jandaia é um bairro residencial de Carapicuíba com perfil popular e comunitário. A região cresceu de forma orgânica ao longo das últimas décadas, formando um tecido urbano denso de casas e sobrados que caracteriza boa parte dos bairros de médio porte da cidade. A vida no Parque Jandaia é marcada pela vizinhança próxima e pelo comércio de rua que atende às necessidades cotidianas sem grandes deslocamentos — um padrão de bairro que atrai famílias que valorizam o convívio local.',
+      infraestrutura:
+        'O bairro conta com mercadinhos, padarias, açougues, farmácias e serviços de saúde de proximidade. Para demandas maiores, o Centro de Carapicuíba fica acessível por ônibus ou carro em poucos minutos, dando acesso ao Hospital Geral, supermercados de rede e cartórios. O Parque dos Paturis, o maior espaço de lazer ao ar livre de Carapicuíba com ciclovia, pista de caminhada e lago, está na vizinhança do bairro.',
+      transporte:
+        'O Parque Jandaia é atendido por linhas de ônibus que ligam ao Terminal Central de Carapicuíba, de onde partem conexões para toda a cidade e para municípios vizinhos. A Estação CPTM Carapicuíba, ponto de acesso à Linha 8-Diamante até São Paulo, está a poucos minutos de ônibus ou bicicleta. Para motoristas, a Rodovia Castelo Branco é o principal eixo de saída da região.',
+      educacao:
+        'O bairro e seu entorno são atendidos por escolas municipais de ensino fundamental e creches conveniadas. A proximidade com o Centro facilita o acesso a escolas estaduais de ensino médio e a colégios particulares da cidade. A CPTM conecta os estudantes a faculdades e cursos técnicos em Osasco, Barueri e na capital.',
+      porqueMorar:
+        'O Parque Jandaia oferece o melhor custo de entrada para quem quer sair do aluguel em Carapicuíba. Os preços de casas e apartamentos na região estão entre os mais competitivos da cidade, tornando-o o destino natural para compradores da faixa 1 e 2 do Minha Casa Minha Vida. A proximidade com o Parque dos Paturis, referência de lazer gratuito em Carapicuíba, é um diferencial que normalmente só se encontra em bairros mais caros.',
+    },
+  },
+
+  'jardim-das-belezas': {
+    nome: 'Jardim das Belezas',
+    slug: 'jardim-das-belezas',
+    cidade: 'Carapicuíba',
+    titulo: 'Imóveis no Jardim das Belezas, Carapicuíba SP — Corretor Yuri',
+    descricaoMeta:
+      'Casas e apartamentos no Jardim das Belezas em Carapicuíba, SP. Bairro integrado ao Centro com comércio variado e transporte público. Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Jardim das Belezas é um bairro de Carapicuíba totalmente integrado ao Centro da cidade. A fusão entre comércio e residência é a marca do bairro: avenidas movimentadas com lojas, restaurantes e prestadores de serviço convivem com ruas internas mais calmas e residenciais. Essa mistura atrai moradores que preferem a praticidade urbana — tudo a pé — ao sossego das regiões mais afastadas, e é especialmente valorizada por quem não tem carro e depende da infraestrutura do bairro para o dia a dia.',
+      infraestrutura:
+        'A infraestrutura do Jardim das Belezas é completa para o cotidiano: supermercados, farmácias, padarias, bancos, clínicas médicas e escolas estão todos na área ou nas quadras imediatas. A conexão direta com o Centro de Carapicuíba dá acesso rápido ao Hospital Geral, ao Plaza Shopping e a órgãos públicos como Prefeitura e Fórum. O Parque dos Paturis fica próximo para lazer ao ar livre.',
+      transporte:
+        'A posição central do bairro garante acesso fácil ao Terminal de Ônibus de Carapicuíba e, por consequência, a toda a rede de transporte público da cidade e da região. A Estação CPTM Carapicuíba da Linha 8-Diamante está a distância curta, conectando o bairro à Estação da Luz em São Paulo. Quem usa carro tem saída rápida para a Rodovia Castelo Branco e o eixo Osasco–Alphaville.',
+      educacao:
+        'Escolas municipais e estaduais de todos os níveis atendem o bairro e seu entorno imediato. A integração com o Centro concentra a maior parte das opções de colégios particulares e cursos profissionalizantes de Carapicuíba na mesma área de alcance. Faculdades em Osasco e Barueri são acessíveis via transporte público em trajeto de menos de 30 minutos.',
+      porqueMorar:
+        'Morar no Jardim das Belezas é a escolha ideal para quem quer praticidade urbana com o preço de Carapicuíba. A integração total com o Centro significa que o morador tem acesso imediato a tudo — trabalho, serviço, escola, lazer — sem pagar o preço de São Paulo ou Barueri. Para investidores, a alta liquidez dos imóveis na região, impulsionada pela demanda de aluguel de trabalhadores que atuam no comércio central, torna o bairro uma escolha de baixo risco.',
+    },
+  },
+
+  'vila-municipal-carapicuiba': {
+    nome: 'Vila Municipal',
+    slug: 'vila-municipal-carapicuiba',
+    cidade: 'Carapicuíba',
+    titulo: 'Imóveis na Vila Municipal, Carapicuíba SP — Corretor Yuri',
+    descricaoMeta:
+      'Casas e apartamentos na Vila Municipal em Carapicuíba, SP. Bairro familiar ao lado do Parque dos Paturis. Atendimento com o Corretor Yuri Imóveis.',
+    conteudo: {
+      sobre:
+        'A Vila Municipal é um dos bairros residenciais mais bem posicionados de Carapicuíba: fica ao lado do Parque dos Paturis, o principal pulmão verde da cidade, e mantém um perfil familiar tranquilo que contrasta com a agitação das regiões mais comerciais. O bairro é formado principalmente por casas e sobrados de médio padrão, com uma comunidade estável de moradores de longa data que valorizam o silêncio das ruas internas e a facilidade de acessar a natureza sem sair do município.',
+      infraestrutura:
+        'A grande vantagem de infraestrutura da Vila Municipal é o Parque dos Paturis na porta: lago, pista de caminhada, ciclovia, campo de grama sintética, playground e equipamentos de ginástica ao ar livre compõem o parque, que é de acesso gratuito. Para serviços cotidianos, o Centro de Carapicuíba está próximo, com supermercados de rede, Hospital Geral, farmácias e comércio variado. O bairro tem comércio local para as demandas do dia a dia.',
+      transporte:
+        'A Vila Municipal é conectada ao Terminal Central de Carapicuíba por linhas de ônibus regulares. Da Estação CPTM Carapicuíba, a Linha 8-Diamante leva ao centro de São Paulo em aproximadamente 35 a 40 minutos. Para quem usa carro, a saída para a Rodovia Castelo Branco — porta de entrada para Alphaville, Barueri e a capital — é feita por trajeto direto sem grandes cruzamentos.',
+      educacao:
+        'Escolas municipais de ensino fundamental e creches atendem o bairro e seu entorno. A presença do Parque dos Paturis nas proximidades também beneficia escolas que utilizam o espaço para atividades externas. Para ensino médio e superior, o acesso ao Centro de Carapicuíba e à CPTM conecta os moradores a uma ampla rede de instituições em Osasco, Barueri e São Paulo.',
+      porqueMorar:
+        'A Vila Municipal é a escolha certa para famílias que colocam qualidade de vida no topo da lista e ainda querem preços acessíveis. Ter um parque do porte do Parque dos Paturis como vizinho é um privilégio que, em outras cidades da Grande São Paulo, estaria reservado a bairros de alto padrão. Em Carapicuíba, esse acesso à natureza vem junto com preços de imóveis que cabem no financiamento do MCMV — uma combinação rara que o bairro oferece sem exagero.',
+    },
+  },
+
   'cidade-de-deus': {
     nome: 'Cidade de Deus',
     slug: 'cidade-de-deus',
