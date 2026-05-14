@@ -30,6 +30,7 @@ export function usePropertyFilters() {
     const next = new URLSearchParams(searchParams.toString())
     if (value) next.set(key, value)
     else next.delete(key)
+    if (key === 'cidade') next.delete('bairro')
     next.delete('page')
     router.replace(`${pathname}?${next.toString()}`, { scroll: false })
   }

@@ -11,12 +11,12 @@ interface ImoveisControlsProps {
   total: number
   currentPage: number
   totalPages: number
-  bairros?: string[]
+  bairrosPorCidade?: Record<string, string[]>
   cidades?: string[]
   children: ReactNode
 }
 
-export default function ImoveisControls({ total, currentPage, totalPages, bairros = [], cidades = [], children }: ImoveisControlsProps) {
+export default function ImoveisControls({ total, currentPage, totalPages, bairrosPorCidade = {}, cidades = [], children }: ImoveisControlsProps) {
   const [showFilters, setShowFilters] = useState(false)
   const {
     tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, codigo, ordem,
@@ -25,6 +25,8 @@ export default function ImoveisControls({ total, currentPage, totalPages, bairro
     setPrecoMinInput, setPrecoMaxInput,
     clearFilters, activeFilterCount,
   } = usePropertyFilters()
+
+  const bairros = cidade ? bairrosPorCidade[cidade] ?? [] : []
 
   const goToPage = (page: number) => {
     navigatePage(page)

@@ -131,6 +131,26 @@ const fetchDistinctBairrosCached = unstable_cache(
   { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
 )
 
+const fetchBairrosByCidadeCached = unstable_cache(
+  async (): Promise<Record<string, string[]>> => {
+    const result = await getDb().query(
+      `SELECT DISTINCT bairro, cidade FROM imoveis
+       WHERE ativo = true
+         AND bairro IS NOT NULL AND bairro != ''
+         AND cidade IS NOT NULL AND cidade != ''
+       ORDER BY bairro`
+    )
+    const grouped: Record<string, string[]> = {}
+    for (const row of result.rows as { bairro: string; cidade: string }[]) {
+      if (!grouped[row.cidade]) grouped[row.cidade] = []
+      grouped[row.cidade].push(row.bairro)
+    }
+    return grouped
+  },
+  ['fetchBairrosByCidade'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS }
+)
+
 const fetchCidadesByTipoCached = unstable_cache(
   async (): Promise<Record<string, string[]>> => {
     const result = await getDb().query(
@@ -266,6 +286,15 @@ export async function fetchDistinctBairros(): Promise<string[]> {
   } catch (err) {
     logDbError('fetchDistinctBairros', err)
     return []
+  }
+}
+
+export async function fetchBairrosByCidade(): Promise<Record<string, string[]>> {
+  try {
+    return await fetchBairrosByCidadeCached()
+  } catch (err) {
+    logDbError('fetchBairrosByCidade', err)
+    return {}
   }
 }
 

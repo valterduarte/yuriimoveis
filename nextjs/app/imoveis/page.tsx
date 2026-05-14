@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import ImoveisControls from '../../components/imoveis/ImoveisControls'
 import PropertyGrid from '../../components/imoveis/PropertyGrid'
-import { fetchProperties, fetchDistinctBairros, fetchDistinctCidades } from '../../lib/api'
+import { fetchProperties, fetchBairrosByCidade, fetchDistinctCidades } from '../../lib/api'
 import { ITEMS_PER_PAGE } from '../../lib/constants'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import { buildBreadcrumb } from '../../lib/jsonLd'
@@ -34,14 +34,14 @@ export const metadata: Metadata = {
 
 export default async function ImoveisPage({ searchParams }: { searchParams: Promise<Record<string, string>> }) {
   const params = await searchParams
-  const [{ imoveis, total }, bairros, cidades] = await Promise.all([
+  const [{ imoveis, total }, bairrosPorCidade, cidades] = await Promise.all([
     fetchProperties({
       ...Object.fromEntries(FILTER_KEYS.filter(k => params[k]).map(k => [k, params[k]])),
       ordem: params.ordem || 'recente',
       page:  params.page  || 1,
       limit: ITEMS_PER_PAGE,
     }),
-    fetchDistinctBairros(),
+    fetchBairrosByCidade(),
     fetchDistinctCidades(),
   ])
   const currentPage = Number(params.page || 1)
@@ -73,7 +73,7 @@ export default async function ImoveisPage({ searchParams }: { searchParams: Prom
         </div>
       </div>
       <div className="container mx-auto px-6 py-10">
-        <ImoveisControls total={total} currentPage={currentPage} totalPages={totalPages} bairros={bairros} cidades={cidades}>
+        <ImoveisControls total={total} currentPage={currentPage} totalPages={totalPages} bairrosPorCidade={bairrosPorCidade} cidades={cidades}>
           <PropertyGrid
             properties={imoveis}
             activeFilterCount={activeFilterCount}

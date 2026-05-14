@@ -21,6 +21,7 @@ export {
   fetchPropertiesByBairro,
   fetchProperties,
   fetchDistinctBairros,
+  fetchBairrosByCidade,
   fetchCidadesByTipo,
   fetchDistinctCidades,
   fetchSimilarProperties,
