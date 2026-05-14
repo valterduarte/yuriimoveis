@@ -31,10 +31,11 @@ type PageProps = {
 }
 
 export async function generateStaticParams() {
+  // Aluguel: catálogo público fica vazio enquanto não houver inventário no banco.
+  // O atendimento de aluguel acontece sob demanda pela landing /alugar/page.tsx; URLs
+  // hierárquicas /alugar/{cidade}/* respondem 404 (total === 0) por design.
   const cidades = getAllCidadeSlugs()
-  return (['comprar', 'alugar'] as const).flatMap(acao =>
-    cidades.map(cidade => ({ acao, cidade }))
-  )
+  return cidades.map(cidade => ({ acao: 'comprar', cidade }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

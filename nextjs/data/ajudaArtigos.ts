@@ -160,14 +160,14 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
     h1: 'Custos para Comprar um Imóvel em',
     h1Destaque: 'Osasco',
     descricaoMeta:
-      'Quanto custa comprar um imóvel em Osasco? Veja ITBI, escritura, registro e demais taxas com valores atualizados para 2026 e simulações por faixa de preço.',
+      'Quanto custa comprar um imóvel em Osasco em 2026? ITBI de 3% (LC 227/2026), escritura, registro e demais taxas com cálculo por faixa de preço.',
     resumo:
-      'Conheça todos os custos que entram na compra de um imóvel em Osasco — do ITBI da Prefeitura à escritura no tabelião — e como planejar seu orçamento com segurança.',
-    atualizadoEm: '2026-04-13',
+      'Comprar imóvel em Osasco custa de 5% a 7% além do valor anunciado: ITBI de 3% pela LC 227/2026, escritura, registro e tarifas bancárias. Veja como planejar.',
+    atualizadoEm: '2026-05-14',
     blocks: [
       {
         type: 'p',
-        text: 'Além do valor do imóvel, comprar uma casa ou apartamento em Osasco envolve impostos, taxas de cartório e despesas com documentação. Em geral, esses custos somam de 4% a 6%* do valor do imóvel. Conhecer cada item ajuda a planejar o orçamento e evita correr atrás de dinheiro na hora da escritura.',
+        text: 'Além do valor do imóvel, comprar uma casa ou apartamento em Osasco envolve impostos, taxas de cartório e despesas com documentação. Com a Lei Complementar 227/2026 que ajustou o ITBI de Osasco para 3%, esses custos somam de 5% a 7%* do valor do imóvel. Conhecer cada item ajuda a planejar o orçamento e evita correr atrás de dinheiro na hora da escritura.',
       },
 
       {
@@ -178,16 +178,24 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
       { type: 'h2', text: 'ITBI — Imposto de Transmissão de Bens Imóveis' },
       {
         type: 'p',
-        text: 'O ITBI é o imposto cobrado pela Prefeitura de Osasco sempre que um imóvel muda de dono. Em Osasco, a alíquota praticada é de aproximadamente 2%* sobre o maior valor entre o preço de venda e o valor venal de referência. O pagamento é feito antes da lavratura da escritura — sem o ITBI quitado, o cartório não realiza a transferência.',
+        text: 'O ITBI é o imposto cobrado pela Prefeitura de Osasco sempre que um imóvel muda de dono. Em Osasco, a alíquota é de 3%* sobre o maior valor entre o preço de venda e o valor venal de referência, conforme a Lei Complementar 227/2026 que substituiu a alíquota anterior de 2%. O pagamento é feito antes da lavratura da escritura — sem o ITBI quitado, o cartório não realiza a transferência.',
       },
       {
         type: 'ul',
         items: [
-          'Alíquota estimada em Osasco: 2%* sobre o valor do imóvel',
+          'Alíquota em Osasco: 3%* sobre o valor do imóvel (LC 227/2026)',
           'Pago à Prefeitura Municipal de Osasco',
           'Obrigatório antes do registro em cartório',
           'Existem isenções parciais para imóveis no programa Minha Casa Minha Vida e primeiro imóvel financiado pelo SFH',
         ],
+      },
+      {
+        type: 'callout',
+        text: 'Para comparar com Barueri, Carapicuíba e São Paulo, veja o panorama completo de ITBI da região metropolitana oeste.',
+        link: {
+          href: '/blog/itbi-osasco-barueri-carapicuiba-sao-paulo-2026',
+          label: 'ITBI em Osasco, Barueri, Carapicuíba e São Paulo 2026 →',
+        },
       },
       {
         type: 'callout',
@@ -240,11 +248,11 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
       {
         type: 'ul',
         items: [
-          'ITBI: aproximadamente 2% (Osasco)*',
+          'ITBI: 3% em Osasco (LC 227/2026)*',
           'Escritura ou contrato bancário: aproximadamente 0,5% a 1%*',
           'Registro de imóveis: cerca de 1%*',
           'Avaliação do imóvel (financiamento): tarifa fixa definida pelo banco',
-          'Total estimado: 4% a 6% do valor do imóvel à vista*',
+          'Total estimado: 5% a 7% do valor do imóvel à vista*',
         ],
       },
 
@@ -262,7 +270,7 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
       {
         pergunta: 'Quanto é o ITBI em Osasco?',
         resposta:
-          'A alíquota do ITBI em Osasco é de 2% sobre o maior valor entre o preço de venda do imóvel e o valor venal de referência informado pela Prefeitura.',
+          'A alíquota do ITBI em Osasco é de 3% sobre o maior valor entre o preço de venda do imóvel e o valor venal de referência informado pela Prefeitura, conforme a Lei Complementar 227/2026 que substituiu o percentual anterior de 2%.',
       },
       {
         pergunta: 'Quanto custa a escritura em São Paulo?',

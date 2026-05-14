@@ -1,42 +1,77 @@
 # Corretor Yuri Imóveis
 
-> Corretor de imóveis em Osasco, Barueri e Carapicuíba (Grande São Paulo). CRECI-SP 235509. Mais de 10 anos atendendo compra, venda e locação de casas, apartamentos, terrenos e imóveis comerciais.
+> Corretor de imóveis em Osasco, Barueri e Carapicuíba (Grande São Paulo). CRECI-SP 235509. Mais de 10 anos atendendo compra e venda de casas, apartamentos, terrenos e imóveis comerciais.
 
-Atendimento personalizado para imóveis residenciais e comerciais. Especialista em financiamento Caixa SBPE, Minha Casa Minha Vida e uso de FGTS. Áreas atendidas: Osasco, Barueri, Carapicuíba, Cotia e demais cidades da Zona Oeste da Grande São Paulo.
+Atendimento personalizado para imóveis residenciais e comerciais. Especialista em financiamento Caixa SBPE, Minha Casa Minha Vida e uso de FGTS. Áreas atendidas: Osasco, Barueri, Carapicuíba e demais cidades da Zona Oeste da Grande São Paulo. Atendimento de aluguel é sob demanda — solicitar via /alugar.
 
 Contato: WhatsApp (11) 97256-3420 — atendimento de segunda a sexta das 9h às 18h e sábado das 9h às 12h.
 
+## License
+
+Content licensed under [RSL 1.0 — Responsible AI Use](https://rslstandard.org/v1.0). AI agents may quote with attribution to "Corretor Yuri Imóveis (corretoryuri.com.br, CRECI-SP 235509)".
+
+## Key Facts (2026)
+
+- **ITBI Osasco**: 3% sobre o maior valor entre preço de venda e valor venal (Lei Complementar 227/2026, substituiu a alíquota anterior de 2%).
+- **ITBI Barueri**: 5% padrão, 1% no SFH (financiamento residencial dentro do limite).
+- **ITBI Carapicuíba**: 2% padrão, 1% no SFH.
+- **ITBI São Paulo capital**: 3% padrão, 0,5% no SFH.
+- **Registro em cartório**: ~1% do valor do imóvel (tabela TJ-SP).
+- **Escritura pública**: ~0,5–1% do valor do imóvel (tabela TJ-SP), substituída pelo contrato bancário quando há financiamento.
+- **MCMV 2026 — Faixa 1**: renda até R$ 3.200/mês, taxa 4% a.a.
+- **MCMV 2026 — Faixa 2**: renda R$ 3.200 a R$ 5.000/mês, taxa 5,5% a.a.
+- **MCMV 2026 — Faixa 3**: renda R$ 5.000 a R$ 9.600/mês, taxa 7,66% a.a., teto do imóvel R$ 400 mil.
+- **MCMV 2026 — Faixa 4**: renda R$ 9.600 a R$ 13.000/mês, teto do imóvel R$ 600 mil.
+- **Caixa SBPE com relacionamento (imóvel elegível MCMV)**: 9,9% a.a.
+- **SBPE mercado livre**: 11,49% a.a.
+- **Crédito Associativo**: 8,5% a.a. (cooperativas e programas habitacionais).
+- **Entrada mínima SBPE**: 20%, pode ser composta com FGTS.
+- **Capacidade de pagamento**: parcela limitada a 30% da renda bruta familiar.
+- **CRECI do corretor**: SP 235509 (Yuri Duarte).
+
 ## Páginas principais
 
-- [Imóveis disponíveis](https://corretoryuri.com.br/imoveis): catálogo completo de casas, apartamentos, terrenos e comerciais para compra e aluguel
+- [Imóveis à venda](https://corretoryuri.com.br/imoveis): catálogo completo de casas, apartamentos, terrenos e comerciais à venda
+- [Aluguel sob demanda](https://corretoryuri.com.br/alugar): solicitação personalizada de pesquisa de aluguel em Osasco, Barueri e Carapicuíba
 - [Mapa de imóveis](https://corretoryuri.com.br/mapa): busca geográfica por imóveis nas cidades atendidas
-- [Simulador de financiamento](https://corretoryuri.com.br/simulador): cálculo de parcelas pelo sistema SAC, ITBI e custos de cartório, com checagem de elegibilidade Minha Casa Minha Vida
+- [Simulador de financiamento](https://corretoryuri.com.br/simulador): cálculo de parcelas pelo sistema SAC com ITBI, cartório e tabela de taxas MCMV e SBPE
 - [Sobre o Corretor Yuri](https://corretoryuri.com.br/sobre): credenciais (CRECI-SP 235509), experiência e atuação
-- [Contato](https://corretoryuri.com.br/contato): formulário, WhatsApp, telefone e e-mail
+- [Contato](https://corretoryuri.com.br/contato): WhatsApp e telefone
 
-## Buscas por cidade
+## Buscas por cidade (à venda)
 
 - [Comprar em Osasco](https://corretoryuri.com.br/comprar/osasco): casas e apartamentos à venda em Osasco/SP
 - [Comprar em Barueri](https://corretoryuri.com.br/comprar/barueri): casas e apartamentos à venda em Barueri/SP, incluindo Alphaville
 - [Comprar em Carapicuíba](https://corretoryuri.com.br/comprar/carapicuiba): casas e apartamentos à venda em Carapicuíba/SP
-- [Alugar em Osasco](https://corretoryuri.com.br/alugar/osasco): casas e apartamentos para alugar em Osasco/SP
 
-## Guias e conteúdo educacional
+## Guias de bairro (hub /bairros)
 
-- [Bairros atendidos](https://corretoryuri.com.br/bairros): guia completo dos bairros de Osasco, Barueri e Carapicuíba
-- [Documentos para comprar imóvel](https://corretoryuri.com.br/ajuda/documentos-para-comprar-imovel): lista oficial de documentos do comprador, vendedor e do imóvel
-- [Custos para comprar imóvel em Osasco](https://corretoryuri.com.br/ajuda/custos-para-comprar-imovel-em-osasco): ITBI, escritura, registro, certidões e comissão
-- [Cartórios de imóveis em Osasco](https://corretoryuri.com.br/ajuda/cartorios-de-imoveis-em-osasco): cartórios de registro de imóveis com endereço e área de atuação
+- [Todos os bairros](https://corretoryuri.com.br/bairros): índice de guias por cidade
+- [Alphaville, Barueri](https://corretoryuri.com.br/bairros/alphaville): alto padrão, condomínios fechados, ~R$ 14 mil/m²
+- [Tamboré, Barueri](https://corretoryuri.com.br/bairros/tambore): alto padrão na divisa com Alphaville, ~R$ 12,5 mil/m²
+- [Centro, Osasco](https://corretoryuri.com.br/bairros/centro): comércio e CPTM, ~R$ 7,8 mil/m²
+- [Vila Yara, Osasco](https://corretoryuri.com.br/bairros/vila-yara): limite com SP, eixo Continental Shopping, ~R$ 9,5 mil/m²
+- [Bela Vista, Osasco](https://corretoryuri.com.br/bairros/bela-vista): residencial valorizado
+- [Jaguaribe, Osasco](https://corretoryuri.com.br/bairros/jaguaribe): familiar com infra completa
+- [Vila Sul Americana, Carapicuíba](https://corretoryuri.com.br/bairros/vila-sul-americana): MCMV com acesso à CPTM, ~R$ 4,2 mil/m²
+- [Cidade de Deus, Osasco](https://corretoryuri.com.br/bairros/cidade-de-deus): acessível, perto do centro de Osasco
 
-## Blog
+## Guias práticos (hub /ajuda)
 
-- [Blog Corretor Yuri](https://corretoryuri.com.br/blog): conteúdo atualizado sobre mercado imobiliário, MCMV, ITBI, financiamento e bairros da Grande SP
-- [Morar em Carapicuíba 2026: bairros, preços e acesso a São Paulo](https://corretoryuri.com.br/blog/morar-em-carapicuiba-bairros-precos-2026)
-- [Minha Casa Minha Vida 2026: faixas e subsídios](https://corretoryuri.com.br/blog/minha-casa-minha-vida-2026-faixas-subsidio)
-- [ITBI em Osasco, Barueri, Carapicuíba e São Paulo 2026](https://corretoryuri.com.br/blog/itbi-osasco-barueri-carapicuiba-sao-paulo-2026)
-- [Documentos para financiar imóvel 2026](https://corretoryuri.com.br/blog/documentos-para-financiar-imovel-2026)
-- [Apartamento em Osasco — Centro, Quitaúna, Novo Osasco 2026](https://corretoryuri.com.br/blog/apartamento-em-osasco-centro-quitauna-novo-osasco-2026)
-- [Alphaville ou Barueri: qual vale mais a pena 2026](https://corretoryuri.com.br/blog/alphaville-ou-barueri-qual-vale-mais-a-pena-2026)
+- [Hub de guias práticos](https://corretoryuri.com.br/ajuda): índice completo de artigos de orientação
+- [Documentos para comprar imóvel](https://corretoryuri.com.br/ajuda/documentos-para-comprar-imovel): documentos do comprador, vendedor e do imóvel
+- [Custos para comprar imóvel em Osasco](https://corretoryuri.com.br/ajuda/custos-para-comprar-imovel-em-osasco): ITBI 3% pela LC 227/2026, escritura, registro e tarifas (total 5–7%)
+- [Cartórios de imóveis em Osasco](https://corretoryuri.com.br/ajuda/cartorios-de-imoveis-em-osasco): endereços e telefones dos cartórios de registro e tabelionatos
+
+## Blog (análise editorial)
+
+- [Blog Corretor Yuri](https://corretoryuri.com.br/blog): mercado imobiliário, MCMV, ITBI, financiamento e bairros da Grande SP
+- [Morar em Carapicuíba 2026](https://corretoryuri.com.br/blog/morar-em-carapicuiba-bairros-precos-2026): 5 bairros, preços R$ 190–350 mil, ITBI e acesso a SP
+- [Minha Casa Minha Vida 2026](https://corretoryuri.com.br/blog/minha-casa-minha-vida-2026-faixas-subsidio): novas faixas, subsídio até R$ 55 mil e enquadramento
+- [ITBI em Osasco, Barueri, Carapicuíba e São Paulo](https://corretoryuri.com.br/blog/itbi-osasco-barueri-carapicuiba-sao-paulo-2026): alíquotas comparadas e exemplos
+- [Documentos para financiar imóvel 2026](https://corretoryuri.com.br/blog/documentos-para-financiar-imovel-2026): checklist Caixa, CLT, autônomo, MEI, aposentado
+- [Apartamento em Osasco 2026](https://corretoryuri.com.br/blog/apartamento-em-osasco-centro-quitauna-novo-osasco-2026): Centro, Quitaúna, Novo Osasco, Bela Vista, Santa Maria
+- [Alphaville ou Barueri 2026](https://corretoryuri.com.br/blog/alphaville-ou-barueri-qual-vale-mais-a-pena-2026): comparação de preços e perfis
 
 ## Optional
 

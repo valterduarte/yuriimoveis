@@ -66,7 +66,7 @@ export const SORT_OPTIONS = [
 export const BEDROOM_OPTIONS = ['', '1', '2', '3', '4+']
 
 export const ITBI_RATE_BY_CITY: Record<string, string> = {
-  Osasco:      '2%',
-  Barueri:     '3%',
-  Carapicuíba: '2%',
+  Osasco:      '3%',
+  Barueri:     '5% (1% no SFH)',
+  Carapicuíba: '2% (1% no SFH)',
 }
