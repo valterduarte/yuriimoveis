@@ -548,6 +548,27 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'jardim-ana-estela': {
+    nome: 'Jardim Ana Estela',
+    slug: 'jardim-ana-estela',
+    cidade: 'Carapicuíba',
+    titulo: 'Imóveis no Jardim Ana Estela, Carapicuíba SP — Corretor Yuri',
+    descricaoMeta:
+      'Casas e apartamentos no Jardim Ana Estela em Carapicuíba, SP. Imóveis para venda e aluguel com bom custo-benefício e acesso à CPTM. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Jardim Ana Estela é um bairro residencial de Carapicuíba com perfil predominantemente familiar, formado em sua maior parte por casas e sobrados. A região atrai famílias que buscam moradia com bom custo-benefício na Grande São Paulo, com a vantagem de estar inserida no eixo Osasco–Carapicuíba–Barueri, próxima a polos de emprego e serviços. A identidade do bairro é marcada pela vida de vizinhança, com comércio de rua tradicional e ruas residenciais tranquilas que convivem com o crescimento urbano da cidade.',
+      infraestrutura:
+        'O Jardim Ana Estela conta com comércio local ativo — mercados, padarias, farmácias, açougues e prestadores de serviço que atendem ao cotidiano dos moradores sem necessidade de deslocamento. A proximidade com o centro de Carapicuíba amplia o acesso a supermercados de rede, agências bancárias, lojas e ao Hospital Geral de Carapicuíba. Praças e áreas de convívio compõem o desenho urbano do bairro, e equipamentos públicos como o Parque dos Paturis estão ao alcance de poucos minutos.',
+      transporte:
+        'O bairro se beneficia da posição estratégica de Carapicuíba na Linha 8-Diamante da CPTM: a Estação Carapicuíba conecta a cidade diretamente à Estação da Luz em São Paulo, com integração à Estação Júlio Prestes. Linhas de ônibus municipais e intermunicipais atendem o Jardim Ana Estela ligando-o ao centro de Carapicuíba, Osasco e Barueri. Para quem se desloca de carro, o acesso à Rodovia Castelo Branco — principal eixo viário da região oeste da Grande São Paulo — está a poucos minutos.',
+      educacao:
+        'O Jardim Ana Estela é atendido por escolas municipais e estaduais de ensino fundamental e médio, além de creches e escolas de educação infantil. A proximidade com o centro de Carapicuíba e com Osasco amplia as opções de colégios particulares, cursos técnicos e escolas de idiomas. Para ensino superior, a região conta com instituições acessíveis pela CPTM e pelas rodovias, como UNIFIEO em Osasco e demais faculdades da Grande São Paulo.',
+      porqueMorar:
+        'Morar no Jardim Ana Estela é combinar o sossego de um bairro residencial consolidado com a praticidade da CPTM Linha 8-Diamante a poucos minutos. O preço por metro quadrado em Carapicuíba é um dos mais competitivos da região metropolitana, o que torna o bairro uma escolha pragmática para quem busca o primeiro imóvel ou quer trocar de aluguel por casa própria. A localização no eixo Osasco–Alphaville, somada à valorização recente da Linha 8-Diamante após investimentos da ViaMobilidade, favorece o potencial de longo prazo do bairro.',
+    },
+  },
+
   'vila-sul-americana': {
     nome: 'Vila Sul Americana',
     slug: 'vila-sul-americana',
