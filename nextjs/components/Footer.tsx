@@ -3,6 +3,7 @@ import { FiPhone, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL, CRECI } from '../lib/config'
 import { NAVIGATION_LINKS, FOOTER_TOOL_LINKS } from '../lib/constants'
+import { GUIAS } from '../data/guias'
 import { LANDING_PAGES } from '../data/landingPages'
 import { AJUDA_ARTIGOS, fullH1 } from '../data/ajudaArtigos'
 import { BAIRROS } from '../data/bairros'
@@ -70,6 +71,18 @@ export default async function Footer() {
                   <Link href={link.href} className={FOOTER_LINK_CLASS}>
                     {FOOTER_BULLET}
                     {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <h3 className={`${FOOTER_TITLE_CLASS} mt-8`}>Guias</h3>
+            <ul className="space-y-3">
+              {Object.values(GUIAS).map(guia => (
+                <li key={guia.slug}>
+                  <Link href={`/guia/${guia.slug}`} className={FOOTER_LINK_CLASS}>
+                    {FOOTER_BULLET}
+                    <span className="line-clamp-1">{guia.titulo}</span>
                   </Link>
                 </li>
               ))}
@@ -176,6 +189,8 @@ export default async function Footer() {
             <Link href="/ajuda" className="hover:text-primary transition-colors">Ajuda</Link>
             <span aria-hidden="true" className="hidden md:inline">•</span>
             <Link href="/bairros" className="hover:text-primary transition-colors">Bairros</Link>
+            <span aria-hidden="true" className="hidden md:inline">•</span>
+            <Link href="/guia" className="hover:text-primary transition-colors">Guias</Link>
           </div>
         </div>
       </div>
