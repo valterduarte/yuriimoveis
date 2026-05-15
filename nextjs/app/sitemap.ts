@@ -4,6 +4,7 @@ import { BAIRROS } from '../data/bairros'
 import { getCategoriaBySlug } from '../data/categorias'
 import { LANDING_PAGES } from '../data/landingPages'
 import { AJUDA_ARTIGOS } from '../data/ajudaArtigos'
+import { GUIA_SLUGS } from '../data/guias'
 import { getAllPriceRanges, BEDROOM_FILTERS } from '../data/priceRanges'
 import { AMENITY_FILTERS, imovelMatchesAmenity } from '../data/amenityFilters'
 import {
@@ -327,6 +328,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}/blog/${b.slug}`,
       lastModified: b.updated_at ? new Date(b.updated_at) : now,
     })),
+    { url: `${SITE_URL}/guia`, lastModified: now },
+    ...GUIA_SLUGS.map(slug => ({ url: `${SITE_URL}/guia/${slug}`, lastModified: now })),
     { url: `${SITE_URL}/bairros`, lastModified: propertiesLatest || now },
     ...hierarchicalUrls,
     ...filterUrls,
