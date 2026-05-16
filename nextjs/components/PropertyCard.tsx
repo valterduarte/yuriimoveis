@@ -10,6 +10,7 @@ import type { Imovel } from '../types'
 
 interface PropertyCardProps {
   imovel: Imovel
+  priority?: boolean
 }
 
 function getCardImageSrc(imovel: Imovel): string {
@@ -17,7 +18,7 @@ function getCardImageSrc(imovel: Imovel): string {
   return firstImage && firstImage.length > 0 ? firstImage : PLACEHOLDER_IMAGE
 }
 
-export default function PropertyCard({ imovel }: PropertyCardProps) {
+export default function PropertyCard({ imovel, priority = false }: PropertyCardProps) {
   const imageSrc = getCardImageSrc(imovel)
   const slug = imovelSlug(imovel)
   const statusConfig = imovel.status
@@ -32,7 +33,9 @@ export default function PropertyCard({ imovel }: PropertyCardProps) {
           alt={`${imovel.titulo} — ${imovel.categoria} para ${imovel.tipo} em ${imovel.bairro || imovel.cidade}`}
           width={600}
           height={CARD_IMAGE_HEIGHT}
-          loading="lazy"
+          priority={priority}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
           quality={75}
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
