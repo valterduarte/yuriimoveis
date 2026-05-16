@@ -57,6 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   })
 
   const MIN_PROPERTIES_FOR_INDEXING = 3
+  const MIN_PROPERTIES_FOR_FILTER = 5
 
   const bairroCountByDbName = new Map<string, number>()
   const bairroLastModByDbName = new Map<string, Date>()
@@ -166,10 +167,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   }
 
-  const filterUrls: MetadataRoute.Sitemap = []
-  const filterSeen = new Set<string>()
-  const categoryFilterSeen = new Set<string>()
-  const bairroFilterSeen = new Set<string>()
+  const cityFilterCounts = new Map<string, number>()
+  const categoryFilterCounts = new Map<string, number>()
+  const bairroFilterCounts = new Map<string, number>()
+
+  const bumpCounts = (acao: AcaoSlug, cidadeSlug: string, categoria: string, hasCategoria: boolean, bairroSlug: string, filterSlug: string) => {
+    const cityKey = `${acao}|${cidadeSlug}|${filterSlug}`
+    cityFilterCounts.set(cityKey, (cityFilterCounts.get(cityKey) ?? 0) + 1)
+    if (hasCategoria) {
+      const catKey = `${acao}|${cidadeSlug}|${categoria}|${filterSlug}`
+      categoryFilterCounts.set(catKey, (categoryFilterCounts.get(catKey) ?? 0) + 1)
+      if (bairroSlug) {
+        const bairroKey = `${acao}|${cidadeSlug}|${categoria}|${bairroSlug}|${filterSlug}`
+        bairroFilterCounts.set(bairroKey, (bairroFilterCounts.get(bairroKey) ?? 0) + 1)
+      }
+    }
+  }
 
   for (const row of priceMatrix) {
     const acao: AcaoSlug = row.tipo === 'venda' ? 'comprar' : 'alugar'
@@ -177,118 +190,56 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!cidadeSlugToName(cidadeSlug)) continue
     const hasCategoria = !!getCategoriaBySlug(row.categoria)
     const bairroSlug = bairroDbNameToSlug(row.bairro)
-    const lastMod = cidadeCategoriaLatest.get(`${acao}|${cidadeSlug}|${row.categoria}`)
-      || cidadeLatest.get(`${acao}|${cidadeSlug}`)
-      || now
 
-    const priceRanges = getAllPriceRanges(row.tipo as 'venda' | 'aluguel')
-    for (const range of priceRanges) {
+    for (const range of getAllPriceRanges(row.tipo as 'venda' | 'aluguel')) {
       const inRange = (!range.min || row.preco >= range.min) && (!range.max || row.preco <= range.max)
       if (!inRange) continue
-
-      const key = `${acao}|${cidadeSlug}|${range.slug}`
-      if (!filterSeen.has(key)) {
-        filterSeen.add(key)
-        filterUrls.push({
-          url: `${SITE_URL}/${acao}/${cidadeSlug}/filtro/${range.slug}`,
-          lastModified: lastMod,
-        })
-      }
-
-      if (hasCategoria) {
-        const catKey = `${acao}|${cidadeSlug}|${row.categoria}|${range.slug}`
-        if (!categoryFilterSeen.has(catKey)) {
-          categoryFilterSeen.add(catKey)
-          filterUrls.push({
-            url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/filtro/${range.slug}`,
-            lastModified: lastMod,
-          })
-        }
-
-        if (bairroSlug) {
-          const bairroKey = `${acao}|${cidadeSlug}|${row.categoria}|${bairroSlug}|${range.slug}`
-          if (!bairroFilterSeen.has(bairroKey)) {
-            bairroFilterSeen.add(bairroKey)
-            filterUrls.push({
-              url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/${bairroSlug}/filtro/${range.slug}`,
-              lastModified: lastMod,
-            })
-          }
-        }
-      }
+      bumpCounts(acao, cidadeSlug, row.categoria, hasCategoria, bairroSlug, range.slug)
     }
 
     for (const amenity of AMENITY_FILTERS) {
       if (!imovelMatchesAmenity(row.diferenciais, amenity)) continue
-
-      const key = `${acao}|${cidadeSlug}|${amenity.slug}`
-      if (!filterSeen.has(key)) {
-        filterSeen.add(key)
-        filterUrls.push({
-          url: `${SITE_URL}/${acao}/${cidadeSlug}/filtro/${amenity.slug}`,
-          lastModified: lastMod,
-        })
-      }
-
-      if (hasCategoria) {
-        const catKey = `${acao}|${cidadeSlug}|${row.categoria}|${amenity.slug}`
-        if (!categoryFilterSeen.has(catKey)) {
-          categoryFilterSeen.add(catKey)
-          filterUrls.push({
-            url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/filtro/${amenity.slug}`,
-            lastModified: lastMod,
-          })
-        }
-
-        if (bairroSlug) {
-          const bairroKey = `${acao}|${cidadeSlug}|${row.categoria}|${bairroSlug}|${amenity.slug}`
-          if (!bairroFilterSeen.has(bairroKey)) {
-            bairroFilterSeen.add(bairroKey)
-            filterUrls.push({
-              url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/${bairroSlug}/filtro/${amenity.slug}`,
-              lastModified: lastMod,
-            })
-          }
-        }
-      }
+      bumpCounts(acao, cidadeSlug, row.categoria, hasCategoria, bairroSlug, amenity.slug)
     }
 
     for (const bf of BEDROOM_FILTERS) {
       const minBedrooms = bf.value === '4+' ? 4 : bf.value
-      const matches = row.quartos >= minBedrooms
-      if (!matches) continue
-
-      const key = `${acao}|${cidadeSlug}|${bf.slug}`
-      if (!filterSeen.has(key)) {
-        filterSeen.add(key)
-        filterUrls.push({
-          url: `${SITE_URL}/${acao}/${cidadeSlug}/filtro/${bf.slug}`,
-          lastModified: lastMod,
-        })
-      }
-
-      if (hasCategoria) {
-        const catKey = `${acao}|${cidadeSlug}|${row.categoria}|${bf.slug}`
-        if (!categoryFilterSeen.has(catKey)) {
-          categoryFilterSeen.add(catKey)
-          filterUrls.push({
-            url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/filtro/${bf.slug}`,
-            lastModified: lastMod,
-          })
-        }
-
-        if (bairroSlug) {
-          const bairroKey = `${acao}|${cidadeSlug}|${row.categoria}|${bairroSlug}|${bf.slug}`
-          if (!bairroFilterSeen.has(bairroKey)) {
-            bairroFilterSeen.add(bairroKey)
-            filterUrls.push({
-              url: `${SITE_URL}/${acao}/${cidadeSlug}/${row.categoria}/${bairroSlug}/filtro/${bf.slug}`,
-              lastModified: lastMod,
-            })
-          }
-        }
-      }
+      if (row.quartos < minBedrooms) continue
+      bumpCounts(acao, cidadeSlug, row.categoria, hasCategoria, bairroSlug, bf.slug)
     }
+  }
+
+  const filterUrls: MetadataRoute.Sitemap = []
+  const lastModForCityCategory = (acao: AcaoSlug, cidadeSlug: string, categoria: string): Date =>
+    cidadeCategoriaLatest.get(`${acao}|${cidadeSlug}|${categoria}`)
+      || cidadeLatest.get(`${acao}|${cidadeSlug}`)
+      || now
+
+  for (const [key, count] of cityFilterCounts) {
+    if (count < MIN_PROPERTIES_FOR_FILTER) continue
+    const [acao, cidadeSlug, filterSlug] = key.split('|') as [AcaoSlug, string, string]
+    filterUrls.push({
+      url: `${SITE_URL}/${acao}/${cidadeSlug}/filtro/${filterSlug}`,
+      lastModified: cidadeLatest.get(`${acao}|${cidadeSlug}`) || now,
+    })
+  }
+
+  for (const [key, count] of categoryFilterCounts) {
+    if (count < MIN_PROPERTIES_FOR_FILTER) continue
+    const [acao, cidadeSlug, categoria, filterSlug] = key.split('|') as [AcaoSlug, string, string, string]
+    filterUrls.push({
+      url: `${SITE_URL}/${acao}/${cidadeSlug}/${categoria}/filtro/${filterSlug}`,
+      lastModified: lastModForCityCategory(acao, cidadeSlug, categoria),
+    })
+  }
+
+  for (const [key, count] of bairroFilterCounts) {
+    if (count < MIN_PROPERTIES_FOR_FILTER) continue
+    const [acao, cidadeSlug, categoria, bairroSlug, filterSlug] = key.split('|') as [AcaoSlug, string, string, string, string]
+    filterUrls.push({
+      url: `${SITE_URL}/${acao}/${cidadeSlug}/${categoria}/${bairroSlug}/filtro/${filterSlug}`,
+      lastModified: lastModForCityCategory(acao, cidadeSlug, categoria),
+    })
   }
 
   const activeBairroDbNames = new Set(matrix.map(r => r.bairro))

@@ -214,7 +214,7 @@ export const GUIAS: Record<string, GuiaData> = {
           'O ITBI só incide sobre a parte financiada quando há financiamento bancário? Não — ele incide sobre o valor total do imóvel, independentemente de quanto foi financiado.',
         ],
         links: [
-          { href: '/blog/itbi-osasco-como-calcular-2026', label: 'ITBI em Osasco: como calcular e onde pagar', description: 'Passo a passo para emitir a guia e evitar erros no cálculo', type: 'blog' },
+          { href: '/blog/itbi-osasco-barueri-carapicuiba-sao-paulo-2026', label: 'ITBI em Osasco, Barueri e Carapicuíba: como calcular e onde pagar', description: 'Passo a passo para emitir a guia e evitar erros no cálculo nas três cidades', type: 'blog' },
           { href: '/ajuda/custos-para-comprar-imovel-em-osasco', label: 'Calculadora de custos de compra em Osasco', description: 'Ferramenta para calcular ITBI, cartório e registro de uma só vez', type: 'ajuda' },
         ],
       },
