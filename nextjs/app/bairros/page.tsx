@@ -10,9 +10,9 @@ import type { BairroData } from '../../types'
 
 export const revalidate = 300
 
-const PAGE_TITLE = 'Guias de Bairro em Osasco, Barueri e Carapicuíba | Corretor Yuri'
+const PAGE_TITLE = 'Melhores Bairros de Osasco, Barueri e Carapicuíba 2026 — Guia Completo'
 const PAGE_DESCRIPTION =
-  'Compare os bairros de Osasco, Barueri e Carapicuíba: preços, transporte, infraestrutura e imóveis disponíveis. Guias completos para quem quer morar ou investir na Grande SP Oeste.'
+  'Os melhores bairros de Osasco, Barueri e Carapicuíba em 2026: compare preços por m², transporte, infraestrutura, escolas e imóveis disponíveis. Guias completos para morar ou investir na Grande SP Oeste.'
 
 export function generateMetadata(): Metadata {
   const url = `${SITE_URL}/bairros`
@@ -140,10 +140,10 @@ export default async function BairrosIndexPage() {
           </nav>
           <span className="section-label">Conheça a região</span>
           <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">
-            Guias de Bairro — Osasco, Barueri e Carapicuíba
+            Melhores Bairros de Osasco, Barueri e Carapicuíba
           </h1>
           <p className="text-gray-400 text-sm mt-3 max-w-3xl leading-relaxed">
-            {totalGuides} guias completos com infraestrutura, transporte, educação, preços de referência e imóveis disponíveis em cada bairro.
+            {totalGuides} guias comparativos com preços por m², transporte, infraestrutura, escolas e imóveis disponíveis em cada bairro da Grande SP Oeste.
           </p>
         </div>
       </div>

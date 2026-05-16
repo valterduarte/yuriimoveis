@@ -134,6 +134,8 @@ export default async function BairroGuidePage({ params }: PageProps) {
       headline: guideTitle,
       description: bairro.descricaoMeta,
       url: canonicalUrl,
+      datePublished: '2026-04-01',
+      dateModified: bairro.precoMedio?.atualizadoEm || '2026-05-15',
     }),
     buildFaqPageSchema(faqs),
   ]

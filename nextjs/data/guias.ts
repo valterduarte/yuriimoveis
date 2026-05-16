@@ -26,6 +26,8 @@ export interface GuiaData {
   faqs: GuiaFaq[]
   ctaLabel: string
   ctaHref: string
+  publishedAt: string
+  updatedAt: string
 }
 
 export const GUIAS: Record<string, GuiaData> = {
@@ -113,6 +115,8 @@ export const GUIAS: Record<string, GuiaData> = {
     ],
     ctaLabel: 'Ver imóveis à venda em Osasco',
     ctaHref: '/imoveis?tipo=venda&cidade=Osasco',
+    publishedAt: '2026-05-01',
+    updatedAt: '2026-05-15',
   },
 
   'financiamento-imobiliario-osasco': {
@@ -195,6 +199,8 @@ export const GUIAS: Record<string, GuiaData> = {
     ],
     ctaLabel: 'Simular meu financiamento',
     ctaHref: '/simulador',
+    publishedAt: '2026-05-01',
+    updatedAt: '2026-05-15',
   },
 
   'custos-compra-imovel': {
@@ -274,6 +280,8 @@ export const GUIAS: Record<string, GuiaData> = {
     ],
     ctaLabel: 'Calcular custos do meu financiamento',
     ctaHref: '/simulador',
+    publishedAt: '2026-05-01',
+    updatedAt: '2026-05-15',
   },
 
   'alugar-imovel-osasco-barueri': {
@@ -347,6 +355,8 @@ export const GUIAS: Record<string, GuiaData> = {
     ],
     ctaLabel: 'Ver imóveis para alugar em Osasco',
     ctaHref: '/imoveis?tipo=aluguel&cidade=Osasco',
+    publishedAt: '2026-05-01',
+    updatedAt: '2026-05-15',
   },
 }
 

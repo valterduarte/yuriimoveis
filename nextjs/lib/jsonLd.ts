@@ -92,16 +92,20 @@ export function buildArticleSchema({
 
 interface PersonSchemaInput {
   name: string
+  givenName?: string
+  familyName?: string
   alternateName?: string
   image?: string
 }
 
-export function buildPersonSchema({ name, alternateName, image }: PersonSchemaInput): Record<string, unknown> {
+export function buildPersonSchema({ name, givenName, familyName, alternateName, image }: PersonSchemaInput): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
     '@id': PERSON_ID,
     name,
+    ...(givenName ? { givenName } : {}),
+    ...(familyName ? { familyName } : {}),
     ...(alternateName ? { alternateName } : {}),
     url: `${SITE_URL}/sobre`,
     jobTitle: 'Corretor de Imóveis',

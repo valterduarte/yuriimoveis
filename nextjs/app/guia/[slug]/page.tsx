@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowRight, FiBookOpen, FiTool, FiHome, FiList } from 'react-icons/fi'
-import { getGuiaBySlug, GUIA_SLUGS } from '../../../data/guias'
+import { getGuiaBySlug, GUIA_SLUGS, GUIAS } from '../../../data/guias'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
 import { buildBreadcrumb, buildFaqPageSchema, buildArticleSchema } from '../../../lib/jsonLd'
 import type { GuiaLink } from '../../../data/guias'
@@ -66,6 +66,8 @@ export default async function GuiaPage({ params }: PageProps) {
       headline: guia.titulo,
       description: guia.descricaoMeta,
       url: canonicalUrl,
+      datePublished: guia.publishedAt,
+      dateModified: guia.updatedAt,
     }),
     buildFaqPageSchema(guia.faqs),
   ]
@@ -139,6 +141,29 @@ export default async function GuiaPage({ params }: PageProps) {
               </details>
             ))}
           </div>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">Outros guias completos</h2>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {Object.values(GUIAS)
+              .filter(g => g.slug !== guia.slug)
+              .map(g => (
+                <li key={g.slug}>
+                  <Link
+                    href={`/guia/${g.slug}`}
+                    className="flex items-start gap-3 p-4 bg-white border border-gray-200 hover:border-primary hover:bg-primary/5 transition-colors group"
+                  >
+                    <FiBookOpen size={14} className="shrink-0 text-primary mt-0.5" />
+                    <span className="flex-1 min-w-0">
+                      <span className="block text-sm font-semibold text-dark group-hover:text-primary leading-snug">{g.titulo}</span>
+                      <span className="block text-xs text-gray-500 mt-1 leading-relaxed">{g.descricaoMeta}</span>
+                    </span>
+                    <FiArrowRight size={14} className="shrink-0 mt-1 text-gray-400 group-hover:text-primary group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </li>
+              ))}
+          </ul>
         </section>
 
         <div className="mt-12 bg-dark text-white p-8 text-center">
