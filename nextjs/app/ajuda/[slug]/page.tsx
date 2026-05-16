@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const url = `${SITE_URL}/ajuda/${artigo.slug}`
   return {
-    title: artigo.titulo,
+    title: { absolute: artigo.titulo },
     description: artigo.descricaoMeta,
     alternates: { canonical: url },
     openGraph: {

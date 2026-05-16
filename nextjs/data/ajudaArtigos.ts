@@ -164,11 +164,11 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
 
   {
     slug: 'custos-para-comprar-imovel-em-osasco',
-    titulo: 'Custos para Comprar Imóvel em Osasco — ITBI, Escritura e Registro',
+    titulo: 'Quanto Custa Comprar Imóvel em Osasco em 2026? + Calculadora',
     h1: 'Custos para Comprar um Imóvel em',
     h1Destaque: 'Osasco',
     descricaoMeta:
-      'Quanto custa comprar um imóvel em Osasco em 2026? ITBI de 3% (LC 227/2026), escritura, registro e demais taxas com cálculo por faixa de preço.',
+      'Calcule ITBI (3%), escritura, registro e cartório em Osasco em 2026. Exemplo de imóvel de R$ 300 mil: total de R$ 18-20 mil. Atualizado pela LC 227/2026.',
     resumo:
       'Comprar imóvel em Osasco custa de 5% a 7% além do valor anunciado: ITBI de 3% pela LC 227/2026, escritura, registro e tarifas bancárias. Veja como planejar.',
     atualizadoEm: '2026-05-14',
@@ -300,11 +300,11 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
 
   {
     slug: 'cartorios-de-imoveis-em-osasco',
-    titulo: 'Cartórios de Imóveis em Osasco — Endereços e Telefones',
+    titulo: 'Cartórios de Imóveis em Osasco: Endereços, Telefones e Mapa',
     h1: 'Cartórios de Imóveis em',
     h1Destaque: 'Osasco',
     descricaoMeta:
-      'Lista completa dos cartórios de registro de imóveis e tabelionatos de notas em Osasco SP, com endereço, telefone e área de atuação. Atualizado para 2026.',
+      'Cartórios de registro de imóveis e tabelionatos de notas em Osasco — endereço, telefone e área de atuação. Saiba onde registrar sua escritura em 2026.',
     resumo:
       'Endereços e contatos dos cartórios de registro de imóveis e tabelionatos de notas que atendem Osasco — informação essencial para escritura, registro e certidões.',
     atualizadoEm: '2026-04-13',
