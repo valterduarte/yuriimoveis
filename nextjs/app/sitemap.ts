@@ -16,6 +16,7 @@ import {
   type AcaoSlug,
 } from '../lib/navigation'
 import { SITE_URL } from '../lib/config'
+import { SEO_MIN_PROPERTIES_FOR_INDEXING, SEO_MIN_PROPERTIES_FOR_FILTER } from '../lib/constants'
 import type { MetadataRoute } from 'next'
 
 export const revalidate = 3600
@@ -56,8 +57,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   })
 
-  const MIN_PROPERTIES_FOR_INDEXING = 3
-  const MIN_PROPERTIES_FOR_FILTER = 5
+  const MIN_PROPERTIES_FOR_INDEXING = SEO_MIN_PROPERTIES_FOR_INDEXING
+  const MIN_PROPERTIES_FOR_FILTER = SEO_MIN_PROPERTIES_FOR_FILTER
 
   const bairroCountByDbName = new Map<string, number>()
   const bairroLastModByDbName = new Map<string, Date>()

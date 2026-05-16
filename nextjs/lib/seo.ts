@@ -9,6 +9,7 @@ interface ListingMetadataInput {
   url: string
   ogImage?: string
   ogImageAlt?: string
+  noindex?: boolean
 }
 
 export function buildListingMetadata({
@@ -17,11 +18,13 @@ export function buildListingMetadata({
   url,
   ogImage = OG_DEFAULT_IMAGE,
   ogImageAlt = title,
+  noindex = false,
 }: ListingMetadataInput): Metadata {
   return {
     title,
     description,
     alternates: { canonical: url },
+    robots: noindex ? { index: false, follow: true } : undefined,
     openGraph: {
       title,
       description,

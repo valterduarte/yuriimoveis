@@ -29,6 +29,7 @@ import {
   type AmenityFilter,
 } from '../../../../../../data/amenityFilters'
 import { SITE_URL } from '../../../../../../lib/config'
+import { SEO_MIN_PROPERTIES_FOR_FILTER } from '../../../../../../lib/constants'
 import { buildBreadcrumb, buildCollectionPage, buildPropertyProduct } from '../../../../../../lib/jsonLd'
 import { buildListingMetadata } from '../../../../../../lib/seo'
 import type { Metadata } from 'next'
@@ -141,6 +142,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     url: `${SITE_URL}${buildCategoryFilterUrl(acao, cidade, categoria, filtro)}`,
+    noindex: total < SEO_MIN_PROPERTIES_FOR_FILTER,
   })
 }
 

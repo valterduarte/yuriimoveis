@@ -7,7 +7,7 @@ import PropertyResultsGrid from '../../../../../components/PropertyResultsGrid'
 import { FilterChip, FilterChipList } from '../../../../../components/FilterChip'
 import { formatNeighborhoodName, emBairro, deBairro, sobreBairro, formatPrice } from '../../../../../utils/imovelUtils'
 import { getBairroBySlug, BAIRROS } from '../../../../../data/bairros'
-import { ITBI_RATE_BY_CITY } from '../../../../../lib/constants'
+import { ITBI_RATE_BY_CITY, SEO_MIN_PROPERTIES_FOR_INDEXING } from '../../../../../lib/constants'
 import {
   acaoToTipo,
   isValidAcao,
@@ -184,6 +184,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     url: `${SITE_URL}${buildHierarchicalUrl({ acao, cidade, categoria, bairro })}`,
+    noindex: total < SEO_MIN_PROPERTIES_FOR_INDEXING,
   })
 }
 

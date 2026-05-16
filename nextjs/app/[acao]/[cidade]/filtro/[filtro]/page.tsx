@@ -29,6 +29,7 @@ import {
   type AmenityFilter,
 } from '../../../../../data/amenityFilters'
 import { SITE_URL } from '../../../../../lib/config'
+import { SEO_MIN_PROPERTIES_FOR_FILTER } from '../../../../../lib/constants'
 import { buildBreadcrumb, buildCollectionPage, buildPropertyProduct } from '../../../../../lib/jsonLd'
 import { buildListingMetadata } from '../../../../../lib/seo'
 import type { Metadata } from 'next'
@@ -121,10 +122,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const filterLabel = filter.price?.label || filter.bedroom?.label || filter.amenity?.label || ''
   const title = `Imóveis ${label} ${filterLabel} em ${cidadeName} SP — Corretor Yuri`
   const description = `Imóveis ${label.toLowerCase()} ${filterLabel} em ${cidadeName}, SP. Encontre casas, apartamentos e terrenos com o Corretor Yuri, CRECI 235509.`
+
+  const { total } = await fetchProperties({
+    tipo,
+    cidade: cidadeName,
+    precoMin: filter.price?.min ? String(filter.price.min) : undefined,
+    precoMax: filter.price?.max ? String(filter.price.max) : undefined,
+    quartos: filter.bedroom ? String(filter.bedroom.value) : undefined,
+    amenity: filter.amenity ? filter.amenity.matchTerms.join('|') : undefined,
+    limit: 1,
+  })
+
   return buildListingMetadata({
     title,
     description,
     url: `${SITE_URL}${buildFilterUrl(acao, cidade, filtro)}`,
+    noindex: total < SEO_MIN_PROPERTIES_FOR_FILTER,
   })
 }
 

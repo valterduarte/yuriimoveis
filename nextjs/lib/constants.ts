@@ -56,6 +56,9 @@ export const CARD_IMAGE_HEIGHT    = 260
 export const ADMIN_PROPERTIES_LIMIT = 50
 export const DEBOUNCE_DELAY       = 600
 
+export const SEO_MIN_PROPERTIES_FOR_INDEXING = 3
+export const SEO_MIN_PROPERTIES_FOR_FILTER   = 5
+
 export const SORT_OPTIONS = [
   { value: 'recente',     label: 'Mais recente' },
   { value: 'menor_preco', label: 'Menor preço'  },
