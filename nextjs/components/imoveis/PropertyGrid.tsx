@@ -19,6 +19,8 @@ interface PropertyGridProps {
   filters?: PropertyFilterParams
 }
 
+const EAGER_LOAD_COUNT = 2
+
 const TIPO_HEADLINE_LABEL: Record<string, string> = {
   venda: 'à venda',
   aluguel: 'para alugar',
@@ -89,7 +91,7 @@ export default function PropertyGrid({ properties, activeFilterCount, filters }:
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
         {properties.map((property, i) => (
           <div key={property.id} className="reveal" style={{ transitionDelay: `${(i % 3) * 0.08}s` }}>
-            <PropertyCard imovel={property} />
+            <PropertyCard imovel={property} priority={i < EAGER_LOAD_COUNT} />
           </div>
         ))}
       </div>
