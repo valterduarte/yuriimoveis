@@ -8,6 +8,7 @@ import { FilterChip, FilterChipList } from '../../../../components/FilterChip'
 import BairrosRecomendados from '../../../../components/imoveis/BairrosRecomendados'
 import CrossCategoryLinks from '../../../../components/imoveis/CrossCategoryLinks'
 import AmplieChances from '../../../../components/imoveis/AmplieChances'
+import ListingMap from '../../../../components/imoveis/ListingMap'
 import {
   acaoToTipo,
   isValidAcao,
@@ -253,6 +254,11 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
       </div>
 
       <PropertyResultsGrid imoveis={imoveis} />
+
+      <ListingMap
+        imoveis={imoveis}
+        title={`${categoriaData.plural} ${label.toLowerCase()} em ${cidadeName} no mapa`}
+      />
 
       <BairrosRecomendados
         acao={acao}
