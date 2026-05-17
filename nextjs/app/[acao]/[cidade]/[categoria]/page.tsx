@@ -5,6 +5,9 @@ import { fetchProperties, fetchNavigationMatrix } from '../../../../lib/api'
 import ListingPageShell, { type BreadcrumbItem } from '../../../../components/ListingPageShell'
 import PropertyResultsGrid from '../../../../components/PropertyResultsGrid'
 import { FilterChip, FilterChipList } from '../../../../components/FilterChip'
+import BairrosRecomendados from '../../../../components/imoveis/BairrosRecomendados'
+import CrossCategoryLinks from '../../../../components/imoveis/CrossCategoryLinks'
+import AmplieChances from '../../../../components/imoveis/AmplieChances'
 import {
   acaoToTipo,
   isValidAcao,
@@ -18,7 +21,6 @@ import {
   type AcaoSlug,
 } from '../../../../lib/navigation'
 import { getBairroBySlug } from '../../../../data/bairros'
-import { BEDROOM_FILTERS, getAllPriceRanges } from '../../../../data/priceRanges'
 import { getListingCopy } from '../../../../data/listingCopy'
 import { SITE_URL } from '../../../../lib/config'
 import { buildBreadcrumb, buildCollectionPage, buildFaqPageSchema, buildPropertyProduct } from '../../../../lib/jsonLd'
@@ -179,6 +181,31 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
 
   const topBairros = [...bairrosWithCount].sort((a, b) => b.count - a.count)
 
+  const categoriaSlug = categoria as PropertyCategory
+  const bairrosRecomendados = topBairros.filter(b => getBairroBySlug(b.slug)?.precoMedio)
+  const bairrosSemPreco = topBairros.filter(b => !getBairroBySlug(b.slug)?.precoMedio)
+
+  const sameTipo = acaoToTipo(acao)
+  const oppositeTipo = sameTipo === 'venda' ? 'aluguel' : 'venda'
+
+  const categoriasNaMesmaAcao = Array.from(
+    new Set(
+      matrix
+        .filter(r => r.tipo === sameTipo && cidadeNameToSlug(r.cidade) === cidade && r.categoria !== categoria)
+        .map(r => r.categoria),
+    ),
+  )
+    .filter((c): c is PropertyCategory => !!getCategoriaBySlug(c))
+
+  const categoriasNaAcaoOposta = Array.from(
+    new Set(
+      matrix
+        .filter(r => r.tipo === oppositeTipo && cidadeNameToSlug(r.cidade) === cidade)
+        .map(r => r.categoria),
+    ),
+  )
+    .filter((c): c is PropertyCategory => !!getCategoriaBySlug(c))
+
   const faqs = buildFaqs({
     acao: acao,
     cidadeName,
@@ -227,45 +254,27 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
 
       <PropertyResultsGrid imoveis={imoveis} />
 
-      <section className="mt-14 grid gap-8 md:grid-cols-2">
-        <div>
-          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
-            {categoriaData.plural} {label} por quartos
-          </h2>
-          <FilterChipList>
-            {BEDROOM_FILTERS.map(bf => (
-              <FilterChip key={bf.slug} href={`/${acao}/${cidade}/${categoria}/filtro/${bf.slug}`}>
-                {bf.shortLabel || bf.label}
-              </FilterChip>
-            ))}
-          </FilterChipList>
-        </div>
-        <div>
-          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
-            {categoriaData.plural} {label} por preço
-          </h2>
-          <FilterChipList>
-            {getAllPriceRanges(acaoToTipo(acao)).map(pr => (
-              <FilterChip key={pr.slug} href={`/${acao}/${cidade}/${categoria}/filtro/${pr.slug}`}>
-                {pr.shortLabel || pr.label}
-              </FilterChip>
-            ))}
-          </FilterChipList>
-        </div>
-      </section>
+      <BairrosRecomendados
+        acao={acao}
+        cidade={cidade}
+        cidadeName={cidadeName}
+        categoria={categoriaSlug}
+        categoriaPlural={categoriaData.plural}
+        bairrosWithCount={bairrosRecomendados}
+      />
 
-      {bairrosWithCount.length > 0 && (
+      {bairrosSemPreco.length > 0 && (
         <section className="mt-14">
           <div className="flex items-end justify-between gap-4 mb-4">
             <h2 className="text-base font-bold text-dark uppercase tracking-wide">
-              {categoriaData.plural} {label} por bairro
+              Procure por {categoriaData.plural.toLowerCase()} em outros bairros de {cidadeName}
             </h2>
             <Link href="/bairros" className="text-xs uppercase tracking-wider font-bold text-primary hover:underline whitespace-nowrap">
               Guias de bairro →
             </Link>
           </div>
           <FilterChipList>
-            {bairrosWithCount.map(b => {
+            {bairrosSemPreco.map(b => {
               const bairroData = getBairroBySlug(b.slug)
               const displayName = bairroData?.nome || b.slug
               const hasGuide = hasRichBairroContent(b.slug)
@@ -281,6 +290,23 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
           </FilterChipList>
         </section>
       )}
+
+      <CrossCategoryLinks
+        acao={acao}
+        cidade={cidade}
+        cidadeName={cidadeName}
+        categoria={categoriaSlug}
+        categoriaPlural={categoriaData.plural}
+        categoriasNaMesmaAcao={categoriasNaMesmaAcao}
+        categoriasNaAcaoOposta={categoriasNaAcaoOposta}
+      />
+
+      <AmplieChances
+        acao={acao}
+        cidade={cidade}
+        categoria={categoriaSlug}
+        tipo={sameTipo}
+      />
 
       <FaqAccordion faqs={faqs} />
       </div>
