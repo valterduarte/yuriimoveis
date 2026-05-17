@@ -92,23 +92,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  const configuredBairros = Object.values(BAIRROS)
-
-  const bairroHasEnoughStock = (slug: string, dbName: string | undefined): boolean => {
-    if (hasRichBairroContent(slug)) return true
-    if (!dbName) return false
-    return (bairroCountByDbName.get(dbName) ?? 0) >= MIN_PROPERTIES_FOR_INDEXING
-  }
-
-  const configuredBairroUrls: MetadataRoute.Sitemap = configuredBairros
-    .filter(b => bairroHasEnoughStock(b.slug, b.dbMatch))
-    .map(b => ({
-      url: `${SITE_URL}/imoveis/${b.slug}`,
-      lastModified: (b.dbMatch && bairroLastModByDbName.get(b.dbMatch)) || now,
-    }))
-
-  const bairroUrls: MetadataRoute.Sitemap = configuredBairroUrls
-
   const landingUrls: MetadataRoute.Sitemap = LANDING_PAGES
     .filter(lp => (landingCountByTipoCategoria.get(`${lp.tipo}|${lp.categoria}`) ?? 0) >= MIN_PROPERTIES_FOR_INDEXING)
     .map(lp => ({
@@ -276,7 +259,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...hierarchicalUrls,
     ...filterUrls,
     ...landingUrls,
-    ...bairroUrls,
     ...bairroGuideUrls,
     ...propertyUrls,
   ]
