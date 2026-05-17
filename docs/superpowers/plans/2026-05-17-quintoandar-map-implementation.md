@@ -36,7 +36,7 @@
 - `nextjs/app/[acao]/[cidade]/page.tsx` — wrap `<PropertyResultsGrid>` in `<ListingMapShell>`
 - `nextjs/app/bairros/[slug]/page.tsx` — replace 3-property destaques block with full bairro listing + map
 - `nextjs/package.json` — add deps
-- `nextjs/.env.example` — document `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
+- `nextjs/.env.local.example` — document `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
 
 **Delete (cleanup, final task)**
 - `nextjs/components/imoveis/ListingMap.tsx` — superseded by `ListingMapShell`
@@ -76,11 +76,11 @@ git commit -m "Add Google Maps and Zustand dependencies for listing map"
 ## Task 2: Document the Google Maps env var
 
 **Files:**
-- Modify: `nextjs/.env.example`
+- Modify: `nextjs/.env.local.example`
 
 - [ ] **Step 1: Add the env var stub**
 
-Append to `nextjs/.env.example`:
+Append to `nextjs/.env.local.example`:
 
 ```
 # Google Maps JavaScript API key (used by listing pages map).
@@ -92,7 +92,7 @@ NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
 - [ ] **Step 2: Commit**
 
 ```bash
-git add nextjs/.env.example
+git add nextjs/.env.local.example
 git commit -m "Document NEXT_PUBLIC_GOOGLE_MAPS_API_KEY for listing map"
 ```
 
