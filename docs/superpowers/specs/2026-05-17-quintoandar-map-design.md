@@ -9,13 +9,14 @@ Replace the current "map below the grid" experience on listing pages with a Quin
 
 ## Pages covered
 
-- `app/[acao]/[cidade]/[categoria]/page.tsx`
-- `app/imoveis/page.tsx`
-- `app/[acao]/[cidade]/page.tsx`
-- `app/alugar/page.tsx`
-- `app/bairros/[slug]/page.tsx`
+- `app/[acao]/[cidade]/[categoria]/page.tsx` (e.g. `/comprar/osasco/apartamento`)
+- `app/imoveis/page.tsx` (master catalog with filters)
+- `app/[acao]/[cidade]/page.tsx` (e.g. `/comprar/osasco`)
+- `app/bairros/[slug]/page.tsx` — requires a new data fetch: currently the page only shows ~3 featured properties. For the map to be meaningful the page must fetch all active properties whose `bairro` matches the slug, render them in a new grid, and feed them to the map.
 
-The property detail page (`app/imoveis/[slug]`) is **not** in scope. It keeps the existing Leaflet-based `MapaLeaflet` for now.
+Not in scope:
+- `app/alugar/page.tsx` — landing page with no inventory by design (aluguel catalog is empty; conversion happens through WhatsApp). A map adds nothing.
+- `app/imoveis/[slug]/page.tsx` — property detail page. Keeps the existing Leaflet-based `MapaLeaflet`.
 
 ## Stack decisions
 
@@ -172,7 +173,7 @@ The split section is the natural viewport-height block. Page sections that today
 
 ## Acceptance criteria
 
-- All 5 listing pages render the split layout on desktop and the FAB-toggled fullscreen on mobile
+- All 4 listing pages render the split layout on desktop and the FAB-toggled fullscreen on mobile
 - Pins display prices in the Quinto Andar format (not dots), color-coded by tipo
 - Clusters show counts with primary-color circles
 - Hovering a card highlights its pin; hovering a pin highlights and scrolls to its card
