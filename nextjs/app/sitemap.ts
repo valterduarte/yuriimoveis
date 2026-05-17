@@ -1,5 +1,5 @@
 import { fetchAllPropertySlugs, fetchDistinctBairros, fetchNavigationMatrix, fetchPriceBedroomMatrix, fetchAllBlogSlugs } from '../lib/api'
-import { imovelSlug, ogImageUrl, slugify } from '../utils/imovelUtils'
+import { imovelSlug, ogImageUrl } from '../utils/imovelUtils'
 import { BAIRROS } from '../data/bairros'
 import { getCategoriaBySlug } from '../data/categorias'
 import { LANDING_PAGES } from '../data/landingPages'
@@ -93,8 +93,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const configuredBairros = Object.values(BAIRROS)
-  const overriddenDbNames = new Set(configuredBairros.map(b => b.dbMatch).filter(Boolean) as string[])
-  const configuredSlugs = new Set(configuredBairros.map(b => b.slug))
 
   const bairroHasEnoughStock = (slug: string, dbName: string | undefined): boolean => {
     if (hasRichBairroContent(slug)) return true
@@ -109,15 +107,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: (b.dbMatch && bairroLastModByDbName.get(b.dbMatch)) || now,
     }))
 
-  const dbBairroUrls: MetadataRoute.Sitemap = bairros
-    .filter(b => !overriddenDbNames.has(b) && !configuredSlugs.has(slugify(b)))
-    .filter(b => (bairroCountByDbName.get(b) ?? 0) >= MIN_PROPERTIES_FOR_INDEXING)
-    .map(b => ({
-      url: `${SITE_URL}/imoveis/${slugify(b)}`,
-      lastModified: bairroLastModByDbName.get(b) || now,
-    }))
-
-  const bairroUrls: MetadataRoute.Sitemap = [...configuredBairroUrls, ...dbBairroUrls]
+  const bairroUrls: MetadataRoute.Sitemap = configuredBairroUrls
 
   const landingUrls: MetadataRoute.Sitemap = LANDING_PAGES
     .filter(lp => (landingCountByTipoCategoria.get(`${lp.tipo}|${lp.categoria}`) ?? 0) >= MIN_PROPERTIES_FOR_INDEXING)

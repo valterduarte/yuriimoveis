@@ -143,6 +143,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: { canonical: `${SITE_URL}/imoveis/${slug}` },
+    robots: bairroData ? undefined : { index: false, follow: true },
     openGraph: {
       title: bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP`,
       description,
