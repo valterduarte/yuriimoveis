@@ -3,12 +3,11 @@ import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
 import { fetchProperties, fetchNavigationMatrix } from '../../../../lib/api'
 import ListingPageShell, { type BreadcrumbItem } from '../../../../components/ListingPageShell'
-import PropertyResultsGrid from '../../../../components/PropertyResultsGrid'
 import { FilterChip, FilterChipList } from '../../../../components/FilterChip'
 import BairrosRecomendados from '../../../../components/imoveis/BairrosRecomendados'
 import CrossCategoryLinks from '../../../../components/imoveis/CrossCategoryLinks'
 import AmplieChances from '../../../../components/imoveis/AmplieChances'
-import ListingMap from '../../../../components/imoveis/ListingMap'
+import ListingMapShell from '../../../../components/imoveis/listing-map/ListingMapShell'
 import {
   acaoToTipo,
   isValidAcao,
@@ -253,12 +252,7 @@ export default async function CategoriaAcaoPage({ params }: PageProps) {
         </p>
       </div>
 
-      <PropertyResultsGrid imoveis={imoveis} />
-
-      <ListingMap
-        imoveis={imoveis}
-        title={`${categoriaData.plural} ${label.toLowerCase()} em ${cidadeName} no mapa`}
-      />
+      <ListingMapShell imoveis={imoveis} />
 
       <BairrosRecomendados
         acao={acao}
