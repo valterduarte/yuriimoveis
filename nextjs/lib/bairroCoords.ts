@@ -100,15 +100,10 @@ export function jitterCoords(id: number, base: LatLng): LatLng {
   }
 }
 
-export function coordsForImovelJittered(
-  id: number,
-  bairro: string,
-  cidade: string,
-): LatLng | null {
-  // Only jitter when we have a real bairro centroid — no city fallback,
-  // so listings with an unknown bairro return null instead of piling on
-  // the city centre pin.
+// No city fallback on purpose: if the bairro centroid is unknown we
+// return null rather than dropping every unknown-bairro pin at the city
+// centre, which would mislead users and defeat the privacy story.
+export function coordsForImovelJittered(id: number, bairro: string): LatLng | null {
   const base = coordsForBairro(bairro, null)
-  if (!base) return null
-  return jitterCoords(id, base)
+  return base ? jitterCoords(id, base) : null
 }

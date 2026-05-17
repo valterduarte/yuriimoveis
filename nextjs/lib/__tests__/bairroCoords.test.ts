@@ -27,11 +27,11 @@ describe('jitterCoords', () => {
 
 describe('coordsForImovelJittered', () => {
   it('returns null when the bairro has no centroid', () => {
-    expect(coordsForImovelJittered(1, 'bairro-inexistente-foo', 'osasco')).toBeNull()
+    expect(coordsForImovelJittered(1, 'bairro-inexistente-foo')).toBeNull()
   })
 
   it('returns a jittered coord when the bairro is known', () => {
-    const result = coordsForImovelJittered(7, 'centro', 'osasco')
+    const result = coordsForImovelJittered(7, 'centro')
     expect(result).not.toBeNull()
     expect(result!.lat).not.toEqual(BASE.lat)
   })
