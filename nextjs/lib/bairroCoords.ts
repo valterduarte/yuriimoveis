@@ -87,3 +87,28 @@ export function coordsForImovel(id: number, bairro: string, cidade: string): Lat
 
 export const DEFAULT_MAP_CENTER: LatLng = { lat: -23.5329, lng: -46.7917 }
 export const DEFAULT_MAP_ZOOM = 12
+
+// Deterministic jitter so multiple listings in the same bairro don't stack
+// on a single pin. Same id always produces the same offset; max ~80m radius
+// keeps the pin inside the bairro (privacy preserved).
+export function jitterCoords(id: number, base: LatLng): LatLng {
+  const angle = ((id * 137.508) % 360) * (Math.PI / 180) // golden angle
+  const radius = (((id * 31) % 100) / 100) * 0.0008
+  return {
+    lat: base.lat + radius * Math.cos(angle),
+    lng: base.lng + radius * Math.sin(angle),
+  }
+}
+
+export function coordsForImovelJittered(
+  id: number,
+  bairro: string,
+  cidade: string,
+): LatLng | null {
+  // Only jitter when we have a real bairro centroid — no city fallback,
+  // so listings with an unknown bairro return null instead of piling on
+  // the city centre pin.
+  const base = coordsForBairro(bairro, null)
+  if (!base) return null
+  return jitterCoords(id, base)
+}
