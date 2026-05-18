@@ -1,9 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
-import { MapContainer, TileLayer, useMap } from 'react-leaflet'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps'
+import { FiMapPin } from 'react-icons/fi'
 import type { LatLng } from '../../lib/bairroCoords'
 
 interface PropertyLocationMapProps {
@@ -11,52 +9,78 @@ interface PropertyLocationMapProps {
   bairro: string
   cidade: string
   tipo: 'venda' | 'aluguel'
+  preco: number
 }
 
 const MAP_ZOOM = 15
 
-const buildPinIcon = (tipo: 'venda' | 'aluguel'): L.DivIcon => {
-  const color = tipo === 'venda' ? '#af1e23' : '#10b981'
-  return L.divIcon({
-    html: `<div style="width:22px;height:22px;border-radius:50%;background:${color};border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4);"></div>`,
-    className: '',
-    iconSize: [22, 22],
-    iconAnchor: [11, 11],
-  })
+function formatPriceShort(preco: number, tipo: 'venda' | 'aluguel'): string {
+  if (tipo === 'aluguel') {
+    const value = preco.toLocaleString('pt-BR', { maximumFractionDigits: 0 })
+    return `R$ ${value}/mês`
+  }
+  if (preco >= 1_000_000) {
+    const v = (preco / 1_000_000).toFixed(1).replace('.', ',').replace(/,0$/, '')
+    return `R$ ${v}M`
+  }
+  if (preco >= 1_000) {
+    return `R$ ${Math.round(preco / 1_000)}K`
+  }
+  return `R$ ${preco}`
 }
 
-function PropertyMarker({ coords, bairro, cidade, tipo }: PropertyLocationMapProps) {
-  const map = useMap()
+export default function PropertyLocationMap({
+  coords,
+  bairro,
+  cidade,
+  tipo,
+  preco,
+}: PropertyLocationMapProps) {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 
-  useEffect(() => {
-    const icon = buildPinIcon(tipo)
-    const marker = L.marker([coords.lat, coords.lng], { icon })
-      .bindTooltip(`${bairro}, ${cidade}`, { permanent: false, direction: 'top', offset: [0, -10] })
-      .addTo(map)
-
-    return () => {
-      marker.remove()
+  if (!apiKey) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(
+        'NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not set; property location map will not render.',
+      )
     }
-  }, [map, coords.lat, coords.lng, bairro, cidade, tipo])
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 text-sm">
+        <FiMapPin size={16} className="mr-2" />
+        Mapa indisponível
+      </div>
+    )
+  }
 
-  return null
-}
+  const isVenda = tipo === 'venda'
+  const markerClass = isVenda
+    ? 'bg-primary text-white border-primary'
+    : 'bg-emerald-500 text-white border-emerald-500'
 
-export default function PropertyLocationMap({ coords, bairro, cidade, tipo }: PropertyLocationMapProps) {
   return (
-    <MapContainer
-      center={[coords.lat, coords.lng]}
-      zoom={MAP_ZOOM}
-      scrollWheelZoom={false}
-      style={{ height: '100%', width: '100%' }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-        subdomains="abcd"
-        maxZoom={20}
-      />
-      <PropertyMarker coords={coords} bairro={bairro} cidade={cidade} tipo={tipo} />
-    </MapContainer>
+    <APIProvider apiKey={apiKey}>
+      <Map
+        mapId="property-detail-map"
+        defaultCenter={coords}
+        defaultZoom={MAP_ZOOM}
+        gestureHandling="cooperative"
+        disableDefaultUI={false}
+        mapTypeControl={false}
+        streetViewControl={false}
+        fullscreenControl={false}
+        style={{ width: '100%', height: '100%' }}
+      >
+        <AdvancedMarker
+          position={coords}
+          title={`${bairro}, ${cidade}`}
+        >
+          <div
+            className={`inline-flex items-center px-3 py-1.5 text-xs font-bold rounded-md shadow-md border-l-4 whitespace-nowrap ${markerClass}`}
+          >
+            {formatPriceShort(preco, tipo)}
+          </div>
+        </AdvancedMarker>
+      </Map>
+    </APIProvider>
   )
 }

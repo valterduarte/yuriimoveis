@@ -15,7 +15,7 @@ const PropertyLocationMap = dynamic(() => import('./PropertyLocationMap'), {
 })
 
 interface PropertyLocationSectionProps {
-  imovel: Pick<Imovel, 'id' | 'bairro' | 'cidade' | 'tipo' | 'lat' | 'lng'>
+  imovel: Pick<Imovel, 'id' | 'bairro' | 'cidade' | 'tipo' | 'lat' | 'lng' | 'preco'>
 }
 
 const MAP_HEIGHT_PX = 360
@@ -57,6 +57,7 @@ export default function PropertyLocationSection({ imovel }: PropertyLocationSect
               bairro={imovel.bairro}
               cidade={imovel.cidade}
               tipo={imovel.tipo}
+              preco={imovel.preco}
             />
           </div>
         </>
