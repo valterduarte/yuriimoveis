@@ -48,16 +48,22 @@ export function middleware(request) {
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
-  // Note: 'unsafe-inline' in script-src is required by Next.js hydration scripts.
-  // Removing it breaks the site unless a full nonce pipeline is implemented in layout.jsx.
+  // CSP notes:
+  // - 'unsafe-inline' in script-src is required by Next.js hydration scripts.
+  //   Removing it breaks the site unless a full nonce pipeline is implemented in layout.jsx.
+  // - 'unsafe-eval' in script-src is required by the Google Maps JS API (uses
+  //   `new Function()` internally) and by Next.js HMR in development.
+  // - maps.googleapis.com and maps.gstatic.com are added to script-src,
+  //   img-src, and connect-src so the listing map can load tiles, marker
+  //   sprites, and runtime API calls.
   response.headers.set(
     'Content-Security-Policy',
     "default-src 'self'; " +
-      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://va.vercel-scripts.com; " +
-      "style-src 'self' 'unsafe-inline'; " +
-      "img-src 'self' data: https://res.cloudinary.com https://valterduarte.github.io https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://www.google-analytics.com https://www.googletagmanager.com; " +
-      "font-src 'self' data:; " +
-      "connect-src 'self' https://api.cloudinary.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://vitals.vercel-insights.com; " +
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://va.vercel-scripts.com https://maps.googleapis.com https://maps.gstatic.com; " +
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+      "img-src 'self' data: blob: https://res.cloudinary.com https://valterduarte.github.io https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://www.google-analytics.com https://www.googletagmanager.com https://maps.googleapis.com https://maps.gstatic.com https://*.googleusercontent.com; " +
+      "font-src 'self' data: https://fonts.gstatic.com; " +
+      "connect-src 'self' https://api.cloudinary.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://vitals.vercel-insights.com https://maps.googleapis.com; " +
       "frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
   )
 
