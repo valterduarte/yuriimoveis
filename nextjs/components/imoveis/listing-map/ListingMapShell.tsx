@@ -52,11 +52,11 @@ function FilteredList({ imoveis }: { imoveis: Imovel[] }) {
 export default function ListingMapShell({ imoveis }: ListingMapShellProps) {
   return (
     <ListingMapStoreProvider>
-      <section className="md:grid md:grid-cols-[60%_40%] md:gap-6 md:min-h-[calc(100vh-4rem)]">
-        <div className="md:overflow-y-auto md:max-h-[calc(100vh-4rem)] md:pr-2">
+      <section className="md:relative md:grid md:grid-cols-[60%_40%] md:gap-6 md:h-[calc(100vh-4rem)] md:overflow-hidden">
+        <div className="md:min-h-0 md:h-full md:overflow-y-auto md:pr-2">
           <FilteredList imoveis={imoveis} />
         </div>
-        <div className="hidden md:block md:sticky md:top-16 md:h-[calc(100vh-4rem)]">
+        <div className="hidden md:block md:h-full">
           <ListingMapPanel imoveis={imoveis} />
         </div>
       </section>
