@@ -35,6 +35,8 @@ Content licensed under [RSL 1.0 — Responsible AI Use](https://rslstandard.org/
 - [Aluguel sob demanda](https://corretoryuri.com.br/alugar): solicitação personalizada de pesquisa de aluguel em Osasco, Barueri e Carapicuíba
 - [Mapa de imóveis](https://corretoryuri.com.br/mapa): busca geográfica por imóveis nas cidades atendidas
 - [Simulador de financiamento](https://corretoryuri.com.br/simulador): cálculo de parcelas pelo sistema SAC com ITBI, cartório e tabela de taxas MCMV e SBPE
+- [Minha Casa Minha Vida em Osasco](https://corretoryuri.com.br/mcmv-osasco): faixas 2026 atualizadas, bairros recomendados, passo a passo e FAQs do programa
+- [Avaliação de imóvel em Osasco](https://corretoryuri.com.br/avaliacao-imovel-osasco): estimativa de mercado gratuita em 48h, métodos de avaliação e quando faz sentido pedir
 - [Sobre o Corretor Yuri](https://corretoryuri.com.br/sobre): credenciais (CRECI-SP 235509), experiência e atuação
 - [Contato](https://corretoryuri.com.br/contato): WhatsApp e telefone
 
@@ -47,6 +49,7 @@ Content licensed under [RSL 1.0 — Responsible AI Use](https://rslstandard.org/
 ## Guias de bairro (hub /bairros)
 
 - [Todos os bairros](https://corretoryuri.com.br/bairros): índice de guias por cidade
+- [Aldeia da Serra, Barueri](https://corretoryuri.com.br/bairros/aldeia): condomínios de alto padrão na divisa Barueri/Santana de Parnaíba
 - [Alphaville, Barueri](https://corretoryuri.com.br/bairros/alphaville): alto padrão, condomínios fechados, ~R$ 14 mil/m²
 - [Tamboré, Barueri](https://corretoryuri.com.br/bairros/tambore): alto padrão na divisa com Alphaville, ~R$ 12,5 mil/m²
 - [Centro, Osasco](https://corretoryuri.com.br/bairros/centro): comércio e CPTM, ~R$ 7,8 mil/m²
@@ -73,7 +76,10 @@ Content licensed under [RSL 1.0 — Responsible AI Use](https://rslstandard.org/
 - [Apartamento em Osasco 2026](https://corretoryuri.com.br/blog/apartamento-em-osasco-centro-quitauna-novo-osasco-2026): Centro, Quitaúna, Novo Osasco, Bela Vista, Santa Maria
 - [Alphaville ou Barueri 2026](https://corretoryuri.com.br/blog/alphaville-ou-barueri-qual-vale-mais-a-pena-2026): comparação de preços e perfis
 
+## Sitemap
+
+- [Sitemap XML completo](https://corretoryuri.com.br/sitemap.xml): 257 URLs indexáveis cobrindo páginas principais, blog, guias, bairros e listings filtráveis
+
 ## Optional
 
-- [Sitemap XML](https://corretoryuri.com.br/sitemap.xml)
-- [robots.txt](https://corretoryuri.com.br/robots.txt)
+- [robots.txt](https://corretoryuri.com.br/robots.txt): regras de crawling incluindo permissões explícitas para GPTBot, ClaudeBot, OAI-SearchBot, PerplexityBot, Google-Extended e CCBot

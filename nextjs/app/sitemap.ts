@@ -241,6 +241,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/alugar`, lastModified: now },
     { url: `${SITE_URL}/mapa`, lastModified: propertiesLatest || now },
     { url: `${SITE_URL}/simulador`, lastModified: now },
+    { url: `${SITE_URL}/mcmv-osasco`, lastModified: new Date('2026-05-19'), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${SITE_URL}/avaliacao-imovel-osasco`, lastModified: new Date('2026-05-19'), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${SITE_URL}/sobre`, lastModified: now },
     { url: `${SITE_URL}/contato`, lastModified: now },
     { url: `${SITE_URL}/ajuda`, lastModified: ajudaLatest },
