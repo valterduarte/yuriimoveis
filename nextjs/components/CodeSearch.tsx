@@ -52,11 +52,13 @@ export default function CodeSearch() {
   if (!open) {
     return (
       <button
+        type="button"
         onClick={() => setOpen(true)}
         aria-label="Buscar imóvel por código"
-        className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+        aria-expanded={false}
+        className="w-11 h-11 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
       >
-        <FiSearch size={15} />
+        <FiSearch size={15} aria-hidden="true" />
       </button>
     )
   }
@@ -73,23 +75,25 @@ export default function CodeSearch() {
           setValue(e.target.value.replace(/\D/g, ''))
           setError('')
         }}
-        className="w-24 bg-gray-800 border border-gray-600 text-white text-xs px-2.5 py-2 focus:outline-none focus:border-primary placeholder:text-gray-500"
+        aria-label="Código do imóvel"
+        aria-invalid={!!error || undefined}
+        className="w-24 bg-gray-800 border border-gray-600 text-white text-xs px-2.5 py-2.5 focus:outline-none focus:border-primary placeholder:text-gray-500"
       />
       <button
         type="submit"
         disabled={loading || !value}
         aria-label="Buscar"
-        className="bg-primary text-white px-2.5 py-2 text-xs disabled:opacity-50"
+        className="bg-primary text-white px-3 py-2.5 text-xs disabled:opacity-50"
       >
-        <FiSearch size={13} />
+        <FiSearch size={13} aria-hidden="true" />
       </button>
       <button
         type="button"
         onClick={handleClose}
         aria-label="Fechar busca"
-        className="text-gray-400 hover:text-white ml-1"
+        className="text-gray-400 hover:text-white ml-1 p-2 -m-2"
       >
-        <FiX size={14} />
+        <FiX size={14} aria-hidden="true" />
       </button>
       {error && (
         <span className="absolute top-full left-0 mt-1 text-[10px] text-red-400 whitespace-nowrap bg-dark/95 px-2 py-1">

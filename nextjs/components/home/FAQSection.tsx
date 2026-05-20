@@ -7,11 +7,11 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section aria-labelledby="faq-heading" className="py-20 bg-gray-50">
       <div className="container mx-auto px-6">
         <div className="max-w-2xl mx-auto">
           <span className="section-label">Dúvidas Frequentes</span>
-          <h2 className="section-title mb-10">Perguntas que Recebemos Toda Semana</h2>
+          <h2 id="faq-heading" className="section-title mb-10">Perguntas que Recebemos Toda Semana</h2>
           <div className="space-y-3">
             {HOMEPAGE_FAQ.map((item, i) => {
               const isOpen = openIndex === i

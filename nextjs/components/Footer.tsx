@@ -16,7 +16,7 @@ const FOOTER_LINK_CLASS =
   'text-xs text-gray-400 hover:text-primary transition-colors flex items-center gap-2'
 const FOOTER_TITLE_CLASS =
   'text-white text-xs uppercase tracking-widest font-bold mb-5'
-const FOOTER_BULLET = <span className="w-2 h-px bg-gray-600 inline-block flex-shrink-0" />
+const FOOTER_BULLET = <span aria-hidden="true" className="w-2 h-px bg-gray-600 inline-block flex-shrink-0" />
 
 const TOP_LANDING_PAGES = LANDING_PAGES.slice(0, 3)
 
@@ -49,16 +49,16 @@ export default async function Footer() {
               <Logo className="h-9 w-auto" />
             </Link>
             <p className="text-sm leading-relaxed text-gray-400 mb-6 max-w-xs">
-              Do primeiro imóvel<br />ao imóvel dos sonhos.
+              Do primeiro imóvel <br />ao imóvel dos sonhos.
             </p>
             <div className="flex items-center gap-3">
-              <WhatsAppLink href={PHONE_WA} source="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Fale pelo WhatsApp"
+              <WhatsAppLink href={PHONE_WA} source="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Fale pelo WhatsApp (abre em nova aba)"
                 className="w-9 h-9 border border-gray-700 flex items-center justify-center hover:text-green-400 hover:border-current transition-all">
-                <FaWhatsapp size={16} />
+                <FaWhatsapp size={16} aria-hidden="true" />
               </WhatsAppLink>
-              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Siga no Instagram"
+              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Siga no Instagram (abre em nova aba)"
                 className="w-9 h-9 border border-gray-700 flex items-center justify-center hover:text-pink-400 hover:border-current transition-all">
-                <FaInstagram size={16} />
+                <FaInstagram size={16} aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -157,18 +157,18 @@ export default async function Footer() {
             <h3 className={FOOTER_TITLE_CLASS}>Contato</h3>
             <ul className="space-y-3 text-xs">
               <li className="flex items-center gap-2">
-                <FiMapPin className="text-primary flex-shrink-0" size={13} />
+                <FiMapPin className="text-primary flex-shrink-0" size={13} aria-hidden="true" />
                 <span>Osasco — SP</span>
               </li>
               <li className="flex items-center gap-2">
-                <FiPhone className="text-primary flex-shrink-0" size={13} />
+                <FiPhone className="text-primary flex-shrink-0" size={13} aria-hidden="true" />
                 <a href={PHONE_TEL} className="hover:text-primary transition-colors">{PHONE_DISPLAY}</a>
               </li>
             </ul>
 
             <WhatsAppLink href={PHONE_WA} source="footer-cta" target="_blank" rel="noopener noreferrer"
               className="mt-5 inline-flex items-center gap-2 bg-primary text-white text-xs font-bold uppercase tracking-widest px-5 py-3 hover:brightness-110 transition-all">
-              <FaWhatsapp size={14} />
+              <FaWhatsapp size={14} aria-hidden="true" />
               Falar pelo WhatsApp
             </WhatsAppLink>
           </nav>

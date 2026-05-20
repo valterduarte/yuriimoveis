@@ -9,15 +9,15 @@ interface FeaturedPropertiesProps {
 
 export default function FeaturedProperties({ properties }: FeaturedPropertiesProps) {
   return (
-    <section className="py-20">
+    <section aria-labelledby="featured-heading" className="py-20">
       <div className="container mx-auto px-6">
         <div className="flex items-end justify-between mb-12 reveal">
           <div>
             <span className="section-label">Selecionados</span>
-            <h2 className="section-title">Imóveis em Destaque</h2>
+            <h2 id="featured-heading" className="section-title">Imóveis em Destaque</h2>
           </div>
-          <Link href="/imoveis" className="hidden md:flex items-center gap-2 text-xs uppercase tracking-widest font-bold text-dark hover:text-primary transition-colors">
-            Ver todos <FiArrowRight size={14} />
+          <Link href="/imoveis" aria-label="Ver todos os imóveis" className="hidden md:flex items-center gap-2 text-xs uppercase tracking-widest font-bold text-dark hover:text-primary transition-colors">
+            Ver todos <FiArrowRight size={14} aria-hidden="true" />
           </Link>
         </div>
 
@@ -35,7 +35,7 @@ export default function FeaturedProperties({ properties }: FeaturedPropertiesPro
 
         <div className="text-center mt-10">
           <Link href="/imoveis" className="btn-outline inline-flex items-center gap-2">
-            Ver todos os imóveis <FiArrowUpRight size={14} />
+            Ver todos os imóveis <FiArrowUpRight size={14} aria-hidden="true" />
           </Link>
         </div>
       </div>

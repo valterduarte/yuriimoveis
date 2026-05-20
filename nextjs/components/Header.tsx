@@ -35,13 +35,13 @@ export default function Header() {
             <Logo className="h-9 w-auto" />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav aria-label="Navegação principal" className="hidden md:flex items-center gap-8">
             {NAVIGATION_LINKS.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
                 aria-current={pathname === link.href ? 'page' : undefined}
-                className={`text-xs uppercase tracking-widest font-semibold transition-colors duration-200 ${
+                className={`py-3 text-xs uppercase tracking-widest font-semibold transition-colors duration-200 ${
                   pathname === link.href
                     ? 'text-primary'
                     : 'text-gray-300 hover:text-white'
@@ -55,13 +55,13 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-5">
             <CodeSearch />
             <div className="flex items-center gap-1 text-gray-400">
-              <WhatsAppLink href={PHONE_WA} source="header-icon" target="_blank" rel="noreferrer" aria-label="WhatsApp — ícone"
+              <WhatsAppLink href={PHONE_WA} source="header-icon" target="_blank" rel="noreferrer" aria-label="Fale pelo WhatsApp (abre em nova aba)"
                 className="w-10 h-10 flex items-center justify-center hover:text-green-400 transition-colors">
-                <FaWhatsapp size={15} />
+                <FaWhatsapp size={15} aria-hidden="true" />
               </WhatsAppLink>
-              <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram"
+              <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Siga no Instagram (abre em nova aba)"
                 className="w-10 h-10 flex items-center justify-center hover:text-pink-400 transition-colors">
-                <FaInstagram size={15} />
+                <FaInstagram size={15} aria-hidden="true" />
               </a>
             </div>
             <WhatsAppLink
@@ -69,25 +69,29 @@ export default function Header() {
               source="header-cta"
               target="_blank"
               rel="noreferrer"
+              aria-label="Fale conosco pelo WhatsApp (abre em nova aba)"
               className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs"
             >
-              <FaWhatsapp size={13} />
+              <FaWhatsapp size={13} aria-hidden="true" />
               Fale Conosco
             </WhatsAppLink>
           </div>
 
           <button
-            className="md:hidden text-white p-2"
+            type="button"
+            className="md:hidden text-white p-3"
             aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+            {menuOpen ? <FiX size={22} aria-hidden="true" /> : <FiMenu size={22} aria-hidden="true" />}
           </button>
         </div>
       </div>
 
-      <div className={`md:hidden bg-dark border-t border-gray-800 overflow-hidden transition-all duration-200 ${menuOpen ? 'max-h-96' : 'max-h-0'}`}>
-        <nav className="flex flex-col py-4 container mx-auto px-6">
+      <div id="mobile-menu" className={`md:hidden bg-dark border-t border-gray-800 overflow-hidden transition-all duration-200 ${menuOpen ? 'max-h-96' : 'max-h-0'}`}>
+        <nav aria-label="Navegação mobile" className="flex flex-col py-4 container mx-auto px-6">
           {NAVIGATION_LINKS.map(link => (
             <Link
               key={link.href}
@@ -101,13 +105,13 @@ export default function Header() {
             </Link>
           ))}
           <div className="pt-5 flex items-center gap-4">
-            <WhatsAppLink href={PHONE_WA} source="header-mobile" target="_blank" rel="noreferrer" aria-label="WhatsApp — ícone"
-              className="text-gray-400 hover:text-green-400 transition-colors"><FaWhatsapp size={18} /></WhatsAppLink>
-            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Instagram"
-              className="text-gray-400 hover:text-pink-400 transition-colors"><FaInstagram size={18} /></a>
+            <WhatsAppLink href={PHONE_WA} source="header-mobile" target="_blank" rel="noreferrer" aria-label="Fale pelo WhatsApp (abre em nova aba)"
+              className="text-gray-400 hover:text-green-400 transition-colors p-2 -m-2"><FaWhatsapp size={18} aria-hidden="true" /></WhatsAppLink>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Siga no Instagram (abre em nova aba)"
+              className="text-gray-400 hover:text-pink-400 transition-colors p-2 -m-2"><FaInstagram size={18} aria-hidden="true" /></a>
             <a href={PHONE_TEL} aria-label={`Ligar para ${PHONE_DISPLAY}`}
-              className="ml-auto text-gray-400 hover:text-white flex items-center gap-1 text-xs">
-              <FiPhone size={13} /> {PHONE_DISPLAY}
+              className="ml-auto text-gray-400 hover:text-white flex items-center gap-1 text-xs py-2">
+              <FiPhone size={13} aria-hidden="true" /> {PHONE_DISPLAY}
             </a>
           </div>
         </nav>

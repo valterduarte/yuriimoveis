@@ -23,17 +23,18 @@ export default function FloatingContact() {
           source="floating-bar"
           target="_blank"
           rel="noreferrer"
+          aria-label="Falar agora pelo WhatsApp (abre em nova aba)"
           className="col-span-2 bg-[#25D366] hover:bg-[#1ebe57] text-white flex items-center justify-center gap-2 py-3 font-bold uppercase tracking-wider text-xs transition-colors duration-200"
         >
-          <FaWhatsapp size={18} />
+          <FaWhatsapp size={18} aria-hidden="true" />
           Falar agora
         </WhatsAppLink>
-        <a href={PHONE_TEL} className={secondaryClass}>
-          <FiPhone size={16} />
+        <a href={PHONE_TEL} aria-label="Ligar agora" className={secondaryClass}>
+          <FiPhone size={16} aria-hidden="true" />
           <span className="text-[10px] uppercase tracking-wider">Ligar</span>
         </a>
-        <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" className={secondaryClass}>
-          <FaInstagram size={16} />
+        <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" aria-label="Ver Instagram (abre em nova aba)" className={secondaryClass}>
+          <FaInstagram size={16} aria-hidden="true" />
           <span className="text-[10px] uppercase tracking-wider">Instagram</span>
         </a>
       </div>

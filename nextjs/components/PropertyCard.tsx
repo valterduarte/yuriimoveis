@@ -25,8 +25,19 @@ export default function PropertyCard({ imovel, priority = false }: PropertyCardP
     ? PROPERTY_STATUSES.find(s => s.value === imovel.status)
     : null
 
+  const tipoLabel = imovel.tipo === 'venda' ? 'Venda' : 'Aluguel'
+  const linkLabel = `${imovel.titulo} — ${tipoLabel} em ${imovel.bairro || imovel.cidade}`
+
   return (
-    <Link href={`/imoveis/${slug}`} className="group block bg-white overflow-hidden">
+    <article className="group relative bg-white overflow-hidden">
+      <Link
+        href={`/imoveis/${slug}`}
+        aria-label={linkLabel}
+        className="absolute inset-0 z-[1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px]"
+      >
+        <span className="sr-only">{linkLabel}</span>
+      </Link>
+
       <div className="relative overflow-hidden" style={{ height: CARD_IMAGE_HEIGHT }}>
         <Image
           src={imageSrc}
@@ -41,18 +52,18 @@ export default function PropertyCard({ imovel, priority = false }: PropertyCardP
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
 
-        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-dark/60 to-transparent pointer-events-none" />
+        <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-dark/60 to-transparent pointer-events-none" />
 
-        <div className="absolute top-3 left-3">
+        <div aria-hidden="true" className="absolute top-3 left-3">
           <span className={`text-xs uppercase tracking-wider font-bold px-2.5 py-1 text-white ${
             imovel.tipo === 'venda' ? 'bg-primary' : 'bg-dark'
           }`}>
-            {imovel.tipo === 'venda' ? 'Venda' : 'Aluguel'}
+            {tipoLabel}
           </span>
         </div>
 
         {imovel.destaque && (
-          <div className="absolute top-3 right-3">
+          <div aria-hidden="true" className="absolute top-3 right-3">
             <span className="text-xs uppercase tracking-wider font-bold px-2.5 py-1 text-dark bg-white">
               Destaque
             </span>
@@ -60,7 +71,7 @@ export default function PropertyCard({ imovel, priority = false }: PropertyCardP
         )}
 
         {statusConfig && (
-          <div className={`absolute ${imovel.destaque ? 'top-9' : 'top-3'} right-3`}>
+          <div aria-hidden="true" className={`absolute ${imovel.destaque ? 'top-9' : 'top-3'} right-3`}>
             <span className={`text-xs uppercase tracking-wider font-bold px-2.5 py-1 text-white ${statusConfig.color}`}>
               {statusConfig.label}
             </span>
@@ -78,7 +89,7 @@ export default function PropertyCard({ imovel, priority = false }: PropertyCardP
           {imovel.titulo}
         </h3>
         <p className="flex items-center gap-1 text-gray-600 text-xs mb-3">
-          <FiMapPin size={11} className="text-primary flex-shrink-0" />
+          <FiMapPin size={11} className="text-primary flex-shrink-0" aria-hidden="true" />
           {imovel.bairro}, {imovel.cidade}
         </p>
 
@@ -113,6 +124,6 @@ export default function PropertyCard({ imovel, priority = false }: PropertyCardP
           )}
         </div>
       </div>
-    </Link>
+    </article>
   )
 }

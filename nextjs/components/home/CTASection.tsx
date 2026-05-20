@@ -6,10 +6,10 @@ import WhatsAppLink from '../WhatsAppLink'
 
 export default function CTASection() {
   return (
-    <section className="py-20 bg-primary">
+    <section aria-labelledby="cta-heading" className="py-20 bg-primary">
       <div className="container mx-auto px-6 text-center reveal">
-        <h2 className="text-4xl md:text-5xl font-black text-white uppercase leading-tight mb-4">
-          Não encontrou<br />o que procura?
+        <h2 id="cta-heading" className="text-4xl md:text-5xl font-black text-white uppercase leading-tight mb-4">
+          Não encontrou <br />o que procura?
         </h2>
         <p className="text-white/90 text-sm mb-10 max-w-xl mx-auto leading-relaxed">
           Me conta o que você precisa e eu vou atrás. Tenho acesso a imóveis fora do site —
@@ -18,11 +18,11 @@ export default function CTASection() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <WhatsAppLink href={PHONE_WA} source="home-cta" target="_blank" rel="noreferrer"
             className="inline-flex items-center justify-center gap-2 bg-white text-primary font-bold uppercase tracking-widest text-xs py-4 px-8 hover:bg-gray-100 transition-colors">
-            <FaWhatsapp size={16} /> Chamar no WhatsApp
+            <FaWhatsapp size={16} aria-hidden="true" /> Chamar no WhatsApp
           </WhatsAppLink>
           <Link href="/imoveis"
             className="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-bold uppercase tracking-widest text-xs py-4 px-8 hover:bg-white/10 transition-colors">
-            Ver imóveis <FiArrowRight size={14} />
+            Ver imóveis <FiArrowRight size={14} aria-hidden="true" />
           </Link>
         </div>
       </div>

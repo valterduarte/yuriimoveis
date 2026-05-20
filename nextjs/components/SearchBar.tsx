@@ -61,7 +61,7 @@ export default function SearchBar({ cidadesByTipo = {}, bairrosPorCidade = {} }:
 
   return (
     <form onSubmit={handleSearch} className="bg-white shadow-2xl">
-      <div className="flex">
+      <div role="group" aria-label="Tipo de transação" className="flex">
         {TRANSACTION_TYPES.map(t => {
           const available = isTipoAvailable(t.value)
           const isActive = tipo === t.value
@@ -70,6 +70,9 @@ export default function SearchBar({ cidadesByTipo = {}, bairrosPorCidade = {} }:
               key={t.value}
               type="button"
               disabled={!available}
+              aria-pressed={isActive}
+              aria-disabled={!available || undefined}
+              aria-label={available ? undefined : `${t.label} — em breve`}
               onClick={() => available && handleTipoChange(t.value)}
               title={available ? undefined : 'Em breve'}
               className={`flex-1 py-4 text-xs uppercase tracking-widest font-bold transition-all duration-200 border-b-2 ${
@@ -81,7 +84,7 @@ export default function SearchBar({ cidadesByTipo = {}, bairrosPorCidade = {} }:
               }`}
             >
               {t.label}
-              {!available && <span className="ml-2 text-[10px] tracking-normal normal-case">(em breve)</span>}
+              {!available && <span aria-hidden="true" className="ml-2 text-[10px] tracking-normal normal-case">(em breve)</span>}
             </button>
           )
         })}
@@ -141,7 +144,7 @@ export default function SearchBar({ cidadesByTipo = {}, bairrosPorCidade = {} }:
       <div className="px-5 pb-5 pt-2">
         <button type="submit"
           className="w-full btn-primary flex items-center justify-center gap-2 py-4">
-          <FiSearch size={15} />
+          <FiSearch size={15} aria-hidden="true" />
           Buscar Imóveis
         </button>
       </div>
