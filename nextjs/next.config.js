@@ -26,6 +26,7 @@ const nextConfig = {
       ['chales',       'chale'],
       ['chacaras',     'chacara'],
       ['comerciais',   'comercial'],
+      ['coberturas',   'cobertura'],
     ]
 
     const pluralRedirects = categoriaAliases.flatMap(([plural, singular]) => [
@@ -51,12 +52,34 @@ const nextConfig = {
       },
     ])
 
+    const rootCategoryRedirects = categoriaAliases.flatMap(([plural, singular]) => [
+      { source: `/${plural}`,  destination: '/imoveis', permanent: true },
+      { source: `/${singular}`, destination: '/imoveis', permanent: true },
+    ])
+
     return [
       ...pluralRedirects,
+      ...rootCategoryRedirects,
+      {
+        source: '/comprar',
+        destination: '/imoveis',
+        permanent: true,
+      },
       {
         source: '/alugar/:path+',
         destination: '/alugar',
         permanent: false,
+      },
+    ]
+  },
+  async headers() {
+    return [
+      {
+        source: '/imoveis',
+        headers: [
+          { key: 'Vercel-CDN-Cache-Control', value: 'public, s-maxage=60, stale-while-revalidate=300' },
+          { key: 'CDN-Cache-Control',        value: 'public, s-maxage=60, stale-while-revalidate=300' },
+        ],
       },
     ]
   },
