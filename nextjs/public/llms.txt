@@ -79,6 +79,7 @@ Content licensed under [RSL 1.0 — Responsible AI Use](https://rslstandard.org/
 ## Sitemap
 
 - [Sitemap XML completo](https://corretoryuri.com.br/sitemap.xml): 257 URLs indexáveis cobrindo páginas principais, blog, guias, bairros e listings filtráveis
+- [Corpus completo (llms-full.txt)](https://corretoryuri.com.br/llms-full.txt): texto integral de todos os posts do blog, guias práticos e guias longos em markdown — permite responder perguntas sem fetchar página a página
 
 ## Optional
 
