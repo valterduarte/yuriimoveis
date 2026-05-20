@@ -41,11 +41,11 @@ const breadcrumbJsonLd = {
 const RATE_TABLE_FAQ = buildFaqPageSchema([
   {
     question: 'Qual a taxa de juros do financiamento imobiliário em 2026?',
-    answer: 'A taxa varia conforme o programa. Caixa SBPE com relacionamento parte de 9,9% ao ano para imóveis elegíveis ao MCMV. Mercado livre (SBPE tradicional) gira em 11,49% ao ano. Crédito Associativo cooperativo fica em torno de 8,5%. Minha Casa Minha Vida vai de 4% (Faixa 1) até 7,66% (Faixa 3).',
+    answer: 'A taxa varia conforme o programa. Caixa SBPE com relacionamento parte de 9,9% ao ano para imóveis elegíveis ao MCMV. Mercado livre (SBPE tradicional) gira em 11,49% ao ano. Crédito Associativo cooperativo fica em torno de 8,5%. Minha Casa Minha Vida vai de 4% (Faixa 1) até 7,66% (Faixa 3) e a Faixa 4 (renda até R$ 13.000) usa taxa de mercado próxima a 9,9%.',
   },
   {
     question: 'Quem se enquadra no Minha Casa Minha Vida em 2026?',
-    answer: 'Famílias com renda bruta de até R$ 8.000/mês comprando imóvel residencial de até R$ 350.000. Faixa 1: renda até R$ 2.640 (juros 4% a.a.). Faixa 2: R$ 2.640 a R$ 4.400 (juros 5,5% a.a.). Faixa 3: R$ 4.400 a R$ 8.000 (juros 7,66% a.a.).',
+    answer: 'Famílias com renda bruta de até R$ 13.000/mês podem se enquadrar nas faixas atualizadas pelas portarias de 2026. Faixa 1: renda até R$ 3.200 (juros 4% a.a.). Faixa 2: R$ 3.200 a R$ 5.000 (juros 5,5% a.a.). Faixa 3: R$ 5.000 a R$ 9.600 (juros 7,66% a.a., imóvel até R$ 400 mil). Faixa 4: R$ 9.600 a R$ 13.000 com imóvel até R$ 600 mil.',
   },
   {
     question: 'Qual a entrada mínima para financiar um imóvel?',
@@ -58,10 +58,11 @@ const RATE_TABLE_FAQ = buildFaqPageSchema([
 ])
 
 const RATE_ROWS: { programa: string; taxa: string; perfil: string }[] = [
-  { programa: 'MCMV — Faixa 1', taxa: '4,00% a.a.', perfil: 'Renda até R$ 2.640. Imóvel até R$ 350 mil.' },
-  { programa: 'MCMV — Faixa 2', taxa: '5,50% a.a.', perfil: 'Renda R$ 2.640 a R$ 4.400. Imóvel até R$ 350 mil.' },
-  { programa: 'MCMV — Faixa 3', taxa: '7,66% a.a.', perfil: 'Renda R$ 4.400 a R$ 8.000. Imóvel até R$ 350 mil.' },
-  { programa: 'Crédito Associativo', taxa: '8,50% a.a.', perfil: 'Cooperativas e programas habitacionais. Renda até R$ 12 mil.' },
+  { programa: 'MCMV — Faixa 1', taxa: '4,00% a.a.', perfil: 'Renda até R$ 3.200. Imóvel até R$ 400 mil.' },
+  { programa: 'MCMV — Faixa 2', taxa: '5,50% a.a.', perfil: 'Renda R$ 3.200 a R$ 5.000. Imóvel até R$ 400 mil.' },
+  { programa: 'MCMV — Faixa 3', taxa: '7,66% a.a.', perfil: 'Renda R$ 5.000 a R$ 9.600. Imóvel até R$ 400 mil.' },
+  { programa: 'MCMV — Faixa 4', taxa: '9,90% a.a.', perfil: 'Renda R$ 9.600 a R$ 13.000. Imóvel até R$ 600 mil.' },
+  { programa: 'Crédito Associativo', taxa: '8,50% a.a.', perfil: 'Cooperativas e programas habitacionais. Renda até R$ 13 mil.' },
   { programa: 'Caixa SBPE — imóvel elegível MCMV', taxa: '9,90% a.a.', perfil: 'SBPE com relacionamento, imóvel dentro do teto MCMV.' },
   { programa: 'SBPE — mercado livre', taxa: '11,49% a.a.', perfil: 'Financiamento tradicional dos bancos, fora do MCMV.' },
 ]
@@ -182,9 +183,10 @@ export default async function SimuladorPage({ searchParams }: { searchParams: Pr
             <div>
               <h3 className="font-bold text-dark mb-2">Minha Casa Minha Vida</h3>
               <p>
-                Famílias com renda mensal de até R$ 8.000 que estejam comprando imóvel de até R$ 350.000 podem se
-                enquadrar no programa Minha Casa Minha Vida, com juros bem menores que o mercado e, em alguns
-                casos, subsídio direto na entrada. As faixas vão de 4% a.a. (Faixa 1) até 7,66% a.a. (Faixa 3).
+                Famílias com renda mensal de até R$ 13.000 podem se enquadrar no Minha Casa Minha Vida pelas regras
+                atualizadas em 2026, com juros bem menores que o mercado e subsídio direto na entrada nas faixas
+                iniciais. As faixas vão de 4% a.a. (Faixa 1, renda até R$ 3.200) até a Faixa 4 (renda até R$ 13.000,
+                imóvel até R$ 600 mil), com a Faixa 3 cobrindo imóveis de até R$ 400 mil a 7,66% a.a.
               </p>
               <Link href="/blog/minha-casa-minha-vida-2026-faixas-subsidio" className="inline-block mt-2 text-xs font-bold uppercase tracking-wider text-primary hover:underline">
                 Faixas, subsídios e regras do MCMV 2026 →

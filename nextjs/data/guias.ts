@@ -85,7 +85,7 @@ export const GUIAS: Record<string, GuiaData> = {
       {
         heading: 'Financiamento imobiliário em Osasco',
         paragraphs: [
-          'A maioria das compras em Osasco é financiada. As principais opções em 2026 são o Minha Casa Minha Vida (para imóveis até R$ 350.000 e renda familiar até R$ 8.000) e o SBPE (mercado livre, para imóveis acima desse teto ou compradores acima do teto de renda do MCMV).',
+          'A maioria das compras em Osasco é financiada. As principais opções em 2026 são o Minha Casa Minha Vida (Faixas 1-3 para imóveis até R$ 400.000 com renda familiar até R$ 9.600 e Faixa 4 para imóveis até R$ 600.000 com renda até R$ 13.000) e o SBPE (mercado livre, para imóveis acima desses tetos ou compradores acima do teto de renda do MCMV).',
           'Use o simulador de financiamento para calcular a parcela, o total pago em juros e se você se enquadra no MCMV. Leve o resultado para a conversa com o banco — isso agiliza a análise de crédito.',
         ],
         links: [
@@ -132,8 +132,8 @@ export const GUIAS: Record<string, GuiaData> = {
         heading: 'Programas de financiamento disponíveis em Osasco em 2026',
         paragraphs: [
           'Os três programas principais que operam em Osasco são: Minha Casa Minha Vida (MCMV), SBPE (Sistema Brasileiro de Poupança e Empréstimo) e Crédito Associativo via cooperativas.',
-          'O MCMV é o mais vantajoso para quem se enquadra: juros de 4% a 7,66% ao ano (contra 11,49% no mercado livre), além de subsídio direto na entrada para as faixas 1 e 2. O limite é renda familiar bruta de até R$ 8.000/mês e imóvel de até R$ 350.000. Em Osasco, boa parte dos lançamentos de 2024-2025 foi projetada para se enquadrar nesse teto.',
-          'Para quem fica fora do MCMV — ou quer um imóvel acima de R$ 350.000 — o SBPE com relacionamento bancário parte de 9,9% ao ano na Caixa e de 11% a 12% nos bancos privados.',
+          'O MCMV é o mais vantajoso para quem se enquadra: juros de 4% a 7,66% ao ano nas Faixas 1-3 (contra 11,49% no mercado livre), além de subsídio direto na entrada para as faixas 1 e 2. As regras atualizadas em 2026 ampliaram o programa: Faixas 1-3 cobrem renda até R$ 9.600/mês e imóvel até R$ 400.000, e a nova Faixa 4 atende renda até R$ 13.000 com imóvel até R$ 600.000. Em Osasco, boa parte dos lançamentos recentes foi projetada para se enquadrar nesses tetos.',
+          'Para quem fica fora do MCMV — ou quer um imóvel acima de R$ 600.000 — o SBPE com relacionamento bancário parte de 9,9% ao ano na Caixa e de 11% a 12% nos bancos privados.',
         ],
         links: [
           { href: '/simulador', label: 'Simular financiamento com as taxas de 2026', description: 'Compare parcelas SAC, total de juros e elegibilidade ao MCMV', type: 'tool' },
@@ -182,7 +182,7 @@ export const GUIAS: Record<string, GuiaData> = {
     faqs: [
       {
         question: 'Qual banco tem as melhores taxas de financiamento em Osasco?',
-        answer: 'Para imóveis dentro do teto do MCMV (até R$ 350.000), a Caixa Econômica Federal tem as melhores taxas: de 4% a.a. (Faixa 1) até 9,9% a.a. (SBPE com relacionamento). Para imóveis acima do teto, vale cotar nos bancos privados — Itaú, Bradesco e Santander costumam oferecer taxas competitivas para clientes com bom relacionamento.',
+        answer: 'Para imóveis dentro do teto do MCMV (até R$ 400.000 nas Faixas 1-3, até R$ 600.000 na Faixa 4), a Caixa Econômica Federal tem as melhores taxas: de 4% a.a. (Faixa 1) até 9,9% a.a. (SBPE com relacionamento). Para imóveis acima desses tetos, vale cotar nos bancos privados — Itaú, Bradesco e Santander costumam oferecer taxas competitivas para clientes com bom relacionamento.',
       },
       {
         question: 'O FGTS pode ser usado para dar entrada em Osasco?',

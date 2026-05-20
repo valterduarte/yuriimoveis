@@ -81,30 +81,36 @@ describe('calculateSacFinancing', () => {
 })
 
 describe('detectCreditProgram', () => {
-  it('returns Faixa 1 for income up to R$ 2.640 with eligible property', () => {
+  it('returns Faixa 1 for income up to R$ 3.200 with eligible property', () => {
     expect(detectCreditProgram(200000, 2000).id).toBe('mcmv_1')
-    expect(detectCreditProgram(200000, 2640).id).toBe('mcmv_1')
+    expect(detectCreditProgram(200000, 3200).id).toBe('mcmv_1')
   })
 
-  it('returns Faixa 2 for income between R$ 2.641 and R$ 4.400', () => {
-    expect(detectCreditProgram(300000, 3500).id).toBe('mcmv_2')
-    expect(detectCreditProgram(300000, 4400).id).toBe('mcmv_2')
+  it('returns Faixa 2 for income between R$ 3.201 and R$ 5.000', () => {
+    expect(detectCreditProgram(300000, 4000).id).toBe('mcmv_2')
+    expect(detectCreditProgram(300000, 5000).id).toBe('mcmv_2')
   })
 
-  it('returns Faixa 3 for income between R$ 4.401 and R$ 8.000', () => {
-    expect(detectCreditProgram(300000, 6000).id).toBe('mcmv_3')
-    expect(detectCreditProgram(300000, 8000).id).toBe('mcmv_3')
+  it('returns Faixa 3 for income between R$ 5.001 and R$ 9.600 within R$ 400k cap', () => {
+    expect(detectCreditProgram(350000, 7000).id).toBe('mcmv_3')
+    expect(detectCreditProgram(400000, 9600).id).toBe('mcmv_3')
+  })
+
+  it('returns Faixa 4 for income between R$ 9.601 and R$ 13.000 within R$ 600k cap', () => {
+    expect(detectCreditProgram(500000, 11000).id).toBe('mcmv_4')
+    expect(detectCreditProgram(600000, 13000).id).toBe('mcmv_4')
   })
 
   it('returns mcmv_estimado for an MCMV-eligible property when income is unknown', () => {
-    expect(detectCreditProgram(300000, 0).id).toBe('mcmv_estimado')
+    expect(detectCreditProgram(350000, 0).id).toBe('mcmv_estimado')
   })
 
-  it('returns associativo for income up to R$ 12k and property up to R$ 500k (above MCMV ceiling)', () => {
-    expect(detectCreditProgram(450000, 10000).id).toBe('associativo')
+  it('returns associativo for income above MCMV faixa 4 within R$ 600k property cap', () => {
+    expect(detectCreditProgram(500000, 13000).id).toBe('mcmv_4')
+    expect(detectCreditProgram(450000, 10000).id).toBe('mcmv_4')
   })
 
-  it('falls back to SBPE for income above R$ 12k or property above R$ 500k', () => {
+  it('falls back to SBPE for income above R$ 13k or property above R$ 600k', () => {
     expect(detectCreditProgram(800000, 15000).id).toBe('sbpe')
     expect(detectCreditProgram(800000, 0).id).toBe('sbpe')
   })
@@ -115,10 +121,19 @@ describe('detectCreditProgram', () => {
 })
 
 describe('isMcmvEligible', () => {
-  it('requires both income within R$ 8k and property within R$ 350k', () => {
+  it('returns true for Faixa 3 boundaries (R$ 9.600 income, R$ 400k property)', () => {
+    expect(isMcmvEligible(400000, 9600)).toBe(true)
     expect(isMcmvEligible(300000, 7000)).toBe(true)
-    expect(isMcmvEligible(300000, 9000)).toBe(false)
-    expect(isMcmvEligible(400000, 7000)).toBe(false)
+  })
+
+  it('returns true for Faixa 4 boundaries (R$ 13.000 income, R$ 600k property)', () => {
+    expect(isMcmvEligible(600000, 13000)).toBe(true)
+    expect(isMcmvEligible(500000, 11000)).toBe(true)
+  })
+
+  it('returns false above the Faixa 4 ceilings', () => {
+    expect(isMcmvEligible(700000, 13000)).toBe(false)
+    expect(isMcmvEligible(500000, 14000)).toBe(false)
   })
 
   it('returns false when income is missing', () => {
@@ -131,6 +146,7 @@ describe('isMcmvOrAssociativo', () => {
     expect(isMcmvOrAssociativo('mcmv_1')).toBe(true)
     expect(isMcmvOrAssociativo('mcmv_2')).toBe(true)
     expect(isMcmvOrAssociativo('mcmv_3')).toBe(true)
+    expect(isMcmvOrAssociativo('mcmv_4')).toBe(true)
     expect(isMcmvOrAssociativo('mcmv_estimado')).toBe(true)
     expect(isMcmvOrAssociativo('associativo')).toBe(true)
   })
@@ -142,8 +158,8 @@ describe('isMcmvOrAssociativo', () => {
 
 describe('maxAffordableInstallment', () => {
   it('returns 30% of monthly income (Brazilian banking convention)', () => {
-    expect(maxAffordableInstallment(8000)).toBe(2400)
-    expect(maxAffordableInstallment(10000)).toBe(3000)
+    expect(maxAffordableInstallment(9600)).toBe(2880)
+    expect(maxAffordableInstallment(13000)).toBe(3900)
     expect(maxAffordableInstallment(0)).toBe(0)
   })
 })

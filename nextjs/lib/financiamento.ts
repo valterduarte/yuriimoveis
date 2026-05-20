@@ -20,14 +20,18 @@ export interface SimulationResult {
 const SAC_RATE_DEFAULT_ANNUAL = 11.49
 export const ITBI_RATE = 0.02
 export const REGISTRATION_RATE = 0.025
-const MCMV_INCOME_LIMIT = 8000
-const MCMV_PROPERTY_LIMIT = 350000
+const MCMV_FAIXA_1_INCOME_LIMIT = 3200
+const MCMV_FAIXA_2_INCOME_LIMIT = 5000
+const MCMV_FAIXA_3_INCOME_LIMIT = 9600
+const MCMV_FAIXA_4_INCOME_LIMIT = 13000
+const MCMV_PROPERTY_LIMIT = 400000
+const MCMV_FAIXA_4_PROPERTY_LIMIT = 600000
 export const MIN_DOWN_PAYMENT_RATE = 0.20
 
 /* ── Credit programs ─────────────────────────────────────────────────────────── */
 
 export interface CreditProgram {
-  id: 'mcmv_1' | 'mcmv_2' | 'mcmv_3' | 'mcmv_estimado' | 'associativo' | 'sbpe'
+  id: 'mcmv_1' | 'mcmv_2' | 'mcmv_3' | 'mcmv_4' | 'mcmv_estimado' | 'associativo' | 'sbpe'
   label: string
   description: string
   rate: number
@@ -36,22 +40,29 @@ export interface CreditProgram {
 const MCMV_FAIXA_1: CreditProgram = {
   id: 'mcmv_1',
   label: 'Minha Casa Minha Vida — Faixa 1',
-  description: 'Renda até R$ 2.640 · Juros subsidiados',
+  description: 'Renda até R$ 3.200 · Juros subsidiados',
   rate: 4.0,
 }
 
 const MCMV_FAIXA_2: CreditProgram = {
   id: 'mcmv_2',
   label: 'Minha Casa Minha Vida — Faixa 2',
-  description: 'Renda de R$ 2.640 a R$ 4.400',
+  description: 'Renda de R$ 3.200 a R$ 5.000',
   rate: 5.5,
 }
 
 const MCMV_FAIXA_3: CreditProgram = {
   id: 'mcmv_3',
   label: 'Minha Casa Minha Vida — Faixa 3',
-  description: 'Renda de R$ 4.400 a R$ 8.000',
+  description: 'Renda de R$ 5.000 a R$ 9.600 · Imóvel até R$ 400 mil',
   rate: 7.66,
+}
+
+const MCMV_FAIXA_4: CreditProgram = {
+  id: 'mcmv_4',
+  label: 'Minha Casa Minha Vida — Faixa 4',
+  description: 'Renda de R$ 9.600 a R$ 13.000 · Imóvel até R$ 600 mil',
+  rate: 9.9,
 }
 
 const MCMV_ESTIMADO: CreditProgram = {
@@ -81,10 +92,15 @@ const SBPE: CreditProgram = {
  */
 export function detectCreditProgram(propertyValue: number, monthlyIncome: number): CreditProgram {
   // With income: precise faixa detection
-  if (propertyValue > 0 && propertyValue <= MCMV_PROPERTY_LIMIT && monthlyIncome > 0) {
-    if (monthlyIncome <= 2640) return MCMV_FAIXA_1
-    if (monthlyIncome <= 4400) return MCMV_FAIXA_2
-    if (monthlyIncome <= MCMV_INCOME_LIMIT) return MCMV_FAIXA_3
+  if (propertyValue > 0 && monthlyIncome > 0) {
+    if (propertyValue <= MCMV_PROPERTY_LIMIT) {
+      if (monthlyIncome <= MCMV_FAIXA_1_INCOME_LIMIT) return MCMV_FAIXA_1
+      if (monthlyIncome <= MCMV_FAIXA_2_INCOME_LIMIT) return MCMV_FAIXA_2
+      if (monthlyIncome <= MCMV_FAIXA_3_INCOME_LIMIT) return MCMV_FAIXA_3
+    }
+    if (propertyValue <= MCMV_FAIXA_4_PROPERTY_LIMIT && monthlyIncome <= MCMV_FAIXA_4_INCOME_LIMIT) {
+      return MCMV_FAIXA_4
+    }
   }
 
   // Without income but property fits MCMV: conservative market estimate
@@ -92,8 +108,8 @@ export function detectCreditProgram(propertyValue: number, monthlyIncome: number
     return MCMV_ESTIMADO
   }
 
-  // Associativo: income up to R$ 12k, property up to R$ 500k
-  if (monthlyIncome > 0 && monthlyIncome <= 12000 && propertyValue > 0 && propertyValue <= 500000) {
+  // Associativo: income up to R$ 13k, property up to R$ 600k (above MCMV ceiling but below SBPE territory)
+  if (monthlyIncome > 0 && monthlyIncome <= MCMV_FAIXA_4_INCOME_LIMIT && propertyValue > 0 && propertyValue <= MCMV_FAIXA_4_PROPERTY_LIMIT) {
     return ASSOCIATIVO
   }
 
@@ -141,14 +157,14 @@ export function calculateSacFinancing(input: SimulationInput): SimulationResult 
 }
 
 export function isMcmvEligible(propertyValue: number, monthlyIncome: number): boolean {
-  return monthlyIncome > 0
-    && monthlyIncome <= MCMV_INCOME_LIMIT
-    && propertyValue > 0
-    && propertyValue <= MCMV_PROPERTY_LIMIT
+  if (monthlyIncome <= 0 || propertyValue <= 0) return false
+  if (monthlyIncome <= MCMV_FAIXA_3_INCOME_LIMIT && propertyValue <= MCMV_PROPERTY_LIMIT) return true
+  if (monthlyIncome <= MCMV_FAIXA_4_INCOME_LIMIT && propertyValue <= MCMV_FAIXA_4_PROPERTY_LIMIT) return true
+  return false
 }
 
 export function isMcmvOrAssociativo(programId: CreditProgram['id']): boolean {
-  return programId === 'mcmv_1' || programId === 'mcmv_2' || programId === 'mcmv_3' || programId === 'mcmv_estimado' || programId === 'associativo'
+  return programId === 'mcmv_1' || programId === 'mcmv_2' || programId === 'mcmv_3' || programId === 'mcmv_4' || programId === 'mcmv_estimado' || programId === 'associativo'
 }
 
 export function maxAffordableInstallment(monthlyIncome: number): number {

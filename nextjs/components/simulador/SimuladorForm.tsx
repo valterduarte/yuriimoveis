@@ -5,10 +5,11 @@ import { TERM_OPTIONS, type CreditProgram } from '../../lib/financiamento'
 import { formatBRL, formatIntBR, formatRate, parseDigits } from '../../lib/formatters'
 
 const INCOME_PRESETS = [
-  { label: 'Até R$ 2.640',       min: 1,    max: 2640,     value: 2000 },
-  { label: 'R$ 2.640 – 4.400',   min: 2641, max: 4400,     value: 3500 },
-  { label: 'R$ 4.400 – 8.000',   min: 4401, max: 8000,     value: 6000 },
-  { label: 'Acima de R$ 8.000',  min: 8001, max: Infinity, value: 12000 },
+  { label: 'Até R$ 3.200',        min: 1,     max: 3200,     value: 2500 },
+  { label: 'R$ 3.200 – 5.000',    min: 3201,  max: 5000,     value: 4200 },
+  { label: 'R$ 5.000 – 9.600',    min: 5001,  max: 9600,     value: 7500 },
+  { label: 'R$ 9.600 – 13.000',   min: 9601,  max: 13000,    value: 11000 },
+  { label: 'Acima de R$ 13.000',  min: 13001, max: Infinity, value: 18000 },
 ]
 
 interface SimuladorFormProps {
@@ -212,7 +213,7 @@ export default function SimuladorForm({
               inputMode="numeric"
               value={formatIntBR(monthlyIncome)}
               onChange={(e) => onMonthlyIncomeChange(parseDigits(e.target.value))}
-              placeholder="8.000"
+              placeholder="9.600"
               className="w-full bg-gray-100 pl-11 pr-4 py-4 text-lg font-bold text-dark focus:bg-white focus:ring-2 focus:ring-primary focus:outline-none transition-all"
             />
           </div>

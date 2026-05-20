@@ -28,7 +28,8 @@ function programColors(id: CreditProgram['id']): BadgeColors {
   switch (id) {
     case 'mcmv_1':
     case 'mcmv_2':
-    case 'mcmv_3':         return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-300', icon: 'text-green-600' }
+    case 'mcmv_3':
+    case 'mcmv_4':         return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-300', icon: 'text-green-600' }
     case 'mcmv_estimado':  return { bg: 'bg-amber-50',  text: 'text-amber-800', border: 'border-amber-200', icon: 'text-amber-600' }
     case 'associativo':    return { bg: 'bg-blue-100',  text: 'text-blue-800',  border: 'border-blue-300',  icon: 'text-blue-600'  }
     case 'sbpe':           return { bg: 'bg-gray-100',  text: 'text-gray-700',  border: 'border-gray-300',  icon: 'text-gray-500'  }
@@ -47,6 +48,7 @@ function programDescriptionSuffix(id: CreditProgram['id']): string {
     case 'mcmv_1':         return ' — possibilidade de subsídio na entrada.'
     case 'mcmv_2':         return ' — juros reduzidos com subsídio parcial.'
     case 'mcmv_3':         return ' — juros abaixo do mercado.'
+    case 'mcmv_4':         return ' — teto ampliado para R$ 600 mil pelas regras de 2026.'
     case 'mcmv_estimado':  return ' — preencha sua renda para encontrar uma taxa ainda menor (a partir de 4% a.a.).'
     case 'associativo':    return ' — condições especiais via cooperativas.'
     case 'sbpe':           return ' — financiamento padrão do mercado. Com relacionamento bancário (conta salário, portabilidade, seguros) a taxa pode cair para ~9,9% a.a.'
