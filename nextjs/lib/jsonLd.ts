@@ -162,6 +162,7 @@ export function buildPlaceSchema({ name, description, url, cidade }: PlaceSchema
   return {
     '@context': 'https://schema.org',
     '@type': 'Place',
+    '@id': `${url}#place`,
     name,
     description,
     url,
