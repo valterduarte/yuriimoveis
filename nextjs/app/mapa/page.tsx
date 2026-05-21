@@ -3,16 +3,17 @@ import { fetchPropertiesForMap } from '../../lib/api'
 import MapaClient from '../../components/mapa/MapaClient'
 import type { Metadata } from 'next'
 
-const TITLE = 'Mapa de Imóveis em Osasco e Região — Corretor Yuri'
+const PAGE_TITLE = 'Mapa de Imóveis em Osasco e Região'
+const SOCIAL_TITLE = `${PAGE_TITLE} — Corretor Yuri`
 const DESCRIPTION =
   'Veja todos os imóveis disponíveis no mapa de Osasco, Barueri, Carapicuíba e Cotia. Filtre por preço, quartos e tipo e encontre o imóvel certo pela localização.'
 
 export const metadata: Metadata = {
-  title: TITLE,
+  title: PAGE_TITLE,
   description: DESCRIPTION,
   alternates: { canonical: `${SITE_URL}/mapa` },
   openGraph: {
-    title: TITLE,
+    title: SOCIAL_TITLE,
     description: DESCRIPTION,
     url: `${SITE_URL}/mapa`,
     siteName: 'Corretor Yuri Imóveis',
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: TITLE,
+    title: SOCIAL_TITLE,
     description: DESCRIPTION,
     images: [OG_DEFAULT_IMAGE],
   },

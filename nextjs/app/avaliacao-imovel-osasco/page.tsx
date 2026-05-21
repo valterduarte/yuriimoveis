@@ -10,18 +10,19 @@ const PAGE_URL = `${SITE_URL}/avaliacao-imovel-osasco`
 const PUBLISHED_AT = '2026-05-19'
 const MODIFIED_AT = '2026-05-19'
 
-const TITLE = 'Avaliação de Imóvel em Osasco — Quanto Vale o Seu? | Corretor Yuri'
+const PAGE_TITLE = 'Avaliação de Imóvel em Osasco — Quanto Vale o Seu?'
+const SOCIAL_TITLE = `${PAGE_TITLE} — Corretor Yuri`
 const DESCRIPTION =
   'Avaliação gratuita de imóvel em Osasco, Barueri e Carapicuíba pelo Corretor Yuri (CRECI-SP 235509). Análise comparativa de mercado, sem compromisso, com base em vendas reais da região. Resposta em 24-48h.'
 const WA_TEXT = encodeURIComponent('Olá! Quero saber quanto vale meu imóvel em Osasco. Pode fazer uma avaliação?')
 const WA_HREF = `${PHONE_WA_BASE}?text=${WA_TEXT}`
 
 export const metadata: Metadata = {
-  title: TITLE,
+  title: PAGE_TITLE,
   description: DESCRIPTION,
   alternates: { canonical: PAGE_URL },
   openGraph: {
-    title: TITLE,
+    title: SOCIAL_TITLE,
     description: DESCRIPTION,
     url: PAGE_URL,
     siteName: 'Corretor Yuri Imóveis',
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     modifiedTime: MODIFIED_AT,
     images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: 'Avaliação de imóvel em Osasco' }],
   },
-  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION, images: [OG_DEFAULT_IMAGE] },
+  twitter: { card: 'summary_large_image', title: SOCIAL_TITLE, description: DESCRIPTION, images: [OG_DEFAULT_IMAGE] },
 }
 
 const METODOS = [
@@ -116,7 +117,7 @@ const breadcrumbJsonLd = buildBreadcrumb([
 ])
 
 const articleJsonLd = buildArticleSchema({
-  headline: TITLE,
+  headline: PAGE_TITLE,
   description: DESCRIPTION,
   url: PAGE_URL,
   datePublished: PUBLISHED_AT,

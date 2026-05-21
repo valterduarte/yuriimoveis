@@ -9,7 +9,7 @@ import type { Metadata } from 'next'
 export const revalidate = 300
 
 export const metadata: Metadata = {
-  title: 'Blog — Corretor Yuri Imóveis',
+  title: 'Blog',
   description: 'Dicas, guias e informações sobre o mercado imobiliário em Osasco e região. Aprenda sobre financiamento, documentação, bairros e muito mais.',
   alternates: { canonical: `${SITE_URL}/blog` },
   openGraph: {

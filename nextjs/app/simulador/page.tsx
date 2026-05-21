@@ -4,16 +4,17 @@ import SimuladorClient from '../../components/simulador/SimuladorClient'
 import { buildFaqPageSchema } from '../../lib/jsonLd'
 import type { Metadata } from 'next'
 
-const TITLE = 'Simulador de Financiamento Imobiliário — Corretor Yuri'
+const PAGE_TITLE = 'Simulador de Financiamento Imobiliário'
+const SOCIAL_TITLE = `${PAGE_TITLE} — Corretor Yuri`
 const DESCRIPTION =
   'Simule o financiamento do seu imóvel pelo sistema SAC: parcelas, juros, ITBI e custos de cartório. Veja se você se enquadra no Minha Casa Minha Vida.'
 
 export const metadata: Metadata = {
-  title: TITLE,
+  title: PAGE_TITLE,
   description: DESCRIPTION,
   alternates: { canonical: `${SITE_URL}/simulador` },
   openGraph: {
-    title: TITLE,
+    title: SOCIAL_TITLE,
     description: DESCRIPTION,
     url: `${SITE_URL}/simulador`,
     siteName: 'Corretor Yuri Imóveis',
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: TITLE,
+    title: SOCIAL_TITLE,
     description: DESCRIPTION,
     images: [OG_DEFAULT_IMAGE],
   },

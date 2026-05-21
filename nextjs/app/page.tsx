@@ -12,7 +12,7 @@ const FALLBACK_HERO = 'https://res.cloudinary.com/dfl3eskr9/image/upload/v177508
 export const revalidate = 300
 
 export const metadata = {
-  title: 'Corretor Yuri — Imóveis em Osasco, Barueri e Carapicuíba',
+  title: { absolute: 'Corretor Yuri — Imóveis em Osasco, Barueri e Carapicuíba' },
   description:
     'Corretor de imóveis em Osasco, Barueri e Carapicuíba com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para compra e aluguel.',
   alternates: { canonical: SITE_URL },

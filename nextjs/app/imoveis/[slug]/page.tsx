@@ -83,7 +83,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const socialImage = ogImageUrl(rawImage)
 
     return {
-      title: `${imovel.titulo} — Corretor Yuri Imóveis`,
+      title: imovel.titulo,
       description,
       alternates: { canonical: pageUrl },
       openGraph: {
@@ -132,7 +132,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Bairro page
   const bairroData = getBairroBySlug(slug)
   const neighborhoodName = bairroData?.nome || formatNeighborhoodName(slug)
-  const title = bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP — Corretor Yuri`
+  const title = bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP`
   const description = bairroData?.descricaoMeta || `Veja todos os imóveis disponíveis no ${neighborhoodName} em Osasco, SP. Casas, apartamentos e terrenos à venda e para alugar. Atendimento com o Corretor Yuri.`
 
   const bairroImage = bairroData?.imagem

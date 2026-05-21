@@ -37,17 +37,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = await fetchBlogPostBySlug(slug)
   if (!post) return { title: 'Post não encontrado' }
 
-  const title = post.meta_titulo || `${post.titulo} — Corretor Yuri`
+  const socialTitle = post.meta_titulo || `${post.titulo} — Corretor Yuri Imóveis`
   const description = post.meta_descricao || post.resumo || post.titulo
   const url = `${SITE_URL}/blog/${post.slug}`
   const image = post.imagem_capa || OG_DEFAULT_IMAGE
 
   return {
-    title: { absolute: title },
+    title: post.meta_titulo ? { absolute: post.meta_titulo } : post.titulo,
     description,
     alternates: { canonical: url },
     openGraph: {
-      title,
+      title: socialTitle,
       description,
       url,
       siteName: 'Corretor Yuri Imóveis',
@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       modifiedTime: post.updated_at,
       images: [{ url: image, width: 1200, height: 630, alt: post.titulo }],
     },
-    twitter: { card: 'summary_large_image', title, description, images: [image] },
+    twitter: { card: 'summary_large_image', title: socialTitle, description, images: [image] },
   }
 }
 

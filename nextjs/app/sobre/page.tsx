@@ -14,12 +14,12 @@ import WhatsAppLink from '../../components/WhatsAppLink'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Sobre o Corretor Yuri — Imóveis em Osasco SP',
+  title: 'Sobre — Imóveis em Osasco SP',
   description:
     'Conheça o Corretor Yuri, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
   alternates: { canonical: `${SITE_URL}/sobre` },
   openGraph: {
-    title: 'Sobre o Corretor Yuri — Imóveis em Osasco SP',
+    title: 'Sobre — Imóveis em Osasco SP',
     description:
       'Conheça o Corretor Yuri, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
     url: `${SITE_URL}/sobre`,
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sobre o Corretor Yuri — Imóveis em Osasco SP',
+    title: 'Sobre — Imóveis em Osasco SP',
     description:
       'Conheça o Corretor Yuri, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
     images: [OG_DEFAULT_IMAGE],

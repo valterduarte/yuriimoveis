@@ -7,16 +7,18 @@ import type { Metadata } from 'next'
 
 export const revalidate = 60
 
-const BASE_TITLE = 'Imóveis em Osasco, Barueri e Carapicuíba — Corretor Yuri'
+const PAGE_TITLE = 'Imóveis em Osasco, Barueri e Carapicuíba'
+const SOCIAL_TITLE = `${PAGE_TITLE} — Corretor Yuri`
 const BASE_DESCRIPTION = 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco, Barueri e Carapicuíba. Atendimento com o Corretor Yuri, CRECI-SP 235509.'
+const SOCIAL_DESCRIPTION = 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco, Barueri e Carapicuíba.'
 
 export const metadata: Metadata = {
-  title: BASE_TITLE,
+  title: PAGE_TITLE,
   description: BASE_DESCRIPTION,
   alternates: { canonical: `${SITE_URL}/imoveis` },
   openGraph: {
-    title: BASE_TITLE,
-    description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco, Barueri e Carapicuíba.',
+    title: SOCIAL_TITLE,
+    description: SOCIAL_DESCRIPTION,
     url: `${SITE_URL}/imoveis`,
     siteName: 'Corretor Yuri Imóveis',
     locale: 'pt_BR',
@@ -25,8 +27,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: BASE_TITLE,
-    description: 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco, Barueri e Carapicuíba.',
+    title: SOCIAL_TITLE,
+    description: SOCIAL_DESCRIPTION,
     images: [OG_DEFAULT_IMAGE],
   },
 }
