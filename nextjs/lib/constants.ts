@@ -53,7 +53,8 @@ export const ITEMS_PER_PAGE       = 9
 export const LISTING_INITIAL_VISIBLE = 12
 export const SCROLL_THRESHOLD     = 60
 export const CARD_IMAGE_HEIGHT    = 260
-export const ADMIN_PROPERTIES_LIMIT = 50
+export const ADMIN_PROPERTIES_LIMIT = 500
+export const ADMIN_LIST_PAGE_SIZE   = 25
 export const DEBOUNCE_DELAY       = 600
 
 export const SEO_MIN_PROPERTIES_FOR_INDEXING = 3

@@ -136,7 +136,15 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
         <div className="space-y-2">
           {stats.byPage.map(p => (
             <div key={p.page} className="flex items-center justify-between text-xs py-2 border-b border-gray-50 last:border-0">
-              <span className="text-gray-600 truncate max-w-[70%]">{p.page}</span>
+              <a
+                href={p.page}
+                target="_blank"
+                rel="noreferrer"
+                title={p.page}
+                className="text-gray-600 truncate max-w-[70%] hover:text-primary hover:underline"
+              >
+                {p.page}
+              </a>
               <span className="font-bold text-dark">{p.clicks}</span>
             </div>
           ))}
@@ -156,7 +164,7 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
                   className="w-full bg-primary/80 hover:bg-primary rounded-t transition-all min-h-[2px]"
                   style={{ height: `${Math.max(pct, 2)}%` }}
                 />
-                <span className="text-[8px] text-gray-400 mt-1 hidden group-hover:block absolute -top-5 bg-dark text-white px-1.5 py-0.5 rounded whitespace-nowrap">
+                <span className="text-[8px] mt-1 hidden group-hover:block absolute -top-5 bg-dark text-white px-1.5 py-0.5 rounded whitespace-nowrap">
                   {dateLabel}: {d.clicks}
                 </span>
               </div>

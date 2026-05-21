@@ -1,11 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { apiClient, isAuthError } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
 import { slugify } from '../../utils/imovelUtils'
 import { useApiSubmit } from '../../hooks/useApiSubmit'
+import { useDirtyFormWarning } from '../../hooks/useDirtyFormWarning'
 import type { BlogPost } from '../../types'
+
+const EMPTY_SNAPSHOT = JSON.stringify({
+  titulo: '', slug: '', resumo: '', conteudo: '',
+  imagemCapa: '', metaTitulo: '', metaDescricao: '',
+  tagsText: '', publicado: false,
+})
 
 interface AdminBlogPostFormProps {
   editingId: number | null
@@ -25,29 +32,49 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
   const [metaDescricao, setMetaDescricao] = useState('')
   const [tagsText, setTagsText] = useState('')
   const [publicado, setPublicado] = useState(false)
+  const [initialSnapshot, setInitialSnapshot] = useState(EMPTY_SNAPSHOT)
+  const [submitted, setSubmitted] = useState(false)
   const { loading, error, setError, submit } = useApiSubmit({ onAuthError, fallbackError: 'Erro ao salvar post.' })
 
   useEffect(() => {
-    if (editingId) {
-      apiClient.get<BlogPost>(`${API_URL}/api/blog/${editingId}`, { headers: authHeader() })
-        .then(post => {
-          setTitulo(post.titulo)
-          setSlug(post.slug)
-          setSlugManual(true)
-          setResumo(post.resumo)
-          setConteudo(post.conteudo)
-          setImagemCapa(post.imagem_capa)
-          setMetaTitulo(post.meta_titulo)
-          setMetaDescricao(post.meta_descricao)
-          setTagsText(post.tags.join(', '))
-          setPublicado(post.publicado)
-        })
-        .catch(err => {
-          if (isAuthError(err)) onAuthError()
-          else setError('Erro ao carregar post.')
-        })
+    if (!editingId) {
+      setInitialSnapshot(EMPTY_SNAPSHOT)
+      return
     }
+    apiClient.get<BlogPost>(`${API_URL}/api/blog/${editingId}`, { headers: authHeader() })
+      .then(post => {
+        const loaded = {
+          titulo: post.titulo, slug: post.slug, resumo: post.resumo, conteudo: post.conteudo,
+          imagemCapa: post.imagem_capa, metaTitulo: post.meta_titulo, metaDescricao: post.meta_descricao,
+          tagsText: post.tags.join(', '), publicado: post.publicado,
+        }
+        setTitulo(loaded.titulo)
+        setSlug(loaded.slug)
+        setSlugManual(true)
+        setResumo(loaded.resumo)
+        setConteudo(loaded.conteudo)
+        setImagemCapa(loaded.imagemCapa)
+        setMetaTitulo(loaded.metaTitulo)
+        setMetaDescricao(loaded.metaDescricao)
+        setTagsText(loaded.tagsText)
+        setPublicado(loaded.publicado)
+        setInitialSnapshot(JSON.stringify(loaded))
+      })
+      .catch(err => {
+        if (isAuthError(err)) onAuthError()
+        else setError('Erro ao carregar post.')
+      })
   }, [editingId, authHeader, onAuthError, setError])
+
+  const isDirty = useMemo(() => {
+    if (submitted) return false
+    const current = JSON.stringify({
+      titulo, slug, resumo, conteudo,
+      imagemCapa, metaTitulo, metaDescricao, tagsText, publicado,
+    })
+    return current !== initialSnapshot
+  }, [titulo, slug, resumo, conteudo, imagemCapa, metaTitulo, metaDescricao, tagsText, publicado, initialSnapshot, submitted])
+  useDirtyFormWarning(isDirty)
 
   useEffect(() => {
     if (!slugManual && titulo) {
@@ -74,9 +101,11 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
     await submit(async () => {
       if (editingId) {
         await apiClient.put(`${API_URL}/api/blog/${editingId}`, payload, { headers: authHeader() })
+        setSubmitted(true)
         onSuccess('Post atualizado com sucesso!')
       } else {
         await apiClient.post(`${API_URL}/api/blog`, payload, { headers: authHeader() })
+        setSubmitted(true)
         onSuccess('Post criado com sucesso!')
         setTitulo(''); setSlug(''); setSlugManual(false); setResumo(''); setConteudo('')
         setImagemCapa(''); setMetaTitulo(''); setMetaDescricao(''); setTagsText(''); setPublicado(false)
@@ -154,6 +183,11 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
         <label htmlFor="publicado" className="text-sm text-gray-700">Publicar imediatamente</label>
       </div>
 
+      {isDirty && (
+        <p role="status" className="text-[10px] uppercase tracking-widest font-bold text-amber-600 text-center">
+          Alterações não salvas
+        </p>
+      )}
       <button
         type="submit"
         disabled={loading}

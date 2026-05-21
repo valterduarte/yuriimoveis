@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect, type ChangeEvent } from 'react'
+import { useState, useEffect, useMemo, type ChangeEvent } from 'react'
 import { apiClient } from '../../lib/apiClient'
 import { calcParcela } from '../../utils/imovelUtils'
 import { API_URL, CLOUDINARY_CLOUD, CLOUDINARY_PRESET } from '../../lib/config'
 import { useApiSubmit } from '../../hooks/useApiSubmit'
+import { useDirtyFormWarning } from '../../hooks/useDirtyFormWarning'
 import BasicInfoSection from './property-form/BasicInfoSection'
 import LocationSection from './property-form/LocationSection'
 import DescriptionSection from './property-form/DescriptionSection'
@@ -52,18 +53,32 @@ interface AdminPropertyFormProps {
 export default function AdminPropertyForm({ editingId, authHeader, onSuccess, onAuthError }: AdminPropertyFormProps) {
   const [form, setForm] = useState<FormState>(EMPTY_FORM)
   const [imageUrls, setImageUrls] = useState<string[]>([])
+  const [initialSnapshot, setInitialSnapshot] = useState(() => JSON.stringify({ form: EMPTY_FORM, imageUrls: [] }))
+  const [submitted, setSubmitted] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const { loading, error, setError, submit } = useApiSubmit({ onAuthError, fallbackError: 'Erro ao salvar.' })
 
   useEffect(() => {
-    if (!editingId) return
+    if (!editingId) {
+      setInitialSnapshot(JSON.stringify({ form: EMPTY_FORM, imageUrls: [] }))
+      return
+    }
     apiClient.get<Imovel>(`${API_URL}/api/imoveis/${editingId}`)
       .then(imovel => {
-        setForm(propertyToForm(imovel))
-        setImageUrls(Array.isArray(imovel.imagens) ? imovel.imagens : [])
+        const loadedForm = propertyToForm(imovel)
+        const loadedImages = Array.isArray(imovel.imagens) ? imovel.imagens : []
+        setForm(loadedForm)
+        setImageUrls(loadedImages)
+        setInitialSnapshot(JSON.stringify({ form: loadedForm, imageUrls: loadedImages }))
       })
       .catch(() => setError('Erro ao carregar imóvel.'))
   }, [editingId, setError])
+
+  const isDirty = useMemo(
+    () => !submitted && JSON.stringify({ form, imageUrls }) !== initialSnapshot,
+    [form, imageUrls, initialSnapshot, submitted],
+  )
+  useDirtyFormWarning(isDirty)
 
   const updateField: UpdateField = (key, value) => setForm(f => ({ ...f, [key]: value }))
 
@@ -125,9 +140,11 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
     await submit(async () => {
       if (editingId) {
         await apiClient.put(`${API_URL}/api/imoveis/${editingId}`, payload, { headers: authHeader() })
+        setSubmitted(true)
         onSuccess('Imóvel atualizado com sucesso!')
       } else {
         const created = await apiClient.post<{ id: number }>(`${API_URL}/api/imoveis`, payload, { headers: authHeader() })
+        setSubmitted(true)
         onSuccess(`Imóvel cadastrado com sucesso! ID: ${created.id}`)
       }
     })
@@ -160,6 +177,11 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
         onRemove={removeImage}
       />
 
+      {isDirty && (
+        <p role="status" className="text-[10px] uppercase tracking-widest font-bold text-amber-600 text-center">
+          Alterações não salvas
+        </p>
+      )}
       <button type="submit" disabled={loading}
         className="w-full btn-primary py-4 text-sm uppercase tracking-widest font-bold disabled:opacity-50">
         {loading ? 'Salvando...' : editingId ? 'Salvar Alterações' : 'Cadastrar Imóvel'}

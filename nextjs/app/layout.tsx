@@ -5,6 +5,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import FloatingContact from '../components/FloatingContact'
 import CompareBar from '../components/compare/CompareBar'
+import PublicChrome, { MainContent } from '../components/PublicChrome'
 import ScrollReveal from '../components/ScrollReveal'
 import GoogleAnalytics from '../components/GoogleAnalytics'
 import { SITE_URL } from '../lib/config'
@@ -64,13 +65,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:text-sm focus:font-bold">
           Pular para o conteúdo
         </a>
-        <Header />
-        <main id="main-content" tabIndex={-1} className="flex-1 pt-16 md:pt-20 focus:outline-none">
-          {children}
-        </main>
-        <Footer />
-        <CompareBar />
-        <FloatingContact />
+        <PublicChrome><Header /></PublicChrome>
+        <MainContent>{children}</MainContent>
+        <PublicChrome><Footer /></PublicChrome>
+        <PublicChrome><CompareBar /></PublicChrome>
+        <PublicChrome><FloatingContact /></PublicChrome>
         <ScrollReveal />
         <GoogleAnalytics />
         <SpeedInsights />

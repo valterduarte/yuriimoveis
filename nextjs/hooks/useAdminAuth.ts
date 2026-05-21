@@ -1,20 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ApiError, apiClient } from '../lib/apiClient'
 import { API_URL } from '../lib/config'
+
+const TOKEN_KEY = 'admin_token'
+const USER_KEY  = 'admin_user'
 
 export function useAdminAuth() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [token, setToken] = useState(() =>
-    typeof window !== 'undefined' ? sessionStorage.getItem('admin_token') || '' : ''
-  )
-  const [isAuthenticated, setIsAuthenticated] = useState(() =>
-    typeof window !== 'undefined' ? !!sessionStorage.getItem('admin_token') : false
-  )
+  const [token, setToken] = useState('')
+  const [authenticatedUser, setAuthenticatedUser] = useState<string | null>(null)
+  const [hydrated, setHydrated] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem(TOKEN_KEY)
+    const storedUser  = sessionStorage.getItem(USER_KEY)
+    if (storedToken) {
+      setToken(storedToken)
+      setAuthenticatedUser(storedUser)
+    }
+    setHydrated(true)
+  }, [])
 
   const authHeader = () => ({ Authorization: `Bearer ${token}` })
 
@@ -27,9 +37,10 @@ export function useAdminAuth() {
         `${API_URL}/api/auth/login`,
         { usuario: username, senha: password },
       )
-      sessionStorage.setItem('admin_token', newToken)
+      sessionStorage.setItem(TOKEN_KEY, newToken)
+      sessionStorage.setItem(USER_KEY, username)
       setToken(newToken)
-      setIsAuthenticated(true)
+      setAuthenticatedUser(username)
     } catch (err) {
       if (err instanceof ApiError && typeof err.data === 'object' && err.data !== null && 'error' in err.data) {
         setError(String((err.data as { error: unknown }).error) || 'Erro ao autenticar.')
@@ -42,9 +53,10 @@ export function useAdminAuth() {
   }
 
   const handleLogout = () => {
-    sessionStorage.removeItem('admin_token')
+    sessionStorage.removeItem(TOKEN_KEY)
+    sessionStorage.removeItem(USER_KEY)
     setToken('')
-    setIsAuthenticated(false)
+    setAuthenticatedUser(null)
     setUsername('')
     setPassword('')
   }
@@ -52,7 +64,9 @@ export function useAdminAuth() {
   return {
     username, setUsername,
     password, setPassword,
-    isAuthenticated,
+    isAuthenticated: !!token,
+    authenticatedUser,
+    hydrated,
     loading, error,
     authHeader,
     handleLogin,

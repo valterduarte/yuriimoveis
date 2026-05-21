@@ -23,7 +23,8 @@ interface AdminMessage {
 export default function AdminPage() {
   const {
     username, setUsername, password, setPassword,
-    isAuthenticated, loading: authLoading, error: authError,
+    isAuthenticated, authenticatedUser, hydrated,
+    loading: authLoading, error: authError,
     authHeader, handleLogin, handleLogout,
   } = useAdminAuth()
 
@@ -80,6 +81,10 @@ export default function AdminPage() {
   const handleDeactivate = (id: number) => setActiveStatus(id, false, 'Erro ao desativar.')
   const handleReactivate = (id: number) => setActiveStatus(id, true,  'Erro ao reativar.')
 
+  if (!hydrated) {
+    return <div className="min-h-screen bg-gray-50" aria-hidden="true" />
+  }
+
   if (!isAuthenticated) {
     return (
       <AdminLogin
@@ -104,13 +109,21 @@ export default function AdminPage() {
           ? editingBlogId ? 'Editar Post' : 'Novo Post'
           : editingId ? 'Editar Imóvel' : 'Novo Imóvel'
 
+  const activeCount = properties.filter(p => p.ativo).length
+  const inactiveCount = properties.length - activeCount
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-dark text-white py-10">
         <div className="container mx-auto px-6 flex items-center justify-between">
           <div>
-            <span className="section-label">Admin</span>
+            <span className="section-label">Admin{authenticatedUser ? ` · ${authenticatedUser}` : ''}</span>
             <h1 className="text-3xl font-black uppercase text-white">{viewTitle}</h1>
+            {activeView === 'list' && properties.length > 0 && (
+              <p className="text-xs text-gray-400 mt-2">
+                {activeCount} {activeCount === 1 ? 'ativo' : 'ativos'} · {inactiveCount} {inactiveCount === 1 ? 'inativo' : 'inativos'} · {properties.length} total
+              </p>
+            )}
           </div>
           <div className="flex items-center gap-4">
             {activeView === 'list' ? (

@@ -52,7 +52,7 @@ export const GET = withErrorHandler('GET /api/track-click', async (request: Next
   )
 
   const byDayResult = await getDb().query(
-    `SELECT DATE(created_at) as date, COUNT(*) as clicks FROM wa_clicks WHERE created_at >= NOW() - INTERVAL '1 day' * $1 GROUP BY DATE(created_at) ORDER BY date DESC`,
+    `SELECT TO_CHAR(created_at::date, 'YYYY-MM-DD') as date, COUNT(*) as clicks FROM wa_clicks WHERE created_at >= NOW() - INTERVAL '1 day' * $1 GROUP BY created_at::date ORDER BY created_at::date DESC`,
     [days]
   )
 
