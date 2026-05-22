@@ -19,6 +19,7 @@ import { findLandingPage, LANDING_PAGES } from '../../../data/landingPages'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
 import { SITE_URL, PHONE_WA_BASE, OG_DEFAULT_IMAGE } from '../../../lib/config'
 import { AGENT_ID, buildBreadcrumb } from '../../../lib/jsonLd'
+import { buildPageMetadata } from '../../../lib/seo'
 import {
   bairroDbNameToSlug,
   buildHierarchicalUrl,
@@ -78,88 +79,41 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (!imovel) return { title: 'Imóvel não encontrado' }
 
     const description = buildSeoDescription(imovel)
-    const pageUrl = `${SITE_URL}/imoveis/${imovelSlug(imovel)}`
     const rawImage = imovel.imagens?.[0] ?? PLACEHOLDER_IMAGE
-    const socialImage = ogImageUrl(rawImage)
 
-    return {
+    return buildPageMetadata({
       title: imovel.titulo,
       description,
-      alternates: { canonical: pageUrl },
-      openGraph: {
-        title: `${imovel.titulo} — Corretor Yuri Imóveis`,
-        description,
-        url: pageUrl,
-        siteName: 'Corretor Yuri Imóveis',
-        locale: 'pt_BR',
-        type: 'website',
-        images: [{ url: socialImage, width: 1200, height: 630, alt: imovel.titulo, type: 'image/jpeg' }],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: imovel.titulo,
-        description,
-        images: [socialImage],
-      },
-    }
+      url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
+      socialTitle: `${imovel.titulo} — Corretor Yuri Imóveis`,
+      ogImage: ogImageUrl(rawImage),
+      ogImageAlt: imovel.titulo,
+    })
   }
 
-  // Landing page (tipo+categoria)
   const landingPage = findLandingPage(slug)
   if (landingPage) {
-    return {
+    return buildPageMetadata({
       title: landingPage.titulo,
       description: landingPage.descricaoMeta,
-      alternates: { canonical: `${SITE_URL}/imoveis/${slug}` },
-      openGraph: {
-        title: landingPage.titulo,
-        description: landingPage.descricaoMeta,
-        url: `${SITE_URL}/imoveis/${slug}`,
-        siteName: 'Corretor Yuri Imóveis',
-        locale: 'pt_BR',
-        type: 'website',
-        images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: landingPage.h1 }],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: landingPage.titulo,
-        description: landingPage.descricaoMeta,
-        images: [OG_DEFAULT_IMAGE],
-      },
-    }
+      url: `${SITE_URL}/imoveis/${slug}`,
+      ogImageAlt: landingPage.h1,
+    })
   }
 
-  // Bairro page
   const bairroData = getBairroBySlug(slug)
   const neighborhoodName = bairroData?.nome || formatNeighborhoodName(slug)
   const title = bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP`
   const description = bairroData?.descricaoMeta || `Veja todos os imóveis disponíveis no ${neighborhoodName} em Osasco, SP. Casas, apartamentos e terrenos à venda e para alugar. Atendimento com o Corretor Yuri.`
 
-  const bairroImage = bairroData?.imagem
-    ? ogImageUrl(bairroData.imagem)
-    : OG_DEFAULT_IMAGE
-
-  return {
+  return buildPageMetadata({
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/imoveis/${slug}` },
-    robots: { index: false, follow: true },
-    openGraph: {
-      title: bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP`,
-      description,
-      url: `${SITE_URL}/imoveis/${slug}`,
-      siteName: 'Corretor Yuri Imóveis',
-      locale: 'pt_BR',
-      type: 'website',
-      images: [{ url: bairroImage, width: 1200, height: 630, alt: `Imóveis em ${neighborhoodName}` }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: bairroData?.titulo || `Imóveis em ${neighborhoodName}, Osasco SP`,
-      description,
-      images: [bairroImage],
-    },
-  }
+    url: `${SITE_URL}/imoveis/${slug}`,
+    noindex: true,
+    ogImage: bairroData?.imagem ? ogImageUrl(bairroData.imagem) : OG_DEFAULT_IMAGE,
+    ogImageAlt: `Imóveis em ${neighborhoodName}`,
+  })
 }
 
 // ── property detail page ──────────────────────────────────────────────────────

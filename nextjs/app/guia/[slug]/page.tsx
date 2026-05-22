@@ -2,8 +2,9 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowRight, FiBookOpen, FiTool, FiHome, FiList } from 'react-icons/fi'
 import { getGuiaBySlug, GUIA_SLUGS, GUIAS } from '../../../data/guias'
-import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
+import { SITE_URL } from '../../../lib/config'
 import { buildBreadcrumb, buildFaqPageSchema, buildArticleSchema } from '../../../lib/jsonLd'
+import { buildPageMetadata } from '../../../lib/seo'
 import type { GuiaLink } from '../../../data/guias'
 import type { Metadata } from 'next'
 
@@ -22,22 +23,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const guia = getGuiaBySlug(slug)
   if (!guia) return {}
 
-  const url = `${SITE_URL}/guia/${guia.slug}`
-  return {
+  return buildPageMetadata({
     title: guia.titulo,
     description: guia.descricaoMeta,
-    alternates: { canonical: url },
-    openGraph: {
-      title: guia.titulo,
-      description: guia.descricaoMeta,
-      url,
-      siteName: 'Corretor Yuri Imóveis',
-      locale: 'pt_BR',
-      type: 'article',
-      images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: guia.titulo }],
-    },
-    twitter: { card: 'summary_large_image', title: guia.titulo, description: guia.descricaoMeta, images: [OG_DEFAULT_IMAGE] },
-  }
+    url: `${SITE_URL}/guia/${guia.slug}`,
+    type: 'article',
+  })
 }
 
 function linkIcon(type: GuiaLink['type']) {

@@ -5,6 +5,7 @@ import { FaWhatsapp } from 'react-icons/fa'
 import { fetchBlogPostBySlug, fetchAllBlogSlugs, fetchRelatedBlogPosts } from '../../../lib/api'
 import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA } from '../../../lib/config'
 import { buildBreadcrumb, buildArticleSchema, buildFaqPageSchema } from '../../../lib/jsonLd'
+import { buildPageMetadata } from '../../../lib/seo'
 import { extractFaqsFromHtml } from '../../../lib/blogFaqs'
 import WhatsAppLink from '../../../components/WhatsAppLink'
 import ItbiCalculator from '../../../components/ItbiCalculator'
@@ -39,26 +40,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const socialTitle = post.meta_titulo || `${post.titulo} — Corretor Yuri Imóveis`
   const description = post.meta_descricao || post.resumo || post.titulo
-  const url = `${SITE_URL}/blog/${post.slug}`
-  const image = post.imagem_capa || OG_DEFAULT_IMAGE
 
-  return {
+  return buildPageMetadata({
     title: post.meta_titulo ? { absolute: post.meta_titulo } : post.titulo,
     description,
-    alternates: { canonical: url },
-    openGraph: {
-      title: socialTitle,
-      description,
-      url,
-      siteName: 'Corretor Yuri Imóveis',
-      locale: 'pt_BR',
-      type: 'article',
-      publishedTime: post.created_at,
-      modifiedTime: post.updated_at,
-      images: [{ url: image, width: 1200, height: 630, alt: post.titulo }],
-    },
-    twitter: { card: 'summary_large_image', title: socialTitle, description, images: [image] },
-  }
+    url: `${SITE_URL}/blog/${post.slug}`,
+    type: 'article',
+    publishedTime: post.created_at,
+    modifiedTime: post.updated_at,
+    socialTitle,
+    ogImage: post.imagem_capa || OG_DEFAULT_IMAGE,
+    ogImageAlt: post.titulo,
+  })
 }
 
 export default async function BlogPostPage({ params }: PageProps) {

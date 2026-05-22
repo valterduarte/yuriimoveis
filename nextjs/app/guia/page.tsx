@@ -1,29 +1,19 @@
 import Link from 'next/link'
 import { FiArrowRight } from 'react-icons/fi'
 import { GUIAS } from '../../data/guias'
-import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
+import { SITE_URL } from '../../lib/config'
 import { buildBreadcrumb } from '../../lib/jsonLd'
-import type { Metadata } from 'next'
+import { buildPageMetadata } from '../../lib/seo'
 
 const TITLE = 'Guias Imobiliários — Osasco e Região 2026'
 const DESCRIPTION =
   'Guias completos sobre como comprar, financiar e alugar imóvel em Osasco e Barueri em 2026: passo a passo, custos, programas de financiamento e direitos do inquilino.'
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: `${SITE_URL}/guia` },
-  openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
-    url: `${SITE_URL}/guia`,
-    siteName: 'Corretor Yuri Imóveis',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: TITLE }],
-  },
-  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION, images: [OG_DEFAULT_IMAGE] },
-}
+  url: `${SITE_URL}/guia`,
+})
 
 const breadcrumbJsonLd = buildBreadcrumb([
   { name: 'Início', path: '/' },

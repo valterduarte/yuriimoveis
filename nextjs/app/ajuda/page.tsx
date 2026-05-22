@@ -1,33 +1,18 @@
 import Link from 'next/link'
 import { FiArrowRight, FiBookOpen } from 'react-icons/fi'
-import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
+import { SITE_URL } from '../../lib/config'
 import { AJUDA_ARTIGOS, fullH1 } from '../../data/ajudaArtigos'
-import type { Metadata } from 'next'
+import { buildPageMetadata } from '../../lib/seo'
 
 const PAGE_TITLE = 'Ajuda — Guia Prático para Comprar Imóvel em Osasco'
 const PAGE_DESCRIPTION =
   'Guias completos sobre documentação, custos, ITBI, escritura, financiamento e cartórios para quem quer comprar imóvel em Osasco e Grande São Paulo.'
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
-  alternates: { canonical: `${SITE_URL}/ajuda` },
-  openGraph: {
-    title: PAGE_TITLE,
-    description: PAGE_DESCRIPTION,
-    url: `${SITE_URL}/ajuda`,
-    siteName: 'Corretor Yuri Imóveis',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: PAGE_TITLE }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: PAGE_TITLE,
-    description: PAGE_DESCRIPTION,
-    images: [OG_DEFAULT_IMAGE],
-  },
-}
+  url: `${SITE_URL}/ajuda`,
+})
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',

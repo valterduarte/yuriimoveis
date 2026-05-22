@@ -1,27 +1,20 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { fetchPublishedBlogPosts } from '../../lib/api'
-import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
+import { SITE_URL } from '../../lib/config'
 import { PLACEHOLDER_IMAGE } from '../../lib/constants'
 import { buildBreadcrumb, buildCollectionPage } from '../../lib/jsonLd'
-import type { Metadata } from 'next'
+import { buildPageMetadata } from '../../lib/seo'
 
 export const revalidate = 300
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: 'Blog',
   description: 'Dicas, guias e informações sobre o mercado imobiliário em Osasco e região. Aprenda sobre financiamento, documentação, bairros e muito mais.',
-  alternates: { canonical: `${SITE_URL}/blog` },
-  openGraph: {
-    title: 'Blog — Corretor Yuri Imóveis',
-    description: 'Dicas e guias sobre o mercado imobiliário em Osasco e região.',
-    url: `${SITE_URL}/blog`,
-    siteName: 'Corretor Yuri Imóveis',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630 }],
-  },
-}
+  url: `${SITE_URL}/blog`,
+  socialTitle: 'Blog — Corretor Yuri Imóveis',
+  socialDescription: 'Dicas e guias sobre o mercado imobiliário em Osasco e região.',
+})
 
 export default async function BlogListPage() {
   const posts = await fetchPublishedBlogPosts()

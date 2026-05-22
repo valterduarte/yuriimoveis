@@ -3,39 +3,21 @@ import { FiCheckCircle, FiHome, FiUsers, FiShield } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import {
   SITE_URL,
-  OG_DEFAULT_IMAGE,
   PHONE_WA_BASE,
   PHONE_DISPLAY,
   PHONE_TEL,
   CRECI,
 } from '../../lib/config'
 import { buildPersonSchema } from '../../lib/jsonLd'
+import { buildPageMetadata } from '../../lib/seo'
 import WhatsAppLink from '../../components/WhatsAppLink'
-import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: 'Sobre — Imóveis em Osasco SP',
   description:
     'Conheça o Corretor Yuri, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
-  alternates: { canonical: `${SITE_URL}/sobre` },
-  openGraph: {
-    title: 'Sobre — Imóveis em Osasco SP',
-    description:
-      'Conheça o Corretor Yuri, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
-    url: `${SITE_URL}/sobre`,
-    siteName: 'Corretor Yuri Imóveis',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: 'Corretor Yuri Imóveis' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Sobre — Imóveis em Osasco SP',
-    description:
-      'Conheça o Corretor Yuri, CRECI-SP 235509. Mais de 10 anos de experiência em imóveis residenciais e comerciais em Osasco e Grande São Paulo.',
-    images: [OG_DEFAULT_IMAGE],
-  },
-}
+  url: `${SITE_URL}/sobre`,
+})
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
