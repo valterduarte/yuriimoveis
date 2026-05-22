@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import SimuladorClient from '../../components/simulador/SimuladorClient'
 import { buildFaqPageSchema } from '../../lib/jsonLd'
+import { FINANCING_PROGRAMS } from '../../data/financiamento'
 import type { Metadata } from 'next'
 
 const PAGE_TITLE = 'Simulador de Financiamento Imobiliário'
@@ -58,15 +59,7 @@ const RATE_TABLE_FAQ = buildFaqPageSchema([
   },
 ])
 
-const RATE_ROWS: { programa: string; taxa: string; perfil: string }[] = [
-  { programa: 'MCMV — Faixa 1', taxa: '4,00% a.a.', perfil: 'Renda até R$ 3.200. Imóvel até R$ 400 mil.' },
-  { programa: 'MCMV — Faixa 2', taxa: '5,50% a.a.', perfil: 'Renda R$ 3.200 a R$ 5.000. Imóvel até R$ 400 mil.' },
-  { programa: 'MCMV — Faixa 3', taxa: '7,66% a.a.', perfil: 'Renda R$ 5.000 a R$ 9.600. Imóvel até R$ 400 mil.' },
-  { programa: 'MCMV — Faixa 4', taxa: '9,90% a.a.', perfil: 'Renda R$ 9.600 a R$ 13.000. Imóvel até R$ 600 mil.' },
-  { programa: 'Crédito Associativo', taxa: '8,50% a.a.', perfil: 'Cooperativas e programas habitacionais. Renda até R$ 13 mil.' },
-  { programa: 'Caixa SBPE — imóvel elegível MCMV', taxa: '9,90% a.a.', perfil: 'SBPE com relacionamento, imóvel dentro do teto MCMV.' },
-  { programa: 'SBPE — mercado livre', taxa: '11,49% a.a.', perfil: 'Financiamento tradicional dos bancos, fora do MCMV.' },
-]
+const RATE_ROWS = FINANCING_PROGRAMS
 
 export default async function SimuladorPage({ searchParams }: { searchParams: Promise<Record<string, string>> }) {
   const params = await searchParams
