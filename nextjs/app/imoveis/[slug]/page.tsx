@@ -388,7 +388,7 @@ async function BairroPage({ slug }: { slug: string }) {
 
       <div className="bg-dark text-white py-12">
         <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+          <nav className="crumb-row" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
             <span aria-hidden="true">/</span>
             <Link href="/imoveis" className="hover:text-white transition-colors">Imóveis</Link>
@@ -408,19 +408,19 @@ async function BairroPage({ slug }: { slug: string }) {
       {bairroData && (
         <section className="container mx-auto px-6 pt-10 pb-2">
           <div className="bg-white border border-gray-200 p-6 md:p-8">
-            <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">
+            <h2 className="heading-block">
               Sobre o bairro {neighborhoodName}
             </h2>
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.sobre}</p>
+            <p className="body-prose">{bairroData.conteudo.sobre}</p>
 
             <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Infraestrutura</h3>
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.infraestrutura}</p>
+            <p className="body-prose">{bairroData.conteudo.infraestrutura}</p>
 
             <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Transporte e Acesso</h3>
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.transporte}</p>
+            <p className="body-prose">{bairroData.conteudo.transporte}</p>
 
             <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Educação</h3>
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.educacao}</p>
+            <p className="body-prose">{bairroData.conteudo.educacao}</p>
 
             <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">
               Por que morar no {neighborhoodName}?
@@ -507,7 +507,7 @@ async function LandingPage({ slug }: { slug: string }) {
 
       <div className="bg-dark text-white py-12">
         <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+          <nav className="crumb-row" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
             <span aria-hidden="true">/</span>
             <Link href="/imoveis" className="hover:text-white transition-colors">Imóveis</Link>

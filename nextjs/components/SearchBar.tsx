@@ -92,7 +92,7 @@ export default function SearchBar({ cidadesByTipo = {}, bairrosPorCidade = {} }:
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
         <div className="p-5">
-          <label htmlFor="sb-categoria" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">
+          <label htmlFor="sb-categoria" className="label-field">
             Tipo de Imóvel
           </label>
           <select id="sb-categoria" value={categoria} onChange={e => setCategoria(e.target.value)}
@@ -104,7 +104,7 @@ export default function SearchBar({ cidadesByTipo = {}, bairrosPorCidade = {} }:
           </select>
         </div>
         <div className="p-5">
-          <label htmlFor="sb-cidade" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">
+          <label htmlFor="sb-cidade" className="label-field">
             Cidade
           </label>
           <select id="sb-cidade" value={cidade} onChange={e => handleCidadeChange(e.target.value)}
@@ -116,7 +116,7 @@ export default function SearchBar({ cidadesByTipo = {}, bairrosPorCidade = {} }:
           </select>
         </div>
         <div className="p-5">
-          <label htmlFor="sb-bairro" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">
+          <label htmlFor="sb-bairro" className="label-field">
             Bairro
           </label>
           <select id="sb-bairro" value={bairro} onChange={e => setBairro(e.target.value)}
@@ -128,7 +128,7 @@ export default function SearchBar({ cidadesByTipo = {}, bairrosPorCidade = {} }:
           </select>
         </div>
         <div className="p-5">
-          <label htmlFor="sb-preco" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">
+          <label htmlFor="sb-preco" className="label-field">
             Preço Máximo
           </label>
           <select id="sb-preco" value={precoMax} onChange={e => setPrecoMax(e.target.value)}

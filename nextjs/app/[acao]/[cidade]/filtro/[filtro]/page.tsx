@@ -233,7 +233,7 @@ export default async function FilterPage({ params }: PageProps) {
 
       {categoriasCounts.size > 1 && (
         <section className="mb-10">
-          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Por categoria</h2>
+          <h2 className="heading-section">Por categoria</h2>
           <FilterChipList>
             {Array.from(categoriasCounts.entries()).map(([cat, count]) => {
               const catData = CATEGORIAS[cat as keyof typeof CATEGORIAS]
@@ -251,7 +251,7 @@ export default async function FilterPage({ params }: PageProps) {
       <PropertyResultsGrid imoveis={imoveis} />
 
       <section className="mt-14">
-        <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">{relatedSectionTitle}</h2>
+        <h2 className="heading-section">{relatedSectionTitle}</h2>
         <FilterChipList>
           {relatedFilters.map(f => (
             <FilterChip key={f.slug} href={buildFilterUrl(acao, cidade, f.slug)} active={f.slug === filtro}>
@@ -262,7 +262,7 @@ export default async function FilterPage({ params }: PageProps) {
       </section>
 
       <section className="mt-10">
-        <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por comodidade</h2>
+        <h2 className="heading-section">Filtrar por comodidade</h2>
         <FilterChipList>
           {AMENITY_FILTERS.map(a => (
             <FilterChip key={a.slug} href={buildFilterUrl(acao, cidade, a.slug)} active={a.slug === filtro}>

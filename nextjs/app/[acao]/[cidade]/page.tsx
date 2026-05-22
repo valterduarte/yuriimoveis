@@ -128,7 +128,7 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
 
       {categoriaCounts.size > 0 && (
         <section className="mb-10">
-          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Imóveis por categoria</h2>
+          <h2 className="heading-section">Imóveis por categoria</h2>
           <FilterChipList>
             {Array.from(categoriaCounts.entries()).map(([catSlug, count]) => {
               const cat = CATEGORIAS[catSlug]
@@ -166,7 +166,7 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
       <PropertyResultsGrid imoveis={imoveis} />
 
       <section className="mt-14">
-        <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por faixa de preço</h2>
+        <h2 className="heading-section">Filtrar por faixa de preço</h2>
         <FilterChipList>
           {getAllPriceRanges(acaoToTipo(acao)).map(range => (
             <FilterChip key={range.slug} href={`/${acao}/${cidade}/filtro/${range.slug}`}>
@@ -177,7 +177,7 @@ export default async function CidadeAcaoPage({ params }: PageProps) {
       </section>
 
       <section className="mt-8">
-        <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por quartos</h2>
+        <h2 className="heading-section">Filtrar por quartos</h2>
         <FilterChipList>
           {BEDROOM_FILTERS.map(bf => (
             <FilterChip key={bf.slug} href={`/${acao}/${cidade}/filtro/${bf.slug}`}>

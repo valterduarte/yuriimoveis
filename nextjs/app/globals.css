@@ -156,4 +156,32 @@ section { scroll-margin-top: 80px; }
     @apply text-3xl md:text-4xl font-bold leading-tight;
     color: #1a1a1a;
   }
+
+  .heading-section {
+    @apply text-base font-bold text-dark mb-4 uppercase tracking-wide;
+  }
+
+  .heading-block {
+    @apply text-lg font-bold text-dark mb-4 uppercase tracking-wide;
+  }
+
+  .heading-hero {
+    @apply text-3xl md:text-4xl font-black uppercase text-white leading-tight;
+  }
+
+  .label-field {
+    @apply block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2;
+  }
+
+  .body-prose {
+    @apply text-gray-700 text-sm leading-relaxed mb-4;
+  }
+
+  .crumb-row {
+    @apply flex items-center gap-2 text-xs text-gray-400 mb-4;
+  }
+
+  .meta-pill {
+    @apply inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-bold text-gray-500;
+  }
 }

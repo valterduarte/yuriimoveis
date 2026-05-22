@@ -52,7 +52,7 @@ export default function CrossCategoryLinks({
       <div className="grid md:grid-cols-2 gap-10">
         {hasMesmaAcao && (
           <div>
-            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
+            <h2 className="heading-section">
               Quem se interessou por {categoriaPlural.toLowerCase()} em {cidadeName} também procurou por
             </h2>
             <LinkList>
@@ -70,7 +70,7 @@ export default function CrossCategoryLinks({
 
         {hasAcaoOposta && (
           <div>
-            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
+            <h2 className="heading-section">
               Veja também: {oppositeAcao === 'comprar' ? 'imóveis à venda' : 'imóveis para alugar'} em {cidadeName}
             </h2>
             <LinkList>

@@ -156,7 +156,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
             <span className="text-white" aria-current="page">{bairro.nome}</span>
           </nav>
           <span className="section-label flex items-center gap-2"><FiMapPin size={12} /> {cidadeName}, SP</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{guideTitle}</h1>
+          <h1 className="heading-hero">{guideTitle}</h1>
           <p className="text-gray-400 text-sm mt-2 max-w-3xl">{bairro.descricaoMeta}</p>
           <p className="text-xs text-gray-500 mt-3">{totalImoveis} {totalLabel.noun} {totalLabel.adjective} no bairro</p>
         </div>
@@ -244,7 +244,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
 
         {combos.length > 0 && (
           <section className="mt-12">
-            <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">Encontre imóveis no {bairro.nome}</h2>
+            <h2 className="heading-block">Encontre imóveis no {bairro.nome}</h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {combos.map(({ acao, categoria, count }) => {
                 const categoriaData = CATEGORIAS[categoria as PropertyCategory]
@@ -274,7 +274,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
 
         {featured.length > 0 && (
           <section className="mt-12">
-            <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">Destaques no {bairro.nome}</h2>
+            <h2 className="heading-block">Destaques no {bairro.nome}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               {featured.map(property => (
                 <PropertyCard key={property.id} imovel={property} />
@@ -284,7 +284,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
         )}
 
         <section className="mt-12">
-          <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">Perguntas frequentes sobre o {bairro.nome}</h2>
+          <h2 className="heading-block">Perguntas frequentes sobre o {bairro.nome}</h2>
           <div className="space-y-3">
             {faqs.map(faq => (
               <details key={faq.question} className="group bg-white border border-gray-200 p-4">
@@ -300,7 +300,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
 
         {siblingBairros.length > 0 && (
           <section className="mt-12">
-            <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">Outros guias de bairro em {cidadeName}</h2>
+            <h2 className="heading-block">Outros guias de bairro em {cidadeName}</h2>
             <ul className="flex flex-wrap gap-2">
               {siblingBairros.map(b => (
                 <li key={b.slug}>

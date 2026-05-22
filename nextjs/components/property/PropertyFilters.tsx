@@ -52,7 +52,7 @@ export default function PropertyFilters({
 
       <div className="space-y-6">
         <div>
-          <label htmlFor="filter-codigo" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Código do Imóvel</label>
+          <label htmlFor="filter-codigo" className="label-field">Código do Imóvel</label>
           <div className="relative">
             <input
               id="filter-codigo"
@@ -71,7 +71,7 @@ export default function PropertyFilters({
         </div>
 
         <fieldset>
-          <legend className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Finalidade</legend>
+          <legend className="label-field">Finalidade</legend>
           <div className="flex gap-1" role="group">
             {TRANSACTION_TYPE_OPTIONS.map(option => (
               <button
@@ -90,7 +90,7 @@ export default function PropertyFilters({
         </fieldset>
 
         <div>
-          <label htmlFor="filter-categoria" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Tipo</label>
+          <label htmlFor="filter-categoria" className="label-field">Tipo</label>
           <select
             id="filter-categoria"
             value={categoria}
@@ -105,7 +105,7 @@ export default function PropertyFilters({
         </div>
 
         <div>
-          <label htmlFor="filter-cidade" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Cidade</label>
+          <label htmlFor="filter-cidade" className="label-field">Cidade</label>
           <select
             id="filter-cidade"
             value={cidade}
@@ -121,7 +121,7 @@ export default function PropertyFilters({
 
         {bairros.length > 0 && (
           <div>
-            <label htmlFor="filter-bairro" className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Bairro</label>
+            <label htmlFor="filter-bairro" className="label-field">Bairro</label>
             <select
               id="filter-bairro"
               value={bairro}
@@ -137,7 +137,7 @@ export default function PropertyFilters({
         )}
 
         <fieldset>
-          <legend className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Faixa de Preço</legend>
+          <legend className="label-field">Faixa de Preço</legend>
           <label htmlFor="filter-preco-min" className="sr-only">Preço mínimo</label>
           <input
             id="filter-preco-min"
@@ -159,7 +159,7 @@ export default function PropertyFilters({
         </fieldset>
 
         <fieldset>
-          <legend className="block text-xs font-bold uppercase tracking-widest text-gray-600 mb-2">Quartos</legend>
+          <legend className="label-field">Quartos</legend>
           <div className="flex gap-1" role="group">
             {BEDROOM_OPTIONS.map(option => (
               <button

@@ -58,7 +58,7 @@ export default function BairrosRecomendados({
 
   return (
     <section className="mt-14">
-      <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
+      <h2 className="heading-section">
         Bairros recomendados para {acao === 'comprar' ? 'comprar' : 'alugar'} {categoriaLc} em {cidadeName}
       </h2>
 

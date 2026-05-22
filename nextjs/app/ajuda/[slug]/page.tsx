@@ -238,7 +238,7 @@ export default async function AjudaArtigoPage({ params }: PageProps) {
 
       <header className="py-20 md:py-24 bg-dark text-white">
         <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+          <nav className="crumb-row" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
             <span aria-hidden="true">/</span>
             <Link href="/ajuda" className="hover:text-white transition-colors">Ajuda</Link>

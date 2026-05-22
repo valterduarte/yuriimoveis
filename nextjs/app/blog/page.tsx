@@ -46,13 +46,13 @@ export default async function BlogListPage() {
 
       <div className="bg-dark text-white py-12">
         <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+          <nav className="crumb-row" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
             <span aria-hidden="true">/</span>
             <span className="text-white" aria-current="page">Blog</span>
           </nav>
           <span className="section-label">Conteúdo</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">Blog Imobiliário</h1>
+          <h1 className="heading-hero">Blog Imobiliário</h1>
           <p className="text-gray-400 text-sm mt-2">Dicas, guias e informações sobre o mercado imobiliário em Osasco e região</p>
         </div>
       </div>

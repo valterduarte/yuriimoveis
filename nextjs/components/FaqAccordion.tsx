@@ -12,7 +12,7 @@ interface FaqAccordionProps {
 export default function FaqAccordion({ faqs, headingId = 'faq-heading', title = 'Perguntas frequentes' }: FaqAccordionProps) {
   return (
     <section className="mt-14" aria-labelledby={headingId}>
-      <h2 id={headingId} className="text-base font-bold text-dark mb-4 uppercase tracking-wide">
+      <h2 id={headingId} className="heading-section">
         {title}
       </h2>
       <div className="divide-y divide-gray-200 border border-gray-200 bg-white">

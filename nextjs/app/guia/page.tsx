@@ -39,13 +39,13 @@ export default function GuiaIndexPage() {
 
       <div className="bg-dark text-white py-12">
         <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+          <nav className="crumb-row" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
             <span aria-hidden="true">/</span>
             <span className="text-white" aria-current="page">Guias</span>
           </nav>
           <span className="section-label">Conteúdo educativo</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">Guias Imobiliários</h1>
+          <h1 className="heading-hero">Guias Imobiliários</h1>
           <p className="text-gray-400 text-sm mt-2 max-w-2xl">
             Tudo que você precisa saber para comprar, financiar ou alugar imóvel em Osasco e Barueri com segurança em 2026.
           </p>
