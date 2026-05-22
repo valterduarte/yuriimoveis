@@ -26,6 +26,9 @@ export function parseImovel(row: ImovelRow): Imovel {
   return {
     ...row,
     preco:        Number(row.preco),
+    area:         Number(row.area),
+    lat:          row.lat == null ? undefined : Number(row.lat),
+    lng:          row.lng == null ? undefined : Number(row.lng),
     imagens:      JSON.parse(row.imagens      || '[]'),
     diferenciais: JSON.parse(row.diferenciais || '[]'),
   }
