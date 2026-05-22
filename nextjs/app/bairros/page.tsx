@@ -5,6 +5,7 @@ import { fetchNavigationMatrix } from '../../lib/api'
 import { bairroSlugToDbName, inferCidadeFromBairro } from '../../lib/navigation'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import { buildBreadcrumb, buildCollectionPage, buildFaqPageSchema } from '../../lib/jsonLd'
+import PageHero from '../../components/ui/PageHero'
 import type { Metadata } from 'next'
 import type { BairroData } from '../../types'
 
@@ -131,22 +132,12 @@ export default async function BairrosIndexPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       ))}
 
-      <div className="bg-dark text-white py-12">
-        <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white transition-colors">Início</Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-white" aria-current="page">Guias de bairro</span>
-          </nav>
-          <span className="section-label">Conheça a região</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">
-            Melhores Bairros de Osasco, Barueri e Carapicuíba
-          </h1>
-          <p className="text-gray-400 text-sm mt-3 max-w-3xl leading-relaxed">
-            {totalGuides} guias comparativos com preços por m², transporte, infraestrutura, escolas e imóveis disponíveis em cada bairro da Grande SP Oeste.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        breadcrumbs={[{ label: 'Início', href: '/' }, { label: 'Guias de bairro' }]}
+        eyebrow="Conheça a região"
+        title="Melhores Bairros de Osasco, Barueri e Carapicuíba"
+        description={`${totalGuides} guias comparativos com preços por m², transporte, infraestrutura, escolas e imóveis disponíveis em cada bairro da Grande SP Oeste.`}
+      />
 
       <div className="container mx-auto px-6 py-10 max-w-5xl">
 

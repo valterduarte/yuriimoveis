@@ -3,6 +3,7 @@ import { FiArrowRight } from 'react-icons/fi'
 import { GUIAS } from '../../data/guias'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import { buildBreadcrumb } from '../../lib/jsonLd'
+import PageHero from '../../components/ui/PageHero'
 import type { Metadata } from 'next'
 
 const TITLE = 'Guias Imobiliários — Osasco e Região 2026'
@@ -37,20 +38,12 @@ export default function GuiaIndexPage() {
     <div className="min-h-screen pb-16 md:pb-0 bg-gray-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
-      <div className="bg-dark text-white py-12">
-        <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white transition-colors">Início</Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-white" aria-current="page">Guias</span>
-          </nav>
-          <span className="section-label">Conteúdo educativo</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">Guias Imobiliários</h1>
-          <p className="text-gray-400 text-sm mt-2 max-w-2xl">
-            Tudo que você precisa saber para comprar, financiar ou alugar imóvel em Osasco e Barueri com segurança em 2026.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        breadcrumbs={[{ label: 'Início', href: '/' }, { label: 'Guias' }]}
+        eyebrow="Conteúdo educativo"
+        title="Guias Imobiliários"
+        description="Tudo que você precisa saber para comprar, financiar ou alugar imóvel em Osasco e Barueri com segurança em 2026."
+      />
 
       <div className="container mx-auto px-6 py-10 max-w-4xl">
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-5">

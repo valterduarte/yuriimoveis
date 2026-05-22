@@ -21,6 +21,7 @@ import {
   buildPlaceSchema,
 } from '../../../lib/jsonLd'
 import { buildBairroFaqs } from '../../../lib/bairroFaqs'
+import PageHero from '../../../components/ui/PageHero'
 import type { Metadata } from 'next'
 import type { PropertyCategory } from '../../../types'
 
@@ -146,21 +147,17 @@ export default async function BairroGuidePage({ params }: PageProps) {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       ))}
 
-      <div className="bg-dark text-white py-12">
-        <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4 flex-wrap" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white transition-colors">Início</Link>
-            <span aria-hidden="true">/</span>
-            <Link href="/bairros" className="hover:text-white transition-colors">Guias de bairro</Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-white" aria-current="page">{bairro.nome}</span>
-          </nav>
-          <span className="section-label flex items-center gap-2"><FiMapPin size={12} /> {cidadeName}, SP</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{guideTitle}</h1>
-          <p className="text-gray-400 text-sm mt-2 max-w-3xl">{bairro.descricaoMeta}</p>
-          <p className="text-xs text-gray-500 mt-3">{totalImoveis} {totalLabel.noun} {totalLabel.adjective} no bairro</p>
-        </div>
-      </div>
+      <PageHero
+        breadcrumbs={[
+          { label: 'Início',          href: '/' },
+          { label: 'Guias de bairro', href: '/bairros' },
+          { label: bairro.nome },
+        ]}
+        eyebrow={<><FiMapPin size={12} /> {cidadeName}, SP</>}
+        title={guideTitle}
+        description={bairro.descricaoMeta}
+        extra={<p className="text-xs text-gray-500 mt-3">{totalImoveis} {totalLabel.noun} {totalLabel.adjective} no bairro</p>}
+      />
 
       <div className="container mx-auto px-6 py-10 max-w-5xl">
         <article className="bg-white border border-gray-200 p-6 md:p-10 space-y-8">
