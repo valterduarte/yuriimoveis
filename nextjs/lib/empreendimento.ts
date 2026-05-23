@@ -4,7 +4,7 @@ import { getDb } from './db'
 import { logDbError } from './logger'
 import { CACHE_TAG_IMOVEIS, STATIC_DATA_REVALIDATE_SECONDS } from './cacheTags'
 import { parseImovel } from './properties'
-import type { Imovel, ImovelRow } from '../types'
+import type { Imovel, ImovelRow, PropertyStatus } from '../types'
 
 const TITLE_SEPARATOR = /^(.+?)(?:\s+[—|-]\s+|:\s+)/
 const GENERIC_PREFIX_WORDS = new Set([
@@ -55,7 +55,23 @@ export interface EmpreendimentoSummary {
   areaMax: number
   heroImage: string | null
   imovelIds: number[]
+  status: PropertyStatus
 }
+
+export const EMPREENDIMENTO_RESERVED_SLUGS = new Set(['em-construcao', 'pronto-para-morar', 'na-planta'])
+
+export interface EmpreendimentoStatusFilter {
+  slug: string
+  status: PropertyStatus | null
+  label: string
+  href: string
+}
+
+export const EMPREENDIMENTO_STATUS_FILTERS: EmpreendimentoStatusFilter[] = [
+  { slug: '',                  status: null,          label: 'Todos',             href: '/empreendimentos' },
+  { slug: 'em-construcao',     status: 'construcao',  label: 'Em Construção',     href: '/empreendimentos/em-construcao' },
+  { slug: 'pronto-para-morar', status: 'pronto',      label: 'Pronto para Morar', href: '/empreendimentos/pronto-para-morar' },
+]
 
 export interface EmpreendimentoDetail extends EmpreendimentoSummary {
   imoveis: Imovel[]
@@ -121,6 +137,23 @@ interface GroupRow {
   area_min: string | number
   area_max: string | number
   first_imagens: string | null
+  statuses: PropertyStatus[]
+}
+
+const STATUS_PRIORITY: PropertyStatus[] = ['planta', 'construcao', 'pronto']
+
+function resolveEmpreendimentoStatus(statuses: PropertyStatus[]): PropertyStatus {
+  const counts = new Map<PropertyStatus, number>()
+  for (const s of statuses) counts.set(s, (counts.get(s) ?? 0) + 1)
+  let best: PropertyStatus = statuses[0] ?? 'pronto'
+  let bestCount = counts.get(best) ?? 0
+  for (const [status, count] of counts) {
+    if (count > bestCount || (count === bestCount && STATUS_PRIORITY.indexOf(status) < STATUS_PRIORITY.indexOf(best))) {
+      best = status
+      bestCount = count
+    }
+  }
+  return best
 }
 
 const listEmpreendimentosCached = unstable_cache(
@@ -132,6 +165,7 @@ const listEmpreendimentosCached = unstable_cache(
         cidade,
         array_agg(titulo ORDER BY area ASC, id ASC) AS titulos,
         array_agg(id ORDER BY area ASC, id ASC) AS ids,
+        array_agg(status ORDER BY area ASC, id ASC) AS statuses,
         MIN(preco) AS preco_min,
         MAX(preco) AS preco_max,
         MIN(area)  AS area_min,
@@ -182,6 +216,7 @@ const listEmpreendimentosCached = unstable_cache(
         areaMax: Number(row.area_max),
         heroImage,
         imovelIds: row.ids,
+        status: resolveEmpreendimentoStatus(row.statuses ?? []),
       })
     }
 

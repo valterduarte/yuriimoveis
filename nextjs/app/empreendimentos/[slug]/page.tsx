@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft, FiMapPin } from 'react-icons/fi'
-import { listEmpreendimentos, fetchEmpreendimentoBySlug } from '../../../lib/empreendimento'
+import { EMPREENDIMENTO_RESERVED_SLUGS, listEmpreendimentos, fetchEmpreendimentoBySlug } from '../../../lib/empreendimento'
 import PropertyCard from '../../../components/PropertyCard'
 import { SITE_URL } from '../../../lib/config'
 import { formatPrice, imovelSlug } from '../../../utils/imovelUtils'
@@ -15,7 +15,9 @@ type PageProps = { params: Promise<{ slug: string }> }
 
 export async function generateStaticParams() {
   const empreendimentos = await listEmpreendimentos()
-  return empreendimentos.map(e => ({ slug: e.slug }))
+  return empreendimentos
+    .filter(e => !EMPREENDIMENTO_RESERVED_SLUGS.has(e.slug))
+    .map(e => ({ slug: e.slug }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -51,6 +53,7 @@ function formatAreaRange(min: number, max: number): string {
 
 export default async function EmpreendimentoDetailPage({ params }: PageProps) {
   const { slug } = await params
+  if (EMPREENDIMENTO_RESERVED_SLUGS.has(slug)) notFound()
   const emp = await fetchEmpreendimentoBySlug(slug)
   if (!emp) notFound()
 

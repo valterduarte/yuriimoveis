@@ -261,7 +261,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...GUIA_SLUGS.map(slug => ({ url: `${SITE_URL}/guia/${slug}`, lastModified: now })),
     { url: `${SITE_URL}/bairros`, lastModified: propertiesLatest || now },
     ...(empreendimentos.length > 0
-      ? [{ url: `${SITE_URL}/empreendimentos`, lastModified: propertiesLatest || now, changeFrequency: 'weekly' as const, priority: 0.8 }]
+      ? [
+        { url: `${SITE_URL}/empreendimentos`,                   lastModified: propertiesLatest || now, changeFrequency: 'weekly' as const, priority: 0.8 },
+        ...(empreendimentos.some(e => e.status === 'construcao')
+          ? [{ url: `${SITE_URL}/empreendimentos/em-construcao`,     lastModified: propertiesLatest || now, changeFrequency: 'weekly' as const, priority: 0.8 }]
+          : []),
+        ...(empreendimentos.some(e => e.status === 'pronto')
+          ? [{ url: `${SITE_URL}/empreendimentos/pronto-para-morar`, lastModified: propertiesLatest || now, changeFrequency: 'weekly' as const, priority: 0.8 }]
+          : []),
+      ]
       : []),
     ...empreendimentos.map(e => ({
       url: `${SITE_URL}/empreendimentos/${e.slug}`,
