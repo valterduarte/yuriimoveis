@@ -1,4 +1,5 @@
 import { fetchAllPropertySlugs, fetchDistinctBairros, fetchNavigationMatrix, fetchPriceBedroomMatrix, fetchAllBlogSlugs } from '../lib/api'
+import { listEmpreendimentos } from '../lib/empreendimento'
 import { imovelSlug, ogImageUrl } from '../utils/imovelUtils'
 import { BAIRROS } from '../data/bairros'
 import { getCategoriaBySlug } from '../data/categorias'
@@ -29,12 +30,13 @@ function pickLatest(current: Date | undefined, incoming: string | undefined): Da
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [properties, bairros, matrix, priceMatrix, blogSlugs] = await Promise.all([
+  const [properties, bairros, matrix, priceMatrix, blogSlugs, empreendimentos] = await Promise.all([
     fetchAllPropertySlugs(),
     fetchDistinctBairros(),
     fetchNavigationMatrix(),
     fetchPriceBedroomMatrix(),
     fetchAllBlogSlugs(),
+    listEmpreendimentos(),
   ])
 
   if (properties.length === 0 && bairros.length === 0 && matrix.length === 0) {
@@ -258,6 +260,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/guia`, lastModified: now },
     ...GUIA_SLUGS.map(slug => ({ url: `${SITE_URL}/guia/${slug}`, lastModified: now })),
     { url: `${SITE_URL}/bairros`, lastModified: propertiesLatest || now },
+    ...(empreendimentos.length > 0
+      ? [{ url: `${SITE_URL}/empreendimentos`, lastModified: propertiesLatest || now, changeFrequency: 'weekly' as const, priority: 0.8 }]
+      : []),
+    ...empreendimentos.map(e => ({
+      url: `${SITE_URL}/empreendimentos/${e.slug}`,
+      lastModified: propertiesLatest || now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    })),
     ...hierarchicalUrls,
     ...filterUrls,
     ...landingUrls,

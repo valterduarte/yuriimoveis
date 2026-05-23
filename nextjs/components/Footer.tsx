@@ -8,6 +8,7 @@ import { LANDING_PAGES } from '../data/landingPages'
 import { AJUDA_ARTIGOS, fullH1 } from '../data/ajudaArtigos'
 import { BAIRROS } from '../data/bairros'
 import { fetchNavigationMatrix } from '../lib/api'
+import { listEmpreendimentos } from '../lib/empreendimento'
 import { bairroDbNameToSlug } from '../lib/navigation'
 import WhatsAppLink from './WhatsAppLink'
 import Logo from './Logo'
@@ -37,7 +38,11 @@ async function getTopBairrosWithGuide(): Promise<{ slug: string; nome: string }[
 
 export default async function Footer() {
   const year = new Date().getFullYear()
-  const topBairros = await getTopBairrosWithGuide()
+  const [topBairros, empreendimentos] = await Promise.all([
+    getTopBairrosWithGuide(),
+    listEmpreendimentos(),
+  ])
+  const topEmpreendimentos = empreendimentos.slice(0, 5)
 
   return (
     <footer className="bg-dark text-gray-400">
@@ -134,6 +139,27 @@ export default async function Footer() {
                   <li>
                     <Link href="/bairros" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
                       Todos os bairros →
+                    </Link>
+                  </li>
+                </ul>
+              </>
+            )}
+
+            {topEmpreendimentos.length > 0 && (
+              <>
+                <h3 className={`${FOOTER_TITLE_CLASS} mt-8`}>Lançamentos</h3>
+                <ul className="space-y-3">
+                  {topEmpreendimentos.map(e => (
+                    <li key={e.slug}>
+                      <Link href={`/empreendimentos/${e.slug}`} className={FOOTER_LINK_CLASS}>
+                        {FOOTER_BULLET}
+                        {e.nome}
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
+                    <Link href="/empreendimentos" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
+                      Todos os lançamentos →
                     </Link>
                   </li>
                 </ul>
