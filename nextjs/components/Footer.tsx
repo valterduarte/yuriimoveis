@@ -147,7 +147,17 @@ export default async function Footer() {
 
             {topEmpreendimentos.length > 0 && (
               <>
-                <h3 className={`${FOOTER_TITLE_CLASS} mt-8`}>Lançamentos</h3>
+                <h3 className={`${FOOTER_TITLE_CLASS} mt-8 !mb-3 flex flex-wrap items-center gap-x-2 gap-y-1`}>
+                  <span>Lançamentos</span>
+                  <span aria-hidden="true" className="text-gray-600 font-normal">·</span>
+                  <Link href="/empreendimentos/em-construcao" className="text-gray-400 hover:text-primary font-normal normal-case tracking-normal transition-colors">
+                    Em construção
+                  </Link>
+                  <span aria-hidden="true" className="text-gray-600 font-normal">·</span>
+                  <Link href="/empreendimentos/pronto-para-morar" className="text-gray-400 hover:text-primary font-normal normal-case tracking-normal transition-colors">
+                    Pronto para morar
+                  </Link>
+                </h3>
                 <ul className="space-y-3">
                   {topEmpreendimentos.map(e => (
                     <li key={e.slug}>
