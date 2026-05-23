@@ -14,6 +14,7 @@ import {
   fetchNavigationMatrix,
 } from '../../../lib/api'
 import { imovelSlug, slugify, formatNeighborhoodName, buildSeoDescription, ogImageUrl } from '../../../utils/imovelUtils'
+import { detectEmpreendimento } from '../../../lib/empreendimento'
 import { BAIRROS, getBairroBySlug } from '../../../data/bairros'
 import { findLandingPage, LANDING_PAGES } from '../../../data/landingPages'
 import { PLACEHOLDER_IMAGE } from '../../../lib/constants'
@@ -170,7 +171,16 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
 
   if (!imovel) notFound()
 
-  const similarProperties = await fetchSimilarProperties(imovel)
+  const [similarProperties, empreendimento] = await Promise.all([
+    fetchSimilarProperties(imovel),
+    detectEmpreendimento({
+      id: imovel.id,
+      titulo: imovel.titulo,
+      endereco: imovel.endereco,
+      bairro: imovel.bairro,
+      cidade: imovel.cidade,
+    }),
+  ])
 
   const acao = tipoToAcao(imovel.tipo)
   const cidadeSlug = imovel.cidade ? cidadeNameToSlug(imovel.cidade) : ''
@@ -231,10 +241,31 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
     {
       '@context': 'https://schema.org',
       '@type': 'RealEstateListing',
+      '@id': `${SITE_URL}/imoveis/${imovelSlug(imovel)}#listing`,
       name: imovel.titulo,
       description: imovelDescription,
       image: images,
       url: `${SITE_URL}/imoveis/${imovelSlug(imovel)}`,
+      sku: empreendimento
+        ? `${slugify(empreendimento.nome)}-${imovel.id}`
+        : String(imovel.id),
+      ...(empreendimento
+        ? {
+          isPartOf: {
+            '@type': 'ApartmentComplex',
+            '@id': `${SITE_URL}/empreendimentos/${slugify(empreendimento.nome)}#complex`,
+            name: empreendimento.nome,
+            numberOfAccommodationUnits: empreendimento.totalUnidades,
+            address: {
+              '@type': 'PostalAddress',
+              streetAddress: imovel.endereco || undefined,
+              addressLocality: imovel.cidade || 'Osasco',
+              addressRegion: 'SP',
+              addressCountry: 'BR',
+            },
+          },
+        }
+        : {}),
       datePosted: imovel.created_at ? new Date(imovel.created_at).toISOString().split('T')[0] : undefined,
       dateModified: imovel.updated_at ? new Date(imovel.updated_at).toISOString().split('T')[0] : undefined,
       address: {
