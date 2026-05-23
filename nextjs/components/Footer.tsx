@@ -43,6 +43,8 @@ export default async function Footer() {
     listEmpreendimentos(),
   ])
   const topEmpreendimentos = empreendimentos.slice(0, 5)
+  const empreendimentosConstrucao = empreendimentos.filter(e => e.status === 'construcao').slice(0, 5)
+  const empreendimentosProntos = empreendimentos.filter(e => e.status === 'pronto').slice(0, 5)
 
   return (
     <footer className="bg-dark text-gray-400">
@@ -145,36 +147,6 @@ export default async function Footer() {
               </>
             )}
 
-            {topEmpreendimentos.length > 0 && (
-              <>
-                <h3 className={`${FOOTER_TITLE_CLASS} mt-8 !mb-3 flex flex-wrap items-center gap-x-2 gap-y-1`}>
-                  <span>Lançamentos</span>
-                  <span aria-hidden="true" className="text-gray-600 font-normal">·</span>
-                  <Link href="/empreendimentos/em-construcao" className="text-gray-400 hover:text-primary font-normal normal-case tracking-normal transition-colors">
-                    Em construção
-                  </Link>
-                  <span aria-hidden="true" className="text-gray-600 font-normal">·</span>
-                  <Link href="/empreendimentos/pronto-para-morar" className="text-gray-400 hover:text-primary font-normal normal-case tracking-normal transition-colors">
-                    Pronto para morar
-                  </Link>
-                </h3>
-                <ul className="space-y-3">
-                  {topEmpreendimentos.map(e => (
-                    <li key={e.slug}>
-                      <Link href={`/empreendimentos/${e.slug}`} className={FOOTER_LINK_CLASS}>
-                        {FOOTER_BULLET}
-                        {e.nome}
-                      </Link>
-                    </li>
-                  ))}
-                  <li>
-                    <Link href="/empreendimentos" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
-                      Todos os lançamentos →
-                    </Link>
-                  </li>
-                </ul>
-              </>
-            )}
           </nav>
 
           <nav aria-label="Ajuda e contato">
@@ -210,6 +182,71 @@ export default async function Footer() {
           </nav>
 
         </div>
+
+        {topEmpreendimentos.length > 0 && (
+          <div className="mt-12 pt-10 border-t border-gray-800/60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-8">
+            <nav aria-label="Lançamentos">
+              <h3 className={FOOTER_TITLE_CLASS}>Lançamentos</h3>
+              <ul className="space-y-3">
+                {topEmpreendimentos.map(e => (
+                  <li key={e.slug}>
+                    <Link href={`/empreendimentos/${e.slug}`} className={FOOTER_LINK_CLASS}>
+                      {FOOTER_BULLET}
+                      {e.nome}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <Link href="/empreendimentos" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
+                    Todos os lançamentos →
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+
+            {empreendimentosConstrucao.length > 0 && (
+              <nav aria-label="Empreendimentos em construção">
+                <h3 className={FOOTER_TITLE_CLASS}>Em construção</h3>
+                <ul className="space-y-3">
+                  {empreendimentosConstrucao.map(e => (
+                    <li key={e.slug}>
+                      <Link href={`/empreendimentos/${e.slug}`} className={FOOTER_LINK_CLASS}>
+                        {FOOTER_BULLET}
+                        {e.nome}
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
+                    <Link href="/empreendimentos/em-construcao" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
+                      Todos em construção →
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+            )}
+
+            {empreendimentosProntos.length > 0 && (
+              <nav aria-label="Empreendimentos prontos para morar">
+                <h3 className={FOOTER_TITLE_CLASS}>Pronto para morar</h3>
+                <ul className="space-y-3">
+                  {empreendimentosProntos.map(e => (
+                    <li key={e.slug}>
+                      <Link href={`/empreendimentos/${e.slug}`} className={FOOTER_LINK_CLASS}>
+                        {FOOTER_BULLET}
+                        {e.nome}
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
+                    <Link href="/empreendimentos/pronto-para-morar" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
+                      Todos prontos para morar →
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="border-t border-gray-800">
