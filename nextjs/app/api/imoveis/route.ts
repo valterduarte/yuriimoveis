@@ -8,11 +8,17 @@ import { parseSchema, requireUser, withErrorHandler } from '../../../lib/apiHand
 export const GET = withErrorHandler('GET /api/imoveis', async (request: NextRequest) => {
   const { searchParams } = new URL(request.url)
   const filters = Object.fromEntries(searchParams)
-  const result = await fetchProperties(filters)
 
-  return NextResponse.json(result, {
-    headers: { 'Cache-Control': 'public, max-age=60' },
-  })
+  if (filters.todos === 'true') {
+    const user = requireUser(request)
+    if (user instanceof NextResponse) return user
+  }
+
+  const result = await fetchProperties(filters)
+  const isAdmin = filters.todos === 'true'
+  const cacheControl = isAdmin ? 'private, no-store' : 'public, max-age=60'
+
+  return NextResponse.json(result, { headers: { 'Cache-Control': cacheControl } })
 })
 
 export const POST = withErrorHandler('POST /api/imoveis', async (request: NextRequest) => {

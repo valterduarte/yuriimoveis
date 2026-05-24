@@ -76,7 +76,8 @@ const fetchPropertiesByBairroCached = unstable_cache(
 const fetchPropertiesCached = unstable_cache(
   async (filters: PropertyFilters): Promise<PropertyListResult> => {
     const { tipo, categoria, cidade, bairro, precoMin, precoMax, quartos, amenity, codigo, destaque, todos, ordem = 'recente', page = 1, limit = 9 } = filters
-    const conditions: string[] = todos === true || todos === 'true' ? [] : ['ativo = true']
+    const isAdmin = todos === true || todos === 'true'
+    const conditions: string[] = isAdmin ? [] : ['ativo = true']
     const params: (string | number)[] = []
     let idx = 1
 
@@ -105,7 +106,8 @@ const fetchPropertiesCached = unstable_cache(
     const orderMap: Record<string, string> = { recente: 'created_at DESC', menor_preco: 'preco ASC', maior_preco: 'preco DESC', maior_area: 'area DESC' }
     const order = `ORDER BY destaque DESC, ${orderMap[ordem as string] || orderMap.recente}`
     const pageNum  = Math.max(1, Number(page))
-    const limitNum = Math.min(50, Math.max(1, Number(limit)))
+    const maxLimit = isAdmin ? 500 : 50
+    const limitNum = Math.min(maxLimit, Math.max(1, Number(limit)))
     const offset   = (pageNum - 1) * limitNum
 
     const dataResult = await getDb().query(

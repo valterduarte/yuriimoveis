@@ -37,10 +37,12 @@ export default function AdminPage() {
   const loadProperties = async () => {
     try {
       const data = await apiClient.get<{ imoveis?: Imovel[] }>(
-        `${API_URL}/api/imoveis?limit=${ADMIN_PROPERTIES_LIMIT}&ordem=recente&todos=true`
+        `${API_URL}/api/imoveis?limit=${ADMIN_PROPERTIES_LIMIT}&ordem=recente&todos=true`,
+        { headers: authHeader() }
       )
       setProperties(data.imoveis || [])
-    } catch {
+    } catch (err) {
+      if (isAuthError(err)) handleLogout()
       setProperties([])
     }
   }
