@@ -66,6 +66,17 @@ Content licensed under [RSL 1.0 — Responsible AI Use](https://rslstandard.org/
 - [Custos para comprar imóvel em Osasco](https://corretoryuri.com.br/ajuda/custos-para-comprar-imovel-em-osasco): ITBI 3% pela LC 227/2026, escritura, registro e tarifas (total 5–7%)
 - [Cartórios de imóveis em Osasco](https://corretoryuri.com.br/ajuda/cartorios-de-imoveis-em-osasco): endereços e telefones dos cartórios de registro e tabelionatos
 
+## Empreendimentos e lançamentos (hub /empreendimentos)
+
+- [Todos os empreendimentos](https://corretoryuri.com.br/empreendimentos): lançamentos, em construção e prontos para morar em Osasco, Barueri e Carapicuíba
+- [Em construção](https://corretoryuri.com.br/empreendimentos/em-construcao): obras em andamento com prazo de entrega previsto
+- [Pronto para morar](https://corretoryuri.com.br/empreendimentos/pronto-para-morar): unidades com habite-se e entrega imediata
+- [The Way Condomínio Clube](https://corretoryuri.com.br/empreendimentos/the-way-condominio-clube): lançamento em Osasco
+- [Beyond Residence Alphaville](https://corretoryuri.com.br/empreendimentos/beyond-residence-alphaville): alto padrão em Alphaville
+- [Hub 111](https://corretoryuri.com.br/empreendimentos/hub-111): lançamento na região
+- [Terra Alta Barueri](https://corretoryuri.com.br/empreendimentos/terra-alta-barueri): condomínio em Barueri
+- [Pop Osasco](https://corretoryuri.com.br/empreendimentos/pop-osasco): lançamento MCMV em Osasco
+
 ## Blog (análise editorial)
 
 - [Blog Corretor Yuri](https://corretoryuri.com.br/blog): mercado imobiliário, MCMV, ITBI, financiamento e bairros da Grande SP
