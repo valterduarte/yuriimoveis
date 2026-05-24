@@ -9,7 +9,7 @@ import { AJUDA_ARTIGOS, fullH1 } from '../data/ajudaArtigos'
 import { BAIRROS } from '../data/bairros'
 import { fetchNavigationMatrix } from '../lib/api'
 import { listEmpreendimentos } from '../lib/empreendimento'
-import { bairroDbNameToSlug } from '../lib/navigation'
+import { bairroDbNameToSlug, cidadeNameToSlug, cidadeSlugToName, buildHierarchicalUrl } from '../lib/navigation'
 import WhatsAppLink from './WhatsAppLink'
 import Logo from './Logo'
 
@@ -36,11 +36,26 @@ async function getTopBairrosWithGuide(): Promise<{ slug: string; nome: string }[
     .map(b => ({ slug: b.slug, nome: BAIRROS[b.slug].nome }))
 }
 
+async function getCidadesWithApartamento(): Promise<{ slug: string; nome: string; count: number }[]> {
+  const matrix = await fetchNavigationMatrix()
+  const counts = new Map<string, number>()
+  for (const row of matrix) {
+    if (row.tipo !== 'venda' || row.categoria !== 'apartamento') continue
+    const slug = cidadeNameToSlug(row.cidade)
+    if (!cidadeSlugToName(slug)) continue
+    counts.set(slug, (counts.get(slug) || 0) + row.count)
+  }
+  return Array.from(counts.entries())
+    .map(([slug, count]) => ({ slug, nome: cidadeSlugToName(slug)!, count }))
+    .sort((a, b) => b.count - a.count)
+}
+
 export default async function Footer() {
   const year = new Date().getFullYear()
-  const [topBairros, empreendimentos] = await Promise.all([
+  const [topBairros, empreendimentos, cidadesApartamento] = await Promise.all([
     getTopBairrosWithGuide(),
     listEmpreendimentos(),
+    getCidadesWithApartamento(),
   ])
   const topEmpreendimentos = empreendimentos.slice(0, 5)
   const empreendimentosConstrucao = empreendimentos.filter(e => e.status === 'construcao').slice(0, 5)
@@ -125,6 +140,25 @@ export default async function Footer() {
                 </Link>
               </li>
             </ul>
+
+            {cidadesApartamento.length > 0 && (
+              <>
+                <h3 className={`${FOOTER_TITLE_CLASS} mt-8`}>Apartamentos por cidade</h3>
+                <ul className="space-y-3">
+                  {cidadesApartamento.map(c => (
+                    <li key={c.slug}>
+                      <Link
+                        href={buildHierarchicalUrl({ acao: 'comprar', cidade: c.slug, categoria: 'apartamento' })}
+                        className={FOOTER_LINK_CLASS}
+                      >
+                        {FOOTER_BULLET}
+                        Apartamentos em {c.nome}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
 
             {topBairros.length > 0 && (
               <>

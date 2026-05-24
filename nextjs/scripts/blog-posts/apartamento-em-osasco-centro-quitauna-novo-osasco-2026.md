@@ -37,6 +37,8 @@ O **coração da cidade**, com maior densidade de comércio, serviços e ofertas
 - **Ponto forte:** mobilidade — qualquer lugar da cidade fica a até 15 min.
 - **Ponto fraco:** trânsito intenso, menos áreas verdes.
 
+Quem quer entrar nesse mercado pode [ver os apartamentos à venda no Centro de Osasco](/comprar/osasco/apartamento/centro) com filtros por preço e quartos.
+
 ### 2. Quitaúna
 
 O bairro **em maior crescimento em 2026**. A chegada de lançamentos MCMV e a proximidade do Parque Municipal Dionísio Álvaro Rosa fizeram o preço do m² saltar, mas ainda ficam entre os mais acessíveis da cidade.
@@ -73,6 +75,8 @@ Um dos bairros **mais valorizados da cidade**. Tem perfil de alto padrão, com c
 - **Ponto forte:** a região mais arborizada e arquitetonicamente uniforme de Osasco.
 - **Ponto fraco:** poucas opções abaixo de R$ 450 mil — inviabiliza primeira compra modesta.
 
+Para quem se encaixa nesse padrão, vale conhecer os [apartamentos à venda na Bela Vista](/comprar/osasco/apartamento/bela-vista), com listagens atualizadas diariamente.
+
 ### 5. Santa Maria
 
 Bairro **em transição** — mescla áreas residenciais consolidadas com lançamentos novos. Boa opção para quem quer valor intermediário com potencial de valorização.
@@ -84,6 +88,8 @@ Bairro **em transição** — mescla áreas residenciais consolidadas com lança
 - **Infraestrutura:** proximidade com o Shopping Plaza Osasco (na divisa), supermercados e agências bancárias.
 - **Ponto forte:** equilíbrio entre preço e localização.
 - **Ponto fraco:** ruas residenciais com pavimentação irregular em algumas áreas.
+
+É possível [ver os apartamentos à venda em Santa Maria](/comprar/osasco/apartamento/santa-maria) e comparar com os outros bairros listados acima.
 
 ## Comparativo rápido — mesmo orçamento, 5 bairros
 
@@ -155,6 +161,6 @@ Quitaúna continua sendo o mais promissor, especialmente com a ampliação do Pa
 
 ## Próximos passos
 
-Gostou de um bairro? **[Veja imóveis disponíveis em Osasco](/imoveis)** agora mesmo ou, se já tem um preço em mente, **[simule o financiamento](/simulador)** para saber a parcela real e os custos iniciais.
+Gostou de um bairro? **[Veja apartamentos à venda em Osasco](/comprar/osasco/apartamento)** com filtros por bairro, preço e número de dormitórios. Se já tem um preço em mente, **[simule o financiamento](/simulador)** para saber a parcela real e os custos iniciais.
 
 Se você se encaixa no MCMV, revise as [faixas atualizadas para 2026](/blog/minha-casa-minha-vida-2026-faixas-subsidio) — o teto aumentou e você pode ter subsídio que não tinha antes.

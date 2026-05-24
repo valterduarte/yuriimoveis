@@ -13,6 +13,7 @@ import {
   getCategoriaBySlug,
   buildHierarchicalUrl,
   ACAO_LABELS,
+  type AcaoSlug,
 } from '../../../../../../lib/navigation'
 import {
   getPriceRangeBySlug,
@@ -29,9 +30,10 @@ import {
   type AmenityFilter,
 } from '../../../../../../data/amenityFilters'
 import { SITE_URL } from '../../../../../../lib/config'
-import { SEO_MIN_PROPERTIES_FOR_FILTER } from '../../../../../../lib/constants'
-import { buildBreadcrumb, buildCollectionPage, buildPropertyProduct } from '../../../../../../lib/jsonLd'
+import { SEO_MIN_PROPERTIES_FOR_FILTER, ITBI_RATE_BY_CITY } from '../../../../../../lib/constants'
+import { buildBreadcrumb, buildCollectionPage, buildFaqPageSchema, buildPropertyProduct } from '../../../../../../lib/jsonLd'
 import { buildListingMetadata } from '../../../../../../lib/seo'
+import FaqAccordion from '../../../../../../components/FaqAccordion'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -41,6 +43,75 @@ type PageProps = {
 }
 
 type ParsedFilter = { price?: PriceRange; bedroom?: BedroomFilter; amenity?: AmenityFilter }
+
+interface FilterFaq {
+  q: string
+  a: string
+}
+
+function buildFilterFaqs(args: {
+  acao: AcaoSlug
+  cidadeName: string
+  categoriaData: { singular: string; plural: string }
+  label: string
+  filter: ParsedFilter
+  filterLabel: string
+  filterConnector: string
+  total: number
+}): FilterFaq[] {
+  const { acao, cidadeName, categoriaData, label, filter, filterLabel, filterConnector, total } = args
+  const pluralLc = categoriaData.plural.toLowerCase()
+  const labelLc = label.toLowerCase()
+  const filterPhraseLc = `${filterConnector}${filterLabel.toLowerCase()}`.trim()
+  const itbi = ITBI_RATE_BY_CITY[cidadeName]
+  const faqs: FilterFaq[] = []
+
+  faqs.push({
+    q: `Quantos ${pluralLc} ${labelLc} ${filterPhraseLc} há em ${cidadeName}?`,
+    a: total > 0
+      ? `Hoje temos ${total} ${pluralLc} ${labelLc} ${filterPhraseLc} em ${cidadeName}, SP. O estoque é atualizado diariamente; fale com o Corretor Yuri pelo WhatsApp para receber opções ainda não publicadas.`
+      : `O estoque muda diariamente. Fale com o Corretor Yuri pelo WhatsApp para receber novidades de ${pluralLc} ${labelLc} ${filterPhraseLc} em ${cidadeName} assim que aparecerem.`,
+  })
+
+  if (filter.price && acao === 'comprar') {
+    const maxValue = filter.price.max
+    if (maxValue && maxValue <= 600_000) {
+      faqs.push({
+        q: `Esses ${pluralLc} se enquadram no Minha Casa Minha Vida 2026?`,
+        a: `A faixa de preço ${filterLabel.toLowerCase()} fica dentro dos tetos do MCMV 2026 — Faixa 3 vai até R$ 400 mil e Faixa 4 até R$ 600 mil. Use o simulador do site para verificar elegibilidade, parcela e subsídio para cada imóvel.`,
+      })
+    }
+  }
+
+  if (filter.bedroom) {
+    faqs.push({
+      q: `Em quais bairros de ${cidadeName} há mais ${pluralLc} com ${filter.bedroom.label.toLowerCase()}?`,
+      a: `A distribuição por bairro varia conforme o estoque ativo. Use o filtro de bairro logo acima ou navegue pelos guias de bairro para refinar por combinação bairro + ${filter.bedroom.label.toLowerCase()}.`,
+    })
+  }
+
+  if (filter.amenity) {
+    faqs.push({
+      q: `O que conta como ${filter.amenity.label.toLowerCase()}?`,
+      a: `Marcamos como ${filter.amenity.label.toLowerCase()} qualquer ${categoriaData.singular.toLowerCase()} cujo anúncio descreve explicitamente esse diferencial entre as amenidades do condomínio ou da unidade.`,
+    })
+  }
+
+  if (acao === 'comprar') {
+    faqs.push({
+      q: 'Posso financiar pela Caixa ou pelo Minha Casa Minha Vida?',
+      a: 'Sim. Atendemos com SBPE da Caixa e Minha Casa Minha Vida para renda até R$ 13 mil. O simulador do site mostra parcela estimada e elegibilidade ao MCMV para cada imóvel.',
+    })
+    if (itbi) {
+      faqs.push({
+        q: `Quanto custa o ITBI ao comprar um imóvel em ${cidadeName}?`,
+        a: `A alíquota de ITBI em ${cidadeName} é de ${itbi} sobre o valor de compra (ou o valor venal, o que for maior). Confira o guia completo de ITBI no blog.`,
+      })
+    }
+  }
+
+  return faqs
+}
 
 function parseFilter(filtro: string, tipo: 'venda' | 'aluguel'): ParsedFilter | null {
   const priceRange = getPriceRangeBySlug(filtro, tipo)
@@ -182,6 +253,17 @@ export default async function CategoryFilterPage({ params }: PageProps) {
   const relatedFilters = filter.price ? BEDROOM_FILTERS : getAllPriceRanges(tipo)
   const relatedSectionTitle = filter.price ? 'Filtrar por quartos' : 'Filtrar por preço'
 
+  const faqs = buildFilterFaqs({
+    acao,
+    cidadeName,
+    categoriaData,
+    label,
+    filter,
+    filterLabel,
+    filterConnector,
+    total,
+  })
+
   const jsonLd = [
     buildBreadcrumb([
       { name: 'Início', path: '/' },
@@ -196,6 +278,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
       description: `${categoriaData.plural} ${label.toLowerCase()} ${filterConnector}${filterLabel} em ${cidadeName}, SP.`,
       items: imoveis.map(buildPropertyProduct),
     }),
+    buildFaqPageSchema(faqs.map(f => ({ question: f.q, answer: f.a }))),
   ]
 
   const breadcrumb: BreadcrumbItem[] = [
@@ -259,6 +342,8 @@ export default async function CategoryFilterPage({ params }: PageProps) {
           ))}
         </FilterChipList>
       </section>
+
+      <FaqAccordion faqs={faqs} />
       </div>
     </ListingPageShell>
   )

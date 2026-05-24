@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
 import ImoveisResults, { ImoveisResultsFallback } from '../../components/imoveis/ImoveisResults'
+import { FilterChip, FilterChipList } from '../../components/FilterChip'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import { buildBreadcrumb } from '../../lib/jsonLd'
+import { buildHierarchicalUrl, getAllCidadeSlugs, cidadeSlugToName } from '../../lib/navigation'
 import type { Metadata } from 'next'
 
 export const revalidate = 60
@@ -38,7 +40,15 @@ const breadcrumbJsonLd = buildBreadcrumb([
   { name: 'Imóveis', path: '/imoveis' },
 ])
 
+const POPULAR_SEARCH_CATEGORIES = ['apartamento', 'casa'] as const
+const POPULAR_SEARCH_LABELS: Record<typeof POPULAR_SEARCH_CATEGORIES[number], string> = {
+  apartamento: 'Apartamentos',
+  casa: 'Casas',
+}
+
 export default function ImoveisPage({ searchParams }: { searchParams: Promise<Record<string, string>> }) {
+  const cidadeSlugs = getAllCidadeSlugs()
+
   return (
     <div className="min-h-screen bg-gray-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
@@ -61,6 +71,25 @@ export default function ImoveisPage({ searchParams }: { searchParams: Promise<Re
         </div>
       </div>
       <div className="container mx-auto px-6 py-10">
+        <section className="mb-10" aria-labelledby="popular-searches">
+          <h2 id="popular-searches" className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Buscas mais procuradas</h2>
+          {POPULAR_SEARCH_CATEGORIES.map(categoria => (
+            <div key={categoria} className="mb-4 last:mb-0">
+              <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">{POPULAR_SEARCH_LABELS[categoria]} à venda</p>
+              <FilterChipList>
+                {cidadeSlugs.map(cidade => {
+                  const cidadeName = cidadeSlugToName(cidade)
+                  if (!cidadeName) return null
+                  return (
+                    <FilterChip key={`${categoria}-${cidade}`} href={buildHierarchicalUrl({ acao: 'comprar', cidade, categoria })}>
+                      {POPULAR_SEARCH_LABELS[categoria]} em {cidadeName}
+                    </FilterChip>
+                  )
+                })}
+              </FilterChipList>
+            </div>
+          ))}
+        </section>
         <Suspense fallback={<ImoveisResultsFallback />}>
           <ImoveisResults searchParams={searchParams} />
         </Suspense>
