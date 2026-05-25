@@ -47,7 +47,7 @@ Osasco aplica alíquota **única de 3%** sobre o maior valor entre:
 
 Não há desconto especial para financiamento, MCMV ou FGTS — o comprador paga 3% sobre o maior dos dois valores.
 
-**Exemplo prático — apartamento de R$ 400 mil no Centro de Osasco:**
+**Exemplo prático — apartamento de R$ 400 mil no [Centro de Osasco](/bairros/centro):**
 
 - Valor de transação: R$ 400.000
 - Valor venal de referência da prefeitura: R$ 380.000
@@ -63,7 +63,7 @@ Barueri tem **duas alíquotas diferentes** aplicadas simultaneamente sempre que 
 - **5%** sobre os recursos próprios (inclui FGTS sacado, entrada, poupança)
 - **1%** sobre o valor efetivamente financiado pelo banco
 
-**Exemplo prático — apartamento de R$ 600 mil em Alphaville com 20% de entrada:**
+**Exemplo prático — apartamento de R$ 600 mil em [Alphaville](/bairros/alphaville) com 20% de entrada:**
 
 - Entrada: R$ 120.000 (recursos próprios) × 5% = R$ 6.000
 - Financiado: R$ 480.000 × 1% = R$ 4.800
@@ -81,7 +81,7 @@ Carapicuíba segue a **Lei Municipal 2968/2009** e aplica:
 - **1%** sobre o valor efetivamente financiado
 - **2,5%** sobre o valor total, nas demais transmissões (compra à vista, permuta, etc.)
 
-**Exemplo prático — apartamento de R$ 300 mil em Jardim das Belezas com 20% de entrada:**
+**Exemplo prático — apartamento de R$ 300 mil em [Jardim das Belezas](/bairros/jardim-das-belezas) com 20% de entrada:**
 
 - Entrada: R$ 60.000 × 2% = R$ 1.200
 - Financiado: R$ 240.000 × 1% = R$ 2.400

@@ -49,7 +49,7 @@ O valor máximo do imóvel financiado pelo MCMV em 2026 é:
 
 <small>*Em algumas capitais e regiões metropolitanas, como São Paulo, o teto para Faixas 1 e 2 pode chegar a R$ 350 mil.</small>
 
-Na prática, o aumento do teto nas Faixas 3 e 4 abre o MCMV para imóveis de dois ou três dormitórios em regiões mais valorizadas, como Centro de Osasco, Alphaville (para Faixa 4) e bairros da Zona Oeste de São Paulo.
+Na prática, o aumento do teto nas Faixas 3 e 4 abre o MCMV para imóveis de dois ou três dormitórios em regiões mais valorizadas, como [Centro de Osasco](/bairros/centro), [Alphaville](/bairros/alphaville) (para Faixa 4) e bairros da Zona Oeste de São Paulo.
 
 ## Subsídio do MCMV: quem recebe e quanto
 
@@ -105,7 +105,7 @@ O prazo médio entre a análise inicial e a assinatura do contrato é de **30 a 
 
 A região oeste da Grande São Paulo tem ampla oferta de imóveis compatíveis com o MCMV:
 
-- **Osasco:** bairros como Quitaúna, Bela Vista e Novo Osasco têm imóveis novos e usados de 2 dormitórios dentro do teto da Faixa 3 (R$ 400 mil).
+- **Osasco:** bairros como Quitaúna, [Bela Vista](/bairros/bela-vista) e Novo Osasco têm imóveis novos e usados de 2 dormitórios dentro do teto da Faixa 3 (R$ 400 mil).
 - **Carapicuíba:** preços entre R$ 190 mil e R$ 350 mil atendem bem Faixas 2 e 3. É a cidade com melhor custo-benefício da região metropolitana oeste.
 - **Barueri:** fora de Alphaville, bairros como Jardim Belval, Vale do Sol e Jardim São Pedro ficam dentro do teto de Faixa 3 e 4.
 
