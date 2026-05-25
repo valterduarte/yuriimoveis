@@ -62,6 +62,7 @@ export function formatNeighborhoodName(slug: string): string {
 const FEMININE_BAIRRO_FIRST_WORDS = new Set([
   'vila', 'aldeia', 'praia', 'rua', 'avenida', 'travessa', 'alameda', 'cruz',
   'conceição', 'conceicao', 'padroeira', 'bela', 'santa', 'chácara', 'chacara',
+  'cidade',
 ])
 
 function isFeminineBairroName(nome: string): boolean {
