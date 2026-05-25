@@ -177,7 +177,6 @@ const listEmpreendimentosCached = unstable_cache(
         AND bairro IS NOT NULL AND bairro != ''
         AND cidade IS NOT NULL AND cidade != ''
       GROUP BY endereco, bairro, cidade
-      HAVING COUNT(*) >= 2
     `)
 
     const empreendimentos: EmpreendimentoSummary[] = []

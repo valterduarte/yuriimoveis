@@ -6,6 +6,10 @@ const BAIRRO_SLUG_REDIRECTS = {
   'jd-roberto': 'jardim-roberto',
 }
 
+const EMPREENDIMENTO_SLUG_REDIRECTS = {
+  'vila-do-conde': 'vila-do-conde-viva-rsf',
+}
+
 export const LEGACY_LANDING_REDIRECTS = {
   'casas-a-venda-em-osasco':             '/comprar/osasco/casa',
   'apartamentos-a-venda-em-osasco':      '/comprar/osasco/apartamento',
@@ -31,6 +35,16 @@ export function middleware(request) {
     if (bairroTarget) {
       const url = request.nextUrl.clone()
       url.pathname = `/imoveis/${bairroTarget}`
+      return NextResponse.redirect(url, 301)
+    }
+  }
+
+  const empreendimentoMatch = pathname.match(/^\/empreendimentos\/([^/]+)$/)
+  if (empreendimentoMatch) {
+    const empreendimentoTarget = EMPREENDIMENTO_SLUG_REDIRECTS[empreendimentoMatch[1]]
+    if (empreendimentoTarget) {
+      const url = request.nextUrl.clone()
+      url.pathname = `/empreendimentos/${empreendimentoTarget}`
       return NextResponse.redirect(url, 301)
     }
   }

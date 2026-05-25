@@ -203,10 +203,12 @@ async function ImovelDetalhePage({ slug }: { slug: string }) {
   const bairroHasOwnPage = bairroInventoryForCategory >= 3 || (bairroInventoryForCategory >= 1 && hasGuide)
 
   const exploreLinks: { href: string; label: string }[] = []
-  if (empreendimento && empreendimento.totalUnidades >= 2) {
+  if (empreendimento) {
     exploreLinks.push({
       href: `/empreendimentos/${slugify(empreendimento.nome)}`,
-      label: `Ver todas as ${empreendimento.totalUnidades} plantas do ${empreendimento.nome}`,
+      label: empreendimento.totalUnidades >= 2
+        ? `Ver todas as ${empreendimento.totalUnidades} plantas do ${empreendimento.nome}`
+        : `Ver detalhes do empreendimento ${empreendimento.nome}`,
     })
   }
   if (hasGuide) {
