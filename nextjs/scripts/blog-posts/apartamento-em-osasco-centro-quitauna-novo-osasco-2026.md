@@ -37,7 +37,7 @@ O **coração da cidade**, com maior densidade de comércio, serviços e ofertas
 - **Ponto forte:** mobilidade — qualquer lugar da cidade fica a até 15 min.
 - **Ponto fraco:** trânsito intenso, menos áreas verdes.
 
-Quem quer entrar nesse mercado pode [ver os apartamentos à venda no Centro de Osasco](/comprar/osasco/apartamento/centro) com filtros por preço e quartos.
+Pra entender o perfil do bairro com profundidade antes de filtrar imóveis, vale ler o [guia completo de Centro de Osasco](/bairros/centro) — infraestrutura, transporte, perfil do morador e por que vale a pena (ou não) morar lá. Depois disso, [ver os apartamentos à venda no Centro de Osasco](/comprar/osasco/apartamento/centro) com filtros por preço e quartos fica direto ao ponto.
 
 ### 2. Quitaúna
 
@@ -75,7 +75,7 @@ Um dos bairros **mais valorizados da cidade**. Tem perfil de alto padrão, com c
 - **Ponto forte:** a região mais arborizada e arquitetonicamente uniforme de Osasco.
 - **Ponto fraco:** poucas opções abaixo de R$ 450 mil — inviabiliza primeira compra modesta.
 
-Para quem se encaixa nesse padrão, vale conhecer os [apartamentos à venda na Bela Vista](/comprar/osasco/apartamento/bela-vista), com listagens atualizadas diariamente.
+Pra quem se encaixa nesse padrão, vale começar pelo [guia da Bela Vista](/bairros/bela-vista) — escolas particulares, hospitais, padrão arquitetônico e perfil das famílias da região. E pra ver listagens prontas, acesse os [apartamentos à venda na Bela Vista](/comprar/osasco/apartamento/bela-vista), atualizadas diariamente.
 
 ### 5. Santa Maria
 
@@ -89,7 +89,7 @@ Bairro **em transição** — mescla áreas residenciais consolidadas com lança
 - **Ponto forte:** equilíbrio entre preço e localização.
 - **Ponto fraco:** ruas residenciais com pavimentação irregular em algumas áreas.
 
-É possível [ver os apartamentos à venda em Santa Maria](/comprar/osasco/apartamento/santa-maria) e comparar com os outros bairros listados acima.
+No [guia de Santa Maria](/bairros/santa-maria) você vê o que faz o equilíbrio funcionar: ruas residenciais, proximidade com Plaza Osasco, escolas e o ritmo do bairro em transição. Pra ver imóveis, [apartamentos à venda em Santa Maria](/comprar/osasco/apartamento/santa-maria) — dá pra comparar com os outros bairros listados acima.
 
 ## Comparativo rápido — mesmo orçamento, 5 bairros
 
