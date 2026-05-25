@@ -1,21 +1,4 @@
 # Indexing queue — URLs awaiting submission to Google Indexing API
 # Format: one URL per line. Lines starting with # are ignored.
-# Add URLs here to schedule them for next workflow run.
-# After successful submission, this file is reset automatically.
+# Failed URLs from last run (if any) are retained for retry.
 
-# Empreendimentos novos/renomeados (commit 24d360f, 2026-05-25)
-https://corretoryuri.com.br/empreendimentos/vila-do-conde-viva-rsf
-https://corretoryuri.com.br/empreendimentos/look-condominio-clube
-https://corretoryuri.com.br/empreendimentos/ocean-park-condominio-clube
-https://corretoryuri.com.br/empreendimentos/play-condominio-clube
-https://corretoryuri.com.br/empreendimentos/orla-condominio-praia-torre-a
-https://corretoryuri.com.br/empreendimentos/bless-rsf-jardim-esperanca
-https://corretoryuri.com.br/empreendimentos/bless-rsf-parque-barueri
-https://corretoryuri.com.br/empreendimentos/bless-rsf-shopping-barueri
-https://corretoryuri.com.br/empreendimentos/azzure-resort-life
-https://corretoryuri.com.br/empreendimentos/manaca-barueri
-https://corretoryuri.com.br/empreendimentos/raro-centro
-https://corretoryuri.com.br/empreendimentos/raro-vila-isabel
-https://corretoryuri.com.br/empreendimentos/residencial-specialle-barueri
-https://corretoryuri.com.br/empreendimentos/reserva-urano
-https://corretoryuri.com.br/empreendimentos/california
