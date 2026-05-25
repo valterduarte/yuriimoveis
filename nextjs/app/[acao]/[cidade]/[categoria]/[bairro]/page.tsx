@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
 import { fetchProperties, fetchNavigationMatrix } from '../../../../../lib/api'
@@ -209,7 +209,9 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
     limit: 50,
   })
 
-  if (!threshold(total, bairro)) notFound()
+  if (!threshold(total, bairro)) {
+    permanentRedirect(buildHierarchicalUrl({ acao, cidade, categoria }))
+  }
 
   const label = ACAO_LABELS[acao].preposicao
   const nomeImovel = total === 1 ? categoriaData.singular : categoriaData.plural

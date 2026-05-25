@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import { FiMapPin, FiHome, FiBookOpen, FiTruck, FiArrowRight } from 'react-icons/fi'
 import PropertyCard from '../../../components/PropertyCard'
@@ -91,7 +91,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
   const bairroDbName = bairroSlugToDbName(slug)
 
   const combos = await getCombosForBairro(slug, cidadeName)
-  if (combos.length === 0) notFound()
+  if (combos.length === 0) permanentRedirect('/bairros')
 
   const totalImoveis = combos.reduce((acc, c) => acc + c.count, 0)
   const totalLabel = pluralizeImoveis(totalImoveis)

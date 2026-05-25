@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
 import { fetchProperties, fetchPriceBedroomMatrix } from '../../../../../../lib/api'
@@ -244,7 +244,9 @@ export default async function CategoryFilterPage({ params }: PageProps) {
     limit: 50,
   })
 
-  if (total === 0) notFound()
+  if (total === 0) {
+    permanentRedirect(buildHierarchicalUrl({ acao, cidade, categoria }))
+  }
 
   const h1 = `${categoriaData.plural} ${label} ${filterConnector}${filterLabel} em ${cidadeName}`
   const canonicalUrl = `${SITE_URL}${buildCategoryFilterUrl(acao, cidade, categoria, filtro)}`

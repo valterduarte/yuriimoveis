@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft } from 'react-icons/fi'
 import { fetchProperties, fetchPriceBedroomMatrix } from '../../../../../../../lib/api'
@@ -179,7 +179,14 @@ export default async function BairroFilterPage({ params }: PageProps) {
 
   const { imoveis, total } = await fetchProperties(buildFetchFilters(ctx))
 
-  if (total === 0) notFound()
+  if (total === 0) {
+    permanentRedirect(buildHierarchicalUrl({
+      acao: ctx.acao,
+      cidade: raw.cidade,
+      categoria: raw.categoria,
+      bairro: raw.bairro,
+    }))
+  }
 
   const label = ACAO_LABELS[ctx.acao].preposicao
   const h1 = `${ctx.categoriaData.plural} ${label} ${ctx.filter.fragment} no ${ctx.bairroName}, ${ctx.cidadeName}`
