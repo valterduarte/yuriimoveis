@@ -14,6 +14,7 @@
     "knip": "knip",
     "seed:blog": "tsx scripts/seed-blog.ts",
     "submit:indexing": "tsx scripts/submit-indexing.ts",
+    "submit:indexing:queue": "tsx scripts/submit-indexing.ts --queue",
     "gsc:token": "tsx scripts/verify-gsc-ownership.ts token",
     "gsc:verify": "tsx scripts/verify-gsc-ownership.ts verify",
     "prepare": "cd .. && git config core.hooksPath nextjs/.husky || true"

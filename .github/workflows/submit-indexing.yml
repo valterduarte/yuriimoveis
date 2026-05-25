@@ -1,0 +1,64 @@
+name: Submit URLs to Google Indexing API
+
+on:
+  schedule:
+    # Daily at 12:00 UTC (09:00 BRT) — quota resets at 00:00 PT
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: submit-indexing
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    name: Submit queued URLs
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: nextjs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check queue has URLs
+        id: queue
+        run: |
+          QUEUE_FILE="scripts/indexing-queue.txt"
+          PENDING=$(grep -cE '^https?://' "$QUEUE_FILE" || true)
+          echo "pending=$PENDING" >> "$GITHUB_OUTPUT"
+          echo "Queue has $PENDING URL(s) pending."
+
+      - name: Setup Node
+        if: steps.queue.outputs.pending != '0'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: nextjs/package-lock.json
+
+      - name: Install dependencies
+        if: steps.queue.outputs.pending != '0'
+        run: npm ci
+
+      - name: Submit URLs to Indexing API
+        if: steps.queue.outputs.pending != '0'
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: npm run submit:indexing:queue
+
+      - name: Commit queue reset and archive
+        if: steps.queue.outputs.pending != '0'
+        run: |
+          if [ -n "$(git status --porcelain scripts/indexing-queue.txt scripts/indexing-submitted/)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add scripts/indexing-queue.txt scripts/indexing-submitted/
+            git commit -m "chore(indexing): submit queued URLs and archive results"
+            git push
+          fi
