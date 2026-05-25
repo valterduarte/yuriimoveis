@@ -1,4 +1,4 @@
-import { notFound, permanentRedirect } from 'next/navigation'
+import { permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import { FiMapPin, FiHome, FiBookOpen, FiTruck, FiArrowRight } from 'react-icons/fi'
 import PropertyCard from '../../../components/PropertyCard'
@@ -84,7 +84,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function BairroGuidePage({ params }: PageProps) {
   const { slug } = await params
   const bairro = getBairroBySlug(slug)
-  if (!bairro) notFound()
+  if (!bairro) permanentRedirect('/bairros')
 
   const cidadeName = inferCidadeFromBairro(bairro)
   const cidadeSlug = cidadeNameToSlug(cidadeName)
