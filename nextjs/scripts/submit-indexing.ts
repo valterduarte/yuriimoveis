@@ -113,7 +113,7 @@ function parseArgs(argv: string[]): { queuePath: string | null; cliUrls: string[
 async function archiveSubmittedQueue(queuePath: string, results: SubmitResult[]): Promise<void> {
   await mkdir(ARCHIVE_DIR, { recursive: true })
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
-  const archivePath = join(ARCHIVE_DIR, `${timestamp}.log`)
+  const archivePath = join(ARCHIVE_DIR, `${timestamp}.txt`)
   const summary = results
     .map(r => `${r.status === 'ok' ? '✓' : '✗'} ${r.url}${r.detail ? ' — ' + r.detail : ''}`)
     .join('\n')
