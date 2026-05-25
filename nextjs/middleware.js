@@ -6,7 +6,7 @@ const BAIRRO_SLUG_REDIRECTS = {
   'jd-roberto': 'jardim-roberto',
 }
 
-const LEGACY_LANDING_REDIRECTS = {
+export const LEGACY_LANDING_REDIRECTS = {
   'casas-a-venda-em-osasco':             '/comprar/osasco/casa',
   'apartamentos-a-venda-em-osasco':      '/comprar/osasco/apartamento',
   'terrenos-a-venda-em-osasco':          '/comprar/osasco/terreno',

@@ -18,6 +18,7 @@ import {
 } from '../lib/navigation'
 import { SITE_URL } from '../lib/config'
 import { SEO_MIN_PROPERTIES_FOR_INDEXING, SEO_MIN_PROPERTIES_FOR_FILTER } from '../lib/constants'
+import { LEGACY_LANDING_REDIRECTS } from '../middleware'
 import type { MetadataRoute } from 'next'
 
 export const revalidate = 3600
@@ -95,6 +96,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const landingUrls: MetadataRoute.Sitemap = LANDING_PAGES
+    .filter(lp => !(lp.slug in LEGACY_LANDING_REDIRECTS))
     .filter(lp => (landingCountByTipoCategoria.get(`${lp.tipo}|${lp.categoria}`) ?? 0) >= MIN_PROPERTIES_FOR_INDEXING)
     .map(lp => ({
       url: `${SITE_URL}/imoveis/${lp.slug}`,
@@ -218,9 +220,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   }
 
-  const activeBairroDbNames = new Set(matrix.map(r => r.bairro))
+  const activeBairroKeys = new Set(matrix.map(r => `${r.cidade}|${r.bairro}`))
   const bairroGuideUrls: MetadataRoute.Sitemap = Object.values(BAIRROS)
-    .filter(b => activeBairroDbNames.has(b.dbMatch || b.nome))
+    .filter(b => activeBairroKeys.has(`${b.cidade}|${b.dbMatch || b.nome}`))
     .map(b => ({
       url: `${SITE_URL}/bairros/${b.slug}`,
       lastModified: (b.dbMatch && bairroLastModByDbName.get(b.dbMatch)) || now,
