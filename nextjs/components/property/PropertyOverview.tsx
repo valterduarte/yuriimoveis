@@ -2,7 +2,7 @@ import { FiMaximize, FiCheckCircle, FiHome, FiTool, FiFileText, FiClock } from '
 import { FaCar, FaBath } from 'react-icons/fa'
 import { LuBed } from 'react-icons/lu'
 import { PROPERTY_STATUSES } from '../../lib/constants'
-import { formatListingAge } from '../../utils/imovelUtils'
+import { formatListingAge, buildPropertyNarrative } from '../../utils/imovelUtils'
 import type { Imovel, PropertyStatus } from '../../types'
 import type { IconType } from 'react-icons'
 
@@ -79,9 +79,14 @@ export default function PropertyOverview({ imovel }: PropertyOverviewProps) {
         )}
       </div>
 
-      {imovel.descricao && (
+      <div className="bg-white border border-gray-200 p-8 mb-6">
+        <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-dark mb-4">Sobre este imóvel</h3>
+        <p className="text-gray-600 text-sm leading-relaxed">{buildPropertyNarrative(imovel)}</p>
+      </div>
+
+      {imovel.descricao && imovel.descricao.trim().length > 60 && (
         <div className="bg-white border border-gray-200 p-8 mb-6">
-          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-dark mb-4">Descrição</h3>
+          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-dark mb-4">Descrição completa</h3>
           <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{imovel.descricao}</p>
         </div>
       )}

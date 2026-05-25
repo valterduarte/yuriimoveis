@@ -13,7 +13,9 @@ import {
   pluralizeImoveis,
   optimizeCloudinaryUrl,
   ogImageUrl,
+  buildPropertyNarrative,
 } from './imovelUtils'
+import type { Imovel } from '../types'
 
 // Intl.NumberFormat in pt-BR uses a non-breaking space (U+00A0) between
 // the BRL symbol and the digits. Normalising it to a regular space keeps
@@ -144,5 +146,37 @@ describe('ogImageUrl', () => {
 
   it('leaves non-Cloudinary URLs untouched', () => {
     expect(ogImageUrl('https://example.com/x.jpg')).toBe('https://example.com/x.jpg')
+  })
+})
+
+describe('buildPropertyNarrative', () => {
+  const baseImovel: Imovel = {
+    id: 1, titulo: 'Test', descricao: '', descricao_seo: '',
+    tipo: 'venda', categoria: 'apartamento', preco: 0, area: 0,
+    quartos: 0, banheiros: 0, vagas: 0,
+    endereco: '', bairro: '', cidade: '', cep: '',
+    status: 'pronto', destaque: false, ativo: true,
+    imagens: [], diferenciais: [],
+    parcela_display: '', parcela_label: '',
+    created_at: '', updated_at: '',
+  }
+
+  it('joins category, dorms, action and location with feminine bairro article', () => {
+    const imovel = { ...baseImovel, quartos: 2, bairro: 'Vila Yara', cidade: 'Osasco' }
+    const narrative = buildPropertyNarrative(imovel)
+    expect(narrative).toContain('Apartamento de 2 dormitórios à venda na Vila Yara, Osasco.')
+  })
+
+  it('lists specs and diferenciais in natural Portuguese with proper conjunctions', () => {
+    const imovel = {
+      ...baseImovel,
+      quartos: 3, area: 64, banheiros: 2, vagas: 1,
+      bairro: 'Cidade de Deus', cidade: 'Osasco',
+      diferenciais: ['piscina', 'academia', 'área gourmet'],
+    }
+    const narrative = buildPropertyNarrative(imovel)
+    expect(narrative).toContain('Conta com 64 m² de área, 2 banheiros e 1 vaga de garagem.')
+    expect(narrative).toContain('Entre os diferenciais do empreendimento estão piscina, academia e área gourmet.')
+    expect(narrative).toContain('O imóvel está pronto para entrega imediata.')
   })
 })

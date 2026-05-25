@@ -119,6 +119,61 @@ export function formatListingAge(createdAt: string | null | undefined): string |
   return 'Anunciado há mais de 1 ano'
 }
 
+const CATEGORIA_SINGULAR: Record<string, string> = {
+  apartamento: 'Apartamento',
+  casa:        'Casa',
+  terreno:     'Terreno',
+  chale:       'Chalé',
+  comercial:   'Imóvel comercial',
+  chacara:     'Chácara',
+}
+
+const STATUS_NARRATIVE: Record<string, string> = {
+  pronto:     'O imóvel está pronto para entrega imediata.',
+  construcao: 'O empreendimento ainda está em fase de construção.',
+  planta:     'O empreendimento está disponível na planta para reserva.',
+}
+
+function joinNatural(parts: string[]): string {
+  if (parts.length === 0) return ''
+  if (parts.length === 1) return parts[0]
+  if (parts.length === 2) return `${parts[0]} e ${parts[1]}`
+  return `${parts.slice(0, -1).join(', ')} e ${parts[parts.length - 1]}`
+}
+
+export function buildPropertyNarrative(imovel: Imovel): string {
+  const categoria = CATEGORIA_SINGULAR[imovel.categoria] || 'Imóvel'
+  const acao = imovel.tipo === 'aluguel' ? 'para alugar' : 'à venda'
+  const prep = imovel.bairro ? emBairro(imovel.bairro) : 'em'
+  const sentences: string[] = []
+
+  const dorms = imovel.quartos > 0
+    ? `de ${imovel.quartos} dormitório${imovel.quartos > 1 ? 's' : ''} `
+    : ''
+  const locale = imovel.bairro && imovel.cidade
+    ? `${prep} ${imovel.bairro}, ${imovel.cidade}`
+    : imovel.cidade
+      ? `em ${imovel.cidade}`
+      : ''
+  sentences.push(`${categoria} ${dorms}${acao}${locale ? ' ' + locale : ''}.`.replace(/\s+/g, ' '))
+
+  const specs: string[] = []
+  if (imovel.area > 0)      specs.push(`${imovel.area} m² de área`)
+  if (imovel.banheiros > 0) specs.push(`${imovel.banheiros} banheiro${imovel.banheiros > 1 ? 's' : ''}`)
+  if (imovel.vagas > 0)     specs.push(`${imovel.vagas} vaga${imovel.vagas > 1 ? 's' : ''} de garagem`)
+  if (specs.length > 0) sentences.push(`Conta com ${joinNatural(specs)}.`)
+
+  const statusSentence = imovel.status ? STATUS_NARRATIVE[imovel.status] : undefined
+  if (statusSentence) sentences.push(statusSentence)
+
+  const diferenciais = (imovel.diferenciais || []).slice(0, 5).map(d => d.toLowerCase())
+  if (diferenciais.length > 0) {
+    sentences.push(`Entre os diferenciais do empreendimento estão ${joinNatural(diferenciais)}.`)
+  }
+
+  return sentences.join(' ')
+}
+
 export function ogImageUrl(url: string): string {
   if (!url || !url.includes('res.cloudinary.com')) return url
   return url.replace('/upload/', '/upload/f_jpg,q_80,w_1200,h_630,c_fill/')
