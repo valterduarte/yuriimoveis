@@ -2,8 +2,8 @@
 titulo: "ITBI em Osasco, Barueri, Carapicuíba e São Paulo: quanto custa e como calcular em 2026"
 slug: "itbi-osasco-barueri-carapicuiba-sao-paulo-2026"
 resumo: "Cada cidade da região metropolitana oeste cobra ITBI de um jeito diferente. Osasco 3%, Barueri 5% e 1%, Carapicuíba 2% e 1%, e São Paulo 3% ou 0,5% no SFH. Veja a tabela completa com exemplos numéricos."
-meta_titulo: "ITBI 2026: Osasco, Barueri, Carapicuíba e São Paulo comparados"
-meta_descricao: "Alíquotas, fórmulas e exemplos reais de ITBI em Osasco, Barueri, Carapicuíba e São Paulo. Entenda quanto vai pagar antes de assinar o contrato."
+meta_titulo: "ITBI Osasco 2026: alíquota 3%, calculadora e exemplos"
+meta_descricao: "ITBI em Osasco é 3% sobre o maior valor entre transação e venal. Calcule quanto vai pagar e compare com Barueri (5%), Carapicuíba (2%) e São Paulo (3%)."
 imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1776481396/blog/itbi-osasco-barueri-carapicuiba-sao-paulo-2026.jpg"
 tags: ["ITBI", "Osasco", "Barueri", "Carapicuíba", "Impostos"]
 publicado: true
@@ -34,7 +34,9 @@ O responsável pelo pagamento é o **comprador** — ele precisa quitar o impost
 | **Carapicuíba** | 2,5% (demais) | 2% próprio + 1% financiado |
 | **São Paulo (capital)** | 3% | 0,5% financiado no SFH + 3% no excedente |
 
-Abaixo, cada cidade em detalhe com exemplos reais.
+Abaixo, cada cidade em detalhe com exemplos reais. Para já ter um número aproximado antes de seguir lendo, use a calculadora abaixo:
+
+<!-- itbi-calc -->
 
 ## ITBI em Osasco
 
