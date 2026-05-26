@@ -2,6 +2,3 @@
 # Format: one URL per line. Lines starting with # are ignored.
 # Failed URLs from last run (if any) are retained for retry.
 
-https://corretoryuri.com.br/empreendimentos/pop-osasco
-https://corretoryuri.com.br/empreendimentos/pin-osasco-residencial-clube
-
