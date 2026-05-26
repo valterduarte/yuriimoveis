@@ -126,20 +126,6 @@ export async function detectEmpreendimento(imovel: {
   return { nome, totalUnidades: siblingTitles.length + 1 }
 }
 
-interface GroupRow {
-  endereco: string
-  bairro: string
-  cidade: string
-  titulos: string[]
-  ids: number[]
-  preco_min: string | number
-  preco_max: string | number
-  area_min: string | number
-  area_max: string | number
-  first_imagens: string | null
-  statuses: PropertyStatus[]
-}
-
 const STATUS_PRIORITY: PropertyStatus[] = ['planta', 'construcao', 'pronto']
 
 function resolveEmpreendimentoStatus(statuses: PropertyStatus[]): PropertyStatus {
@@ -156,70 +142,108 @@ function resolveEmpreendimentoStatus(statuses: PropertyStatus[]): PropertyStatus
   return best
 }
 
+export type EmpreendimentoSourceRow = Pick<
+  ImovelRow,
+  'id' | 'titulo' | 'endereco' | 'bairro' | 'cidade' | 'preco' | 'area' | 'status' | 'imagens'
+>
+
+interface EmpreendimentoGroup {
+  nome: string
+  endereco: string
+  bairro: string
+  cidade: string
+  ids: number[]
+  statuses: PropertyStatus[]
+  precos: number[]
+  areas: number[]
+  firstImagens: string | null
+}
+
+function parseHeroImage(imagensJson: string | null): string | null {
+  if (!imagensJson) return null
+  try {
+    const imgs = JSON.parse(imagensJson) as string[]
+    return imgs[0] ?? null
+  } catch {
+    return null
+  }
+}
+
+export function buildEmpreendimentosFromRows(rows: EmpreendimentoSourceRow[]): EmpreendimentoSummary[] {
+  const sorted = [...rows].sort((a, b) => {
+    const areaDiff = Number(a.area) - Number(b.area)
+    return areaDiff !== 0 ? areaDiff : a.id - b.id
+  })
+
+  const groups = new Map<string, EmpreendimentoGroup>()
+
+  for (const row of sorted) {
+    if (!row.endereco || !row.bairro || !row.cidade) continue
+    const nome = extractEmpreendimentoFromTitulo(row.titulo)
+    if (!nome) continue
+
+    const key = `${row.endereco}|${row.bairro}|${row.cidade}|${nome}`
+    const existing = groups.get(key)
+
+    if (existing) {
+      existing.ids.push(row.id)
+      existing.statuses.push(row.status)
+      existing.precos.push(Number(row.preco))
+      existing.areas.push(Number(row.area))
+    } else {
+      groups.set(key, {
+        nome,
+        endereco: row.endereco,
+        bairro: row.bairro,
+        cidade: row.cidade,
+        ids: [row.id],
+        statuses: [row.status],
+        precos: [Number(row.preco)],
+        areas: [Number(row.area)],
+        firstImagens: row.imagens ?? null,
+      })
+    }
+  }
+
+  const empreendimentos: EmpreendimentoSummary[] = []
+  const seenSlugs = new Set<string>()
+
+  for (const group of groups.values()) {
+    const slug = slugify(group.nome)
+    if (seenSlugs.has(slug)) continue
+    seenSlugs.add(slug)
+
+    empreendimentos.push({
+      slug,
+      nome: group.nome,
+      endereco: group.endereco,
+      bairro: group.bairro,
+      cidade: group.cidade,
+      totalUnidades: group.ids.length,
+      precoMin: Math.min(...group.precos),
+      precoMax: Math.max(...group.precos),
+      areaMin: Math.min(...group.areas),
+      areaMax: Math.max(...group.areas),
+      heroImage: parseHeroImage(group.firstImagens),
+      imovelIds: group.ids,
+      status: resolveEmpreendimentoStatus(group.statuses),
+    })
+  }
+
+  return empreendimentos.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+}
+
 const listEmpreendimentosCached = unstable_cache(
   async (): Promise<EmpreendimentoSummary[]> => {
     const result = await getDb().query(`
-      SELECT
-        endereco,
-        bairro,
-        cidade,
-        array_agg(titulo ORDER BY area ASC, id ASC) AS titulos,
-        array_agg(id ORDER BY area ASC, id ASC) AS ids,
-        array_agg(status ORDER BY area ASC, id ASC) AS statuses,
-        MIN(preco) AS preco_min,
-        MAX(preco) AS preco_max,
-        MIN(area)  AS area_min,
-        MAX(area)  AS area_max,
-        (array_agg(imagens ORDER BY area ASC, id ASC))[1] AS first_imagens
+      SELECT id, titulo, endereco, bairro, cidade, preco, area, status, imagens
       FROM imoveis
       WHERE ativo = true
         AND endereco IS NOT NULL AND endereco != ''
         AND bairro IS NOT NULL AND bairro != ''
         AND cidade IS NOT NULL AND cidade != ''
-      GROUP BY endereco, bairro, cidade
     `)
-
-    const empreendimentos: EmpreendimentoSummary[] = []
-    const seenSlugs = new Set<string>()
-
-    for (const row of result.rows as GroupRow[]) {
-      let nome: string | null = null
-      for (const titulo of row.titulos) {
-        nome = extractEmpreendimentoFromTitulo(titulo)
-        if (nome) break
-      }
-      if (!nome) continue
-
-      const slug = slugify(nome)
-      if (seenSlugs.has(slug)) continue
-      seenSlugs.add(slug)
-
-      let heroImage: string | null = null
-      if (row.first_imagens) {
-        try {
-          const imgs = JSON.parse(row.first_imagens) as string[]
-          heroImage = imgs[0] ?? null
-        } catch { /* ignore parse errors */ }
-      }
-
-      empreendimentos.push({
-        slug,
-        nome,
-        endereco: row.endereco,
-        bairro: row.bairro,
-        cidade: row.cidade,
-        totalUnidades: row.ids.length,
-        precoMin: Number(row.preco_min),
-        precoMax: Number(row.preco_max),
-        areaMin: Number(row.area_min),
-        areaMax: Number(row.area_max),
-        heroImage,
-        imovelIds: row.ids,
-        status: resolveEmpreendimentoStatus(row.statuses ?? []),
-      })
-    }
-
-    return empreendimentos.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+    return buildEmpreendimentosFromRows(result.rows as EmpreendimentoSourceRow[])
   },
   ['listEmpreendimentos'],
   { tags: [CACHE_TAG_IMOVEIS], revalidate: STATIC_DATA_REVALIDATE_SECONDS },
