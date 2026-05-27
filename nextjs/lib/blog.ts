@@ -8,8 +8,21 @@ import {
 } from './cacheTags'
 import type { BlogPost, BlogPostRow } from '../types'
 
+export function parseBlogTags(raw: unknown): string[] {
+  if (Array.isArray(raw)) {
+    return raw.filter((t): t is string => typeof t === 'string')
+  }
+  if (typeof raw !== 'string' || raw.length === 0) return []
+  try {
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed.filter((t): t is string => typeof t === 'string') : []
+  } catch {
+    return []
+  }
+}
+
 function parseBlogPost(row: BlogPostRow): BlogPost {
-  return { ...row, tags: JSON.parse(row.tags || '[]') }
+  return { ...row, tags: parseBlogTags(row.tags) }
 }
 
 const fetchPublishedBlogPostsCached = unstable_cache(

@@ -4,6 +4,7 @@ import { getDb } from '../../../../lib/db'
 import { imovelUpdateSchema } from '../../../../lib/schemas'
 import { parseImovel, CACHE_TAG_IMOVEIS } from '../../../../lib/api'
 import { notFoundJson, parseSchema, requireUser, withErrorHandler } from '../../../../lib/apiHandler'
+import { publicCacheHeaders } from '../../../../lib/cacheHeaders'
 
 type RouteContext = { params: Promise<{ id: string }> }
 
@@ -15,7 +16,7 @@ export const GET = withErrorHandler('GET /api/imoveis/[id]', async (_request: Ne
   )
   if (!result.rows[0]) return notFoundJson('Imóvel não encontrado')
   return NextResponse.json(parseImovel(result.rows[0]), {
-    headers: { 'Cache-Control': 'public, max-age=300' },
+    headers: publicCacheHeaders({ browserMaxAge: 300, cdnMaxAge: 300, swr: 600 }),
   })
 })
 

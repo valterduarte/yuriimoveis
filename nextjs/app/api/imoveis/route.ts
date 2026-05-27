@@ -4,6 +4,7 @@ import { getDb } from '../../../lib/db'
 import { imovelCreateSchema } from '../../../lib/schemas'
 import { fetchProperties, CACHE_TAG_IMOVEIS } from '../../../lib/api'
 import { parseSchema, requireUser, withErrorHandler } from '../../../lib/apiHandler'
+import { publicCacheHeaders, PRIVATE_NO_STORE } from '../../../lib/cacheHeaders'
 
 export const GET = withErrorHandler('GET /api/imoveis', async (request: NextRequest) => {
   const { searchParams } = new URL(request.url)
@@ -16,9 +17,11 @@ export const GET = withErrorHandler('GET /api/imoveis', async (request: NextRequ
 
   const result = await fetchProperties(filters)
   const isAdmin = filters.todos === 'true'
-  const cacheControl = isAdmin ? 'private, no-store' : 'public, max-age=60'
+  const headers = isAdmin
+    ? PRIVATE_NO_STORE
+    : publicCacheHeaders({ browserMaxAge: 60, cdnMaxAge: 60, swr: 300 })
 
-  return NextResponse.json(result, { headers: { 'Cache-Control': cacheControl } })
+  return NextResponse.json(result, { headers })
 })
 
 export const POST = withErrorHandler('POST /api/imoveis', async (request: NextRequest) => {

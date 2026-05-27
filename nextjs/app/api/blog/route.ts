@@ -3,7 +3,9 @@ import { revalidateTag } from 'next/cache'
 import { getDb } from '../../../lib/db'
 import { blogPostCreateSchema } from '../../../lib/schemas'
 import { CACHE_TAG_BLOG } from '../../../lib/api'
+import { parseBlogTags } from '../../../lib/blog'
 import { badRequest, parseSchema, requireUser, withErrorHandler } from '../../../lib/apiHandler'
+import { publicCacheHeaders } from '../../../lib/cacheHeaders'
 
 export const GET = withErrorHandler('GET /api/blog', async (request: NextRequest) => {
   const { searchParams } = new URL(request.url)
@@ -19,13 +21,13 @@ export const GET = withErrorHandler('GET /api/blog', async (request: NextRequest
   )
 
   const total = result.rows.length > 0 ? parseInt(result.rows[0].total) : 0
-  const posts = result.rows.map((row: Record<string, unknown> & { total: string; tags: string }) => {
+  const posts = result.rows.map((row: Record<string, unknown> & { total: string; tags: unknown }) => {
     const { total: _total, ...rest } = row
-    return { ...rest, tags: JSON.parse(rest.tags || '[]') }
+    return { ...rest, tags: parseBlogTags(rest.tags) }
   })
 
   return NextResponse.json({ posts, total, page, limit, pages: Math.ceil(total / limit) }, {
-    headers: { 'Cache-Control': 'public, max-age=60' },
+    headers: publicCacheHeaders({ browserMaxAge: 60, cdnMaxAge: 60, swr: 300 }),
   })
 })
 

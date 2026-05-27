@@ -29,3 +29,7 @@ function emit(level: LogLevel, message: string, context: LogContext, error?: unk
 export function logDbError(operation: string, error: unknown, extra: Record<string, unknown> = {}): void {
   emit('error', `Database query failed: ${operation}`, { operation, ...extra }, error)
 }
+
+export function logHandlerError(operation: string, error: unknown, extra: Record<string, unknown> = {}): void {
+  emit('error', `Request handler failed: ${operation}`, { operation, ...extra }, error)
+}

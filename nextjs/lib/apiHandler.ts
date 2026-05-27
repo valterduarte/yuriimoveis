@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from './requireAuth'
+import { logHandlerError } from './logger'
 import type { JwtPayload } from 'jsonwebtoken'
 import type { ZodType } from 'zod'
 
@@ -9,7 +10,7 @@ export const notFoundJson      = (message = 'Não encontrado') => NextResponse.j
 export const tooManyRequests   = (message: string) => NextResponse.json({ error: message }, { status: 429 })
 
 export function serverError(name: string, err: unknown): NextResponse {
-  console.error(`${name} error:`, err)
+  logHandlerError(name, err)
   return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
 }
 
