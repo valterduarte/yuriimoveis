@@ -1,13 +1,21 @@
+import { timingSafeEqual } from 'node:crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { rateLimit, rateLimitClear } from '../../../../lib/rateLimit'
+
+function constantTimeEqual(a: string, b: string): boolean {
+  const bufA = Buffer.from(a, 'utf8')
+  const bufB = Buffer.from(b, 'utf8')
+  if (bufA.length !== bufB.length) return false
+  return timingSafeEqual(bufA, bufB)
+}
 
 const isRateLimited = rateLimit({ name: 'login', maxAttempts: 5, windowMs: 15 * 60 * 1000 })
 
 export async function POST(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
 
-  if (isRateLimited(ip)) {
+  if (await isRateLimited(ip)) {
     return NextResponse.json(
       { error: 'Muitas tentativas. Tente novamente em 15 minutos.' },
       { status: 429 }
@@ -29,11 +37,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Configuração de autenticação ausente no servidor' }, { status: 500 })
   }
 
-  if (usuario !== adminUser || senha !== adminPassword) {
+  const userOk = constantTimeEqual(usuario, adminUser)
+  const passOk = constantTimeEqual(senha, adminPassword)
+  if (!userOk || !passOk) {
     return NextResponse.json({ error: 'Usuário ou senha incorretos' }, { status: 401 })
   }
 
-  rateLimitClear('login', ip)
+  await rateLimitClear('login', ip)
 
   const token = jwt.sign(
     { sub: usuario, role: 'admin' },

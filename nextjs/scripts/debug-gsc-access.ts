@@ -1,15 +1,5 @@
-import { readFile } from 'node:fs/promises'
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import jwt from 'jsonwebtoken'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const SERVICE_ACCOUNT_PATH = join(__dirname, '..', 'service-account.json')
-
-interface ServiceAccount {
-  client_email: string
-  private_key: string
-}
+import { loadServiceAccount, type ServiceAccount } from './lib/serviceAccount'
 
 async function getToken(account: ServiceAccount, scope: string): Promise<string> {
   const now = Math.floor(Date.now() / 1000)
@@ -50,7 +40,7 @@ async function claimSite(token: string, siteUrl: string): Promise<void> {
 }
 
 async function main() {
-  const account = JSON.parse(await readFile(SERVICE_ACCOUNT_PATH, 'utf-8')) as ServiceAccount
+  const account = await loadServiceAccount()
 
   console.log(`Service account: ${account.client_email}\n`)
 

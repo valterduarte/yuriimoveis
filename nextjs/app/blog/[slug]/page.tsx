@@ -6,6 +6,7 @@ import { fetchBlogPostBySlug, fetchAllBlogSlugs, fetchRelatedBlogPosts } from '.
 import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA } from '../../../lib/config'
 import { buildBreadcrumb, buildArticleSchema, buildFaqPageSchema } from '../../../lib/jsonLd'
 import { extractFaqsFromHtml } from '../../../lib/blogFaqs'
+import { sanitizeBlogHtml } from '../../../lib/sanitizeHtml'
 import WhatsAppLink from '../../../components/WhatsAppLink'
 import ItbiCalculator from '../../../components/ItbiCalculator'
 import type { Metadata } from 'next'
@@ -140,14 +141,14 @@ export default async function BlogPostPage({ params }: PageProps) {
             const [before, after] = post.conteudo.split(ITBI_CALC_SENTINEL)
             return (
               <>
-                <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: before }} />
+                <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(before) }} />
                 <ItbiCalculator />
-                <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: after }} />
+                <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(after) }} />
               </>
             )
           })()
         ) : (
-          <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: post.conteudo }} />
+          <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(post.conteudo) }} />
         )}
 
         <div className="mt-12 pt-8 border-t border-gray-200">

@@ -1,13 +1,11 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
-import { existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import jwt from 'jsonwebtoken'
+import { loadServiceAccount, type ServiceAccount } from './lib/serviceAccount'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const SCRIPTS_DIR = __dirname
-const PROJECT_ROOT = join(__dirname, '..')
-const SERVICE_ACCOUNT_PATH = join(PROJECT_ROOT, 'service-account.json')
 const DEFAULT_QUEUE_FILE = join(SCRIPTS_DIR, 'indexing-queue.txt')
 const ARCHIVE_DIR = join(SCRIPTS_DIR, 'indexing-submitted')
 
@@ -15,28 +13,10 @@ const TOKEN_URL = 'https://oauth2.googleapis.com/token'
 const INDEXING_URL = 'https://indexing.googleapis.com/v3/urlNotifications:publish'
 const SCOPE = 'https://www.googleapis.com/auth/indexing'
 
-interface ServiceAccount {
-  client_email: string
-  private_key: string
-}
-
 interface SubmitResult {
   url: string
   status: 'ok' | 'failed'
   detail?: string
-}
-
-async function loadServiceAccount(): Promise<ServiceAccount> {
-  const fromEnv = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
-  if (fromEnv) return JSON.parse(fromEnv) as ServiceAccount
-
-  if (!existsSync(SERVICE_ACCOUNT_PATH)) {
-    throw new Error(
-      `No service account credentials found. Set GOOGLE_SERVICE_ACCOUNT_JSON env var ` +
-      `or place service-account.json at ${SERVICE_ACCOUNT_PATH}`
-    )
-  }
-  return JSON.parse(await readFile(SERVICE_ACCOUNT_PATH, 'utf-8')) as ServiceAccount
 }
 
 async function getAccessToken(account: ServiceAccount): Promise<string> {

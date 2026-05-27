@@ -1,57 +1,59 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { rateLimit, rateLimitClear } from './rateLimit'
 
-describe('rateLimit', () => {
+describe('rateLimit (in-memory fallback)', () => {
   beforeEach(() => {
+    delete process.env.UPSTASH_REDIS_REST_URL
+    delete process.env.UPSTASH_REDIS_REST_TOKEN
     vi.useFakeTimers()
   })
   afterEach(() => {
     vi.useRealTimers()
   })
 
-  it('allows requests up to maxAttempts within the window', () => {
+  it('allows requests up to maxAttempts within the window', async () => {
     const isLimited = rateLimit({ name: 't1', maxAttempts: 3, windowMs: 60_000 })
-    expect(isLimited('1.2.3.4')).toBe(false) // 1
-    expect(isLimited('1.2.3.4')).toBe(false) // 2
-    expect(isLimited('1.2.3.4')).toBe(false) // 3
-    expect(isLimited('1.2.3.4')).toBe(true)  // 4 — over the limit
+    expect(await isLimited('1.2.3.4')).toBe(false) // 1
+    expect(await isLimited('1.2.3.4')).toBe(false) // 2
+    expect(await isLimited('1.2.3.4')).toBe(false) // 3
+    expect(await isLimited('1.2.3.4')).toBe(true)  // 4 — over the limit
   })
 
-  it('isolates limits per key', () => {
+  it('isolates limits per key', async () => {
     const isLimited = rateLimit({ name: 't2', maxAttempts: 1, windowMs: 60_000 })
-    expect(isLimited('alice')).toBe(false)
-    expect(isLimited('alice')).toBe(true)
-    expect(isLimited('bob')).toBe(false) // bob still has fresh quota
+    expect(await isLimited('alice')).toBe(false)
+    expect(await isLimited('alice')).toBe(true)
+    expect(await isLimited('bob')).toBe(false)
   })
 
-  it('resets after the window elapses', () => {
+  it('resets after the window elapses', async () => {
     const isLimited = rateLimit({ name: 't3', maxAttempts: 1, windowMs: 60_000 })
-    expect(isLimited('1.2.3.4')).toBe(false)
-    expect(isLimited('1.2.3.4')).toBe(true)
+    expect(await isLimited('1.2.3.4')).toBe(false)
+    expect(await isLimited('1.2.3.4')).toBe(true)
 
     vi.advanceTimersByTime(61_000)
-    expect(isLimited('1.2.3.4')).toBe(false)
+    expect(await isLimited('1.2.3.4')).toBe(false)
   })
 
-  it('isolates limits per name (multiple buckets)', () => {
+  it('isolates limits per name (multiple buckets)', async () => {
     const limitedA = rateLimit({ name: 'login',  maxAttempts: 1, windowMs: 60_000 })
     const limitedB = rateLimit({ name: 'signup', maxAttempts: 1, windowMs: 60_000 })
 
-    expect(limitedA('1.2.3.4')).toBe(false)
-    expect(limitedA('1.2.3.4')).toBe(true)
-    expect(limitedB('1.2.3.4')).toBe(false) // different name, fresh quota
+    expect(await limitedA('1.2.3.4')).toBe(false)
+    expect(await limitedA('1.2.3.4')).toBe(true)
+    expect(await limitedB('1.2.3.4')).toBe(false)
   })
 
-  it('rateLimitClear lets a key try again immediately', () => {
+  it('rateLimitClear lets a key try again immediately', async () => {
     const isLimited = rateLimit({ name: 't4', maxAttempts: 1, windowMs: 60_000 })
-    expect(isLimited('1.2.3.4')).toBe(false)
-    expect(isLimited('1.2.3.4')).toBe(true)
+    expect(await isLimited('1.2.3.4')).toBe(false)
+    expect(await isLimited('1.2.3.4')).toBe(true)
 
-    rateLimitClear('t4', '1.2.3.4')
-    expect(isLimited('1.2.3.4')).toBe(false)
+    await rateLimitClear('t4', '1.2.3.4')
+    expect(await isLimited('1.2.3.4')).toBe(false)
   })
 
-  it('rateLimitClear is a no-op for unknown name/key', () => {
-    expect(() => rateLimitClear('does-not-exist', 'x')).not.toThrow()
+  it('rateLimitClear is a no-op for unknown name/key', async () => {
+    await expect(rateLimitClear('does-not-exist', 'x')).resolves.toBeUndefined()
   })
 })

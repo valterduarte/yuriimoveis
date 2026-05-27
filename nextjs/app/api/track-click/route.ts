@@ -7,7 +7,7 @@ const isRateLimited = rateLimit({ name: 'track-click', maxAttempts: 30, windowMs
 
 export const POST = withErrorHandler('POST /api/track-click', async (request: NextRequest) => {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
-  if (isRateLimited(ip)) return tooManyRequests('Too many requests')
+  if (await isRateLimited(ip)) return tooManyRequests('Too many requests')
 
   const { source, page, device } = await request.json()
   if (!source || !page || !device) return badRequest('Dados incompletos')

@@ -8,7 +8,7 @@ const isRateLimited = rateLimit({ name: 'contato', maxAttempts: 5, windowMs: 15 
 
 export const POST = withErrorHandler('POST /api/contato', async (request: NextRequest) => {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
-  if (isRateLimited(ip)) {
+  if (await isRateLimited(ip)) {
     return tooManyRequests('Muitas mensagens enviadas. Tente novamente em 15 minutos.')
   }
 

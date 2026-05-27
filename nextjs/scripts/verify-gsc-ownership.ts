@@ -1,17 +1,12 @@
-import { readFile, writeFile } from 'node:fs/promises'
+import { writeFile } from 'node:fs/promises'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import jwt from 'jsonwebtoken'
+import { loadServiceAccount, type ServiceAccount } from './lib/serviceAccount'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const SERVICE_ACCOUNT_PATH = join(__dirname, '..', 'service-account.json')
 const PUBLIC_DIR = join(__dirname, '..', 'public')
 const SITE_URL = 'https://corretoryuri.com.br/'
-
-interface ServiceAccount {
-  client_email: string
-  private_key: string
-}
 
 async function getToken(account: ServiceAccount, scope: string): Promise<string> {
   const now = Math.floor(Date.now() / 1000)
@@ -64,7 +59,7 @@ async function verifyOwnership(accessToken: string): Promise<void> {
 async function main() {
   const mode = process.argv[2]
 
-  const account = JSON.parse(await readFile(SERVICE_ACCOUNT_PATH, 'utf-8')) as ServiceAccount
+  const account = await loadServiceAccount()
   const accessToken = await getToken(account, 'https://www.googleapis.com/auth/siteverification')
 
   if (mode === 'token') {
