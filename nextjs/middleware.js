@@ -75,7 +75,7 @@ export function middleware(request) {
     "default-src 'self'; " +
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://va.vercel-scripts.com https://maps.googleapis.com https://maps.gstatic.com; " +
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-      "img-src 'self' data: blob: https://res.cloudinary.com https://valterduarte.github.io https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://www.google-analytics.com https://www.googletagmanager.com https://maps.googleapis.com https://maps.gstatic.com https://*.googleusercontent.com; " +
+      "img-src 'self' data: blob: https://res.cloudinary.com https://valterduarte.github.io https://www.google-analytics.com https://www.googletagmanager.com https://maps.googleapis.com https://maps.gstatic.com https://*.googleusercontent.com; " +
       "font-src 'self' data: https://fonts.gstatic.com; " +
       "connect-src 'self' https://api.cloudinary.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://vitals.vercel-insights.com https://maps.googleapis.com; " +
       "frame-ancestors 'none'; base-uri 'self'; form-action 'self'"

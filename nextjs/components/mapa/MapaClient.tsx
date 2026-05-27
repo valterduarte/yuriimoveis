@@ -7,7 +7,8 @@ import { coordsForImovel } from '../../lib/bairroCoords'
 import { PROPERTY_CATEGORIES } from '../../lib/constants'
 import type { MapImovel } from '../../lib/api'
 
-const MapaLeaflet = dynamic(() => import('./MapaLeaflet'), {
+const MapaGoogle = dynamic(() => import('./MapaGoogle'), {
+  // SSR off: Google Maps SDK and AdvancedMarker only run client-side.
   ssr: false,
   loading: () => (
     <div className="h-full w-full flex items-center justify-center bg-gray-100 text-gray-500 text-sm">
@@ -178,7 +179,7 @@ export default function MapaClient({ imoveis }: MapaClientProps) {
       </aside>
 
       <div className="lg:col-span-3 relative">
-        <MapaLeaflet markers={markers} />
+        <MapaGoogle markers={markers} />
       </div>
     </div>
   )
