@@ -16,19 +16,12 @@ import {
   type AcaoSlug,
 } from '../../../../../../lib/navigation'
 import {
-  getPriceRangeBySlug,
-  getBedroomFilterBySlug,
   getAllPriceRanges,
   BEDROOM_FILTERS,
-  type PriceRange,
-  type BedroomFilter,
 } from '../../../../../../data/priceRanges'
-import {
-  AMENITY_FILTERS,
-  getAmenityFilterBySlug,
-  imovelMatchesAmenity,
-  type AmenityFilter,
-} from '../../../../../../data/amenityFilters'
+import { AMENITY_FILTERS } from '../../../../../../data/amenityFilters'
+import { resolveListingFilter, filterToFetchOptions, filterLabel, type ResolvedFilter } from '../../../../../../lib/listingFilter'
+import { expandFilterSlugsForRow } from '../../../../../../lib/listingStaticParams'
 import { SITE_URL } from '../../../../../../lib/config'
 import { SEO_MIN_PROPERTIES_FOR_FILTER, ITBI_RATE_BY_CITY } from '../../../../../../lib/constants'
 import { buildBreadcrumb, buildCollectionPage, buildFaqPageSchema, buildPropertyProduct } from '../../../../../../lib/jsonLd'
@@ -42,8 +35,6 @@ type PageProps = {
   params: Promise<{ acao: string; cidade: string; categoria: string; filtro: string }>
 }
 
-type ParsedFilter = { price?: PriceRange; bedroom?: BedroomFilter; amenity?: AmenityFilter }
-
 interface FilterFaq {
   q: string
   a: string
@@ -54,7 +45,7 @@ function buildFilterFaqs(args: {
   cidadeName: string
   categoriaData: { singular: string; plural: string }
   label: string
-  filter: ParsedFilter
+  filter: ResolvedFilter
   filterLabel: string
   filterConnector: string
   total: number
@@ -73,7 +64,7 @@ function buildFilterFaqs(args: {
       : `O estoque muda diariamente. Fale com o Corretor Yuri pelo WhatsApp para receber novidades de ${pluralLc} ${labelLc} ${filterPhraseLc} em ${cidadeName} assim que aparecerem.`,
   })
 
-  if (filter.price && acao === 'comprar') {
+  if (filter.kind === 'price' && acao === 'comprar') {
     const maxValue = filter.price.max
     if (maxValue && maxValue <= 600_000) {
       faqs.push({
@@ -83,14 +74,14 @@ function buildFilterFaqs(args: {
     }
   }
 
-  if (filter.bedroom) {
+  if (filter.kind === 'bedroom') {
     faqs.push({
       q: `Em quais bairros de ${cidadeName} há mais ${pluralLc} com ${filter.bedroom.label.toLowerCase()}?`,
       a: `A distribuição por bairro varia conforme o estoque ativo. Use o filtro de bairro logo acima ou navegue pelos guias de bairro para refinar por combinação bairro + ${filter.bedroom.label.toLowerCase()}.`,
     })
   }
 
-  if (filter.amenity) {
+  if (filter.kind === 'amenity') {
     faqs.push({
       q: `O que conta como ${filter.amenity.label.toLowerCase()}?`,
       a: `Marcamos como ${filter.amenity.label.toLowerCase()} qualquer ${categoriaData.singular.toLowerCase()} cujo anúncio descreve explicitamente esse diferencial entre as amenidades do condomínio ou da unidade.`,
@@ -113,19 +104,6 @@ function buildFilterFaqs(args: {
   return faqs
 }
 
-function parseFilter(filtro: string, tipo: 'venda' | 'aluguel'): ParsedFilter | null {
-  const priceRange = getPriceRangeBySlug(filtro, tipo)
-  if (priceRange) return { price: priceRange }
-
-  const bedroomFilter = getBedroomFilterBySlug(filtro)
-  if (bedroomFilter) return { bedroom: bedroomFilter }
-
-  const amenityFilter = getAmenityFilterBySlug(filtro)
-  if (amenityFilter) return { amenity: amenityFilter }
-
-  return null
-}
-
 function buildCategoryFilterUrl(acao: string, cidade: string, categoria: string, filtro: string): string {
   return `/${acao}/${cidade}/${categoria}/filtro/${filtro}`
 }
@@ -141,39 +119,11 @@ export async function generateStaticParams() {
     if (!cidadeSlugToName(cidade)) continue
     if (!getCategoriaBySlug(row.categoria)) continue
 
-    const priceRanges = getAllPriceRanges(row.tipo as 'venda' | 'aluguel')
-    for (const range of priceRanges) {
-      const inRange =
-        (!range.min || row.preco >= range.min) &&
-        (!range.max || row.preco <= range.max)
-      if (!inRange) continue
-
-      const key = `${acao}|${cidade}|${row.categoria}|${range.slug}`
-      if (!seen.has(key)) {
-        seen.add(key)
-        params.push({ acao, cidade, categoria: row.categoria, filtro: range.slug })
-      }
-    }
-
-    for (const bf of BEDROOM_FILTERS) {
-      const minBedrooms = bf.value === '4+' ? 4 : bf.value
-      const matches = row.quartos >= minBedrooms
-      if (!matches) continue
-
-      const key = `${acao}|${cidade}|${row.categoria}|${bf.slug}`
-      if (!seen.has(key)) {
-        seen.add(key)
-        params.push({ acao, cidade, categoria: row.categoria, filtro: bf.slug })
-      }
-    }
-
-    for (const amenity of AMENITY_FILTERS) {
-      if (!imovelMatchesAmenity(row.diferenciais, amenity)) continue
-      const key = `${acao}|${cidade}|${row.categoria}|${amenity.slug}`
-      if (!seen.has(key)) {
-        seen.add(key)
-        params.push({ acao, cidade, categoria: row.categoria, filtro: amenity.slug })
-      }
+    for (const slug of expandFilterSlugsForRow(row)) {
+      const key = `${acao}|${cidade}|${row.categoria}|${slug}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      params.push({ acao, cidade, categoria: row.categoria, filtro: slug })
     }
   }
 
@@ -188,27 +138,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!cidadeName || !categoriaData) return {}
 
   const tipo = acaoToTipo(acao)
-  const filter = parseFilter(filtro, tipo)
+  const filter = resolveListingFilter(filtro, tipo)
   if (!filter) return {}
 
   const label = ACAO_LABELS[acao].preposicao
-  const filterLabel = filter.price?.label || filter.bedroom?.label || filter.amenity?.label || ''
-  const filterConnector = filter.bedroom ? 'com ' : ''
+  const { label: filterLabelText, connector: filterConnector } = filterLabel(filter)
 
   const { total } = await fetchProperties({
     tipo,
     categoria,
     cidade: cidadeName,
-    precoMin: filter.price?.min ? String(filter.price.min) : undefined,
-    precoMax: filter.price?.max ? String(filter.price.max) : undefined,
-    quartos: filter.bedroom ? String(filter.bedroom.value) : undefined,
-    amenity: filter.amenity ? filter.amenity.matchTerms.join('|') : undefined,
+    ...filterToFetchOptions(filter),
     limit: 50,
   })
 
   const countPrefix = total > 0 ? `${total} ` : ''
-  const title = `${countPrefix}${categoriaData.plural} ${label} ${filterConnector}${filterLabel} em ${cidadeName} SP`
-  const description = `${categoriaData.plural} ${label.toLowerCase()} ${filterConnector}${filterLabel} em ${cidadeName}, SP. Financiamento, documentação e atendimento com o Corretor Yuri (CRECI 235509).`
+  const title = `${countPrefix}${categoriaData.plural} ${label} ${filterConnector}${filterLabelText} em ${cidadeName} SP`
+  const description = `${categoriaData.plural} ${label.toLowerCase()} ${filterConnector}${filterLabelText} em ${cidadeName}, SP. Financiamento, documentação e atendimento com o Corretor Yuri (CRECI 235509).`
   return buildListingMetadata({
     title,
     description,
@@ -226,21 +172,17 @@ export default async function CategoryFilterPage({ params }: PageProps) {
   if (!cidadeName || !categoriaData) notFound()
 
   const tipo = acaoToTipo(acao)
-  const filter = parseFilter(filtro, tipo)
+  const filter = resolveListingFilter(filtro, tipo)
   if (!filter) notFound()
 
   const label = ACAO_LABELS[acao].preposicao
-  const filterLabel = filter.price?.label || filter.bedroom?.label || filter.amenity?.label || ''
-  const filterConnector = filter.bedroom ? 'com ' : ''
+  const { label: filterLabelText, connector: filterConnector } = filterLabel(filter)
 
   const { imoveis, total } = await fetchProperties({
     tipo,
     categoria,
     cidade: cidadeName,
-    precoMin: filter.price?.min ? String(filter.price.min) : undefined,
-    precoMax: filter.price?.max ? String(filter.price.max) : undefined,
-    quartos: filter.bedroom ? String(filter.bedroom.value) : undefined,
-    amenity: filter.amenity ? filter.amenity.matchTerms.join('|') : undefined,
+    ...filterToFetchOptions(filter),
     limit: 50,
   })
 
@@ -248,12 +190,12 @@ export default async function CategoryFilterPage({ params }: PageProps) {
     permanentRedirect(buildHierarchicalUrl({ acao, cidade, categoria }))
   }
 
-  const h1 = `${categoriaData.plural} ${label} ${filterConnector}${filterLabel} em ${cidadeName}`
+  const h1 = `${categoriaData.plural} ${label} ${filterConnector}${filterLabelText} em ${cidadeName}`
   const canonicalUrl = `${SITE_URL}${buildCategoryFilterUrl(acao, cidade, categoria, filtro)}`
   const categoryUrl = buildHierarchicalUrl({ acao: acao, cidade, categoria })
 
-  const relatedFilters = filter.price ? BEDROOM_FILTERS : getAllPriceRanges(tipo)
-  const relatedSectionTitle = filter.price ? 'Filtrar por quartos' : 'Filtrar por preço'
+  const relatedFilters = filter.kind === 'price' ? BEDROOM_FILTERS : getAllPriceRanges(tipo)
+  const relatedSectionTitle = filter.kind === 'price' ? 'Filtrar por quartos' : 'Filtrar por preço'
 
   const faqs = buildFilterFaqs({
     acao,
@@ -261,7 +203,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
     categoriaData,
     label,
     filter,
-    filterLabel,
+    filterLabel: filterLabelText,
     filterConnector,
     total,
   })
@@ -271,13 +213,13 @@ export default async function CategoryFilterPage({ params }: PageProps) {
       { name: 'Início', path: '/' },
       { name: `${acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${cidadeName}`, path: buildHierarchicalUrl({ acao, cidade }) },
       { name: `${categoriaData.plural} ${label}`,                              path: categoryUrl },
-      { name: filterLabel,                                                     path: buildCategoryFilterUrl(acao, cidade, categoria, filtro) },
+      { name: filterLabelText,                                                 path: buildCategoryFilterUrl(acao, cidade, categoria, filtro) },
     ]),
     buildCollectionPage({
       name: h1,
       url: canonicalUrl,
       numberOfItems: total,
-      description: `${categoriaData.plural} ${label.toLowerCase()} ${filterConnector}${filterLabel} em ${cidadeName}, SP.`,
+      description: `${categoriaData.plural} ${label.toLowerCase()} ${filterConnector}${filterLabelText} em ${cidadeName}, SP.`,
       items: imoveis.map(buildPropertyProduct),
     }),
     buildFaqPageSchema(faqs.map(f => ({ question: f.q, answer: f.a }))),
@@ -287,7 +229,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
     { name: 'Início',                              path: '/' },
     { name: cidadeName,                            path: buildHierarchicalUrl({ acao, cidade }) },
     { name: `${categoriaData.plural} ${label}`,    path: categoryUrl },
-    { name: filterLabel,                           path: buildCategoryFilterUrl(acao, cidade, categoria, filtro) },
+    { name: filterLabelText,                       path: buildCategoryFilterUrl(acao, cidade, categoria, filtro) },
   ]
 
   return (
@@ -295,20 +237,20 @@ export default async function CategoryFilterPage({ params }: PageProps) {
       <div className="container mx-auto px-6 py-10">
       <div className="bg-white border border-gray-200 p-6 md:p-8 mb-8">
         <p className="text-gray-700 text-sm leading-relaxed">
-          {filter.price ? (
+          {filter.kind === 'price' ? (
             <>
-              Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} com preço {filterLabel} em {cidadeName}, SP.
+              Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} com preço {filterLabelText} em {cidadeName}, SP.
               Todas as opções com documentação verificada e atendimento personalizado do Corretor Yuri.
             </>
-          ) : filter.amenity ? (
+          ) : filter.kind === 'amenity' ? (
             <>
-              {categoriaData.plural} {label.toLowerCase()} {filterLabel} em {cidadeName}, SP.
+              {categoriaData.plural} {label.toLowerCase()} {filterLabelText} em {cidadeName}, SP.
               Listagens com {filter.amenity.heroLabel} no condomínio, em vários bairros da cidade.
               Documentação verificada e atendimento personalizado do Corretor Yuri.
             </>
           ) : (
             <>
-              Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} com {filterLabel} em {cidadeName}, SP.
+              Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} com {filterLabelText} em {cidadeName}, SP.
               Opções em diversos bairros, com documentação verificada e atendimento do Corretor Yuri.
             </>
           )}

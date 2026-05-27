@@ -19,19 +19,12 @@ import {
   ACAO_LABELS,
 } from '../../../../../../../lib/navigation'
 import {
-  getBedroomFilterBySlug,
-  getPriceRangeBySlug,
   getAllPriceRanges,
   BEDROOM_FILTERS,
-  type PriceRange,
-  type BedroomFilter,
 } from '../../../../../../../data/priceRanges'
-import {
-  AMENITY_FILTERS,
-  getAmenityFilterBySlug,
-  imovelMatchesAmenity,
-  type AmenityFilter,
-} from '../../../../../../../data/amenityFilters'
+import { AMENITY_FILTERS } from '../../../../../../../data/amenityFilters'
+import { resolveListingFilter, filterToFetchOptions, filterLabel, type ResolvedFilter } from '../../../../../../../lib/listingFilter'
+import { expandFilterSlugsForRow } from '../../../../../../../lib/listingStaticParams'
 import { SITE_URL } from '../../../../../../../lib/config'
 import { SEO_MIN_PROPERTIES_FOR_FILTER } from '../../../../../../../lib/constants'
 import { buildBreadcrumb, buildCollectionPage, buildPropertyProduct } from '../../../../../../../lib/jsonLd'
@@ -61,72 +54,28 @@ export async function generateStaticParams() {
     const bairro = bairroDbNameToSlug(row.bairro)
     if (!bairro) continue
 
-    for (const bf of BEDROOM_FILTERS) {
-      const minBedrooms = bf.value === '4+' ? 4 : bf.value
-      if (row.quartos < minBedrooms) continue
-
-      const key = `${acao}|${cidade}|${row.categoria}|${bairro}|${bf.slug}`
+    for (const slug of expandFilterSlugsForRow(row)) {
+      const key = `${acao}|${cidade}|${row.categoria}|${bairro}|${slug}`
       if (seen.has(key)) continue
       seen.add(key)
-      params.push({ acao, cidade, categoria: row.categoria, bairro, filtro: bf.slug })
-    }
-
-    for (const range of getAllPriceRanges(row.tipo as 'venda' | 'aluguel')) {
-      const inRange = (!range.min || row.preco >= range.min) && (!range.max || row.preco <= range.max)
-      if (!inRange) continue
-
-      const key = `${acao}|${cidade}|${row.categoria}|${bairro}|${range.slug}`
-      if (seen.has(key)) continue
-      seen.add(key)
-      params.push({ acao, cidade, categoria: row.categoria, bairro, filtro: range.slug })
-    }
-
-    for (const amenity of AMENITY_FILTERS) {
-      if (!imovelMatchesAmenity(row.diferenciais, amenity)) continue
-      const key = `${acao}|${cidade}|${row.categoria}|${bairro}|${amenity.slug}`
-      if (seen.has(key)) continue
-      seen.add(key)
-      params.push({ acao, cidade, categoria: row.categoria, bairro, filtro: amenity.slug })
+      params.push({ acao, cidade, categoria: row.categoria, bairro, filtro: slug })
     }
   }
 
   return params
 }
 
-type ResolvedFilter =
-  | { kind: 'bedroom'; bedroom: BedroomFilter; label: string; fragment: string }
-  | { kind: 'price';   price:   PriceRange;    label: string; fragment: string }
-  | { kind: 'amenity'; amenity: AmenityFilter; label: string; fragment: string }
-
-function resolveFilter(filtro: string, tipo: ReturnType<typeof acaoToTipo>): ResolvedFilter | null {
-  const bedroom = getBedroomFilterBySlug(filtro)
-  if (bedroom) return { kind: 'bedroom', bedroom, label: bedroom.label, fragment: `com ${bedroom.label}` }
-  const price = getPriceRangeBySlug(filtro, tipo)
-  if (price)   return { kind: 'price',   price,   label: price.label,   fragment: `com preço ${price.label}` }
-  const amenity = getAmenityFilterBySlug(filtro)
-  if (amenity) return { kind: 'amenity', amenity, label: amenity.label, fragment: amenity.label }
-  return null
-}
-
 type ResolvedContext = NonNullable<Awaited<ReturnType<typeof resolveParams>>>
 
 function buildFetchFilters(ctx: ResolvedContext) {
-  const base = {
+  return {
     tipo: acaoToTipo(ctx.acao),
     categoria: ctx.categoria,
     cidade: ctx.cidadeName,
     bairro: ctx.bairroDbName,
+    ...filterToFetchOptions(ctx.filter),
     limit: 50,
   } as const
-  switch (ctx.filter.kind) {
-    case 'bedroom': return { ...base, quartos: String(ctx.filter.bedroom.value) }
-    case 'price':   return {
-      ...base,
-      precoMin: ctx.filter.price.min ? String(ctx.filter.price.min) : undefined,
-      precoMax: ctx.filter.price.max ? String(ctx.filter.price.max) : undefined,
-    }
-    case 'amenity': return { ...base, amenity: ctx.filter.amenity.matchTerms.join('|') }
-  }
 }
 
 async function resolveParams(p: { acao: string; cidade: string; categoria: string; bairro: string; filtro: string }) {
@@ -138,8 +87,9 @@ async function resolveParams(p: { acao: string; cidade: string; categoria: strin
   const bairroName = bairroData?.nome || formatNeighborhoodName(p.bairro)
   const bairroDbName = bairroSlugToDbName(p.bairro) || bairroName
   const tipo = acaoToTipo(p.acao)
-  const filter = resolveFilter(p.filtro, tipo)
+  const filter: ResolvedFilter | null = resolveListingFilter(p.filtro, tipo)
   if (!filter) return null
+  const { label: filterLabelText, fragment: filterFragment } = filterLabel(filter)
   return {
     acao: p.acao,
     cidade: p.cidade,
@@ -150,6 +100,8 @@ async function resolveParams(p: { acao: string; cidade: string; categoria: strin
     bairroDbName,
     bairroName,
     filter,
+    filterLabel: filterLabelText,
+    filterFragment,
   }
 }
 
@@ -162,8 +114,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const label = ACAO_LABELS[ctx.acao].preposicao
   const countPrefix = total > 0 ? `${total} ` : ''
-  const title = `${countPrefix}${ctx.categoriaData.plural} ${label} ${ctx.filter.fragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP`
-  const description = `${ctx.categoriaData.plural} ${label.toLowerCase()} ${ctx.filter.fragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP. Financiamento, documentação e atendimento com o Corretor Yuri (CRECI 235509).`
+  const title = `${countPrefix}${ctx.categoriaData.plural} ${label} ${ctx.filterFragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP`
+  const description = `${ctx.categoriaData.plural} ${label.toLowerCase()} ${ctx.filterFragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP. Financiamento, documentação e atendimento com o Corretor Yuri (CRECI 235509).`
   return buildListingMetadata({
     title,
     description,
@@ -189,7 +141,7 @@ export default async function BairroFilterPage({ params }: PageProps) {
   }
 
   const label = ACAO_LABELS[ctx.acao].preposicao
-  const h1 = `${ctx.categoriaData.plural} ${label} ${ctx.filter.fragment} no ${ctx.bairroName}, ${ctx.cidadeName}`
+  const h1 = `${ctx.categoriaData.plural} ${label} ${ctx.filterFragment} no ${ctx.bairroName}, ${ctx.cidadeName}`
   const canonicalUrl = `${SITE_URL}${buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro)}`
   const bairroUrl = buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade, categoria: raw.categoria, bairro: raw.bairro })
 
@@ -199,13 +151,13 @@ export default async function BairroFilterPage({ params }: PageProps) {
       { name: `${ctx.acao === 'comprar' ? 'Comprar' : 'Alugar'} em ${ctx.cidadeName}`, path: buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade }) },
       { name: `${ctx.categoriaData.plural} ${label}`,                                  path: buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade, categoria: raw.categoria }) },
       { name: ctx.bairroName,                                                          path: bairroUrl },
-      { name: ctx.filter.label,                                                        path: buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro) },
+      { name: ctx.filterLabel,                                                        path: buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro) },
     ]),
     buildCollectionPage({
       name: h1,
       url: canonicalUrl,
       numberOfItems: total,
-      description: `${ctx.categoriaData.plural} ${label.toLowerCase()} ${ctx.filter.fragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP.`,
+      description: `${ctx.categoriaData.plural} ${label.toLowerCase()} ${ctx.filterFragment} no ${ctx.bairroName}, ${ctx.cidadeName} SP.`,
       items: imoveis.map(buildPropertyProduct),
     }),
   ]
@@ -215,7 +167,7 @@ export default async function BairroFilterPage({ params }: PageProps) {
     { name: ctx.cidadeName,                            path: buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade }) },
     { name: `${ctx.categoriaData.plural} ${label}`,    path: buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade, categoria: raw.categoria }) },
     { name: ctx.bairroName,                            path: bairroUrl },
-    { name: ctx.filter.label,                          path: buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro) },
+    { name: ctx.filterLabel,                          path: buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro) },
   ]
 
   return (
