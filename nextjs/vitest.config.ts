@@ -13,4 +13,7 @@ export default defineConfig({
     // transitively (e.g. data/faq.tsx via lib/jsonLd.ts).
     jsx: 'automatic',
   },
+  oxc: {
+    jsx: { runtime: 'automatic' },
+  },
 })

@@ -65,7 +65,8 @@ describe('buildPropertyMetadata', () => {
     expect(meta.title).toBe('Casa na Vila Yara')
     expect(meta.alternates?.canonical).toContain('/imoveis/casa-na-vila-yara-42')
     expect(meta.openGraph?.images).toHaveLength(1)
-    expect(meta.twitter?.card).toBe('summary_large_image')
+    expect(meta.twitter).toBeDefined()
+    expect((meta.twitter as { card: string } | undefined)?.card).toBe('summary_large_image')
   })
 })
 

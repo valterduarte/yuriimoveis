@@ -6,83 +6,12 @@ import {
   fetchNavigationMatrix,
 } from '../../../../lib/api'
 import { detectEmpreendimento } from '../../../../lib/empreendimento'
-import { imovelSlug, slugify, buildSeoDescription } from '../../../../utils/imovelUtils'
-import { CATEGORIAS } from '../../../../data/categorias'
+import { imovelSlug, buildSeoDescription } from '../../../../utils/imovelUtils'
 import { PLACEHOLDER_IMAGE } from '../../../../lib/constants'
-import {
-  bairroDbNameToSlug,
-  buildHierarchicalUrl,
-  cidadeNameToSlug,
-  cidadeSlugToName,
-  hasRichBairroContent,
-  tipoToAcao,
-} from '../../../../lib/navigation'
 import { buildBreadcrumb, buildRealEstateListingSchema } from '../../../../lib/jsonLd'
 import ImovelDetalheClient from '../../../../components/ImovelDetalheClient'
 import PropertyCard from '../../../../components/PropertyCard'
-
-interface ExploreLink {
-  href: string
-  label: string
-}
-
-function buildExploreLinks(args: {
-  imovel: NonNullable<Awaited<ReturnType<typeof fetchImovel>>>
-  empreendimento: Awaited<ReturnType<typeof detectEmpreendimento>>
-  bairroInventoryForCategory: number
-}): ExploreLink[] {
-  const { imovel, empreendimento, bairroInventoryForCategory } = args
-  const acao = tipoToAcao(imovel.tipo)
-  const cidadeSlug = imovel.cidade ? cidadeNameToSlug(imovel.cidade) : ''
-  const bairroSlug = imovel.bairro ? bairroDbNameToSlug(imovel.bairro) : ''
-  const cidadeSupported = !!cidadeSlugToName(cidadeSlug)
-  const categoriaData = CATEGORIAS[imovel.categoria]
-  const categoriaPlural = categoriaData?.plural ?? 'Imóveis'
-  const actionLabel = acao === 'alugar' ? 'aluguel' : 'venda'
-  const bairroDisplay = imovel.bairro || ''
-  const cidadeDisplay = imovel.cidade || ''
-  const hasGuide = !!bairroSlug && hasRichBairroContent(bairroSlug)
-  const bairroHasOwnPage =
-    bairroInventoryForCategory >= 3 || (bairroInventoryForCategory >= 1 && hasGuide)
-
-  const links: ExploreLink[] = []
-  if (empreendimento) {
-    links.push({
-      href: `/empreendimentos/${slugify(empreendimento.nome)}`,
-      label:
-        empreendimento.totalUnidades >= 2
-          ? `Ver todas as ${empreendimento.totalUnidades} plantas do ${empreendimento.nome}`
-          : `Ver detalhes do empreendimento ${empreendimento.nome}`,
-    })
-  }
-  if (hasGuide) {
-    links.push({ href: `/bairros/${bairroSlug}`, label: `Guia do bairro ${bairroDisplay}` })
-  }
-  if (cidadeSupported && bairroSlug && bairroDisplay && bairroHasOwnPage) {
-    links.push({
-      href: buildHierarchicalUrl({ acao, cidade: cidadeSlug, categoria: imovel.categoria, bairro: bairroSlug }),
-      label: `${categoriaPlural} para ${actionLabel} no ${bairroDisplay}`,
-    })
-  }
-  if (cidadeSupported && cidadeDisplay) {
-    links.push({
-      href: buildHierarchicalUrl({ acao, cidade: cidadeSlug, categoria: imovel.categoria }),
-      label: `${categoriaPlural} para ${actionLabel} em ${cidadeDisplay}`,
-    })
-    links.push({
-      href: buildHierarchicalUrl({ acao, cidade: cidadeSlug }),
-      label: `Imóveis para ${actionLabel} em ${cidadeDisplay}`,
-    })
-  }
-  return links
-}
-
-function buildLcpImageHref(images: string[]): string {
-  const first = images[0]
-  return first?.includes('res.cloudinary.com')
-    ? first.replace('/upload/', '/upload/f_auto,q_auto,w_1920/')
-    : first
-}
+import { buildExploreLinks, buildLcpImageHref } from '../_lib/imovelDetalhe'
 
 export default async function ImovelDetalheView({ id }: { id: string }) {
   const imovel = await fetchImovel(id)

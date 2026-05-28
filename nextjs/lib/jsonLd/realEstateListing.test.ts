@@ -83,7 +83,7 @@ describe('buildRealEstateListingSchema', () => {
 
   it('omits geo when coords are missing', () => {
     const s = buildRealEstateListingSchema({
-      imovel: makeImovel({ lat: null, lng: null }),
+      imovel: makeImovel({ lat: undefined, lng: undefined }),
       description: '', images: [],
     })
     expect(s.geo).toBeUndefined()
