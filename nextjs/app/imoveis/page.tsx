@@ -54,7 +54,7 @@ export default function ImoveisPage({ searchParams }: { searchParams: Promise<Re
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <div className="bg-dark text-white py-12">
         <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+          <nav className="crumb-row" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
             <span aria-hidden="true">/</span>
             <span className="text-white" aria-current="page">Imóveis</span>

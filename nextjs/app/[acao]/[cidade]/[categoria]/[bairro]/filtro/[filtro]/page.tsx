@@ -203,7 +203,7 @@ export default async function BairroFilterPage({ params }: PageProps) {
         <PropertyResultsGrid imoveis={imoveis} />
 
         <section className="mt-14">
-          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por quartos no {ctx.bairroName}</h2>
+          <h2 className="heading-section">Filtrar por quartos no {ctx.bairroName}</h2>
           <FilterChipList>
             {BEDROOM_FILTERS.map(f => (
               <FilterChip key={f.slug} href={buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, f.slug)} active={f.slug === raw.filtro}>
@@ -214,7 +214,7 @@ export default async function BairroFilterPage({ params }: PageProps) {
         </section>
 
         <section className="mt-10">
-          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por preço no {ctx.bairroName}</h2>
+          <h2 className="heading-section">Filtrar por preço no {ctx.bairroName}</h2>
           <FilterChipList>
             {getAllPriceRanges(acaoToTipo(ctx.acao)).map(r => (
               <FilterChip key={r.slug} href={buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, r.slug)} active={r.slug === raw.filtro}>
@@ -225,7 +225,7 @@ export default async function BairroFilterPage({ params }: PageProps) {
         </section>
 
         <section className="mt-10">
-          <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por comodidade no {ctx.bairroName}</h2>
+          <h2 className="heading-section">Filtrar por comodidade no {ctx.bairroName}</h2>
           <FilterChipList>
             {AMENITY_FILTERS.map(a => (
               <FilterChip key={a.slug} href={buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, a.slug)} active={a.slug === raw.filtro}>

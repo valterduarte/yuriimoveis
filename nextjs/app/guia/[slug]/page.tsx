@@ -88,7 +88,7 @@ export default async function GuiaPage({ params }: PageProps) {
             <span className="text-white" aria-current="page">{guia.titulo}</span>
           </nav>
           <span className="section-label">{guia.subtitulo}</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{guia.titulo}</h1>
+          <h1 className="heading-hero">{guia.titulo}</h1>
           <p className="text-gray-400 text-sm mt-3 max-w-3xl leading-relaxed">{guia.intro}</p>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default async function GuiaPage({ params }: PageProps) {
         <article className="space-y-10">
           {guia.sections.map((section, i) => (
             <section key={i} className="bg-white border border-gray-200 p-6 md:p-8">
-              <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">{section.heading}</h2>
+              <h2 className="heading-block">{section.heading}</h2>
               <div className="space-y-3">
                 {section.paragraphs.map((para, j) => (
                   <p key={j} className="text-gray-700 text-sm md:text-base leading-relaxed">{para}</p>
@@ -129,7 +129,7 @@ export default async function GuiaPage({ params }: PageProps) {
         </article>
 
         <section className="mt-12">
-          <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">Perguntas frequentes</h2>
+          <h2 className="heading-block">Perguntas frequentes</h2>
           <div className="space-y-3">
             {guia.faqs.map(faq => (
               <details key={faq.question} className="group bg-white border border-gray-200 p-4">
@@ -144,7 +144,7 @@ export default async function GuiaPage({ params }: PageProps) {
         </section>
 
         <section className="mt-12">
-          <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">Outros guias completos</h2>
+          <h2 className="heading-block">Outros guias completos</h2>
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {Object.values(GUIAS)
               .filter(g => g.slug !== guia.slug)

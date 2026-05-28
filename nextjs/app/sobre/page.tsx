@@ -88,7 +88,7 @@ export default function SobrePage() {
 
       <section className="py-24 bg-dark text-white">
         <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+          <nav className="crumb-row" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
             <span aria-hidden="true">/</span>
             <span className="text-white" aria-current="page">Sobre</span>
@@ -105,7 +105,7 @@ export default function SobrePage() {
         <div className="container mx-auto px-6">
           <div className="max-w-3xl">
             <h2 className="text-xs font-bold uppercase tracking-widest text-dark mb-6">Sobre o Corretor</h2>
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">
+            <p className="body-prose">
               Sou <strong>Yuri Duarte</strong>, corretor de imóveis registrado no <strong>CRECI-SP {CRECI}</strong>, atuando há mais de 10 anos no mercado imobiliário de Osasco, Barueri, Carapicuíba e cidades da Grande São Paulo. Você pode confirmar meu registro diretamente no{' '}
               <a
                 href="https://www.crecisp.gov.br/atendimento/profissionais"
@@ -116,13 +116,13 @@ export default function SobrePage() {
                 site oficial do CRECI-SP
               </a>.
             </p>
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">
+            <p className="body-prose">
               Minha trajetória começou pela paixão em ajudar pessoas a realizarem o sonho da casa própria. Ao longo dos anos, me especializei no mercado local de Osasco, acompanhando a evolução dos bairros, os lançamentos imobiliários e as melhores oportunidades de investimento na região. Esse trabalho de campo — visitar bairros toda semana, conversar com porteiros, síndicos e moradores antigos — é o que me permite identificar quando um anúncio está acima do preço justo e quando uma oportunidade vale a corrida.
             </p>
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">
+            <p className="body-prose">
               Trabalho com todos os tipos de imóveis — casas, apartamentos, terrenos, chalés, chácaras e comerciais — tanto para venda quanto para aluguel. Meu diferencial é o atendimento personalizado: entendo as necessidades de cada cliente e busco as melhores opções dentro do perfil e orçamento desejados. Não é incomum eu sugerir um bairro diferente do que o cliente imaginou inicialmente quando percebo que o perfil de transporte, escola ou tempo até o trabalho casa melhor com a vida dele.
             </p>
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">
+            <p className="body-prose">
               Ofereço assessoria completa em todas as etapas da negociação: análise de documentação, simulação de financiamento (incluindo <Link href="/simulador" className="text-primary underline hover:no-underline">Minha Casa Minha Vida e Caixa SBPE</Link>), acompanhamento na visita aos imóveis, conferência de matrícula no cartório, cálculo de ITBI e suporte até a entrega das chaves.
             </p>
             <p className="text-gray-700 text-sm leading-relaxed">
@@ -154,7 +154,7 @@ export default function SobrePage() {
         <div className="container mx-auto px-6">
           <div className="max-w-3xl">
             <h2 className="text-xs font-bold uppercase tracking-widest text-dark mb-6">Áreas de Atuação</h2>
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">
+            <p className="body-prose">
               Atendo principalmente em <strong>Osasco</strong> e cidades da <strong>Grande São Paulo</strong>, incluindo os bairros mais procurados como Presidente Altino, Bela Vista, Km 18, Jaguaribe, Centro, Cipava, Conceição, Santa Maria e Vila Isabel.
             </p>
             <p className="text-gray-700 text-sm leading-relaxed">

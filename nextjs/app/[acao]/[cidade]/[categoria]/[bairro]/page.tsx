@@ -286,10 +286,10 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
       {bairroData && (
         <section className="container mx-auto px-6 pt-10 pb-2">
           <div className="bg-white border border-gray-200 p-6 md:p-8">
-            <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">{sobreBairro(bairroName)} {bairroName}</h2>
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.sobre}</p>
+            <h2 className="heading-block">{sobreBairro(bairroName)} {bairroName}</h2>
+            <p className="body-prose">{bairroData.conteudo.sobre}</p>
             <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Infraestrutura</h3>
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bairroData.conteudo.infraestrutura}</p>
+            <p className="body-prose">{bairroData.conteudo.infraestrutura}</p>
             <h3 className="text-sm font-bold text-dark mt-5 mb-2 uppercase tracking-wide">Transporte e Acesso</h3>
             <p className="text-gray-700 text-sm leading-relaxed">{bairroData.conteudo.transporte}</p>
             <Link
@@ -313,7 +313,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
 
         {availableBedroomFilters.length > 0 && (
           <section className="mt-14">
-            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por quartos {emBairro(bairroName)} {bairroName}</h2>
+            <h2 className="heading-section">Filtrar por quartos {emBairro(bairroName)} {bairroName}</h2>
             <FilterChipList>
               {availableBedroomFilters.map(bf => (
                 <FilterChip key={bf.slug} href={`${buildHierarchicalUrl({ acao, cidade, categoria, bairro })}/filtro/${bf.slug}`}>
@@ -326,7 +326,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
 
         {siblingBairros.length > 0 && (
           <section className="mt-14">
-            <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Outros bairros em {cidadeName}</h2>
+            <h2 className="heading-section">Outros bairros em {cidadeName}</h2>
             <FilterChipList>
               {siblingBairros.map(b => (
                 <FilterChip key={b.slug} href={buildHierarchicalUrl({ acao, cidade, categoria, bairro: b.slug })}>

@@ -133,13 +133,13 @@ export default async function BairrosIndexPage() {
 
       <div className="bg-dark text-white py-12">
         <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
+          <nav className="crumb-row" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Início</Link>
             <span aria-hidden="true">/</span>
             <span className="text-white" aria-current="page">Guias de bairro</span>
           </nav>
           <span className="section-label">Conheça a região</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">
+          <h1 className="heading-hero">
             Melhores Bairros de Osasco, Barueri e Carapicuíba
           </h1>
           <p className="text-gray-400 text-sm mt-3 max-w-3xl leading-relaxed">
@@ -249,7 +249,7 @@ export default async function BairrosIndexPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-dark mb-4 uppercase tracking-wide">Perguntas frequentes sobre bairros na Grande SP Oeste</h2>
+          <h2 className="heading-block">Perguntas frequentes sobre bairros na Grande SP Oeste</h2>
           <div className="space-y-3">
             {FAQS.map(faq => (
               <details key={faq.question} className="group bg-white border border-gray-200 p-4">

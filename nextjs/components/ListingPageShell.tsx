@@ -38,7 +38,7 @@ export default function ListingPageShell({ jsonLd, breadcrumb, label, h1, total,
             })}
           </nav>
           <span className="section-label">{label}</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{h1}</h1>
+          <h1 className="heading-hero">{h1}</h1>
           <p className="text-gray-400 text-sm mt-2">{total} imóve{total !== 1 ? 'is' : 'l'} disponíve{total !== 1 ? 'is' : 'l'}</p>
         </div>
       </div>

@@ -266,7 +266,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
       <PropertyResultsGrid imoveis={imoveis} />
 
       <section className="mt-14">
-        <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">{relatedSectionTitle}</h2>
+        <h2 className="heading-section">{relatedSectionTitle}</h2>
         <FilterChipList>
           {relatedFilters.map(f => (
             <FilterChip key={f.slug} href={buildCategoryFilterUrl(acao, cidade, categoria, f.slug)} active={f.slug === filtro}>
@@ -277,7 +277,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
       </section>
 
       <section className="mt-10">
-        <h2 className="text-base font-bold text-dark mb-4 uppercase tracking-wide">Filtrar por comodidade</h2>
+        <h2 className="heading-section">Filtrar por comodidade</h2>
         <FilterChipList>
           {AMENITY_FILTERS.map(a => (
             <FilterChip key={a.slug} href={buildCategoryFilterUrl(acao, cidade, categoria, a.slug)} active={a.slug === filtro}>
