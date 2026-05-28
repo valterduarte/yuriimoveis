@@ -2,15 +2,8 @@
 
 import { FiAlertCircle, FiClock, FiDollarSign, FiHome, FiPercent, FiUsers } from 'react-icons/fi'
 import { TERM_OPTIONS, type CreditProgram } from '../../lib/financiamento'
+import { INCOME_PRESETS } from '../../data/financiamento'
 import { formatBRL, formatIntBR, formatRate, parseDigits } from '../../lib/formatters'
-
-const INCOME_PRESETS = [
-  { label: 'Até R$ 3.200',        min: 1,     max: 3200,     value: 2500 },
-  { label: 'R$ 3.200 – 5.000',    min: 3201,  max: 5000,     value: 4200 },
-  { label: 'R$ 5.000 – 9.600',    min: 5001,  max: 9600,     value: 7500 },
-  { label: 'R$ 9.600 – 13.000',   min: 9601,  max: 13000,    value: 11000 },
-  { label: 'Acima de R$ 13.000',  min: 13001, max: Infinity, value: 18000 },
-]
 
 interface SimuladorFormProps {
   propertyValue: number

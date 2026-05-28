@@ -17,15 +17,15 @@ export interface SimulationResult {
   upfrontCostsTotal: number
 }
 
-const SAC_RATE_DEFAULT_ANNUAL = 11.49
+export const SAC_RATE_DEFAULT_ANNUAL = 11.49
 export const ITBI_RATE = 0.02
 export const REGISTRATION_RATE = 0.025
-const MCMV_FAIXA_1_INCOME_LIMIT = 3200
-const MCMV_FAIXA_2_INCOME_LIMIT = 5000
-const MCMV_FAIXA_3_INCOME_LIMIT = 9600
-const MCMV_FAIXA_4_INCOME_LIMIT = 13000
-const MCMV_PROPERTY_LIMIT = 400000
-const MCMV_FAIXA_4_PROPERTY_LIMIT = 600000
+export const MCMV_FAIXA_1_INCOME_LIMIT = 3200
+export const MCMV_FAIXA_2_INCOME_LIMIT = 5000
+export const MCMV_FAIXA_3_INCOME_LIMIT = 9600
+export const MCMV_FAIXA_4_INCOME_LIMIT = 13000
+export const MCMV_PROPERTY_LIMIT = 400000
+export const MCMV_FAIXA_4_PROPERTY_LIMIT = 600000
 export const MIN_DOWN_PAYMENT_RATE = 0.20
 
 /* ── Credit programs ─────────────────────────────────────────────────────────── */

@@ -3,6 +3,7 @@ import { FaWhatsapp } from 'react-icons/fa'
 import { FiCheckCircle, FiHome, FiDollarSign, FiMapPin, FiPercent } from 'react-icons/fi'
 import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA_BASE, PHONE_DISPLAY } from '../../lib/config'
 import { buildArticleSchema, buildBreadcrumb, buildFaqPageSchema } from '../../lib/jsonLd'
+import { MCMV_FAIXAS } from '../../data/financiamento'
 import WhatsAppLink from '../../components/WhatsAppLink'
 import type { Metadata } from 'next'
 
@@ -34,36 +35,7 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION, images: [OG_DEFAULT_IMAGE] },
 }
 
-const FAIXAS = [
-  {
-    nome: 'Faixa 1',
-    renda: 'até R$ 3.200/mês',
-    taxa: '4,00% a.a.',
-    teto: 'R$ 400 mil',
-    publico: 'Subsidio direto na entrada · juros mais baixos do programa',
-  },
-  {
-    nome: 'Faixa 2',
-    renda: 'R$ 3.200 a R$ 5.000/mês',
-    taxa: '5,50% a.a.',
-    teto: 'R$ 400 mil',
-    publico: 'Possível subsídio parcial · público mais frequente em Osasco',
-  },
-  {
-    nome: 'Faixa 3',
-    renda: 'R$ 5.000 a R$ 9.600/mês',
-    taxa: '7,66% a.a.',
-    teto: 'R$ 400 mil',
-    publico: 'Sem subsídio · juros ainda muito abaixo do mercado livre',
-  },
-  {
-    nome: 'Faixa 4',
-    renda: 'R$ 9.600 a R$ 13.000/mês',
-    taxa: '9,90% a.a.',
-    teto: 'R$ 600 mil',
-    publico: 'Novidade 2026 · teto ampliado para classe média',
-  },
-]
+const FAIXAS = MCMV_FAIXAS
 
 const BAIRROS_MCMV = [
   { nome: 'Vila Sul Americana', cidade: 'Carapicuíba', slug: 'vila-sul-americana', destaque: 'Acesso à CPTM, preço médio R$ 4,2 mil/m²' },
@@ -192,10 +164,10 @@ export default function McmvOsascoPage() {
                 {FAIXAS.map(f => (
                   <tr key={f.nome} className="border-t border-gray-200">
                     <td className="px-4 py-3 font-semibold text-dark whitespace-nowrap">{f.nome}</td>
-                    <td className="px-4 py-3 text-dark whitespace-nowrap">{f.renda}</td>
-                    <td className="px-4 py-3 text-dark whitespace-nowrap">{f.taxa}</td>
-                    <td className="px-4 py-3 text-dark whitespace-nowrap">{f.teto}</td>
-                    <td className="px-4 py-3 text-gray-700">{f.publico}</td>
+                    <td className="px-4 py-3 text-dark whitespace-nowrap">{f.incomeRangeFormatted}</td>
+                    <td className="px-4 py-3 text-dark whitespace-nowrap">{f.rateFormatted}</td>
+                    <td className="px-4 py-3 text-dark whitespace-nowrap">{f.propertyLimitFormatted}</td>
+                    <td className="px-4 py-3 text-gray-700">{f.audience}</td>
                   </tr>
                 ))}
               </tbody>
