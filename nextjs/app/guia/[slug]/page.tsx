@@ -4,6 +4,7 @@ import { FiArrowRight, FiBookOpen, FiTool, FiHome, FiList } from 'react-icons/fi
 import { getGuiaBySlug, GUIA_SLUGS, GUIAS } from '../../../data/guias'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../../lib/config'
 import { buildBreadcrumb, buildFaqPageSchema, buildArticleSchema } from '../../../lib/jsonLd'
+import PageHero from '../../../components/ui/PageHero'
 import type { GuiaLink } from '../../../data/guias'
 import type { Metadata } from 'next'
 
@@ -78,20 +79,16 @@ export default async function GuiaPage({ params }: PageProps) {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       ))}
 
-      <div className="bg-dark text-white py-12">
-        <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4 flex-wrap" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white transition-colors">Início</Link>
-            <span aria-hidden="true">/</span>
-            <Link href="/guia" className="hover:text-white transition-colors">Guias</Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-white" aria-current="page">{guia.titulo}</span>
-          </nav>
-          <span className="section-label">{guia.subtitulo}</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{guia.titulo}</h1>
-          <p className="text-gray-400 text-sm mt-3 max-w-3xl leading-relaxed">{guia.intro}</p>
-        </div>
-      </div>
+      <PageHero
+        breadcrumbs={[
+          { label: 'Início', href: '/' },
+          { label: 'Guias',  href: '/guia' },
+          { label: guia.titulo },
+        ]}
+        eyebrow={guia.subtitulo}
+        title={guia.titulo}
+        description={guia.intro}
+      />
 
       <div className="container mx-auto px-6 py-10 max-w-4xl">
         <article className="space-y-10">

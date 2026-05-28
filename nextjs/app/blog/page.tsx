@@ -4,6 +4,7 @@ import { fetchPublishedBlogPosts } from '../../lib/api'
 import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
 import { PLACEHOLDER_IMAGE } from '../../lib/constants'
 import { buildBreadcrumb, buildCollectionPage } from '../../lib/jsonLd'
+import PageHero from '../../components/ui/PageHero'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -44,18 +45,12 @@ export default async function BlogListPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       ))}
 
-      <div className="bg-dark text-white py-12">
-        <div className="container mx-auto px-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-4" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white transition-colors">Início</Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-white" aria-current="page">Blog</span>
-          </nav>
-          <span className="section-label">Conteúdo</span>
-          <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">Blog Imobiliário</h1>
-          <p className="text-gray-400 text-sm mt-2">Dicas, guias e informações sobre o mercado imobiliário em Osasco e região</p>
-        </div>
-      </div>
+      <PageHero
+        breadcrumbs={[{ label: 'Início', href: '/' }, { label: 'Blog' }]}
+        eyebrow="Conteúdo"
+        title="Blog Imobiliário"
+        description="Dicas, guias e informações sobre o mercado imobiliário em Osasco e região"
+      />
 
       <div className="container mx-auto px-6 py-10">
         {posts.length === 0 ? (
