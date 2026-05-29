@@ -298,6 +298,8 @@ export default async function Footer() {
             <Link href="/bairros" className="hover:text-primary transition-colors">Bairros</Link>
             <span aria-hidden="true" className="hidden md:inline">•</span>
             <Link href="/guia" className="hover:text-primary transition-colors">Guias</Link>
+            <span aria-hidden="true" className="hidden md:inline">•</span>
+            <Link href="/blog" className="hover:text-primary transition-colors">Blog</Link>
           </div>
         </div>
       </div>
