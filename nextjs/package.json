@@ -15,6 +15,7 @@
     "seed:blog": "tsx scripts/seed-blog.ts",
     "submit:indexing": "tsx scripts/submit-indexing.ts",
     "submit:indexing:queue": "tsx scripts/submit-indexing.ts --queue",
+    "gsc:index-status": "tsx scripts/inspect-index-status.ts",
     "gsc:token": "tsx scripts/verify-gsc-ownership.ts token",
     "gsc:verify": "tsx scripts/verify-gsc-ownership.ts verify",
     "prepare": "cd .. && git config core.hooksPath nextjs/.husky || true"
