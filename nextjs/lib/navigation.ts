@@ -1,6 +1,7 @@
 import { BAIRROS, getBairroBySlug } from '../data/bairros'
 import { getCategoriaBySlug } from '../data/categorias'
 import { slugify } from '../utils/imovelUtils'
+import { SEO_MIN_PROPERTIES_FOR_INDEXING } from './constants'
 import type { BairroData, TransactionType } from '../types'
 
 export type AcaoSlug = 'comprar' | 'alugar'
@@ -64,6 +65,17 @@ export function bairroDbNameToSlug(dbName: string): string {
 
 export function hasRichBairroContent(bairroSlug: string): boolean {
   return !!getBairroBySlug(bairroSlug)
+}
+
+/**
+ * Single source of truth for whether a hierarchical category+bairro leaf page
+ * should be indexed. Shared by the sitemap and the page's robots meta so the
+ * sitemap never advertises a noindexed URL. A leaf qualifies when it has enough
+ * listings on its own, or has at least one listing in a bairro that ships rich
+ * editorial content.
+ */
+export function isHierarchicalLeafIndexable(count: number, bairroSlug: string): boolean {
+  return count >= SEO_MIN_PROPERTIES_FOR_INDEXING || (count >= 1 && hasRichBairroContent(bairroSlug))
 }
 
 export function buildHierarchicalUrl(params: {

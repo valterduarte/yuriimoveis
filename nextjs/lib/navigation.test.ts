@@ -9,6 +9,7 @@ import {
   bairroSlugToDbName,
   bairroDbNameToSlug,
   hasRichBairroContent,
+  isHierarchicalLeafIndexable,
   buildHierarchicalUrl,
   inferCidadeFromBairro,
   ACAO_LABELS,
@@ -105,6 +106,28 @@ describe('hasRichBairroContent', () => {
 
   it('returns false for slugs that are not in the data file', () => {
     expect(hasRichBairroContent('nao-existe')).toBe(false)
+  })
+})
+
+describe('isHierarchicalLeafIndexable', () => {
+  it('indexes any leaf with enough listings regardless of bairro content', () => {
+    expect(isHierarchicalLeafIndexable(3, 'nao-existe')).toBe(true)
+    expect(isHierarchicalLeafIndexable(10, 'nao-existe')).toBe(true)
+  })
+
+  it('indexes a thin leaf when the bairro ships rich editorial content', () => {
+    expect(isHierarchicalLeafIndexable(1, 'centro')).toBe(true)
+    expect(isHierarchicalLeafIndexable(2, 'centro')).toBe(true)
+  })
+
+  it('does not index a thin leaf in a bairro without rich content', () => {
+    expect(isHierarchicalLeafIndexable(1, 'nao-existe')).toBe(false)
+    expect(isHierarchicalLeafIndexable(2, 'nao-existe')).toBe(false)
+  })
+
+  it('never indexes an empty leaf', () => {
+    expect(isHierarchicalLeafIndexable(0, 'centro')).toBe(false)
+    expect(isHierarchicalLeafIndexable(0, 'nao-existe')).toBe(false)
   })
 })
 

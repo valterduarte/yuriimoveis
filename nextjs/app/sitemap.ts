@@ -13,7 +13,7 @@ import {
   cidadeNameToSlug,
   cidadeSlugToName,
   buildHierarchicalUrl,
-  hasRichBairroContent,
+  isHierarchicalLeafIndexable,
   type AcaoSlug,
 } from '../lib/navigation'
 import { SITE_URL } from '../lib/config'
@@ -133,8 +133,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })
     }
 
-    const passesThreshold = row.count >= 3 || (row.count >= 1 && hasRichBairroContent(bairroSlug))
-    if (!passesThreshold) continue
+    if (!isHierarchicalLeafIndexable(row.count, bairroSlug)) continue
 
     const leafKey = `${acao}|${cidadeSlug}|${row.categoria}|${bairroSlug}`
     if (hierarchicalSeen.has(leafKey)) continue

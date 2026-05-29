@@ -7,7 +7,7 @@ import PropertyResultsGrid from '../../../../../components/PropertyResultsGrid'
 import { FilterChip, FilterChipList } from '../../../../../components/FilterChip'
 import { formatNeighborhoodName, emBairro, deBairro, sobreBairro, formatPrice } from '../../../../../utils/imovelUtils'
 import { getBairroBySlug, BAIRROS } from '../../../../../data/bairros'
-import { ITBI_RATE_BY_CITY, SEO_MIN_PROPERTIES_FOR_INDEXING } from '../../../../../lib/constants'
+import { ITBI_RATE_BY_CITY } from '../../../../../lib/constants'
 import {
   acaoToTipo,
   isValidAcao,
@@ -17,7 +17,7 @@ import {
   getCategoriaBySlug,
   bairroSlugToDbName,
   bairroDbNameToSlug,
-  hasRichBairroContent,
+  isHierarchicalLeafIndexable,
   buildHierarchicalUrl,
   inferCidadeFromBairro,
   ACAO_LABELS,
@@ -33,10 +33,6 @@ export const revalidate = 300
 
 type PageProps = {
   params: Promise<{ acao: string; cidade: string; categoria: string; bairro: string }>
-}
-
-function threshold(count: number, bairroSlug: string): boolean {
-  return count >= 3 || (count >= 1 && hasRichBairroContent(bairroSlug))
 }
 
 interface PriceRange {
@@ -141,7 +137,7 @@ export async function generateStaticParams() {
       bairro:    bairroDbNameToSlug(row.bairro),
       count:     row.count,
     }))
-    .filter(p => cidadeSlugToName(p.cidade) && getCategoriaBySlug(p.categoria) && threshold(p.count, p.bairro))
+    .filter(p => cidadeSlugToName(p.cidade) && getCategoriaBySlug(p.categoria) && isHierarchicalLeafIndexable(p.count, p.bairro))
     .map(({ count: _count, ...rest }) => rest)
 }
 
@@ -184,7 +180,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     url: `${SITE_URL}${buildHierarchicalUrl({ acao, cidade, categoria, bairro })}`,
-    noindex: total < SEO_MIN_PROPERTIES_FOR_INDEXING,
+    noindex: !isHierarchicalLeafIndexable(total, bairro),
   })
 }
 
@@ -209,7 +205,7 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
     limit: 50,
   })
 
-  if (!threshold(total, bairro)) {
+  if (!isHierarchicalLeafIndexable(total, bairro)) {
     permanentRedirect(buildHierarchicalUrl({ acao, cidade, categoria }))
   }
 
