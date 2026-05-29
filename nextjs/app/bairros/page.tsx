@@ -3,9 +3,9 @@ import { FiMapPin, FiArrowRight, FiTrendingUp } from 'react-icons/fi'
 import { BAIRROS } from '../../data/bairros'
 import { fetchNavigationMatrix } from '../../lib/api'
 import { bairroSlugToDbName, inferCidadeFromBairro } from '../../lib/navigation'
-import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
+import { SITE_URL } from '../../lib/config'
 import { buildBreadcrumb, buildCollectionPage, buildFaqPageSchema } from '../../lib/jsonLd'
-import type { Metadata } from 'next'
+import { buildPageMetadata } from '../../lib/seo'
 import type { BairroData } from '../../types'
 
 export const revalidate = 300
@@ -14,24 +14,11 @@ const PAGE_TITLE = 'Melhores Bairros de Osasco, Barueri e Carapicuíba 2026 — 
 const PAGE_DESCRIPTION =
   'Os melhores bairros de Osasco, Barueri e Carapicuíba em 2026: compare preços por m², transporte, infraestrutura, escolas e imóveis disponíveis. Guias completos para morar ou investir na Grande SP Oeste.'
 
-export function generateMetadata(): Metadata {
-  const url = `${SITE_URL}/bairros`
-  return {
-    title: PAGE_TITLE,
-    description: PAGE_DESCRIPTION,
-    alternates: { canonical: url },
-    openGraph: {
-      title: PAGE_TITLE,
-      description: PAGE_DESCRIPTION,
-      url,
-      siteName: 'Corretor Yuri Imóveis',
-      locale: 'pt_BR',
-      type: 'website',
-      images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: PAGE_TITLE }],
-    },
-    twitter: { card: 'summary_large_image', title: PAGE_TITLE, description: PAGE_DESCRIPTION, images: [OG_DEFAULT_IMAGE] },
-  }
-}
+export const metadata = buildPageMetadata({
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  url: `${SITE_URL}/bairros`,
+})
 
 const CITY_PROFILES = [
   {

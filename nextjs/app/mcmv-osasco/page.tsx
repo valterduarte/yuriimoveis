@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { FaWhatsapp } from 'react-icons/fa'
 import { FiCheckCircle, FiHome, FiDollarSign, FiMapPin, FiPercent } from 'react-icons/fi'
-import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA_BASE, PHONE_DISPLAY } from '../../lib/config'
+import { SITE_URL, PHONE_WA_BASE, PHONE_DISPLAY } from '../../lib/config'
 import { buildArticleSchema, buildBreadcrumb, buildFaqPageSchema } from '../../lib/jsonLd'
 import { MCMV_FAIXAS } from '../../data/financiamento'
+import { buildPageMetadata } from '../../lib/seo'
 import WhatsAppLink from '../../components/WhatsAppLink'
-import type { Metadata } from 'next'
 
 const PAGE_URL = `${SITE_URL}/mcmv-osasco`
 const PUBLISHED_AT = '2026-05-19'
@@ -17,23 +17,15 @@ const DESCRIPTION =
 const WA_TEXT = encodeURIComponent('Olá! Quero comprar imóvel pelo Minha Casa Minha Vida em Osasco. Pode me ajudar?')
 const WA_HREF = `${PHONE_WA_BASE}?text=${WA_TEXT}`
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: PAGE_URL },
-  openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
-    url: PAGE_URL,
-    siteName: 'Corretor Yuri Imóveis',
-    locale: 'pt_BR',
-    type: 'article',
-    publishedTime: PUBLISHED_AT,
-    modifiedTime: MODIFIED_AT,
-    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: 'Minha Casa Minha Vida em Osasco' }],
-  },
-  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION, images: [OG_DEFAULT_IMAGE] },
-}
+  url: PAGE_URL,
+  type: 'article',
+  publishedTime: PUBLISHED_AT,
+  modifiedTime: MODIFIED_AT,
+  ogImageAlt: 'Minha Casa Minha Vida em Osasco',
+})
 
 const FAIXAS = MCMV_FAIXAS
 

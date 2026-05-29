@@ -2,6 +2,7 @@ import { fetchFeaturedProperties, fetchSiteConfig, fetchCidadesByTipo, fetchBair
 import { buildHomepageJsonLd } from '../lib/jsonLd'
 import { HOMEPAGE_FAQ } from '../data/faq'
 import { SITE_URL } from '../lib/config'
+import { buildPageMetadata } from '../lib/seo'
 import HeroSection from '../components/home/HeroSection'
 import FeaturedProperties from '../components/home/FeaturedProperties'
 import CTASection from '../components/home/CTASection'
@@ -11,29 +12,16 @@ const FALLBACK_HERO = 'https://res.cloudinary.com/dfl3eskr9/image/upload/v177508
 
 export const revalidate = 300
 
-export const metadata = {
+export const metadata = buildPageMetadata({
   title: { absolute: 'Corretor Yuri — Imóveis em Osasco, Barueri e Carapicuíba' },
   description:
     'Corretor de imóveis em Osasco, Barueri e Carapicuíba com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para compra e aluguel.',
-  alternates: { canonical: SITE_URL },
-  openGraph: {
-    type: 'website',
-    title: 'Corretor Yuri — Imóveis em Osasco, Barueri e Carapicuíba',
-    description:
-      'Corretor de imóveis em Osasco, Barueri e Carapicuíba com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para compra e aluguel.',
-    url: SITE_URL,
-    siteName: 'Corretor Yuri Imóveis',
-    locale: 'pt_BR',
-    images: [{ url: FALLBACK_HERO, width: 1280, height: 853, alt: 'Ponte Metálica de Osasco — atendimento em Osasco, Barueri e Carapicuíba' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Corretor Yuri — Imóveis em Osasco, Barueri e Carapicuíba',
-    description:
-      'Corretor de imóveis em Osasco, Barueri e Carapicuíba com mais de 10 anos de experiência. Casas, apartamentos, terrenos e comerciais para compra e aluguel.',
-    images: [FALLBACK_HERO],
-  },
-}
+  url: SITE_URL,
+  ogImage: FALLBACK_HERO,
+  ogImageAlt: 'Ponte Metálica de Osasco — atendimento em Osasco, Barueri e Carapicuíba',
+  ogImageWidth: 1280,
+  ogImageHeight: 853,
+})
 
 export default async function Home() {
   const [featuredProperties, heroImageUrl, cidadesByTipo, bairrosPorCidade] = await Promise.all([

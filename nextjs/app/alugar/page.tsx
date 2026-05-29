@@ -1,29 +1,20 @@
 import Link from 'next/link'
 import { FaWhatsapp } from 'react-icons/fa'
 import { FiCheckCircle } from 'react-icons/fi'
-import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA_BASE, PHONE_TEL, PHONE_DISPLAY, CRECI } from '../../lib/config'
+import { SITE_URL, PHONE_WA_BASE, PHONE_TEL, PHONE_DISPLAY, CRECI } from '../../lib/config'
 import { buildBreadcrumb } from '../../lib/jsonLd'
+import { buildPageMetadata } from '../../lib/seo'
 import WhatsAppLink from '../../components/WhatsAppLink'
-import type { Metadata } from 'next'
 
 const TITLE = 'Aluguel de Imóveis em Osasco, Barueri e Carapicuíba — Corretor Yuri'
 const DESCRIPTION = `Busco aluguéis sob medida em Osasco, Barueri e Carapicuíba conforme seu orçamento e bairro. Atendimento direto com o Corretor Yuri, CRECI-SP ${CRECI}, sem taxa de pesquisa.`
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: `${SITE_URL}/alugar` },
-  openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
-    url: `${SITE_URL}/alugar`,
-    siteName: 'Corretor Yuri Imóveis',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: 'Aluguel de imóveis com o Corretor Yuri' }],
-  },
-  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION, images: [OG_DEFAULT_IMAGE] },
-}
+  url: `${SITE_URL}/alugar`,
+  ogImageAlt: 'Aluguel de imóveis com o Corretor Yuri',
+})
 
 const WA_TEXT = encodeURIComponent(
   'Olá Yuri! Estou procurando imóvel para alugar. Pode me ajudar?'

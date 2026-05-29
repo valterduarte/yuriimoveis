@@ -11,6 +11,7 @@ import {
 } from '../../../lib/config'
 import WhatsAppLink from '../../../components/WhatsAppLink'
 import { AJUDA_ARTIGOS, getAjudaArtigoBySlug, fullH1, type ArticleBlock, type Cartorio } from '../../../data/ajudaArtigos'
+import { buildPageMetadata } from '../../../lib/seo'
 import type { Metadata } from 'next'
 
 interface PageProps {
@@ -26,29 +27,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const artigo = getAjudaArtigoBySlug(slug)
   if (!artigo) return {}
 
-  const url = `${SITE_URL}/ajuda/${artigo.slug}`
-  return {
+  return buildPageMetadata({
     title: { absolute: artigo.titulo },
     description: artigo.descricaoMeta,
-    alternates: { canonical: url },
-    openGraph: {
-      title: artigo.titulo,
-      description: artigo.descricaoMeta,
-      url,
-      siteName: 'Corretor Yuri Imóveis',
-      locale: 'pt_BR',
-      type: 'article',
-      publishedTime: artigo.atualizadoEm,
-      modifiedTime: artigo.atualizadoEm,
-      images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: fullH1(artigo) }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: artigo.titulo,
-      description: artigo.descricaoMeta,
-      images: [OG_DEFAULT_IMAGE],
-    },
-  }
+    url: `${SITE_URL}/ajuda/${artigo.slug}`,
+    type: 'article',
+    publishedTime: artigo.atualizadoEm,
+    modifiedTime: artigo.atualizadoEm,
+    ogImageAlt: fullH1(artigo),
+  })
 }
 
 function renderBlock(block: ArticleBlock, key: number) {

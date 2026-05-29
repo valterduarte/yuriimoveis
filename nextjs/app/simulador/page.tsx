@@ -1,35 +1,22 @@
 import Link from 'next/link'
-import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
+import { SITE_URL } from '../../lib/config'
 import SimuladorClient from '../../components/simulador/SimuladorClient'
 import { buildFaqPageSchema } from '../../lib/jsonLd'
 import { FINANCING_PROGRAMS } from '../../data/financiamento'
-import type { Metadata } from 'next'
+import { buildPageMetadata } from '../../lib/seo'
 
 const PAGE_TITLE = 'Simulador de Financiamento Imobiliário'
 const SOCIAL_TITLE = `${PAGE_TITLE} — Corretor Yuri`
 const DESCRIPTION =
   'Simule o financiamento do seu imóvel pelo sistema SAC: parcelas, juros, ITBI e custos de cartório. Veja se você se enquadra no Minha Casa Minha Vida.'
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: PAGE_TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: `${SITE_URL}/simulador` },
-  openGraph: {
-    title: SOCIAL_TITLE,
-    description: DESCRIPTION,
-    url: `${SITE_URL}/simulador`,
-    siteName: 'Corretor Yuri Imóveis',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: 'Simulador de Financiamento' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: SOCIAL_TITLE,
-    description: DESCRIPTION,
-    images: [OG_DEFAULT_IMAGE],
-  },
-}
+  url: `${SITE_URL}/simulador`,
+  socialTitle: SOCIAL_TITLE,
+  ogImageAlt: 'Simulador de Financiamento',
+})
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',

@@ -2,10 +2,10 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import ImoveisResults, { ImoveisResultsFallback } from '../../components/imoveis/ImoveisResults'
 import { FilterChip, FilterChipList } from '../../components/FilterChip'
-import { SITE_URL, OG_DEFAULT_IMAGE } from '../../lib/config'
+import { SITE_URL } from '../../lib/config'
 import { buildBreadcrumb } from '../../lib/jsonLd'
 import { buildHierarchicalUrl, getAllCidadeSlugs, cidadeSlugToName } from '../../lib/navigation'
-import type { Metadata } from 'next'
+import { buildPageMetadata } from '../../lib/seo'
 
 export const revalidate = 60
 
@@ -14,26 +14,14 @@ const SOCIAL_TITLE = `${PAGE_TITLE} — Corretor Yuri`
 const BASE_DESCRIPTION = 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco, Barueri e Carapicuíba. Atendimento com o Corretor Yuri, CRECI-SP 235509.'
 const SOCIAL_DESCRIPTION = 'Encontre casas, apartamentos e terrenos à venda e para alugar em Osasco, Barueri e Carapicuíba.'
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: PAGE_TITLE,
   description: BASE_DESCRIPTION,
-  alternates: { canonical: `${SITE_URL}/imoveis` },
-  openGraph: {
-    title: SOCIAL_TITLE,
-    description: SOCIAL_DESCRIPTION,
-    url: `${SITE_URL}/imoveis`,
-    siteName: 'Corretor Yuri Imóveis',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [{ url: OG_DEFAULT_IMAGE, width: 1200, height: 630, alt: 'Imóveis em Osasco, Barueri e Carapicuíba' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: SOCIAL_TITLE,
-    description: SOCIAL_DESCRIPTION,
-    images: [OG_DEFAULT_IMAGE],
-  },
-}
+  url: `${SITE_URL}/imoveis`,
+  socialTitle: SOCIAL_TITLE,
+  socialDescription: SOCIAL_DESCRIPTION,
+  ogImageAlt: PAGE_TITLE,
+})
 
 const breadcrumbJsonLd = buildBreadcrumb([
   { name: 'Início',  path: '/' },
