@@ -56,6 +56,11 @@ export const GET = withErrorHandler('GET /api/track-click', async (request: Next
     [days]
   )
 
+  const recentResult = await getDb().query(
+    `SELECT id, source, page, device, created_at FROM wa_clicks WHERE created_at >= NOW() - INTERVAL '1 day' * $1 ORDER BY created_at DESC LIMIT 50`,
+    [days]
+  )
+
   return NextResponse.json({
     days,
     total: parseInt(totalResult.rows[0].total),
@@ -63,5 +68,6 @@ export const GET = withErrorHandler('GET /api/track-click', async (request: Next
     byDevice: byDeviceResult.rows,
     byPage: byPageResult.rows,
     byDay: byDayResult.rows,
+    recent: recentResult.rows,
   })
 })

@@ -11,6 +11,7 @@ interface ClickStats {
   byDevice: { device: string; clicks: string }[]
   byPage: { page: string; clicks: string }[]
   byDay: { date: string; clicks: string }[]
+  recent: { id: number; source: string; page: string; device: string; created_at: string }[]
 }
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -86,6 +87,44 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
           <option value={90}>90 dias</option>
         </select>
       </div>
+
+      {/* Recent clicks feed — trace an individual lead back to its button + property */}
+      {stats.recent?.length > 0 && (
+        <div className="bg-white border border-gray-200 p-6">
+          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-4">Cliques recentes</h3>
+          <div className="divide-y divide-gray-50">
+            {stats.recent.map(c => (
+              <div key={c.id} className="flex items-center justify-between gap-3 py-2.5 text-xs">
+                <div className="min-w-0">
+                  <p className="font-medium text-dark">
+                    {SOURCE_LABELS[c.source] || c.source}
+                    <span className="ml-2 text-[10px] uppercase tracking-widest text-gray-400">
+                      {c.device === 'mobile' ? 'Mobile' : 'Desktop'}
+                    </span>
+                  </p>
+                  <a
+                    href={c.page}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={c.page}
+                    className="block text-gray-500 truncate hover:text-primary hover:underline"
+                  >
+                    {c.page}
+                  </a>
+                </div>
+                <span className="shrink-0 text-gray-400 whitespace-nowrap">
+                  {new Date(c.created_at).toLocaleString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Device split */}
       <div className="bg-white border border-gray-200 p-6">
