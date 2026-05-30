@@ -4,6 +4,7 @@ import './globals.css'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import FloatingContact from '../components/FloatingContact'
+import ChatWidget from '../components/chat/ChatWidget'
 import CompareBar from '../components/compare/CompareBar'
 import PublicChrome, { MainContent } from '../components/PublicChrome'
 import ScrollReveal from '../components/ScrollReveal'
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PublicChrome><Footer /></PublicChrome>
         <PublicChrome><CompareBar /></PublicChrome>
         <PublicChrome><FloatingContact /></PublicChrome>
+        <PublicChrome><ChatWidget /></PublicChrome>
         <ScrollReveal />
         <GoogleAnalytics />
         <SpeedInsights />
