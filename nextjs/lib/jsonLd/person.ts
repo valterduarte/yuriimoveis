@@ -1,4 +1,4 @@
-import { SITE_URL, PHONE_STRUCTURED, INSTAGRAM_URL, CRECI } from '../config'
+import { SITE_URL, PHONE_STRUCTURED, INSTAGRAM_URL, GOOGLE_BUSINESS_URL, CRECI } from '../config'
 import { AGENT_ID, PERSON_ID } from './ids'
 
 interface PersonSchemaInput {
@@ -47,6 +47,6 @@ export function buildPersonSchema({
       'ITBI e impostos imobiliários',
       'Imóveis residenciais e comerciais',
     ],
-    sameAs: [INSTAGRAM_URL],
+    sameAs: [INSTAGRAM_URL, GOOGLE_BUSINESS_URL],
   }
 }

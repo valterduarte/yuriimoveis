@@ -1,4 +1,4 @@
-import { SITE_URL, PHONE_STRUCTURED, INSTAGRAM_URL, OG_DEFAULT_IMAGE, CRECI } from '../config'
+import { SITE_URL, PHONE_STRUCTURED, INSTAGRAM_URL, GOOGLE_BUSINESS_URL, OG_DEFAULT_IMAGE, CRECI } from '../config'
 import { AGENT_ID, PERSON_ID, WEBSITE_ID } from './ids'
 import { buildFaqPageSchema, type FaqEntry } from './faq'
 
@@ -82,7 +82,8 @@ export function buildGlobalJsonLd(): Record<string, unknown>[] {
       },
       founder:  { '@id': PERSON_ID },
       employee: [{ '@id': PERSON_ID }],
-      sameAs: [INSTAGRAM_URL],
+      hasMap: GOOGLE_BUSINESS_URL,
+      sameAs: [INSTAGRAM_URL, GOOGLE_BUSINESS_URL],
     },
   ]
 }
