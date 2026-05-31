@@ -297,6 +297,8 @@ export const GUIAS: Record<string, GuiaData> = {
         ],
         links: [
           { href: '/ajuda/custos-para-comprar-imovel-em-osasco', label: 'Custos totais de compra em Osasco', description: 'Cálculo detalhado de ITBI (3% em Osasco), escritura e registro', type: 'ajuda' },
+          { href: '/ajuda/itbi-osasco', label: 'ITBI de Osasco: cálculo e isenção', description: 'A alíquota de 3%, a base de cálculo e quando há redução pelo MCMV ou SFH', type: 'ajuda' },
+          { href: '/ajuda/iptu-osasco', label: 'IPTU de Osasco: cálculo, parcelamento e isenção', description: 'Como funciona o IPTU e por que conferir débitos do imóvel antes de comprar', type: 'ajuda' },
           { href: '/blog/fgts-compra-imovel-como-usar', label: 'Como usar o FGTS para compor a entrada', description: 'Regras de elegibilidade, modos de uso e limites por programa', type: 'blog' },
         ],
       },

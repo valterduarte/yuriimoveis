@@ -259,6 +259,14 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
         type: 'p',
         text: 'Quem financia paga ainda algumas tarifas do banco: avaliação do imóvel (em média entre R$ 3.500 e R$ 4.500*), tarifa de abertura de crédito e seguros obrigatórios (MIP e DFI) embutidos nas parcelas. Na Caixa, dentro do Minha Casa Minha Vida, várias dessas tarifas são reduzidas ou subsidiadas, conforme o enquadramento do comprador.',
       },
+      {
+        type: 'callout',
+        text: 'Antes de fechar, vale comparar bancos, taxas (Caixa, Itaú, Bradesco, Santander), uso do FGTS e o CET real no guia completo de financiamento em Osasco.',
+        link: {
+          href: '/guia/financiamento-imobiliario-osasco',
+          label: 'Guia de financiamento imobiliário em Osasco',
+        },
+      },
 
       { type: 'h2', text: 'Resumo dos custos esperados*' },
       {
