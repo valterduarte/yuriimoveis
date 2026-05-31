@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { FiMapPin, FiArrowRight, FiTrendingUp } from 'react-icons/fi'
 import { BAIRROS } from '../../data/bairros'
 import { fetchNavigationMatrix } from '../../lib/api'
-import { bairroSlugToDbName, inferCidadeFromBairro } from '../../lib/navigation'
+import { bairroSlugToDbName, bairroDbNameToSlug, cidadeNameToSlug, buildHierarchicalUrl, inferCidadeFromBairro } from '../../lib/navigation'
 import { SITE_URL } from '../../lib/config'
 import { buildBreadcrumb, buildCollectionPage, buildFaqPageSchema } from '../../lib/jsonLd'
 import { buildPageMetadata } from '../../lib/seo'
@@ -77,8 +77,18 @@ const FAQS = [
 export default async function BairrosIndexPage() {
   const matrix = await fetchNavigationMatrix()
   const countsByBairro = new Map<string, number>()
+  // Quantos apartamentos à venda existem por bairro e por cidade, para só linkar
+  // para a página transacional /comprar/[cidade]/apartamento/[bairro] quando ela tiver imóveis.
+  const aptoVendaByBairroSlug = new Map<string, number>()
+  const aptoVendaByCidadeSlug = new Map<string, number>()
   for (const row of matrix) {
     countsByBairro.set(row.bairro, (countsByBairro.get(row.bairro) ?? 0) + row.count)
+    if (row.tipo === 'venda' && row.categoria === 'apartamento') {
+      const bairroSlug = bairroDbNameToSlug(row.bairro)
+      const cidadeSlug = cidadeNameToSlug(row.cidade)
+      aptoVendaByBairroSlug.set(bairroSlug, (aptoVendaByBairroSlug.get(bairroSlug) ?? 0) + row.count)
+      aptoVendaByCidadeSlug.set(cidadeSlug, (aptoVendaByCidadeSlug.get(cidadeSlug) ?? 0) + row.count)
+    }
   }
 
   const guidesByCidade = new Map<string, Array<{ bairro: BairroData; count: number }>>()
@@ -158,7 +168,10 @@ export default async function BairrosIndexPage() {
         <section className="mb-12">
           <h2 className="text-lg font-bold text-dark mb-5 uppercase tracking-wide">Comparativo rápido das três cidades</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {CITY_PROFILES.map(city => (
+            {CITY_PROFILES.map(city => {
+              const cidadeSlug = cidadeNameToSlug(city.cidade)
+              const aptoCount = aptoVendaByCidadeSlug.get(cidadeSlug) ?? 0
+              return (
               <div key={city.cidade} className="bg-white border border-gray-200 p-5">
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-1">{city.tagline}</p>
                 <h3 className="text-base font-bold text-dark mb-3">{city.cidade}</h3>
@@ -177,8 +190,18 @@ export default async function BairrosIndexPage() {
                   </div>
                 </dl>
                 <p className="text-xs text-gray-600 leading-relaxed">{city.perfil}</p>
+                {aptoCount > 0 && (
+                  <Link
+                    href={buildHierarchicalUrl({ acao: 'comprar', cidade: cidadeSlug, categoria: 'apartamento' })}
+                    className="mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-primary hover:underline"
+                  >
+                    Ver apartamentos à venda em {city.cidade}
+                    <FiArrowRight size={13} />
+                  </Link>
+                )}
               </div>
-            ))}
+              )
+            })}
           </div>
           <p className="text-[11px] text-gray-500 mt-3">Faixas de referência para imóveis usados e novos em 2026. Variação de ±15% conforme andar, conservação e localização dentro do bairro.</p>
         </section>
@@ -189,11 +212,14 @@ export default async function BairrosIndexPage() {
               <FiMapPin size={16} className="text-primary" /> {cidade}, SP
             </h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {guides.map(({ bairro, count }) => (
-                <li key={bairro.slug}>
+              {guides.map(({ bairro, count }) => {
+                const aptoVenda = aptoVendaByBairroSlug.get(bairro.slug) ?? 0
+                const cidadeSlug = cidadeNameToSlug(cidade)
+                return (
+                <li key={bairro.slug} className="bg-white border border-gray-200 hover:border-primary transition-colors">
                   <Link
                     href={`/bairros/${bairro.slug}`}
-                    className="block bg-white border border-gray-200 hover:border-primary hover:bg-primary/5 transition-colors p-5 group"
+                    className="block hover:bg-primary/5 transition-colors p-5 group"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="text-base font-bold text-dark group-hover:text-primary">Morar no {bairro.nome}</h3>
@@ -202,8 +228,18 @@ export default async function BairrosIndexPage() {
                     <p className="text-xs text-gray-500 mb-2">{count} imóve{count !== 1 ? 'is' : 'l'} disponíve{count !== 1 ? 'is' : 'l'}</p>
                     <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">{bairro.conteudo.sobre}</p>
                   </Link>
+                  {aptoVenda > 0 && (
+                    <Link
+                      href={buildHierarchicalUrl({ acao: 'comprar', cidade: cidadeSlug, categoria: 'apartamento', bairro: bairro.slug })}
+                      className="flex items-center justify-between gap-2 border-t border-gray-100 px-5 py-3 text-xs font-bold uppercase tracking-wider text-primary hover:bg-primary/5 transition-colors"
+                    >
+                      Ver apartamentos à venda no {bairro.nome}
+                      <FiArrowRight size={13} />
+                    </Link>
+                  )}
                 </li>
-              ))}
+                )
+              })}
             </ul>
           </section>
         ))}
