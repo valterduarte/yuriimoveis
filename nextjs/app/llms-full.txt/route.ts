@@ -67,6 +67,7 @@ function renderBlock(block: ArticleBlock): string {
       ? `\n> ${block.text} [${block.link.label}](${SITE_URL}${block.link.href})\n`
       : `\n> ${block.text}\n`
     case 'disclaimer': return `\n_${block.text}_\n`
+    case 'calculator': return '' // interactive widget — no prose for the text corpus
   }
 }
 

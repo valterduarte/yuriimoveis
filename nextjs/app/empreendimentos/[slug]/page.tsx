@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-import { EMPREENDIMENTO_RESERVED_SLUGS, listEmpreendimentos, fetchEmpreendimentoBySlug, type EmpreendimentoDetail } from '../../../lib/empreendimento'
+import { EMPREENDIMENTO_RESERVED_SLUGS, listEmpreendimentos, fetchEmpreendimentoBySlug, buildEmpreendimentoTitle, type EmpreendimentoDetail } from '../../../lib/empreendimento'
 import PropertyCard from '../../../components/PropertyCard'
 import WhatsAppLink from '../../../components/WhatsAppLink'
 import { SITE_URL, PHONE_WA_BASE, PHONE_DISPLAY, CRECI } from '../../../lib/config'
@@ -33,9 +33,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ? `a partir de ${formatPrice(emp.precoMin, 'venda')}`
     : `de ${formatPrice(emp.precoMin, 'venda')} a ${formatPrice(emp.precoMax, 'venda')}`
 
-  // Price-forward title: a buyer searching the development by name wants to see
-  // the price in the SERP — front-loading it lifts CTR on branded queries.
-  const title = `${emp.nome} — Apartamentos a partir de ${formatPrice(emp.precoMin, 'venda')}`
+  // City + price-forward title: branded queries are local ("ocean park osasco"),
+  // so the city is part of the match; the price lifts CTR. See buildEmpreendimentoTitle.
+  const title = buildEmpreendimentoTitle(emp.nome, emp.cidade, formatPrice(emp.precoMin, 'venda'))
   const description = `${emp.nome} em ${emp.bairro}, ${emp.cidade}: ${emp.totalUnidades} plantas ${priceText}. Veja valores, plantas disponíveis e fale direto com o Corretor Yuri (CRECI 235509).`
 
   return buildListingMetadata({

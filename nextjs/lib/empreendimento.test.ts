@@ -2,8 +2,27 @@ import { describe, it, expect } from 'vitest'
 import {
   extractEmpreendimentoFromTitulo,
   buildEmpreendimentosFromRows,
+  buildEmpreendimentoTitle,
   type EmpreendimentoSourceRow,
 } from './empreendimento'
+
+describe('buildEmpreendimentoTitle', () => {
+  it('adds the city to a name that lacks it (the common branded-search case)', () => {
+    expect(buildEmpreendimentoTitle('Ocean Park Condomínio Clube', 'Osasco', 'R$ 250.000'))
+      .toBe('Ocean Park Condomínio Clube em Osasco — Apartamentos a partir de R$ 250.000')
+  })
+
+  it('does not duplicate the city when the name already carries it', () => {
+    expect(buildEmpreendimentoTitle('Terra Alta Barueri', 'Barueri', 'R$ 310.000'))
+      .toBe('Terra Alta Barueri — Apartamentos a partir de R$ 310.000')
+  })
+
+  it('matches the city ignoring case and accents', () => {
+    // name carries "Carapicuiba" unaccented; city is the accented "Carapicuíba"
+    expect(buildEmpreendimentoTitle('Residencial Carapicuiba', 'Carapicuíba', 'R$ 200.000'))
+      .toBe('Residencial Carapicuiba — Apartamentos a partir de R$ 200.000')
+  })
+})
 
 describe('extractEmpreendimentoFromTitulo', () => {
   it('extracts before em-dash separator', () => {

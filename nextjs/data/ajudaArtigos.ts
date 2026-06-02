@@ -6,6 +6,7 @@ export type ArticleBlock =
   | { type: 'ol'; items: string[] }
   | { type: 'callout'; text: string; link?: { href: string; label: string } }
   | { type: 'disclaimer'; text: string }
+  | { type: 'calculator' }
 
 export interface Cartorio {
   nome: string
@@ -197,6 +198,7 @@ export const AJUDA_ARTIGOS: AjudaArtigo[] = [
           'Existem isenções parciais para imóveis no programa Minha Casa Minha Vida e primeiro imóvel financiado pelo SFH',
         ],
       },
+      { type: 'calculator' },
       {
         type: 'callout',
         text: 'Quer entrar a fundo só no ITBI de Osasco — base de cálculo, exemplos, como emitir a guia e quando há isenção? Veja o guia completo do imposto.',

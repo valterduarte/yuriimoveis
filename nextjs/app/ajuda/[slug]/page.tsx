@@ -11,6 +11,7 @@ import {
 } from '../../../lib/config'
 import WhatsAppLink from '../../../components/WhatsAppLink'
 import LeadCtaInline from '../../../components/LeadCtaInline'
+import ItbiCalculator from '../../../components/ItbiCalculator'
 import { AJUDA_ARTIGOS, getAjudaArtigoBySlug, fullH1, type ArticleBlock, type Cartorio } from '../../../data/ajudaArtigos'
 import { buildPageMetadata } from '../../../lib/seo'
 import type { Metadata } from 'next'
@@ -104,6 +105,8 @@ function renderBlock(block: ArticleBlock, key: number) {
           {block.text}
         </aside>
       )
+    case 'calculator':
+      return <ItbiCalculator key={key} />
   }
 }
 

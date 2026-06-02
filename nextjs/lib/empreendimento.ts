@@ -37,6 +37,30 @@ export function extractEmpreendimentoFromTitulo(titulo: string): string | null {
   return candidate
 }
 
+function normalizeForMatch(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+}
+
+/**
+ * SERP title for a development page. Buyers searching a building by name almost
+ * always append the city ("ocean park osasco"), so the city belongs in the
+ * title for exact-match relevance and click-through — front-loaded before the
+ * price. The city is skipped when the name already carries it (e.g. "Terra Alta
+ * Barueri") to avoid reading "… Barueri em Barueri —".
+ *
+ * `priceFrom` is the already-formatted lowest price (e.g. "R$ 250.000"), kept as
+ * a parameter so this stays a pure, dependency-free function.
+ */
+export function buildEmpreendimentoTitle(nome: string, cidade: string, priceFrom: string): string {
+  const nomeComCidade = normalizeForMatch(nome).includes(normalizeForMatch(cidade))
+    ? nome
+    : `${nome} em ${cidade}`
+  return `${nomeComCidade} — Apartamentos a partir de ${priceFrom}`
+}
+
 export interface Empreendimento {
   nome: string
   totalUnidades: number
