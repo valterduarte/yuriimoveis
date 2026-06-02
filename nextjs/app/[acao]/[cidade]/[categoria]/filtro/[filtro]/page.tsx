@@ -21,6 +21,7 @@ import {
 } from '../../../../../../data/priceRanges'
 import { AMENITY_FILTERS } from '../../../../../../data/amenityFilters'
 import { resolveListingFilter, filterToFetchOptions, filterLabel, type ResolvedFilter } from '../../../../../../lib/listingFilter'
+import { buildListingInsight } from '../../../../../../lib/listingInsight'
 import { expandFilterSlugsForRow } from '../../../../../../lib/listingStaticParams'
 import { SITE_URL } from '../../../../../../lib/config'
 import { SEO_MIN_PROPERTIES_FOR_FILTER, ITBI_RATE_BY_CITY } from '../../../../../../lib/constants'
@@ -197,6 +198,18 @@ export default async function CategoryFilterPage({ params }: PageProps) {
   const relatedFilters = filter.kind === 'price' ? BEDROOM_FILTERS : getAllPriceRanges(tipo)
   const relatedSectionTitle = filter.kind === 'price' ? 'Filtrar por quartos' : 'Filtrar por preço'
 
+  // Unique, factual intro built from the matched inventory (price, area, bairros,
+  // MCMV). Only for sale pages — rentals carry no inventory and redirect above.
+  const cat = categoriaData.plural.toLowerCase()
+  const insightSubject = filter.kind === 'amenity'
+    ? `${cat} com ${filterLabelText.toLowerCase()}`
+    : filter.kind === 'price'
+      ? `${cat} com preço ${filterLabelText}`
+      : `${cat} com ${filterLabelText}`
+  const listingInsight = acao === 'comprar'
+    ? buildListingInsight(imoveis, { cidadeName, total, subject: insightSubject })
+    : null
+
   const faqs = buildFilterFaqs({
     acao,
     cidadeName,
@@ -236,25 +249,31 @@ export default async function CategoryFilterPage({ params }: PageProps) {
     <ListingPageShell jsonLd={jsonLd} breadcrumb={breadcrumb} label={label} h1={h1} total={total}>
       <div className="container mx-auto px-6 py-10">
       <div className="bg-white border border-gray-200 p-6 md:p-8 mb-8">
-        <p className="text-gray-700 text-sm leading-relaxed">
-          {filter.kind === 'price' ? (
-            <>
-              Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} com preço {filterLabelText} em {cidadeName}, SP.
-              Todas as opções com documentação verificada e atendimento personalizado do Corretor Yuri.
-            </>
-          ) : filter.kind === 'amenity' ? (
-            <>
-              {categoriaData.plural} {label.toLowerCase()} {filterLabelText} em {cidadeName}, SP.
-              Listagens com {filter.amenity.heroLabel} no condomínio, em vários bairros da cidade.
-              Documentação verificada e atendimento personalizado do Corretor Yuri.
-            </>
-          ) : (
-            <>
-              Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} com {filterLabelText} em {cidadeName}, SP.
-              Opções em diversos bairros, com documentação verificada e atendimento do Corretor Yuri.
-            </>
-          )}
-        </p>
+        {listingInsight ? (
+          <p className="text-gray-700 text-sm leading-relaxed">
+            {listingInsight.paragraph} Todas as opções com documentação verificada e atendimento personalizado do Corretor Yuri.
+          </p>
+        ) : (
+          <p className="text-gray-700 text-sm leading-relaxed">
+            {filter.kind === 'price' ? (
+              <>
+                Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} com preço {filterLabelText} em {cidadeName}, SP.
+                Todas as opções com documentação verificada e atendimento personalizado do Corretor Yuri.
+              </>
+            ) : filter.kind === 'amenity' ? (
+              <>
+                {categoriaData.plural} {label.toLowerCase()} {filterLabelText} em {cidadeName}, SP.
+                Listagens com {filter.amenity.heroLabel} no condomínio, em vários bairros da cidade.
+                Documentação verificada e atendimento personalizado do Corretor Yuri.
+              </>
+            ) : (
+              <>
+                Encontre {categoriaData.plural.toLowerCase()} {label.toLowerCase()} com {filterLabelText} em {cidadeName}, SP.
+                Opções em diversos bairros, com documentação verificada e atendimento do Corretor Yuri.
+              </>
+            )}
+          </p>
+        )}
       </div>
 
       <div className="mb-6">
