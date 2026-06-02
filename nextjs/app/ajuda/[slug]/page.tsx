@@ -10,6 +10,7 @@ import {
   PHONE_TEL,
 } from '../../../lib/config'
 import WhatsAppLink from '../../../components/WhatsAppLink'
+import LeadCtaInline from '../../../components/LeadCtaInline'
 import { AJUDA_ARTIGOS, getAjudaArtigoBySlug, fullH1, type ArticleBlock, type Cartorio } from '../../../data/ajudaArtigos'
 import { buildPageMetadata } from '../../../lib/seo'
 import type { Metadata } from 'next'
@@ -257,7 +258,22 @@ export default async function AjudaArtigoPage({ params }: PageProps) {
               </aside>
             )}
 
-            {artigo.blocks.map(renderBlock)}
+            {(() => {
+              const blocks = artigo.blocks
+              // Insert the lead CTA mid-article (after ~3rd block or the midpoint,
+              // whichever comes first) where an engaged reader is most likely to act.
+              const at = Math.min(3, Math.ceil(blocks.length / 2))
+              return (
+                <>
+                  {blocks.slice(0, at).map(renderBlock)}
+                  <LeadCtaInline
+                    message={`Olá Yuri! Vi o guia "${headline}" e gostaria de ajuda para comprar um imóvel em Osasco.`}
+                    source={`ajuda-inline-${artigo.slug}`}
+                  />
+                  {blocks.slice(at).map((block, i) => renderBlock(block, at + i))}
+                </>
+              )
+            })()}
 
             {artigo.cartorios && <CartoriosList cartorios={artigo.cartorios} />}
 

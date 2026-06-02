@@ -1,9 +1,11 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft, FiMapPin } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
 import { EMPREENDIMENTO_RESERVED_SLUGS, listEmpreendimentos, fetchEmpreendimentoBySlug } from '../../../lib/empreendimento'
 import PropertyCard from '../../../components/PropertyCard'
-import { SITE_URL } from '../../../lib/config'
+import WhatsAppLink from '../../../components/WhatsAppLink'
+import { SITE_URL, PHONE_WA_BASE, CRECI } from '../../../lib/config'
 import { formatPrice, imovelSlug } from '../../../utils/imovelUtils'
 import { buildListingMetadata } from '../../../lib/seo'
 import { buildBreadcrumb, AGENT_ID } from '../../../lib/jsonLd'
@@ -59,6 +61,11 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
 
   const canonicalUrl = `${SITE_URL}/empreendimentos/${slug}`
   const complexId = `${canonicalUrl}#complex`
+
+  const waMessage = encodeURIComponent(
+    `Olá Yuri! Tenho interesse no ${emp.nome} (${emp.bairro}, ${emp.cidade}). Pode me passar valores, plantas disponíveis e condições de financiamento?`,
+  )
+  const waHref = `${PHONE_WA_BASE}?text=${waMessage}`
 
   const breadcrumbJsonLd = buildBreadcrumb([
     { name: 'Início',       path: '/' },
@@ -125,6 +132,21 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
             <span className="bg-white/10 px-3 py-1.5">{formatAreaRange(emp.areaMin, emp.areaMax)}</span>
             <span className="bg-primary text-white px-3 py-1.5 font-bold">{formatPriceRange(emp.precoMin, emp.precoMax)}</span>
           </div>
+          <div className="mt-6">
+            <WhatsAppLink
+              href={waHref}
+              source="empreendimento-hero"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-sm uppercase tracking-wider px-6 py-3.5 transition-colors"
+              aria-label={`Falar com o Corretor Yuri sobre o ${emp.nome} pelo WhatsApp (abre em nova aba)`}
+            >
+              <FaWhatsapp size={18} /> Falar sobre o {emp.nome}
+            </WhatsAppLink>
+            <p className="text-gray-400 text-xs mt-2">
+              Resposta rápida · sem compromisso · direto com o Corretor Yuri (CRECI {CRECI})
+            </p>
+          </div>
         </div>
       </div>
 
@@ -147,6 +169,29 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
             <PropertyCard key={imovel.id} imovel={imovel} priority={i < 3} />
           ))}
         </div>
+
+        <section className="mt-12 bg-dark text-white p-8 md:p-10">
+          <div className="max-w-3xl">
+            <span className="section-label">Atendimento</span>
+            <h2 className="text-2xl md:text-3xl font-black uppercase leading-tight mb-3">
+              Ainda na dúvida entre as plantas do {emp.nome}?
+            </h2>
+            <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-6">
+              O Corretor Yuri te ajuda a escolher a unidade certa, simula o financiamento e confirma
+              valores e disponibilidade atualizados — sem compromisso e sem custo.
+            </p>
+            <WhatsAppLink
+              href={waHref}
+              source="empreendimento-cta"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-sm uppercase tracking-wider px-6 py-3.5 transition-colors"
+              aria-label={`Falar com o Corretor Yuri sobre o ${emp.nome} pelo WhatsApp (abre em nova aba)`}
+            >
+              <FaWhatsapp size={18} /> Quero falar com o Yuri
+            </WhatsAppLink>
+          </div>
+        </section>
       </div>
     </div>
   )

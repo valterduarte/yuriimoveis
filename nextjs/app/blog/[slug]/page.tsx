@@ -3,16 +3,32 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { FaWhatsapp } from 'react-icons/fa'
 import { fetchBlogPostBySlug, fetchAllBlogSlugs, fetchRelatedBlogPosts } from '../../../lib/api'
-import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA } from '../../../lib/config'
+import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA_BASE } from '../../../lib/config'
 import { buildBreadcrumb, buildArticleSchema, buildFaqPageSchema } from '../../../lib/jsonLd'
 import { buildPageMetadata } from '../../../lib/seo'
 import { extractFaqsFromHtml } from '../../../lib/blogFaqs'
 import { sanitizeBlogHtml } from '../../../lib/sanitizeHtml'
 import WhatsAppLink from '../../../components/WhatsAppLink'
 import ItbiCalculator from '../../../components/ItbiCalculator'
+import LeadCtaInline from '../../../components/LeadCtaInline'
 import type { Metadata } from 'next'
 
 const ITBI_CALC_SENTINEL = '<!-- itbi-calc -->'
+
+/**
+ * Splits article HTML before the Nth top-level <h2> so a CTA can be injected
+ * mid-article without breaking markup. Returns [before, after]; if there is no
+ * Nth heading, everything lands in `before` and `after` is empty.
+ */
+function splitAtHeading(html: string, n: number): [string, string] {
+  let idx = -1
+  for (let i = 0; i < n; i++) {
+    const next = html.indexOf('<h2', idx + 1)
+    if (next === -1) return [html, '']
+    idx = next
+  }
+  return [html.slice(0, idx), html.slice(idx)]
+}
 
 const PROSE_CLASSES =
   'prose prose-gray max-w-none ' +
@@ -63,6 +79,8 @@ export default async function BlogPostPage({ params }: PageProps) {
   const relatedPosts = await fetchRelatedBlogPosts(post.slug, post.tags, 3)
   const url = `${SITE_URL}/blog/${post.slug}`
   const faqs = extractFaqsFromHtml(post.conteudo)
+
+  const leadMessage = `Olá Yuri! Li o artigo "${post.titulo}" e quero ajuda para comprar um imóvel em Osasco e região.`
 
   const article = buildArticleSchema({
     headline: post.titulo,
@@ -136,12 +154,26 @@ export default async function BlogPostPage({ params }: PageProps) {
               <>
                 <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(before) }} />
                 <ItbiCalculator />
+                <LeadCtaInline message={leadMessage} source={`blog-inline-${post.slug}`} />
                 <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(after) }} />
               </>
             )
           })()
         ) : (
-          <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(post.conteudo) }} />
+          (() => {
+            const [before, after] = splitAtHeading(post.conteudo, 2)
+            return (
+              <>
+                <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(before) }} />
+                {after && (
+                  <>
+                    <LeadCtaInline message={leadMessage} source={`blog-inline-${post.slug}`} />
+                    <div className={PROSE_CLASSES} dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(after) }} />
+                  </>
+                )}
+              </>
+            )
+          })()
         )}
 
         <div className="mt-12 pt-8 border-t border-gray-200">
@@ -149,7 +181,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <h2 className="text-base font-bold text-dark mb-2 uppercase tracking-wide">Gostou do conteúdo?</h2>
             <p className="text-gray-500 text-sm mb-4">Fale com o Corretor Yuri para encontrar o imóvel ideal para você.</p>
             <WhatsAppLink
-              href={PHONE_WA}
+              href={`${PHONE_WA_BASE}?text=${encodeURIComponent(leadMessage)}`}
               source="blog-cta"
               className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-widest text-xs py-3 px-6 transition-colors"
             >
