@@ -690,6 +690,164 @@ export const GUIAS: Record<string, GuiaData> = {
     publishedAt: '2026-06-02',
     updatedAt: '2026-06-02',
   },
+
+  'comprar-ou-alugar-osasco': {
+    slug: 'comprar-ou-alugar-osasco',
+    titulo: 'Comprar ou Alugar em Osasco em 2026? Como Decidir',
+    subtitulo: 'A conta que realmente importa, quando cada opção faz sentido e como o Minha Casa Minha Vida muda a decisão',
+    descricaoMeta:
+      'Comprar ou alugar em Osasco em 2026? Compare a parcela do financiamento com o aluguel, entenda quando cada opção faz mais sentido, o peso do Minha Casa Minha Vida na decisão e como calcular o seu caso no simulador.',
+    intro:
+      '"Vale mais a pena comprar ou continuar alugando?" é provavelmente a pergunta mais importante — e mais mal respondida — de quem está pensando em sair do aluguel em Osasco. A resposta curta da internet ("comprar é sempre melhor, alugar é jogar dinheiro fora") está errada tanto quanto o contrário. A resposta certa depende de quanto tempo você vai ficar no imóvel, de quanto você tem de entrada, e principalmente de uma conta concreta: como fica a parcela do financiamento comparada ao aluguel que você pagaria pelo mesmo imóvel. Em Osasco, com o Minha Casa Minha Vida e a queda gradual dos juros, essa conta tem pendido para a compra em vários cenários — mas não em todos. Este guia te dá o raciocínio honesto para decidir o seu caso, sem torcida.',
+    sections: [
+      {
+        heading: 'A conta que realmente importa: parcela x aluguel',
+        paragraphs: [
+          'Esqueça os ditados. A decisão começa por uma comparação direta: pegue um apartamento que você moraria e compare quanto custaria o aluguel dele por mês contra a parcela do financiamento para comprá-lo. Em muitos imóveis de 2 quartos em Osasco, com entrada e financiamento dentro do Minha Casa Minha Vida, a parcela fica próxima — às vezes até abaixo — do aluguel equivalente. Quando isso acontece, comprar tende a vencer, porque ao fim do financiamento o imóvel é seu.',
+          'Mas a parcela não é o único custo da compra. Some o que o aluguel não tem: IPTU, condomínio (que o inquilino também paga, mas o dono arca com obras), manutenção, e o custo de oportunidade da entrada (o dinheiro que você imobiliza poderia render). Do outro lado, o aluguel tem o reajuste anual e nunca vira patrimônio.',
+          'A forma honesta de decidir é simular. O simulador do site calcula a parcela real para o imóvel e a faixa de financiamento que você se enquadra — coloque o valor do aluguel que você paga hoje ao lado e a decisão fica visível em números, não em achismo.',
+        ],
+        links: [
+          { href: '/simulador', label: 'Simular parcela e comparar com o aluguel', description: 'Calcule a parcela real do financiamento e compare com o que você paga de aluguel', type: 'tool' },
+        ],
+      },
+      {
+        heading: 'Quando alugar ainda faz mais sentido',
+        paragraphs: [
+          'Se você não tem certeza de que vai ficar pelo menos 4 a 5 anos no mesmo lugar, alugar costuma ganhar. Os custos de comprar e vender (ITBI de 3%, cartório, corretagem, tempo) só se diluem no médio prazo; comprar para sair em dois anos raramente compensa.',
+          'Alugar também faz sentido quando você ainda não tem entrada. Em vez de comprar algo apertado só para "sair do aluguel", muitas vezes vale alugar mais barato por um período curto enquanto junta a entrada (e usa o FGTS) para comprar um imóvel melhor — e com parcela confortável.',
+          'E faz sentido para quem precisa de mobilidade: trabalho que pode mudar de cidade, fase de vida indefinida, ou quem prefere a flexibilidade de trocar de bairro sem o custo de uma transação imobiliária.',
+        ],
+        links: [
+          { href: '/guia/alugar-imovel-osasco-barueri', label: 'Guia de aluguel em Osasco e Barueri', description: 'Preços, bairros, garantias e direitos do inquilino', type: 'ajuda' },
+        ],
+      },
+      {
+        heading: 'Quando comprar é a escolha certa',
+        paragraphs: [
+          'Se você pretende ficar no mínimo 4 a 5 anos, tem (ou consegue compor) a entrada e uma parcela confortável dentro de 30% da renda, comprar costuma ser a melhor decisão financeira — você troca um custo que nunca volta (aluguel) por um que constrói patrimônio.',
+          'A estabilidade pesa: parcela de financiamento de taxa fixa não tem reajuste anual de aluguel, e ao fim do contrato o imóvel é seu, livre de pagamento mensal de moradia. Para quem tem perfil estável e família, esse é o argumento decisivo.',
+          'E há o fator que muda o jogo em Osasco: o Minha Casa Minha Vida. Para quem se enquadra, o programa derruba os juros e oferece subsídio na entrada, tornando a parcela competitiva com o aluguel logo de cara — o que inclina a balança para a compra muito antes do que aconteceria a juros de mercado.',
+        ],
+        links: [
+          { href: '/guia/comprar-imovel-osasco', label: 'Guia completo de compra em Osasco', description: 'Passo a passo, documentação, financiamento e negociação', type: 'ajuda' },
+          { href: '/mcmv-osasco', label: 'Minha Casa Minha Vida em Osasco', description: 'Faixas, tetos, subsídio e como se enquadrar', type: 'listing' },
+        ],
+      },
+      {
+        heading: 'Como decidir no seu caso (sem achismo)',
+        paragraphs: [
+          'Responda três perguntas: (1) Vou ficar pelo menos 4–5 anos? (2) Tenho ou consigo a entrada (com FGTS)? (3) A parcela cabe em até 30% da renda da família? Se as três forem "sim", comprar provavelmente vence. Se alguma for "não", alugar pode ser o passo certo por agora — enquanto você resolve a que faltou.',
+          'O passo prático: simule a parcela do imóvel que você moraria e coloque ao lado o aluguel equivalente. Se a parcela for próxima ou menor, e você passa nas três perguntas, a conta fecha para comprar. Se quiser, eu faço essa comparação com você para um imóvel específico — sem compromisso.',
+        ],
+        links: [
+          { href: '/simulador', label: 'Fazer a conta agora', description: 'Simule a parcela, o MCMV e os custos para o seu caso', type: 'tool' },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Comprar é sempre melhor do que alugar?',
+        answer: 'Não. Comprar costuma vencer quando você fica no imóvel por pelo menos 4 a 5 anos, tem entrada e uma parcela dentro de 30% da renda. Para prazos curtos ou sem entrada, alugar pode ser mais inteligente. O que decide é a conta concreta entre parcela e aluguel, não um ditado.',
+      },
+      {
+        question: 'A parcela do financiamento fica parecida com o aluguel em Osasco?',
+        answer: 'Em muitos apartamentos de 2 quartos dentro do Minha Casa Minha Vida, a parcela fica próxima — às vezes abaixo — do aluguel equivalente, porque o programa reduz os juros e oferece subsídio. Simule o imóvel específico para ver a sua diferença real.',
+      },
+      {
+        question: 'Quanto tempo preciso ficar no imóvel para compensar comprar?',
+        answer: 'Como regra geral, pelo menos 4 a 5 anos. É o prazo que dilui os custos de comprar e vender (ITBI de 3%, cartório, corretagem). Abaixo disso, esses custos costumam comer a vantagem da compra.',
+      },
+      {
+        question: 'Posso usar o FGTS na entrada se decidir comprar?',
+        answer: 'Sim. O FGTS pode compor a entrada ou abater o saldo financiado, desde que você atenda às regras do fundo. Isso reduz bastante a barreira da entrada e muda a conta de comprar x alugar a seu favor.',
+      },
+    ],
+    ctaLabel: 'Simular e comparar com o seu aluguel',
+    ctaHref: '/simulador',
+    publishedAt: '2026-06-02',
+    updatedAt: '2026-06-02',
+  },
+
+  'quanto-ganhar-para-financiar-imovel-osasco': {
+    slug: 'quanto-ganhar-para-financiar-imovel-osasco',
+    titulo: 'Quanto Preciso Ganhar para Financiar um Apartamento em Osasco?',
+    subtitulo: 'A regra dos 30%, o que define a parcela e quanto de renda cada faixa de preço exige em 2026',
+    descricaoMeta:
+      'Quanto de renda preciso para financiar um apartamento em Osasco em 2026? Entenda a regra dos 30%, o peso da entrada, da taxa e do prazo, exemplos por faixa de preço e como aumentar seu poder de compra com FGTS e Minha Casa Minha Vida.',
+    intro:
+      '"Eu ganho X, consigo financiar um apartamento de quanto?" — essa é a primeira coisa que todo comprador precisa saber, e a maioria descobre tarde demais, depois de se apaixonar por um imóvel que não fecha. A boa notícia é que dá para estimar isso em poucos minutos, com uma regra simples e três variáveis. Este guia explica quanto de renda familiar cada faixa de preço de imóvel em Osasco costuma exigir em 2026, o que mais pesa na parcela, e — o mais útil — como aumentar o seu poder de compra sem ganhar mais. Os valores aqui são estimativas para você se situar; o número exato sai do simulador, que usa as taxas e faixas vigentes.',
+    sections: [
+      {
+        heading: 'A regra dos 30% da renda',
+        paragraphs: [
+          'O banco limita a parcela do financiamento a, no máximo, 30% da renda bruta familiar. É a trava principal. Ou seja: se a família ganha R$ 6.000/mês, a parcela máxima aceita fica em torno de R$ 1.800. A partir dessa parcela máxima, e considerando entrada, taxa e prazo, chega-se ao valor de imóvel que você consegue financiar.',
+          'Isso significa que existem dois caminhos para comprar um imóvel mais caro: aumentar a renda considerada (compondo a renda do casal ou de familiares no mesmo financiamento) ou reduzir a parcela necessária (com mais entrada, prazo mais longo ou uma taxa menor, como a do Minha Casa Minha Vida).',
+        ],
+        links: [
+          { href: '/simulador', label: 'Descobrir quanto você financia', description: 'Informe sua renda e veja o valor de imóvel e a parcela estimada', type: 'tool' },
+        ],
+      },
+      {
+        heading: 'Os três fatores que definem a sua parcela',
+        paragraphs: [
+          'Entrada: o financiamento costuma cobrir até 80% do imóvel, então a entrada parte de 20% — e pode ser composta com FGTS. Quanto maior a entrada, menor o valor financiado e menor a parcela (logo, menos renda exigida).',
+          'Taxa de juros: é o que mais muda a parcela. Quem se enquadra no Minha Casa Minha Vida paga juros subsidiados (bem abaixo do mercado), o que reduz a renda necessária para o mesmo imóvel. Fora do programa, vale a taxa SBPE — menor para quem tem relacionamento com o banco.',
+          'Prazo: financiamentos vão tipicamente até 360 meses (30 anos). Prazo mais longo reduz a parcela mensal (e a renda exigida), embora aumente o total de juros pago ao longo do contrato.',
+        ],
+        links: [
+          { href: '/guia/financiamento-imobiliario-osasco', label: 'Guia de financiamento imobiliário', description: 'Programas, taxas, SBPE, MCMV e passo a passo', type: 'ajuda' },
+        ],
+      },
+      {
+        heading: 'Quanto de renda cada faixa de preço exige (estimativa 2026)',
+        paragraphs: [
+          'As faixas abaixo são estimativas para você se localizar, considerando entrada de 20%, prazo longo e — quando o imóvel se enquadra — as condições do Minha Casa Minha Vida. O número exato depende da sua taxa, prazo e entrada, então confirme no simulador.',
+          'Imóvel de até R$ 250 mil (muito comum em Osasco e geralmente dentro do MCMV): costuma exigir renda familiar na faixa de R$ 4.500 a R$ 6.000, com a entrada reduzida pelo subsídio e pelo FGTS.',
+          'Imóvel de R$ 300 mil a R$ 400 mil (faixa de 2 e 3 quartos, ainda dentro dos tetos do MCMV): renda familiar aproximada de R$ 6.500 a R$ 9.000, dependendo da entrada e da taxa.',
+          'Imóvel de R$ 400 mil a R$ 600 mil (Faixa 4 do MCMV ou SBPE): renda familiar tipicamente de R$ 9.000 a R$ 13.000. Acima dos tetos do programa, entra o SBPE, com taxa de mercado e, portanto, renda exigida um pouco maior.',
+        ],
+        links: [
+          { href: '/comprar/osasco/apartamento/filtro/ate-300-mil', label: 'Apartamentos até R$ 300 mil em Osasco', description: 'Veja as opções na faixa de entrada do mercado', type: 'listing' },
+          { href: '/mcmv-osasco', label: 'Minha Casa Minha Vida em Osasco', description: 'Faixas de renda, tetos e subsídio do programa', type: 'listing' },
+        ],
+      },
+      {
+        heading: 'Como aumentar seu poder de compra sem ganhar mais',
+        paragraphs: [
+          'Componha a renda: somar a renda do cônjuge ou de um familiar no mesmo financiamento aumenta a parcela aceita e, com ela, o valor do imóvel. É o caminho mais rápido para subir de faixa.',
+          'Use o FGTS: pode entrar na entrada ou abater o saldo, reduzindo o valor financiado e a parcela. Muita gente esquece de contar o FGTS e subestima o próprio poder de compra.',
+          'Aproveite o MCMV: se você se enquadra, o subsídio e os juros menores reduzem a renda exigida para o mesmo imóvel — às vezes o suficiente para sair do aluguel agora em vez de em dois anos.',
+          'Alongue o prazo e reforce a entrada: prazo maior reduz a parcela mensal; entrada maior reduz o valor financiado. Os dois aumentam o imóvel que cabe na sua renda. O simulador mostra o efeito de cada ajuste em segundos.',
+        ],
+        links: [
+          { href: '/simulador', label: 'Testar cenários no simulador', description: 'Veja como entrada, prazo e MCMV mudam a parcela e a renda exigida', type: 'tool' },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Qual a regra para saber quanto consigo financiar?',
+        answer: 'A parcela do financiamento não pode passar de 30% da renda bruta familiar. A partir dessa parcela máxima, e considerando entrada, taxa e prazo, chega-se ao valor de imóvel que você consegue financiar. O simulador faz essa conta a partir da sua renda.',
+      },
+      {
+        question: 'Quanto preciso ganhar para um apartamento de R$ 300 mil em Osasco?',
+        answer: 'Como estimativa, com entrada de 20% e condições do Minha Casa Minha Vida, a renda familiar costuma ficar na faixa de R$ 6.500 a R$ 9.000. O valor exato depende da entrada, da taxa e do prazo — confirme no simulador para o seu caso.',
+      },
+      {
+        question: 'Posso somar a renda do casal para financiar?',
+        answer: 'Sim. A composição de renda (cônjuge ou familiar no mesmo financiamento) aumenta a parcela aceita e o valor do imóvel que você consegue comprar. É uma das formas mais eficazes de aumentar o poder de compra.',
+      },
+      {
+        question: 'O FGTS conta para aumentar quanto posso financiar?',
+        answer: 'Sim. O FGTS pode compor a entrada ou abater o saldo financiado, reduzindo o valor financiado e a parcela — o que, na prática, aumenta o imóvel que cabe na sua renda. Quem ignora o FGTS subestima o próprio poder de compra.',
+      },
+    ],
+    ctaLabel: 'Descobrir quanto você consegue financiar',
+    ctaHref: '/simulador',
+    publishedAt: '2026-06-02',
+    updatedAt: '2026-06-02',
+  },
 }
 
 export function getGuiaBySlug(slug: string): GuiaData | undefined {
