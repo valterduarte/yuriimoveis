@@ -2,15 +2,15 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { FiArrowLeft, FiMapPin } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-import { EMPREENDIMENTO_RESERVED_SLUGS, listEmpreendimentos, fetchEmpreendimentoBySlug } from '../../../lib/empreendimento'
+import { EMPREENDIMENTO_RESERVED_SLUGS, listEmpreendimentos, fetchEmpreendimentoBySlug, type EmpreendimentoDetail } from '../../../lib/empreendimento'
 import PropertyCard from '../../../components/PropertyCard'
 import WhatsAppLink from '../../../components/WhatsAppLink'
-import { SITE_URL, PHONE_WA_BASE, CRECI } from '../../../lib/config'
+import { SITE_URL, PHONE_WA_BASE, PHONE_DISPLAY, CRECI } from '../../../lib/config'
 import { formatPrice, imovelSlug, slugify } from '../../../utils/imovelUtils'
 import { buildHierarchicalUrl, cidadeNameToSlug } from '../../../lib/navigation'
 import { BAIRROS } from '../../../data/bairros'
 import { buildListingMetadata } from '../../../lib/seo'
-import { buildBreadcrumb, AGENT_ID } from '../../../lib/jsonLd'
+import { buildBreadcrumb, buildFaqPageSchema, AGENT_ID } from '../../../lib/jsonLd'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -66,6 +66,53 @@ const STATUS_PHRASE: Record<string, string> = {
 /** Highest unit price (R$) still eligible for the Minha Casa Minha Vida cap. */
 const MCMV_PRICE_CAP = 600_000
 
+/**
+ * FAQs derived entirely from real development data — every answer is rendered
+ * visibly on the page and mirrored in FAQPage JSON-LD (no schema-only content).
+ */
+function buildEmpreendimentoFaqs(
+  emp: EmpreendimentoDetail,
+  statusPhrase: string,
+  fitsMcmv: boolean,
+): { q: string; a: string }[] {
+  const precoText = emp.precoMin === emp.precoMax
+    ? `custam ${formatPrice(emp.precoMin, 'venda')}`
+    : `vão de ${formatPrice(emp.precoMin, 'venda')} a ${formatPrice(emp.precoMax, 'venda')}`
+
+  const faqs = [
+    {
+      q: `Quanto custa um apartamento no ${emp.nome}?`,
+      a: `Os apartamentos no ${emp.nome} ${precoText}, conforme a planta e a metragem escolhidas. Fale com o Corretor Yuri para valores e condições de financiamento atualizados.`,
+    },
+    {
+      q: `Onde fica o ${emp.nome}?`,
+      a: `O ${emp.nome} fica na ${emp.endereco}, no bairro ${emp.bairro}, em ${emp.cidade} (SP).`,
+    },
+    {
+      q: `Quais plantas e tamanhos o ${emp.nome} oferece?`,
+      a: `São ${emp.totalUnidades} ${emp.totalUnidades === 1 ? 'planta' : 'plantas'}, com metragem de ${formatAreaRange(emp.areaMin, emp.areaMax)}.`,
+    },
+    {
+      q: `O ${emp.nome} está pronto ou em construção?`,
+      a: `O empreendimento está ${statusPhrase}.`,
+    },
+  ]
+
+  if (fitsMcmv) {
+    faqs.push({
+      q: `O ${emp.nome} pode ser financiado pelo Minha Casa Minha Vida?`,
+      a: `Unidades a partir de ${formatPrice(emp.precoMin, 'venda')} podem se enquadrar no Minha Casa Minha Vida, conforme a renda familiar. Simule o financiamento ou fale com o Corretor Yuri para confirmar as condições.`,
+    })
+  }
+
+  faqs.push({
+    q: `Como agendar uma visita ao ${emp.nome}?`,
+    a: `O atendimento é feito diretamente pelo Corretor Yuri (CRECI-SP ${CRECI}), pelo WhatsApp ${PHONE_DISPLAY} — sem compromisso e sem custo para o comprador.`,
+  })
+
+  return faqs
+}
+
 export default async function EmpreendimentoDetailPage({ params }: PageProps) {
   const { slug } = await params
   if (EMPREENDIMENTO_RESERVED_SLUGS.has(slug)) notFound()
@@ -90,6 +137,8 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
     bairro: bairroSlug,
   })
   const fitsMcmv = emp.precoMin <= MCMV_PRICE_CAP
+  const faqs = buildEmpreendimentoFaqs(emp, statusPhrase, fitsMcmv)
+  const faqJsonLd = buildFaqPageSchema(faqs.map(f => ({ question: f.q, answer: f.a })))
 
   const breadcrumbJsonLd = buildBreadcrumb([
     { name: 'Início',       path: '/' },
@@ -135,6 +184,7 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
     <div className="min-h-screen pb-16 md:pb-0 bg-gray-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(complexJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       <div className="bg-dark text-white py-12">
         <div className="container mx-auto px-6">
@@ -217,6 +267,22 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
             <PropertyCard key={imovel.id} imovel={imovel} priority={i < 3} />
           ))}
         </div>
+
+        <section className="mt-16 max-w-3xl">
+          <span className="section-label">Perguntas frequentes</span>
+          <h2 className="section-title mb-6">Dúvidas sobre o {emp.nome}</h2>
+          <div className="space-y-3">
+            {faqs.map(faq => (
+              <details key={faq.q} className="group bg-white border border-gray-200 p-4">
+                <summary className="cursor-pointer text-sm font-semibold text-dark list-none flex items-center justify-between gap-3">
+                  {faq.q}
+                  <span className="text-primary text-lg leading-none group-open:rotate-45 transition-transform">+</span>
+                </summary>
+                <p className="text-gray-700 text-sm leading-relaxed mt-3">{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
         <section className="mt-12 bg-dark text-white p-8 md:p-10">
           <div className="max-w-3xl">
