@@ -1,7 +1,17 @@
 import { fetchPublishedBlogPosts } from '../../lib/blog'
 import { AJUDA_ARTIGOS, fullH1, type ArticleBlock, type AjudaArtigo } from '../../data/ajudaArtigos'
 import { GUIAS, type GuiaData } from '../../data/guias'
+import { listEmpreendimentos, EMPREENDIMENTO_RESERVED_SLUGS, type EmpreendimentoSummary } from '../../lib/empreendimento'
+import { BAIRROS } from '../../data/bairros'
+import { formatPrice } from '../../lib/formatters'
 import { SITE_URL, PHONE_DISPLAY, CRECI } from '../../lib/config'
+import type { BairroData } from '../../types'
+
+const EMPREENDIMENTO_STATUS_PHRASE: Record<string, string> = {
+  pronto: 'pronto para morar',
+  construcao: 'em construção',
+  planta: 'na planta',
+}
 
 export const revalidate = 3600
 
@@ -88,8 +98,48 @@ function renderGuia(guia: GuiaData): string {
   return heading + sections + faqs
 }
 
+function renderEmpreendimento(e: EmpreendimentoSummary): string {
+  const status = EMPREENDIMENTO_STATUS_PHRASE[e.status] ?? 'disponível'
+  const preco = e.precoMin === e.precoMax
+    ? `a partir de ${formatPrice(e.precoMin, 'venda')}`
+    : `de ${formatPrice(e.precoMin, 'venda')} a ${formatPrice(e.precoMax, 'venda')}`
+  const area = e.areaMin === e.areaMax
+    ? `${e.areaMin} m²`
+    : `${e.areaMin} a ${e.areaMax} m²`
+  return [
+    `## ${e.nome}`,
+    ``,
+    `Fonte: ${SITE_URL}/empreendimentos/${e.slug}`,
+    ``,
+    `- Status: ${status}`,
+    `- Localização: ${e.endereco}, ${e.bairro}, ${e.cidade} (SP)`,
+    `- Plantas: ${e.totalUnidades} (${area})`,
+    `- Valores: ${preco}`,
+    ``,
+  ].join('\n')
+}
+
+function renderBairro(b: BairroData): string {
+  const c = b.conteudo
+  return [
+    `## ${b.nome}, ${b.cidade}`,
+    ``,
+    `Fonte: ${SITE_URL}/bairros/${b.slug}`,
+    ``,
+    c.sobre,
+    ``,
+    `**Infraestrutura:** ${c.infraestrutura}`,
+    ``,
+    `**Transporte e acesso:** ${c.transporte}`,
+    ``,
+    `**Por que morar:** ${c.porqueMorar}`,
+    ``,
+  ].join('\n')
+}
+
 export async function GET(): Promise<Response> {
   const posts = await fetchPublishedBlogPosts()
+  const empreendimentos = (await listEmpreendimentos()).filter(e => !EMPREENDIMENTO_RESERVED_SLUGS.has(e.slug))
 
   const blogSection = posts.length
     ? `# Blog — posts completos\n\n${posts
@@ -108,7 +158,17 @@ export async function GET(): Promise<Response> {
     ? `# Guias longos (/guia) — texto completo\n\n${Object.values(GUIAS).map(renderGuia).join('\n---\n\n')}\n`
     : ''
 
-  const body = [HEADER, blogSection, ajudaSection, guiaSection].filter(Boolean).join('\n---\n\n')
+  const empreendimentosSection = empreendimentos.length
+    ? `# Empreendimentos e lançamentos — dados estruturados\n\nLista dos empreendimentos com unidades disponíveis pelo Corretor Yuri, com bairro, status, plantas e faixa de preço.\n\n${empreendimentos.map(renderEmpreendimento).join('\n')}\n`
+    : ''
+
+  const bairrosSection = Object.keys(BAIRROS).length
+    ? `# Guias de bairro — texto completo\n\n${Object.values(BAIRROS).map(renderBairro).join('\n---\n\n')}\n`
+    : ''
+
+  const body = [HEADER, blogSection, ajudaSection, guiaSection, empreendimentosSection, bairrosSection]
+    .filter(Boolean)
+    .join('\n---\n\n')
 
   return new Response(body, {
     headers: {
