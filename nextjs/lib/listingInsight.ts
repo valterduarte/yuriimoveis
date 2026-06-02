@@ -54,12 +54,14 @@ function formatArea(value: number): string {
  *
  * `subject` is the noun phrase the sentence is built around, e.g.
  * "apartamentos de 2 quartos" or "apartamentos com preço até R$ 300 mil".
+ * `locationName` is where the units are — a city ("Osasco") or a neighbourhood
+ * ("Rochdale"); it reads as "à venda em {locationName}".
  * `total` is the real result count (may exceed the sample); when the sample does
  * not cover every result the price is framed as "a partir de" to stay accurate.
  */
 export function buildListingInsight(
   imoveis: ListingFacts[],
-  opts: { cidadeName: string; total: number; subject: string },
+  opts: { locationName: string; total: number; subject: string; includeBairros?: boolean },
 ): ListingInsight | null {
   const sample = imoveis.filter(i => i.preco > 0)
   if (sample.length < MIN_SAMPLE) return null
@@ -73,7 +75,7 @@ export function buildListingInsight(
   const topBairros = topByFrequency(sample.map(i => i.bairro), 3)
   const mcmvCount = sample.filter(i => i.preco <= MCMV_PRICE_CAP).length
 
-  const { cidadeName, total, subject } = opts
+  const { locationName, total, subject, includeBairros = true } = opts
   const sampleCoversAll = sample.length >= total
 
   const priceClause = sampleCoversAll && priceFrom !== priceTo
@@ -88,10 +90,10 @@ export function buildListingInsight(
 
   const sentences: string[] = []
   sentences.push(
-    `Há ${total} ${subject} à venda em ${cidadeName}, ${priceClause}${areaClause}.`,
+    `Há ${total} ${subject} à venda em ${locationName}, ${priceClause}${areaClause}.`,
   )
 
-  if (topBairros.length > 0) {
+  if (includeBairros && topBairros.length > 0) {
     const verb = topBairros.length === 1 ? 'se concentram no bairro' : 'se concentram em bairros como'
     sentences.push(`As opções ${verb} ${joinPt(topBairros)}.`)
   }

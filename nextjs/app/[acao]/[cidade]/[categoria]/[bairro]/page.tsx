@@ -26,6 +26,7 @@ import { BEDROOM_FILTERS } from '../../../../../data/priceRanges'
 import { SITE_URL } from '../../../../../lib/config'
 import { buildBreadcrumb, buildCollectionPage, buildFaqPageSchema, buildPropertyProduct } from '../../../../../lib/jsonLd'
 import { buildListingMetadata } from '../../../../../lib/seo'
+import { buildListingInsight } from '../../../../../lib/listingInsight'
 import FaqAccordion from '../../../../../components/FaqAccordion'
 import type { Metadata } from 'next'
 
@@ -242,6 +243,16 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
   const availableBedroomFilters = BEDROOM_FILTERS.filter(bf => (bedroomCounts.get(bf.slug) ?? 0) > 0)
 
   const priceRange = formatPriceRange(imoveis.map(p => p.preco), tipoFilter)
+  // Inventory panorama from real data — unique per neighbourhood, and the only
+  // descriptive content for bairros that don't yet have a written guide.
+  const bairroInsight = acao === 'comprar'
+    ? buildListingInsight(imoveis, {
+        locationName: bairroName,
+        total,
+        subject: categoriaData.plural.toLowerCase(),
+        includeBairros: false,
+      })
+    : null
   const faqs = buildBairroFaqs({
     acao,
     cidadeName,
@@ -294,6 +305,19 @@ export default async function BairroCategoriaAcaoPage({ params }: PageProps) {
             >
               Ler guia completo {deBairro(bairroName)} {bairroName} →
             </Link>
+          </div>
+        </section>
+      )}
+
+      {bairroInsight && (
+        <section className="container mx-auto px-6 pt-10 pb-2">
+          <div className="bg-white border border-gray-200 p-6 md:p-8">
+            <h2 className="text-lg font-bold text-dark mb-3 uppercase tracking-wide">
+              Panorama dos {categoriaData.plural.toLowerCase()} {prep} {bairroName}
+            </h2>
+            <p className="text-gray-700 text-sm leading-relaxed">
+              {bairroInsight.paragraph} Todas as opções com documentação verificada e atendimento direto do Corretor Yuri.
+            </p>
           </div>
         </section>
       )}

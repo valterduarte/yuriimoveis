@@ -207,7 +207,7 @@ export default async function CategoryFilterPage({ params }: PageProps) {
       ? `${cat} com preço ${filterLabelText}`
       : `${cat} com ${filterLabelText}`
   const listingInsight = acao === 'comprar'
-    ? buildListingInsight(imoveis, { cidadeName, total, subject: insightSubject })
+    ? buildListingInsight(imoveis, { locationName: cidadeName, total, subject: insightSubject })
     : null
 
   const faqs = buildFilterFaqs({

@@ -29,6 +29,7 @@ import { SITE_URL } from '../../../../../../../lib/config'
 import { SEO_MIN_PROPERTIES_FOR_FILTER } from '../../../../../../../lib/constants'
 import { buildBreadcrumb, buildCollectionPage, buildPropertyProduct } from '../../../../../../../lib/jsonLd'
 import { buildListingMetadata } from '../../../../../../../lib/seo'
+import { buildListingInsight } from '../../../../../../../lib/listingInsight'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -141,6 +142,15 @@ export default async function BairroFilterPage({ params }: PageProps) {
   }
 
   const label = ACAO_LABELS[ctx.acao].preposicao
+  const cat = ctx.categoriaData.plural.toLowerCase()
+  const insightSubject = ctx.filter.kind === 'amenity'
+    ? `${cat} com ${ctx.filter.amenity.label.toLowerCase()}`
+    : ctx.filter.kind === 'price'
+      ? `${cat} com preço ${ctx.filter.price.label}`
+      : `${cat} com ${ctx.filter.bedroom.label}`
+  const listingInsight = ctx.acao === 'comprar'
+    ? buildListingInsight(imoveis, { locationName: ctx.bairroName, total, subject: insightSubject, includeBairros: false })
+    : null
   const h1 = `${ctx.categoriaData.plural} ${label} ${ctx.filterFragment} no ${ctx.bairroName}, ${ctx.cidadeName}`
   const canonicalUrl = `${SITE_URL}${buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro)}`
   const bairroUrl = buildHierarchicalUrl({ acao: ctx.acao, cidade: raw.cidade, categoria: raw.categoria, bairro: raw.bairro })
@@ -174,24 +184,30 @@ export default async function BairroFilterPage({ params }: PageProps) {
     <ListingPageShell jsonLd={jsonLd} breadcrumb={breadcrumb} label={label} h1={h1} total={total}>
       <div className="container mx-auto px-6 py-10">
         <div className="bg-white border border-gray-200 p-6 md:p-8 mb-8">
-          <p className="text-gray-700 text-sm leading-relaxed">
-            {ctx.filter.kind === 'bedroom' ? (
-              <>
-                Encontre {ctx.categoriaData.plural.toLowerCase()} {label.toLowerCase()} com {ctx.filter.bedroom.label} no {ctx.bairroName}, {ctx.cidadeName} SP.
-                Todas as opções com documentação verificada e atendimento personalizado do Corretor Yuri.
-              </>
-            ) : ctx.filter.kind === 'price' ? (
-              <>
-                {ctx.categoriaData.plural} {label.toLowerCase()} com preço {ctx.filter.price.label} no {ctx.bairroName}, {ctx.cidadeName} SP.
-                Documentação verificada e atendimento personalizado do Corretor Yuri.
-              </>
-            ) : (
-              <>
-                {ctx.categoriaData.plural} {label.toLowerCase()} {ctx.filter.amenity.label} no {ctx.bairroName}, {ctx.cidadeName} SP.
-                Listagens com {ctx.filter.amenity.heroLabel} no condomínio, documentação verificada e atendimento personalizado do Corretor Yuri.
-              </>
-            )}
-          </p>
+          {listingInsight ? (
+            <p className="text-gray-700 text-sm leading-relaxed">
+              {listingInsight.paragraph} Todas as opções com documentação verificada e atendimento personalizado do Corretor Yuri.
+            </p>
+          ) : (
+            <p className="text-gray-700 text-sm leading-relaxed">
+              {ctx.filter.kind === 'bedroom' ? (
+                <>
+                  Encontre {ctx.categoriaData.plural.toLowerCase()} {label.toLowerCase()} com {ctx.filter.bedroom.label} no {ctx.bairroName}, {ctx.cidadeName} SP.
+                  Todas as opções com documentação verificada e atendimento personalizado do Corretor Yuri.
+                </>
+              ) : ctx.filter.kind === 'price' ? (
+                <>
+                  {ctx.categoriaData.plural} {label.toLowerCase()} com preço {ctx.filter.price.label} no {ctx.bairroName}, {ctx.cidadeName} SP.
+                  Documentação verificada e atendimento personalizado do Corretor Yuri.
+                </>
+              ) : (
+                <>
+                  {ctx.categoriaData.plural} {label.toLowerCase()} {ctx.filter.amenity.label} no {ctx.bairroName}, {ctx.cidadeName} SP.
+                  Listagens com {ctx.filter.amenity.heroLabel} no condomínio, documentação verificada e atendimento personalizado do Corretor Yuri.
+                </>
+              )}
+            </p>
+          )}
         </div>
 
         <div className="mb-6">
