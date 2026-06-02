@@ -584,6 +584,112 @@ export const GUIAS: Record<string, GuiaData> = {
     publishedAt: '2026-05-01',
     updatedAt: '2026-05-15',
   },
+
+  'comprar-apartamento-na-planta-osasco': {
+    slug: 'comprar-apartamento-na-planta-osasco',
+    titulo: 'Vale a Pena Comprar Apartamento na Planta em Osasco? Guia 2026',
+    subtitulo: 'Vantagens, riscos, como funciona o pagamento e o financiamento, e o checklist antes de assinar',
+    descricaoMeta:
+      'Comprar apartamento na planta em Osasco em 2026 vale a pena? Veja vantagens (preço de lançamento, valorização na obra, entrada parcelada, MCMV), os riscos e como se proteger pela Lei do Distrato, como funciona o financiamento na entrega e o checklist antes de assinar o contrato.',
+    intro:
+      'A maior parte dos lançamentos em Osasco hoje é vendida na planta ou em construção — e essa é justamente a dúvida que mais recebo de quem está comprando o primeiro imóvel: "vale a pena comprar na planta ou é melhor esperar ficar pronto?". A resposta honesta é: depende do seu perfil, do seu prazo e, principalmente, de quem é a construtora. Comprar na planta pode significar pagar 15% a 30% menos do que o mesmo apartamento custará pronto, com a entrada parcelada em dezenas de meses sem juros — mas também envolve esperar a obra, conviver com o risco de atraso e fazer o financiamento só na entrega das chaves. Este guia explica, sem romantizar nem assustar, como funciona a compra na planta em Osasco em 2026: as vantagens reais, os riscos e como a lei te protege, como é o pagamento durante a obra e o financiamento na entrega, o que muda no Minha Casa Minha Vida, e o checklist que eu uso com meus clientes antes de assinar qualquer contrato.',
+    sections: [
+      {
+        heading: 'Planta, em construção e pronto: o que muda',
+        paragraphs: [
+          'Os três estágios não são a mesma coisa, e o preço reflete isso. "Na planta" é a fase de lançamento: a obra ainda não começou ou está no início, você compra olhando o memorial descritivo, o apartamento decorado e a maquete. "Em construção" é a obra em andamento — você já consegue visitar o canteiro e ver a evolução, e o preço normalmente já subiu em relação ao lançamento. "Pronto para morar" é a unidade com Habite-se emitido, pronta para escriturar e financiar imediatamente.',
+          'A lógica de preço é simples: quanto mais cedo você entra, menor o preço e maior o desconto em relação ao valor final — porque você está, na prática, financiando parte da obra e assumindo parte do risco junto com a construtora. Quem compra no lançamento costuma pagar bem menos do que quem compra a mesma unidade já pronta, dois ou três anos depois.',
+          'Em Osasco, a maioria dos empreendimentos que acompanho está nas fases de planta e construção, concentrados em bairros como Centro, Jaguaribe, Rochdale, Presidente Altino e Bela Vista. É por isso que entender bem essa modalidade é decisivo para comprar bem na cidade hoje.',
+        ],
+        links: [
+          { href: '/empreendimentos/em-construcao', label: 'Lançamentos em construção em Osasco', description: 'Empreendimentos com obra em andamento, plantas e valores', type: 'listing' },
+          { href: '/empreendimentos/pronto-para-morar', label: 'Prontos para morar', description: 'Unidades com Habite-se, prontas para escriturar e financiar', type: 'listing' },
+        ],
+      },
+      {
+        heading: 'As vantagens reais de comprar na planta',
+        paragraphs: [
+          'Preço de lançamento: é o menor preço que aquele apartamento terá. A cada fase da obra (e a cada nova tabela da construtora) o valor sobe. Quem entra no lançamento tende a comprar abaixo do que o imóvel valerá pronto.',
+          'Entrada parcelada e diluída: talvez a maior vantagem para quem não tem o valor à vista. Em vez de juntar 20% de entrada de uma vez, você dilui esse valor ao longo da obra — em parcelas mensais, reforços (semestrais/anuais) e uma parcela das chaves. Isso torna a compra viável para muita gente que não conseguiria entrar num imóvel pronto.',
+          'Valorização durante a obra: como você comprou no preço de lançamento, a valorização natural ao longo da construção fica para você. Não é garantida, mas em bairros em desenvolvimento de Osasco é um padrão recorrente.',
+          'Personalização e unidade nova: você costuma poder escolher entre opções de acabamento e plantas, recebe um imóvel zero, com garantia da construtora e padrões construtivos atuais (isolamento, infraestrutura para ar-condicionado, áreas de lazer completas).',
+          'Compatibilidade com o Minha Casa Minha Vida: muitos lançamentos em Osasco são desenhados para caber nos tetos do MCMV, o que combina o preço de lançamento com juros subsidiados e subsídio do programa — uma das formas mais baratas de comprar o primeiro imóvel.',
+        ],
+        links: [
+          { href: '/simulador', label: 'Simular financiamento e MCMV', description: 'Veja parcela estimada, elegibilidade ao MCMV e subsídio para cada faixa', type: 'tool' },
+          { href: '/guia/financiamento-imobiliario-osasco', label: 'Guia de financiamento imobiliário', description: 'Programas, taxas e passo a passo do financiamento em Osasco', type: 'ajuda' },
+        ],
+      },
+      {
+        heading: 'Os riscos — e como a lei te protege',
+        paragraphs: [
+          'Atraso na entrega: é o risco mais comum. Por lei, o contrato pode prever um prazo de tolerância de até 180 dias além da data prevista, sem que isso configure descumprimento. Passado esse prazo de carência, o comprador pode pedir rescisão com devolução integral dos valores pagos, ou manter o contrato e exigir multa pelo atraso. Sempre confira a cláusula de tolerância e a penalidade por atraso antes de assinar.',
+          'Desistência (distrato): se você precisar desistir da compra, a Lei do Distrato (Lei 13.786/2018) define quanto a construtora pode reter. Em empreendimentos com patrimônio de afetação, a retenção pode chegar a 50% do valor pago; nos demais, até 25%. Não é o cenário ideal, mas a lei trouxe previsibilidade — você sabe exatamente a regra antes de assinar.',
+          'Saúde da construtora: este é o ponto que mais importa. Atraso e abandono de obra quase sempre vêm de construtora descapitalizada. Antes de comprar, verifique o histórico de entregas da incorporadora, se as obras anteriores foram entregues no prazo, e se o empreendimento tem registro de incorporação averbado na matrícula (exigência do art. 32 da Lei 4.591/64) — sem esse registro, a construtora nem pode vender unidades legalmente.',
+          'Risco de financiamento na entrega: você só vai financiar o saldo quando as chaves saírem. Se sua renda ou seu perfil de crédito piorarem durante a obra, pode ter dificuldade de aprovar o financiamento no fim. Por isso é prudente manter o nome limpo e a renda comprovável estável durante todo o período da obra.',
+        ],
+      },
+      {
+        heading: 'Como funciona o pagamento e o financiamento na planta',
+        paragraphs: [
+          'Durante a obra, você paga diretamente à construtora, não ao banco. O fluxo típico tem quatro componentes: a entrada (ato), as parcelas mensais, os reforços (parcelas maiores semestrais ou anuais) e a parcela das chaves, paga na entrega. Esse conjunto costuma somar algo em torno de 20% a 30% do valor do imóvel — é a parte que você quita ao longo da construção.',
+          'O saldo restante (os 70% a 80%) é o que você financia no banco quando o imóvel fica pronto e é individualizado. É nesse momento que entra a Caixa (SBPE ou MCMV), o uso do FGTS para abater o saldo ou compor a entrada, e a definição da taxa e do prazo do financiamento.',
+          'Atenção a um detalhe que pega muita gente: as parcelas pagas à construtora durante a obra costumam ser corrigidas mensalmente pelo INCC (índice da construção civil) até a entrega das chaves, e pelo IPCA depois. Some essa correção ao planejar o orçamento — ela é normal e prevista em contrato, mas precisa entrar na conta.',
+          'Use o simulador do site para estimar a parcela do financiamento na entrega e verificar a elegibilidade ao MCMV antes mesmo de escolher a unidade. Saber a parcela final é o que evita comprar algo que não vai fechar lá na frente.',
+        ],
+        links: [
+          { href: '/simulador', label: 'Simular a parcela na entrega', description: 'Calcule a parcela do financiamento, ITBI e custos de cartório', type: 'tool' },
+          { href: '/guia/custos-compra-imovel', label: 'Custos de compra além do preço', description: 'ITBI 3%, cartório e tarifas — quanto separar além do valor do imóvel', type: 'ajuda' },
+        ],
+      },
+      {
+        heading: 'Minha Casa Minha Vida na planta em Osasco',
+        paragraphs: [
+          'Boa parte dos lançamentos de Osasco é desenhada para caber no MCMV — e comprar na planta dentro do programa combina dois benefícios: o preço de lançamento e os juros subsidiados. Em 2026, o programa atende renda familiar de até R$ 13.000/mês, com tetos de imóvel de R$ 400 mil na Faixa 3 e R$ 600 mil na Faixa 4.',
+          'Na planta, o enquadramento no MCMV é avaliado no momento do financiamento (na entrega), considerando sua renda e o valor do imóvel naquele momento. Por isso vale confirmar, ainda no lançamento, se a unidade e o seu perfil tendem a se enquadrar — e usar o FGTS, que pode compor a entrada ou abater o saldo financiado.',
+          'Como as faixas e os tetos mudam ano a ano, trate qualquer simulação como estimativa e confirme as condições vigentes na contratação. O simulador do site usa as faixas de 2026; eu confirmo caso a caso com a Caixa antes de qualquer assinatura.',
+        ],
+        links: [
+          { href: '/guia/comprar-imovel-osasco', label: 'Guia completo de compra em Osasco', description: 'Passo a passo, documentação, negociação e os erros mais comuns', type: 'ajuda' },
+        ],
+      },
+      {
+        heading: 'Checklist antes de assinar o contrato',
+        paragraphs: [
+          'Confirme o registro de incorporação averbado na matrícula do terreno (art. 32 da Lei 4.591/64) — é o que autoriza a venda das unidades e protege o comprador. Peça o memorial descritivo e confira o padrão de acabamento prometido, item por item. Verifique a cláusula de prazo de entrega e a tolerância de 180 dias, além da multa por atraso.',
+          'Levante o histórico da construtora: empreendimentos anteriores entregues, prazos cumpridos, reclamações. Leia a tabela de pagamento inteira, incluindo reforços, parcela das chaves e a correção pelo INCC durante a obra. Confira as regras de distrato no contrato (percentual de retenção e se há patrimônio de afetação).',
+          'Por fim, simule a parcela do financiamento na entrega e confirme a folga no seu orçamento — a parcela não deve passar de 30% da renda familiar. Esse é o erro que mais vejo: gente que fecha animada com a entrada diluída e esquece de checar se a parcela final, lá na entrega, cabe no bolso.',
+          'Comprar na planta com a construtora certa e o contrato bem lido é uma das formas mais inteligentes de comprar em Osasco hoje. Comprar sem verificar esses pontos é onde mora o risco. Se quiser, eu reviso o contrato e a construtora com você antes de assinar — é parte do meu atendimento, sem custo.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Comprar na planta é mais barato do que comprar pronto?',
+        answer: 'Em geral sim. O preço de lançamento é o menor que aquele apartamento terá, e sobe a cada fase da obra. A contrapartida é esperar a entrega e assumir parte do risco da construção. Quem compra no lançamento normalmente paga menos do que quem compra a mesma unidade pronta.',
+      },
+      {
+        question: 'Como pago um imóvel na planta antes da entrega?',
+        answer: 'Durante a obra você paga diretamente à construtora: entrada (ato), parcelas mensais, reforços semestrais ou anuais e a parcela das chaves — somando algo em torno de 20% a 30% do valor. O saldo restante você financia no banco quando o imóvel fica pronto. As parcelas da obra são corrigidas pelo INCC até a entrega.',
+      },
+      {
+        question: 'O que acontece se a obra atrasar?',
+        answer: 'O contrato pode prever uma tolerância de até 180 dias além da data prevista. Passado esse prazo, você pode pedir a rescisão com devolução integral dos valores pagos ou manter o contrato e exigir multa pelo atraso, conforme a Lei do Distrato (13.786/2018).',
+      },
+      {
+        question: 'Posso usar FGTS e Minha Casa Minha Vida para comprar na planta?',
+        answer: 'Sim. O FGTS pode compor a entrada ou abater o saldo financiado, e muitos lançamentos em Osasco são desenhados para caber no MCMV. O enquadramento é avaliado no financiamento, na entrega das chaves, considerando sua renda e o valor do imóvel. Use o simulador para estimar a elegibilidade.',
+      },
+      {
+        question: 'Como sei se a construtora é confiável?',
+        answer: 'Verifique o histórico de entregas (obras anteriores entregues no prazo), reclamações de clientes, e confirme se o empreendimento tem o registro de incorporação averbado na matrícula. Sem esse registro, a venda de unidades nem é permitida por lei.',
+      },
+    ],
+    ctaLabel: 'Ver lançamentos e plantas em Osasco',
+    ctaHref: '/empreendimentos/em-construcao',
+    publishedAt: '2026-06-02',
+    updatedAt: '2026-06-02',
+  },
 }
 
 export function getGuiaBySlug(slug: string): GuiaData | undefined {

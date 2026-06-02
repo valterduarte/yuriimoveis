@@ -250,6 +250,11 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
                 Guia do bairro {emp.bairro} →
               </Link>
             )}
+            {emp.status !== 'pronto' && (
+              <Link href="/guia/comprar-apartamento-na-planta-osasco" className="font-semibold text-primary hover:underline">
+                Vale a pena comprar na planta? →
+              </Link>
+            )}
             <Link href="/simulador" className="font-semibold text-primary hover:underline">
               Simular financiamento →
             </Link>
