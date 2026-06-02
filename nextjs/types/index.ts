@@ -121,6 +121,12 @@ export interface BairroData {
   descricaoMeta: string
   imagem?: string
   dbMatch?: string
+  /**
+   * Renderiza o guia de bairro mesmo sem imóveis cadastrados, como conteúdo
+   * de SEO local independente do estoque. As seções transacionais (listagens
+   * e destaques) só aparecem quando houver imóveis no banco.
+   */
+  guiaIndependente?: boolean
   precoMedio?: BairroPriceInsight
   relatedPost?: { href: string; label: string }
   conteudo: BairroContent

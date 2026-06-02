@@ -95,7 +95,7 @@ export default async function BairrosIndexPage() {
   for (const bairro of Object.values(BAIRROS)) {
     const dbName = bairroSlugToDbName(bairro.slug) ?? bairro.nome
     const count = countsByBairro.get(dbName) ?? 0
-    if (count === 0) continue
+    if (count === 0 && !bairro.guiaIndependente) continue
     const cidade = inferCidadeFromBairro(bairro)
     const list = guidesByCidade.get(cidade) ?? []
     list.push({ bairro, count })
@@ -225,7 +225,11 @@ export default async function BairrosIndexPage() {
                       <h3 className="text-base font-bold text-dark group-hover:text-primary">Morar no {bairro.nome}</h3>
                       <FiArrowRight size={16} className="text-gray-400 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                     </div>
-                    <p className="text-xs text-gray-500 mb-2">{count} imóve{count !== 1 ? 'is' : 'l'} disponíve{count !== 1 ? 'is' : 'l'}</p>
+                    <p className="text-xs text-gray-500 mb-2">
+                      {count > 0
+                        ? `${count} imóve${count !== 1 ? 'is' : 'l'} disponíve${count !== 1 ? 'is' : 'l'}`
+                        : 'Guia do bairro'}
+                    </p>
                     <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">{bairro.conteudo.sobre}</p>
                   </Link>
                   {aptoVenda > 0 && (

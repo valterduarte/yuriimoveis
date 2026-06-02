@@ -96,7 +96,7 @@ export function buildBairroFaqs({
 
   const { noun: imoveisNoun, adjective: imoveisAdjective } = pluralizeImoveis(total)
 
-  return [
+  const contentFaqs: BairroFaq[] = [
     {
       question: `O que é ${artigo} ${bairro.nome} e onde fica?`,
       answer: bairro.conteudo.sobre,
@@ -117,6 +117,22 @@ export function buildBairroFaqs({
       question: `Como é morar ${em} ${bairro.nome}?`,
       answer: bairro.conteudo.porqueMorar,
     },
+  ]
+
+  // Sem imóveis no bairro, as perguntas transacionais ("quanto custa", "quantos
+  // imóveis") seriam vazias e apontariam para uma listagem inexistente. Trocamos
+  // por uma resposta honesta com o caminho de contato.
+  if (total === 0) {
+    return [
+      ...contentFaqs,
+      {
+        question: `Há apartamentos à venda ${em} ${bairro.nome}?`,
+        answer: `No momento o Corretor Yuri, CRECI 235509, não tem unidades anunciadas ${em} ${bairro.nome}, mas acompanha de perto os lançamentos e oportunidades da região central de ${cidadeName}. Entre em contato para ser avisado assim que surgir um imóvel no bairro ou para ver opções de apartamentos disponíveis nas redondezas.`,
+      },
+    ]
+  }
+
+  const inventoryFaqs: BairroFaq[] = [
     {
       question: `Que tipo de imóvel encontro ${em} ${bairro.nome}?`,
       answer: `${emCap} ${bairro.nome}, o portfólio do Corretor Yuri é composto por ${tipoListagem}. Para ver opções com filtros de dormitórios, metragem e diferenciais, acesse a lista completa de imóveis ${em} ${bairro.nome}.`,
@@ -147,4 +163,6 @@ export function buildBairroFaqs({
       answer: `No momento há ${total} ${imoveisNoun} ${imoveisAdjective} ${em} ${bairro.nome}, ${cidadeName}, entre compra e aluguel. Entre em contato com o Corretor Yuri, CRECI 235509, para agendar uma visita.`,
     },
   ]
+
+  return [...contentFaqs, ...inventoryFaqs]
 }

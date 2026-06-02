@@ -285,6 +285,35 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'novo-osasco': {
+    nome: 'Novo Osasco',
+    slug: 'novo-osasco',
+    cidade: 'Osasco',
+    dbMatch: 'Novo Osasco',
+    // Guia de conteúdo local que renderiza mesmo sem imóveis cadastrados no bairro.
+    // Ativa as listagens transacionais automaticamente assim que houver estoque.
+    guiaIndependente: true,
+    titulo: 'Imóveis no Novo Osasco, Osasco SP',
+    descricaoMeta:
+      'Apartamentos no Novo Osasco, Osasco SP. Conheça o bairro, infraestrutura, transporte e por que morar na região central da cidade. Atendimento com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Novo Osasco é um bairro residencial da região central de Osasco, vizinho ao Centro e a poucos minutos da Estação Osasco. De perfil consolidado e misto, combina ruas tradicionais de moradia com um comércio de bairro ativo, o que torna a região prática para quem quer morar perto de tudo sem abrir mão da tranquilidade do dia a dia. A boa localização tem atraído novos empreendimentos verticais, com apartamentos compactos e de lazer completo voltados a famílias e a quem trabalha na região central da cidade.',
+      infraestrutura:
+        'O bairro conta com supermercados, padarias, farmácias, bancos e comércio de rua diversificado, além de fácil acesso ao Calçadão e aos shoppings do Centro de Osasco a poucos minutos. Há unidades de saúde na região e hospitais do centro acessíveis em curta distância. A proximidade com o núcleo central garante serviços, restaurantes e academias sem necessidade de grandes deslocamentos.',
+      transporte:
+        'A grande vantagem do Novo Osasco é a proximidade com a Estação Osasco da CPTM (Linha 8-Diamante), que liga direto à Estação da Luz, em São Paulo, e com o Terminal Osasco, que concentra dezenas de linhas municipais e intermunicipais. O acesso à Avenida dos Autonomistas e à Rodovia Presidente Castelo Branco facilita os deslocamentos de carro para a capital e para as cidades vizinhas.',
+      educacao:
+        'A região conta com escolas públicas e particulares de ensino fundamental e médio, além de creches. A proximidade com o Centro de Osasco dá acesso a faculdades, cursos técnicos e unidades do SENAC e SENAI a poucos minutos.',
+      porqueMorar:
+        'Morar no Novo Osasco é ideal para quem prioriza localização central, mobilidade por transporte público e praticidade no dia a dia. O bairro reúne a estrutura completa do centro de Osasco ao lado e o sossego de uma região residencial consolidada. Para quem busca apartamento perto da estação e com boa liquidez para revenda ou locação, é uma das opções mais estratégicas da cidade.',
+    },
+    relatedPost: {
+      href: '/blog/apartamento-em-osasco-centro-quitauna-novo-osasco-2026',
+      label: 'Apartamentos em Osasco: Centro, Quitaúna e Novo Osasco em 2026 →',
+    },
+  },
+
   'cruz-preta': {
     nome: 'Cruz Preta',
     slug: 'cruz-preta',

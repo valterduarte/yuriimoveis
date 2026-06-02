@@ -49,6 +49,7 @@ export async function generateStaticParams() {
   const activeBairros = new Set(matrix.map(r => r.bairro.toLowerCase()))
   return Object.values(BAIRROS)
     .filter(b => {
+      if (b.guiaIndependente) return true
       const dbName = (b.dbMatch || b.nome).toLowerCase()
       return activeBairros.has(dbName)
     })
@@ -81,7 +82,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
   const bairroDbName = bairroSlugToDbName(slug)
 
   const combos = await getCombosForBairro(slug, cidadeName)
-  if (combos.length === 0) permanentRedirect('/bairros')
+  if (combos.length === 0 && !bairro.guiaIndependente) permanentRedirect('/bairros')
 
   const totalImoveis = combos.reduce((acc, c) => acc + c.count, 0)
   const totalLabel = pluralizeImoveis(totalImoveis)
@@ -148,7 +149,9 @@ export default async function BairroGuidePage({ params }: PageProps) {
           <span className="section-label flex items-center gap-2"><FiMapPin size={12} /> {cidadeName}, SP</span>
           <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{guideTitle}</h1>
           <p className="text-gray-400 text-sm mt-2 max-w-3xl">{bairro.descricaoMeta}</p>
-          <p className="text-xs text-gray-500 mt-3">{totalImoveis} {totalLabel.noun} {totalLabel.adjective} no bairro</p>
+          {totalImoveis > 0 && (
+            <p className="text-xs text-gray-500 mt-3">{totalImoveis} {totalLabel.noun} {totalLabel.adjective} no bairro</p>
+          )}
         </div>
       </div>
 
@@ -231,6 +234,30 @@ export default async function BairroGuidePage({ params }: PageProps) {
             )}
           </section>
         </article>
+
+        {combos.length === 0 && (
+          <section className="mt-12 bg-white border border-gray-200 p-6 md:p-8">
+            <h2 className="text-lg font-bold text-dark mb-3 uppercase tracking-wide">Procura imóvel no {bairro.nome}?</h2>
+            <p className="text-gray-700 text-sm md:text-base leading-relaxed mb-5 max-w-3xl">
+              Ainda não há imóveis anunciados no {bairro.nome}, mas o Corretor Yuri pode avisar você assim que surgir uma
+              oportunidade no bairro — e já tem ótimas opções de apartamentos na região central de {cidadeName}.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href={buildHierarchicalUrl({ acao: 'comprar', cidade: cidadeSlug, categoria: 'apartamento' })}
+                className="inline-flex items-center gap-2 bg-primary text-white text-xs font-bold uppercase tracking-wider px-5 py-3 hover:bg-primary/90 transition-colors"
+              >
+                Ver apartamentos em {cidadeName} <FiArrowRight size={14} />
+              </Link>
+              <Link
+                href="/contato"
+                className="inline-flex items-center gap-2 border border-gray-300 text-dark text-xs font-bold uppercase tracking-wider px-5 py-3 hover:border-primary hover:text-primary transition-colors"
+              >
+                Falar com o Corretor Yuri
+              </Link>
+            </div>
+          </section>
+        )}
 
         {combos.length > 0 && (
           <section className="mt-12">

@@ -221,7 +221,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const activeBairroKeys = new Set(matrix.map(r => `${r.cidade}|${r.bairro}`))
   const bairroGuideUrls: MetadataRoute.Sitemap = Object.values(BAIRROS)
-    .filter(b => activeBairroKeys.has(`${b.cidade}|${b.dbMatch || b.nome}`))
+    .filter(b => b.guiaIndependente || activeBairroKeys.has(`${b.cidade}|${b.dbMatch || b.nome}`))
     .map(b => ({
       url: `${SITE_URL}/bairros/${b.slug}`,
       lastModified: (b.dbMatch && bairroLastModByDbName.get(b.dbMatch)) || now,
