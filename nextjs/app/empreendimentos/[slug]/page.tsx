@@ -6,7 +6,9 @@ import { EMPREENDIMENTO_RESERVED_SLUGS, listEmpreendimentos, fetchEmpreendimento
 import PropertyCard from '../../../components/PropertyCard'
 import WhatsAppLink from '../../../components/WhatsAppLink'
 import { SITE_URL, PHONE_WA_BASE, CRECI } from '../../../lib/config'
-import { formatPrice, imovelSlug } from '../../../utils/imovelUtils'
+import { formatPrice, imovelSlug, slugify } from '../../../utils/imovelUtils'
+import { buildHierarchicalUrl, cidadeNameToSlug } from '../../../lib/navigation'
+import { BAIRROS } from '../../../data/bairros'
 import { buildListingMetadata } from '../../../lib/seo'
 import { buildBreadcrumb, AGENT_ID } from '../../../lib/jsonLd'
 import type { Metadata } from 'next'
@@ -31,8 +33,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ? `a partir de ${formatPrice(emp.precoMin, 'venda')}`
     : `de ${formatPrice(emp.precoMin, 'venda')} a ${formatPrice(emp.precoMax, 'venda')}`
 
-  const title = `${emp.nome} — ${emp.totalUnidades} plantas em ${emp.bairro}, ${emp.cidade}`
-  const description = `${emp.nome}: ${emp.totalUnidades} plantas disponíveis ${priceText}. Endereço ${emp.endereco}, ${emp.bairro}, ${emp.cidade} SP. Atendimento Corretor Yuri (CRECI 235509).`
+  // Price-forward title: a buyer searching the development by name wants to see
+  // the price in the SERP — front-loading it lifts CTR on branded queries.
+  const title = `${emp.nome} — Apartamentos a partir de ${formatPrice(emp.precoMin, 'venda')}`
+  const description = `${emp.nome} em ${emp.bairro}, ${emp.cidade}: ${emp.totalUnidades} plantas ${priceText}. Veja valores, plantas disponíveis e fale direto com o Corretor Yuri (CRECI 235509).`
 
   return buildListingMetadata({
     title,
@@ -53,6 +57,15 @@ function formatAreaRange(min: number, max: number): string {
   return `${min.toFixed(2).replace('.', ',')} a ${max.toFixed(2).replace('.', ',')} m²`
 }
 
+const STATUS_PHRASE: Record<string, string> = {
+  pronto: 'pronto para morar',
+  construcao: 'em construção',
+  planta: 'na planta',
+}
+
+/** Highest unit price (R$) still eligible for the Minha Casa Minha Vida cap. */
+const MCMV_PRICE_CAP = 600_000
+
 export default async function EmpreendimentoDetailPage({ params }: PageProps) {
   const { slug } = await params
   if (EMPREENDIMENTO_RESERVED_SLUGS.has(slug)) notFound()
@@ -66,6 +79,17 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
     `Olá Yuri! Tenho interesse no ${emp.nome} (${emp.bairro}, ${emp.cidade}). Pode me passar valores, plantas disponíveis e condições de financiamento?`,
   )
   const waHref = `${PHONE_WA_BASE}?text=${waMessage}`
+
+  const statusPhrase = STATUS_PHRASE[emp.status] ?? 'disponível'
+  const bairroSlug = slugify(emp.bairro)
+  const bairroGuideHref = BAIRROS[bairroSlug] ? `/bairros/${bairroSlug}` : null
+  const listagemHref = buildHierarchicalUrl({
+    acao: 'comprar',
+    cidade: cidadeNameToSlug(emp.cidade),
+    categoria: 'apartamento',
+    bairro: bairroSlug,
+  })
+  const fitsMcmv = emp.precoMin <= MCMV_PRICE_CAP
 
   const breadcrumbJsonLd = buildBreadcrumb([
     { name: 'Início',       path: '/' },
@@ -157,6 +181,30 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
         >
           <FiArrowLeft size={13} /> Ver todos os lançamentos
         </Link>
+
+        <section className="mb-12 max-w-3xl">
+          <span className="section-label">Sobre o empreendimento</span>
+          <h2 className="section-title mb-4">Sobre o {emp.nome}</h2>
+          <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+            O {emp.nome} é um empreendimento {statusPhrase} no bairro {emp.bairro}, em {emp.cidade} (SP),
+            localizado na {emp.endereco}. São {emp.totalUnidades} {emp.totalUnidades === 1 ? 'planta' : 'plantas'}{' '}
+            de {formatAreaRange(emp.areaMin, emp.areaMax)}, com valores {formatPriceRange(emp.precoMin, emp.precoMax)}.
+            {fitsMcmv && ' Há unidades que podem se enquadrar no programa Minha Casa Minha Vida — vale simular as condições de financiamento.'}
+          </p>
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm mt-5">
+            <Link href={listagemHref} className="font-semibold text-primary hover:underline">
+              Apartamentos no {emp.bairro} →
+            </Link>
+            {bairroGuideHref && (
+              <Link href={bairroGuideHref} className="font-semibold text-primary hover:underline">
+                Guia do bairro {emp.bairro} →
+              </Link>
+            )}
+            <Link href="/simulador" className="font-semibold text-primary hover:underline">
+              Simular financiamento →
+            </Link>
+          </div>
+        </section>
 
         <span className="section-label">Plantas disponíveis</span>
         <h2 className="section-title mb-6">{emp.totalUnidades} opções no {emp.nome}</h2>
