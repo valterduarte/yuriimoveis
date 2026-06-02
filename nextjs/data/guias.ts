@@ -314,6 +314,7 @@ export const GUIAS: Record<string, GuiaData> = {
         ],
         links: [
           { href: '/blog/fgts-compra-imovel-como-usar', label: 'FGTS para compra de imóvel: regras detalhadas', description: 'Documentação, prazos de liberação e casos especiais', type: 'blog' },
+          { href: '/guia/quanto-dar-de-entrada-imovel-osasco', label: 'Quanto dar de entrada num apartamento', description: 'A entrada mínima de 20%, FGTS, entrada parcelada na planta e custos paralelos', type: 'ajuda' },
           { href: '/simulador', label: 'Simular financiamento com FGTS na entrada', description: 'Veja o impacto na parcela e no total pago de juros', type: 'tool' },
         ],
       },
@@ -639,6 +640,7 @@ export const GUIAS: Record<string, GuiaData> = {
         ],
         links: [
           { href: '/simulador', label: 'Simular a parcela na entrega', description: 'Calcule a parcela do financiamento, ITBI e custos de cartório', type: 'tool' },
+          { href: '/guia/quanto-dar-de-entrada-imovel-osasco', label: 'Quanto dar de entrada num apartamento', description: 'Como funciona a entrada parcelada na planta e quanto reservar para a compra', type: 'ajuda' },
           { href: '/guia/custos-compra-imovel', label: 'Custos de compra além do preço', description: 'ITBI 3%, cartório e tarifas — quanto separar além do valor do imóvel', type: 'ajuda' },
         ],
       },
@@ -821,6 +823,7 @@ export const GUIAS: Record<string, GuiaData> = {
           'Alongue o prazo e reforce a entrada: prazo maior reduz a parcela mensal; entrada maior reduz o valor financiado. Os dois aumentam o imóvel que cabe na sua renda. O simulador mostra o efeito de cada ajuste em segundos.',
         ],
         links: [
+          { href: '/guia/quanto-dar-de-entrada-imovel-osasco', label: 'Quanto dar de entrada num apartamento', description: 'Quanto guardar para a entrada, como o FGTS reduz o desembolso e o que reservar além dela', type: 'ajuda' },
           { href: '/simulador', label: 'Testar cenários no simulador', description: 'Veja como entrada, prazo e MCMV mudam a parcela e a renda exigida', type: 'tool' },
         ],
       },
@@ -844,6 +847,102 @@ export const GUIAS: Record<string, GuiaData> = {
       },
     ],
     ctaLabel: 'Descobrir quanto você consegue financiar',
+    ctaHref: '/simulador',
+    publishedAt: '2026-06-02',
+    updatedAt: '2026-06-02',
+  },
+  'quanto-dar-de-entrada-imovel-osasco': {
+    slug: 'quanto-dar-de-entrada-imovel-osasco',
+    titulo: 'Quanto Dar de Entrada num Apartamento em Osasco?',
+    subtitulo: 'A entrada mínima de 20%, como usar o FGTS, a entrada parcelada na planta e quanto reservar além dela',
+    descricaoMeta:
+      'Quanto dar de entrada num apartamento em Osasco em 2026? Entenda a entrada mínima de 20% no SBPE, como o FGTS e o Minha Casa Minha Vida reduzem o que sai do bolso, a entrada parcelada na planta e os custos paralelos (ITBI 3% e cartório) que você precisa reservar além da entrada.',
+    intro:
+      '"Eu já sei o imóvel que quero — quanto preciso ter guardado para começar?" Essa é a pergunta que trava a maioria dos compradores em Osasco, e quase sempre a resposta é melhor do que eles imaginam. A entrada mínima de um financiamento é de 20% do valor do imóvel, mas esse número raramente é o que sai de fato da sua conta: o FGTS pode compor boa parte dele, o subsídio do Minha Casa Minha Vida abate a entrada nas faixas de menor renda, e quem compra na planta dilui a entrada em parcelas até a entrega. Este guia explica quanto é a entrada mínima de verdade, as três alavancas que reduzem o que você desembolsa, e — o que mais gente esquece — quanto reservar além da entrada para os custos da compra. Os valores aqui são para você se situar; a parcela e a entrada exatas saem do simulador, que usa as taxas e faixas vigentes em 2026.',
+    sections: [
+      {
+        heading: 'Quanto é a entrada mínima em 2026',
+        paragraphs: [
+          'No financiamento pelo SBPE (o crédito imobiliário tradicional dos bancos), a entrada mínima é de 20% do valor do imóvel — o banco financia até 80% e você precisa entrar com o restante. Num apartamento de 2 quartos a partir de R$ 250 mil, que é a faixa mais comum em Osasco, isso significa uma entrada de R$ 50 mil. Num imóvel de R$ 350 mil, R$ 70 mil.',
+          'Essa trava existe porque o banco precisa de uma margem de segurança: o imóvel é a garantia do empréstimo, e financiar 100% deixaria o banco exposto a uma queda de preço. Por isso, mesmo com renda folgada, dificilmente você financia sem nenhuma entrada no SBPE. A boa notícia é que esses 20% não precisam sair todos do seu bolso, como as próximas seções mostram.',
+          'Quanto maior a entrada acima do mínimo, menor o valor financiado — e, com ele, a parcela mensal e o total de juros pago ao longo do contrato. O simulador mostra em segundos o efeito de cada R$ a mais de entrada sobre a parcela.',
+        ],
+        links: [
+          { href: '/simulador', label: 'Simular entrada e parcela', description: 'Informe o valor do imóvel e veja a entrada mínima e a parcela estimada', type: 'tool' },
+        ],
+      },
+      {
+        heading: 'O FGTS reduz (ou quase zera) o que sai do bolso',
+        paragraphs: [
+          'O saldo do seu FGTS pode compor a entrada de um imóvel residencial, o que muda completamente a conta para quem trabalha de carteira assinada há alguns anos. Em vez de juntar os R$ 50 mil de entrada de um imóvel de R$ 250 mil só com poupança, boa parte pode vir do fundo — e muita gente descobre que tem mais saldo acumulado do que imaginava.',
+          'Há requisitos do SFH para usar o FGTS na compra: o imóvel precisa ser residencial e urbano, você não pode ter outro imóvel registrado na cidade onde mora ou trabalha, e precisa respeitar o intervalo mínimo entre usos do fundo para esse fim. Quem mora em São Paulo capital, por exemplo, pode usar o FGTS para comprar em Osasco sem problema, desde que não tenha imóvel na cidade onde reside ou trabalha.',
+          'Na prática, o erro mais comum é não contar o FGTS ao calcular a entrada e concluir que "ainda falta muito para comprar". Some o saldo das contas de FGTS de todos os compradores do financiamento antes de descartar uma faixa de preço — frequentemente a entrada já está mais perto do que parece.',
+        ],
+        links: [
+          { href: '/guia/financiamento-imobiliario-osasco', label: 'Guia de financiamento imobiliário', description: 'Como usar o FGTS na entrada e durante o contrato, programas e taxas', type: 'ajuda' },
+        ],
+      },
+      {
+        heading: 'No Minha Casa Minha Vida, o subsídio entra como parte da entrada',
+        paragraphs: [
+          'Para quem se enquadra nas faixas de menor renda do Minha Casa Minha Vida, o programa concede um subsídio direto que abate o valor a financiar — funcionando, na prática, como uma parte da entrada paga pelo governo. Combinado com o FGTS, o desembolso de entrada do seu bolso pode ficar baixo, e essa é a razão de tanta gente conseguir sair do aluguel antes do que planejava.',
+          'O subsídio diminui conforme a renda familiar sobe, e nas faixas superiores do programa ele já não existe — mas os juros continuam menores que os do mercado, o que reduz a parcela e, indiretamente, a folga necessária para a entrada. Vale checar em qual faixa você se enquadra antes de definir o quanto precisa guardar.',
+        ],
+        links: [
+          { href: '/mcmv-osasco', label: 'Minha Casa Minha Vida em Osasco', description: 'Faixas de renda, tetos e subsídio do programa em 2026', type: 'listing' },
+        ],
+      },
+      {
+        heading: 'Comprando na planta, a entrada é parcelada',
+        paragraphs: [
+          'Quando você compra um apartamento na planta, a entrada não precisa estar inteira no dia da assinatura: ela é diluída em parcelas mensais pagas direto à construtora durante a obra, até a entrega das chaves. Em vez de juntar R$ 50 mil antes de comprar, você paga essa entrada ao longo de meses ou anos, no ritmo da construção.',
+          'Essas parcelas da fase de obra são pagas direto à incorporadora e não carregam os juros de um financiamento bancário — costumam ser corrigidas por um índice de construção (como o INCC) até a entrega. O financiamento bancário, com a entrada já formada pelas parcelas pagas, só entra em cena quando o imóvel fica pronto e você financia o saldo restante. Para quem tem renda boa mas ainda não acumulou a entrada à vista, a planta é o caminho mais natural.',
+        ],
+        links: [
+          { href: '/guia/comprar-apartamento-na-planta-osasco', label: 'Guia de comprar na planta', description: 'Como funciona a entrada parcelada, prazos e riscos da compra na planta', type: 'ajuda' },
+        ],
+      },
+      {
+        heading: 'Quanto reservar ALÉM da entrada',
+        paragraphs: [
+          'A entrada não é o único desembolso na compra. Além dela, há os custos paralelos que precisam estar reservados em dinheiro, porque não entram no financiamento: o ITBI, que em Osasco é de 3% sobre o valor do imóvel, mais as despesas de escritura e registro em cartório e a taxa de avaliação do banco.',
+          'Como regra de bolso, reserve algo em torno de 4% a 5% do valor do imóvel além da entrada para cobrir esses custos. Num imóvel de R$ 250 mil, isso significa de R$ 10 mil a R$ 12,5 mil somados à entrada. Subestimar essa parte é um dos tropeços mais comuns — o comprador junta exatamente os 20% e descobre na reta final que faltam os custos de cartório e o ITBI.',
+        ],
+        links: [
+          { href: '/guia/custos-compra-imovel', label: 'Custos da compra de imóvel', description: 'O detalhamento de ITBI, cartório, registro e demais custos paralelos', type: 'ajuda' },
+          { href: '/ajuda/itbi-osasco', label: 'ITBI em Osasco', description: 'Quanto é, como é calculado e quando pagar o ITBI em Osasco', type: 'ajuda' },
+        ],
+      },
+      {
+        heading: 'Vale a pena dar uma entrada maior?',
+        paragraphs: [
+          'Dar mais do que a entrada mínima reduz o valor financiado e, com ele, a parcela mensal e o total de juros ao longo de todo o contrato — então, financeiramente, uma entrada maior quase sempre sai mais barata no fim. Cada R$ 10 mil a mais de entrada derruba a parcela e economiza juros por anos.',
+          'O contrapeso é a sua reserva de emergência: não vale esvaziar todas as suas reservas para dar uma entrada gorda e ficar sem fôlego para imprevistos logo depois de assumir um financiamento de décadas. O equilíbrio razoável é dar a maior entrada possível mantendo uma reserva que cubra alguns meses de despesas. O simulador ajuda a ver, em segundos, o quanto cada real a mais de entrada reduz a sua parcela — assim você decide com número na tela, não no escuro.',
+        ],
+        links: [
+          { href: '/simulador', label: 'Testar cenários de entrada', description: 'Veja como diferentes valores de entrada mudam a parcela e os juros', type: 'tool' },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Qual a entrada mínima para financiar um apartamento em Osasco?',
+        answer: 'No financiamento SBPE, a entrada mínima é de 20% do valor do imóvel — o banco financia até 80%. Num apartamento de R$ 250 mil, são R$ 50 mil de entrada. Essa entrada pode ser composta com o saldo do FGTS, então nem todo o valor precisa sair da sua poupança.',
+      },
+      {
+        question: 'Posso usar o FGTS na entrada do imóvel?',
+        answer: 'Sim. O saldo do FGTS pode compor a entrada de um imóvel residencial urbano, desde que você não tenha outro imóvel na cidade onde mora ou trabalha e respeite o intervalo mínimo entre usos do fundo para compra. Quem mora na capital pode usar o FGTS para comprar em Osasco normalmente.',
+      },
+      {
+        question: 'Dá para comprar um apartamento sem entrada em Osasco?',
+        answer: 'No financiamento SBPE tradicional, dificilmente — o banco exige a entrada de 20% como margem de garantia. O que reduz o desembolso é compor a entrada com FGTS, usar o subsídio do Minha Casa Minha Vida nas faixas de menor renda, ou comprar na planta, onde a entrada é parcelada ao longo da obra em vez de paga à vista.',
+      },
+      {
+        question: 'Quanto preciso reservar além da entrada?',
+        answer: 'Reserve cerca de 4% a 5% do valor do imóvel além da entrada para os custos paralelos, que não entram no financiamento: o ITBI (3% em Osasco), as despesas de escritura e registro em cartório e a taxa de avaliação do banco. Num imóvel de R$ 250 mil, isso é de R$ 10 mil a R$ 12,5 mil somados à entrada.',
+      },
+    ],
+    ctaLabel: 'Simular entrada e parcela',
     ctaHref: '/simulador',
     publishedAt: '2026-06-02',
     updatedAt: '2026-06-02',
