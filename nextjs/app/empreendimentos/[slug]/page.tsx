@@ -90,7 +90,7 @@ function buildEmpreendimentoFaqs(
     },
     {
       q: `Onde fica o ${emp.nome}?`,
-      a: `O ${emp.nome} fica na ${emp.endereco}, no bairro ${emp.bairro}, em ${emp.cidade} (SP).`,
+      a: `O ${emp.nome} fica no bairro ${emp.bairro}, em ${emp.cidade} (SP).`,
     },
     {
       q: `Quais plantas e tamanhos o ${emp.nome} oferece?`,
@@ -168,7 +168,6 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
     amenityFeature,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: emp.endereco,
       addressLocality: emp.cidade,
       addressRegion: 'SP',
       addressCountry: 'BR',
@@ -211,7 +210,7 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
           <h1 className="text-3xl md:text-4xl font-black uppercase text-white leading-tight">{emp.nome}</h1>
           <p className="flex items-center gap-2 text-gray-300 text-sm mt-3">
             <FiMapPin size={14} className="text-primary" />
-            <span>{emp.endereco} — {emp.bairro}, {emp.cidade} SP</span>
+            <span>{emp.bairro}, {emp.cidade} SP</span>
           </p>
           <div className="flex flex-wrap gap-4 mt-5 text-xs uppercase tracking-wider">
             <span className="bg-white/10 px-3 py-1.5">{emp.totalUnidades} plantas</span>
@@ -248,8 +247,8 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
           <span className="section-label">Sobre o empreendimento</span>
           <h2 className="section-title mb-4">Sobre o {emp.nome}</h2>
           <p className="text-gray-700 text-sm md:text-base leading-relaxed">
-            O {emp.nome} é um empreendimento {statusPhrase} no bairro {emp.bairro}, em {emp.cidade} (SP),
-            localizado na {emp.endereco}. São {emp.totalUnidades} {emp.totalUnidades === 1 ? 'planta' : 'plantas'}{' '}
+            O {emp.nome} é um empreendimento {statusPhrase} no bairro {emp.bairro}, em {emp.cidade} (SP).
+            São {emp.totalUnidades} {emp.totalUnidades === 1 ? 'planta' : 'plantas'}{' '}
             de {formatAreaRange(emp.areaMin, emp.areaMax)}, com valores {formatPriceRange(emp.precoMin, emp.precoMax)}.
             {fitsMcmv && ' Há unidades que podem se enquadrar no programa Minha Casa Minha Vida — vale simular as condições de financiamento.'}
           </p>
