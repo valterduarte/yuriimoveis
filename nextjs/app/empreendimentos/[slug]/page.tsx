@@ -5,6 +5,10 @@ import { FaWhatsapp } from 'react-icons/fa'
 import { EMPREENDIMENTO_RESERVED_SLUGS, listEmpreendimentos, fetchEmpreendimentoBySlug, buildEmpreendimentoTitle, type EmpreendimentoDetail } from '../../../lib/empreendimento'
 import PropertyCard from '../../../components/PropertyCard'
 import WhatsAppLink from '../../../components/WhatsAppLink'
+import EmpreendimentoFinancingCard from '../../../components/EmpreendimentoFinancingCard'
+import EmpreendimentoEnrichmentSections from '../../../components/EmpreendimentoEnrichmentSections'
+import { buildEmpreendimentoFinancingExample } from '../../../lib/empreendimentoFinance'
+import { getEmpreendimentoEnrichment } from '../../../data/empreendimentoEnrichment'
 import { SITE_URL, PHONE_WA_BASE, PHONE_DISPLAY, CRECI } from '../../../lib/config'
 import { formatPrice, imovelSlug, slugify } from '../../../utils/imovelUtils'
 import { buildHierarchicalUrl, cidadeNameToSlug } from '../../../lib/navigation'
@@ -140,6 +144,13 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
   const faqs = buildEmpreendimentoFaqs(emp, statusPhrase, fitsMcmv)
   const faqJsonLd = buildFaqPageSchema(faqs.map(f => ({ question: f.q, answer: f.a })))
 
+  const financingExample = buildEmpreendimentoFinancingExample(emp.precoMin)
+  const enrichment = getEmpreendimentoEnrichment(slug)
+  const bairroData = BAIRROS[bairroSlug] ?? null
+  const amenityFeature = enrichment?.lazer?.length
+    ? enrichment.lazer.map(name => ({ '@type': 'LocationFeatureSpecification', name, value: true }))
+    : undefined
+
   const breadcrumbJsonLd = buildBreadcrumb([
     { name: 'Início',       path: '/' },
     { name: 'Lançamentos',  path: '/empreendimentos' },
@@ -154,6 +165,7 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
     url: canonicalUrl,
     image: emp.heroImage ?? undefined,
     numberOfAccommodationUnits: emp.totalUnidades,
+    amenityFeature,
     address: {
       '@type': 'PostalAddress',
       streetAddress: emp.endereco,
@@ -260,6 +272,27 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
             </Link>
           </div>
         </section>
+
+        {financingExample && <EmpreendimentoFinancingCard example={financingExample} nome={emp.nome} />}
+
+        {enrichment && <EmpreendimentoEnrichmentSections enrichment={enrichment} nome={emp.nome} />}
+
+        {bairroData && (
+          <section className="mb-12 max-w-3xl">
+            <span className="section-label">A região</span>
+            <h2 className="section-title mb-4">Como é morar no {emp.bairro}</h2>
+            <div className="space-y-4 text-gray-700 text-sm md:text-base leading-relaxed">
+              <p>{bairroData.conteudo.infraestrutura}</p>
+              <p>{bairroData.conteudo.transporte}</p>
+              <p>{bairroData.conteudo.educacao}</p>
+            </div>
+            {bairroGuideHref && (
+              <Link href={bairroGuideHref} className="inline-block mt-5 font-semibold text-primary hover:underline">
+                Guia completo do bairro {emp.bairro} →
+              </Link>
+            )}
+          </section>
+        )}
 
         <span className="section-label">Plantas disponíveis</span>
         <h2 className="section-title mb-6">{emp.totalUnidades} opções no {emp.nome}</h2>
