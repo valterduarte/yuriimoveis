@@ -168,11 +168,13 @@ function resolveEmpreendimentoStatus(statuses: PropertyStatus[]): PropertyStatus
 
 export type EmpreendimentoSourceRow = Pick<
   ImovelRow,
-  'id' | 'titulo' | 'endereco' | 'bairro' | 'cidade' | 'preco' | 'area' | 'status' | 'imagens'
+  'id' | 'titulo' | 'endereco' | 'bairro' | 'cidade' | 'preco' | 'area' | 'status' | 'imagens' | 'empreendimento'
 >
 
 interface EmpreendimentoGroup {
   nome: string
+  /** True once the display name came from the explicit field (beats parsed titles). */
+  nomeIsExplicit: boolean
   endereco: string
   bairro: string
   cidade: string
@@ -202,11 +204,18 @@ export function buildEmpreendimentosFromRows(rows: EmpreendimentoSourceRow[]): E
   const groups = new Map<string, EmpreendimentoGroup>()
 
   for (const row of sorted) {
-    if (!row.endereco || !row.bairro || !row.cidade) continue
-    const nome = extractEmpreendimentoFromTitulo(row.titulo)
+    // The explicit field set in the admin form is authoritative; the title
+    // parser is only a fallback for units that predate it. This frees the
+    // listing title from having to match an exact pattern.
+    const explicit = (row.empreendimento ?? '').trim()
+    const nome = explicit || extractEmpreendimentoFromTitulo(row.titulo)
     if (!nome) continue
 
-    const key = `${row.endereco}|${row.bairro}|${row.cidade}|${nome}`
+    // Key by the normalized name alone — the building identity. Dropping
+    // endereço (a typo used to split a building) and not requiring bairro/cidade
+    // means a unit groups even when those fields were left blank; the location
+    // is then filled from whichever sibling unit does have it.
+    const key = normalizeForMatch(nome)
     const existing = groups.get(key)
 
     if (existing) {
@@ -214,12 +223,22 @@ export function buildEmpreendimentosFromRows(rows: EmpreendimentoSourceRow[]): E
       existing.statuses.push(row.status)
       existing.precos.push(Number(row.preco))
       existing.areas.push(Number(row.area))
+      // An explicit name wins over a parsed one for display consistency.
+      if (explicit && !existing.nomeIsExplicit) {
+        existing.nome = explicit
+        existing.nomeIsExplicit = true
+      }
+      // Fill missing location from the first sibling that carries it.
+      if (!existing.bairro && row.bairro) existing.bairro = row.bairro
+      if (!existing.cidade && row.cidade) existing.cidade = row.cidade
+      if (!existing.endereco && row.endereco) existing.endereco = row.endereco
     } else {
       groups.set(key, {
         nome,
-        endereco: row.endereco,
-        bairro: row.bairro,
-        cidade: row.cidade,
+        nomeIsExplicit: !!explicit,
+        endereco: row.endereco ?? '',
+        bairro: row.bairro ?? '',
+        cidade: row.cidade ?? '',
         ids: [row.id],
         statuses: [row.status],
         precos: [Number(row.preco)],
@@ -260,12 +279,9 @@ export function buildEmpreendimentosFromRows(rows: EmpreendimentoSourceRow[]): E
 const listEmpreendimentosCached = unstable_cache(
   async (): Promise<EmpreendimentoSummary[]> => {
     const result = await getDb().query(`
-      SELECT id, titulo, endereco, bairro, cidade, preco, area, status, imagens
+      SELECT id, titulo, endereco, bairro, cidade, preco, area, status, imagens, empreendimento
       FROM imoveis
       WHERE ativo = true
-        AND endereco IS NOT NULL AND endereco != ''
-        AND bairro IS NOT NULL AND bairro != ''
-        AND cidade IS NOT NULL AND cidade != ''
     `)
     return buildEmpreendimentosFromRows(result.rows as EmpreendimentoSourceRow[])
   },

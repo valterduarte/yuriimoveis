@@ -32,8 +32,8 @@ export const POST = withErrorHandler('POST /api/imoveis', async (request: NextRe
   if (data instanceof NextResponse) return data
 
   const result = await getDb().query(`
-    INSERT INTO imoveis (titulo, descricao, descricao_seo, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, area_display, vagas_display, parcela_display, parcela_label, lat, lng)
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24)
+    INSERT INTO imoveis (titulo, descricao, descricao_seo, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, area_display, vagas_display, parcela_display, parcela_label, lat, lng, empreendimento)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25)
     RETURNING id
   `, [
     data.titulo, data.descricao, data.descricao_seo, data.tipo, data.categoria, data.preco,
@@ -44,6 +44,7 @@ export const POST = withErrorHandler('POST /api/imoveis', async (request: NextRe
     JSON.stringify(data.diferenciais),
     data.status, data.area_display, data.vagas_display, data.parcela_display, data.parcela_label,
     data.lat ?? null, data.lng ?? null,
+    data.empreendimento || null,
   ])
   revalidateTag(CACHE_TAG_IMOVEIS)
   return NextResponse.json({ id: result.rows[0].id, message: 'Imóvel criado com sucesso' }, { status: 201 })

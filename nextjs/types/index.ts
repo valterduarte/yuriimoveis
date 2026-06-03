@@ -34,6 +34,8 @@ export interface Imovel {
   vagas_display?: string
   lat?: number
   lng?: number
+  /** Explicit development this unit belongs to (overrides title parsing for grouping). */
+  empreendimento?: string | null
 }
 
 export interface ImovelRow extends Omit<Imovel, 'imagens' | 'diferenciais'> {

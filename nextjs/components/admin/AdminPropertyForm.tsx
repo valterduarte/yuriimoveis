@@ -32,6 +32,7 @@ function propertyToForm(property: Imovel): FormState {
     banheiros:       String(property.banheiros) || '',
     vagas:           String(property.vagas)   || '',
     vagas_display:   property.vagas_display   || '',
+    empreendimento:  property.empreendimento  || '',
     endereco:        property.endereco        || '',
     bairro:          property.bairro          || '',
     cidade:          property.cidade          || 'Osasco',
@@ -52,6 +53,7 @@ interface AdminPropertyFormProps {
 
 export default function AdminPropertyForm({ editingId, authHeader, onSuccess, onAuthError }: AdminPropertyFormProps) {
   const [form, setForm] = useState<FormState>(EMPTY_FORM)
+  const [empreendimentoOptions, setEmpreendimentoOptions] = useState<string[]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [initialSnapshot, setInitialSnapshot] = useState(() => JSON.stringify({ form: EMPTY_FORM, imageUrls: [] }))
   const [submitted, setSubmitted] = useState(false)
@@ -73,6 +75,14 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
       })
       .catch(() => setError('Erro ao carregar imóvel.'))
   }, [editingId, setError])
+
+  useEffect(() => {
+    apiClient.get<{ nomes: string[] }>(`${API_URL}/api/admin/empreendimentos`, { headers: authHeader() })
+      .then(res => setEmpreendimentoOptions(res.nomes))
+      .catch(() => { /* autocomplete is optional — a plain text field still works */ })
+    // authHeader is stable for the session; run once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const isDirty = useMemo(
     () => !submitted && JSON.stringify({ form, imageUrls }) !== initialSnapshot,
@@ -158,7 +168,7 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
         </div>
       )}
 
-      <BasicInfoSection form={form} updateField={updateField} onPriceChange={handlePriceChange} />
+      <BasicInfoSection form={form} updateField={updateField} onPriceChange={handlePriceChange} empreendimentoOptions={empreendimentoOptions} />
       <LocationSection
         form={form}
         updateField={updateField}

@@ -136,4 +136,63 @@ describe('buildEmpreendimentosFromRows', () => {
     ])
     expect(result[0].status).toBe('planta')
   })
+
+  it('groups by the explicit empreendimento field regardless of title or address', () => {
+    const result = buildEmpreendimentosFromRows([
+      row({ id: 1, titulo: 'apto bacana 2 quartos', endereco: 'Rua A, 1', empreendimento: 'Play Condomínio Clube', area: 37 }),
+      row({ id: 2, titulo: 'OUTRO TÍTULO QUALQUER', endereco: 'Rua B, 999', empreendimento: 'Play Condomínio Clube', area: 46 }),
+    ])
+    expect(result).toHaveLength(1)
+    expect(result[0].slug).toBe('play-condominio-clube')
+    expect(result[0].totalUnidades).toBe(2)
+    expect(result[0].imovelIds).toEqual([1, 2])
+  })
+
+  it('lets the explicit field win over a parsed title for the display name', () => {
+    const result = buildEmpreendimentosFromRows([
+      row({ id: 1, titulo: 'PLAY CONDOMINIO CLUBE - 2 DORMS 60M²' }),                 // parsed, caps
+      row({ id: 2, titulo: 'Play Condomínio Clube — 2 Dorms 37m²', empreendimento: 'Play Condomínio Clube' }),
+    ])
+    expect(result).toHaveLength(1)
+    expect(result[0].totalUnidades).toBe(2)
+    expect(result[0].nome).toBe('Play Condomínio Clube')
+  })
+
+  it('groups caps/accent title variants without the explicit field (no silent drop)', () => {
+    const result = buildEmpreendimentosFromRows([
+      row({ id: 1, titulo: 'Play Condomínio Clube — 2 Dorms 37m²' }),
+      row({ id: 2, titulo: 'PLAY CONDOMINIO CLUBE - 2 DORMS 60M²' }),
+    ])
+    expect(result).toHaveLength(1)
+    expect(result[0].slug).toBe('play-condominio-clube')
+    expect(result[0].totalUnidades).toBe(2)
+  })
+
+  it('does not split a building when the address has a typo', () => {
+    const result = buildEmpreendimentosFromRows([
+      row({ id: 1, titulo: 'Ocean Park — 3 Dorms', endereco: 'Rua Achiles Beline, 616' }),
+      row({ id: 2, titulo: 'Ocean Park — 2 Dorms', endereco: 'Rua Achiles Belline, 616' }), // double-L typo
+    ])
+    expect(result).toHaveLength(1)
+    expect(result[0].totalUnidades).toBe(2)
+  })
+
+  it('groups a unit with an explicit name even when address/bairro/cidade are blank', () => {
+    const result = buildEmpreendimentosFromRows([
+      row({ id: 1, titulo: 'whatever', endereco: '', bairro: '', cidade: '', empreendimento: 'Boreal' }),
+    ])
+    expect(result).toHaveLength(1)
+    expect(result[0].slug).toBe('boreal')
+  })
+
+  it('fills missing location from a sibling unit that has it', () => {
+    const result = buildEmpreendimentosFromRows([
+      row({ id: 1, titulo: 'x', bairro: '', cidade: '', endereco: '', empreendimento: 'Reserva Urano', area: 55 }),
+      row({ id: 2, titulo: 'y', bairro: 'Jardim Tupanci', cidade: 'Barueri', empreendimento: 'Reserva Urano', area: 60 }),
+    ])
+    expect(result).toHaveLength(1)
+    expect(result[0].totalUnidades).toBe(2)
+    expect(result[0].bairro).toBe('Jardim Tupanci')
+    expect(result[0].cidade).toBe('Barueri')
+  })
 })

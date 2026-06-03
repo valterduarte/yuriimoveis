@@ -21,6 +21,7 @@ export interface FormState {
   banheiros: string
   vagas: string
   vagas_display: string
+  empreendimento: string
   endereco: string
   bairro: string
   cidade: string
@@ -35,6 +36,7 @@ export const EMPTY_FORM: FormState = {
   titulo: '', descricao: '', descricao_seo: '', tipo: 'venda', categoria: 'apartamento',
   status: 'pronto',
   preco: '', parcela_display: '', parcela_label: '', area: '', area_display: '', quartos: '', banheiros: '', vagas: '', vagas_display: '',
+  empreendimento: '',
   endereco: '', bairro: '', cidade: 'Osasco', cep: '',
   destaque: false, diferenciais: '',
   lat: '', lng: '',
