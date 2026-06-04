@@ -29,7 +29,7 @@ export default function DescriptionSection({ form, updateField }: DescriptionSec
   return (
     <div className="bg-white border border-gray-200 p-6">
       <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Descrição</h2>
-      <p className="text-[10px] text-gray-400 mb-3">Use o template abaixo como base. Pode usar emojis e formatação livre.</p>
+      <p className="text-[10px] text-gray-500 mb-3">Use o template abaixo como base. Pode usar emojis e formatação livre.</p>
       <div className="bg-gray-50 border border-dashed border-gray-300 p-4 mb-3 text-xs text-gray-500 font-mono leading-relaxed whitespace-pre-line">
         {DESCRIPTION_TEMPLATE}
       </div>

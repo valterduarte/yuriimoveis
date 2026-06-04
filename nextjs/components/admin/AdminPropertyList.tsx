@@ -79,7 +79,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
 
   if (properties.length === 0) {
     return (
-      <div className="bg-white border border-gray-200 p-8 text-center text-sm text-gray-400">
+      <div className="bg-white border border-gray-200 p-8 text-center text-sm text-gray-500">
         Nenhum imóvel cadastrado.
       </div>
     )
@@ -135,7 +135,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
       </div>
 
       {visible.length === 0 ? (
-        <div className="bg-white border border-gray-200 p-8 text-center text-sm text-gray-400">
+        <div className="bg-white border border-gray-200 p-8 text-center text-sm text-gray-500">
           Nenhum imóvel encontrado com esses filtros.
         </div>
       ) : (
@@ -149,7 +149,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
                 <>
                   {property.categoria} · {property.tipo} · ID {property.id}
                   {property.bairro && <> · {property.bairro}</>}
-                  {!property.ativo && <span className="ml-2 text-red-400 font-bold">· Inativo</span>}
+                  {!property.ativo && <span className="ml-2 text-red-500 font-bold">· Inativo</span>}
                 </>
               }
               actions={
@@ -175,7 +175,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
                         </button>
                         <button
                           onClick={() => setConfirmingId(null)}
-                          className="text-[10px] uppercase tracking-widest font-bold text-gray-400 hover:underline"
+                          className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:underline"
                         >
                           Não
                         </button>
@@ -183,7 +183,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
                     ) : (
                       <button
                         onClick={() => setConfirmingId(property.id)}
-                        className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-red-400 hover:underline"
+                        className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-red-500 hover:underline"
                       >
                         <FiTrash2 size={12} aria-hidden="true" /> Desativar
                       </button>

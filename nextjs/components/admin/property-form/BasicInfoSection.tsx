@@ -12,7 +12,7 @@ interface BasicInfoSectionProps {
 }
 
 const inputClass = 'w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary'
-const labelClass = 'block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5'
+const labelClass = 'block text-[10px] font-bold uppercase tracking-widest text-gray-700 mb-1.5'
 
 export default function BasicInfoSection({ form, updateField, onPriceChange, empreendimentoOptions = [] }: BasicInfoSectionProps) {
   return (
@@ -43,7 +43,7 @@ export default function BasicInfoSection({ form, updateField, onPriceChange, emp
               <option key={nome} value={nome} />
             ))}
           </datalist>
-          <p className="mt-1 text-[10px] text-gray-400 leading-relaxed">
+          <p className="mt-1 text-[10px] text-gray-500 leading-relaxed">
             Liga esta unidade à página do empreendimento. Escolha o mesmo nome das outras plantas — o título não precisa estar no padrão.
           </p>
         </div>

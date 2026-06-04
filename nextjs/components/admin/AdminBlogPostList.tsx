@@ -57,10 +57,10 @@ export default function AdminBlogPostList({ authHeader, onEdit, onAuthError }: A
           }
           actions={
             <>
-              <button onClick={() => togglePublicado(post)} className="p-2 text-gray-400 hover:text-primary transition-colors" title={post.publicado ? 'Despublicar' : 'Publicar'}>
+              <button onClick={() => togglePublicado(post)} className="p-2 text-gray-500 hover:text-primary transition-colors" title={post.publicado ? 'Despublicar' : 'Publicar'}>
                 {post.publicado ? <FiEye size={14} /> : <FiEyeOff size={14} />}
               </button>
-              <button onClick={() => onEdit(post.id)} className="p-2 text-gray-400 hover:text-primary transition-colors" title="Editar">
+              <button onClick={() => onEdit(post.id)} className="p-2 text-gray-500 hover:text-primary transition-colors" title="Editar">
                 <FiEdit2 size={14} />
               </button>
             </>

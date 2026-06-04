@@ -9,7 +9,7 @@ import type { FormState, UpdateField } from './types'
 const AdminLocationPicker = dynamic(() => import('../AdminLocationPicker'), {
   ssr: false,
   loading: () => (
-    <div className="h-full w-full flex items-center justify-center bg-gray-100 text-gray-400 text-xs uppercase tracking-widest">
+    <div className="h-full w-full flex items-center justify-center bg-gray-100 text-gray-500 text-xs uppercase tracking-widest">
       Carregando mapa…
     </div>
   ),
@@ -25,7 +25,7 @@ interface LocationSectionProps {
 }
 
 const inputClass = 'w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary'
-const labelClass = 'block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5'
+const labelClass = 'block text-[10px] font-bold uppercase tracking-widest text-gray-700 mb-1.5'
 
 const MAP_HEIGHT_PX = 320
 
@@ -73,7 +73,7 @@ export default function LocationSection({ form, updateField, onCoordsChange, onC
             <datalist id={bairrosListId}>
               {bairros.map(b => <option key={b} value={b} />)}
             </datalist>
-            <p className="text-[10px] text-gray-400 mt-1">Selecione um existente ou digite um novo. A capitalização é normalizada ao salvar.</p>
+            <p className="text-[10px] text-gray-500 mt-1">Selecione um existente ou digite um novo. A capitalização é normalizada ao salvar.</p>
           </div>
           <div>
             <label className={labelClass}>Cidade</label>
@@ -92,10 +92,10 @@ export default function LocationSection({ form, updateField, onCoordsChange, onC
 
         <div className="pt-2">
           <div className="flex items-baseline justify-between mb-2">
-            <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400">
+            <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700">
               Posição no mapa
             </label>
-            <p className="text-[10px] text-gray-400">
+            <p className="text-[10px] text-gray-500">
               Clique no mapa pra fixar o pino. Arraste pra ajustar.
             </p>
           </div>

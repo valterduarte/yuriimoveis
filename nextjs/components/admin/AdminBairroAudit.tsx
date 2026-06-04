@@ -105,7 +105,7 @@ export default function AdminBairroAudit({ authHeader, onAuthError }: Props) {
                     {r.cidade} • {r.count} imóve{r.count !== 1 ? 'is' : 'l'} • {STATUS_LABEL[r.status]}
                   </div>
                 </div>
-                <code className="text-[10px] text-gray-400 bg-white px-1.5 py-0.5">{r.slug}</code>
+                <code className="text-[10px] text-gray-500 bg-white px-1.5 py-0.5">{r.slug}</code>
               </li>
             ))}
           </ul>

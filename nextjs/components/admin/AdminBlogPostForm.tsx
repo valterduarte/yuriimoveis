@@ -140,19 +140,19 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
           readOnly={!slugManual}
           required
         />
-        <p className="text-xs text-gray-400 mt-1">URL: /blog/{slug || '...'}</p>
+        <p className="text-xs text-gray-500 mt-1">URL: /blog/{slug || '...'}</p>
       </div>
 
       <div>
         <label className={labelClass}>Resumo</label>
         <textarea value={resumo} onChange={e => setResumo(e.target.value)} className={inputClass} rows={2} maxLength={500} />
-        <p className="text-xs text-gray-400 mt-1">{resumo.length}/500 — aparece na listagem do blog</p>
+        <p className="text-xs text-gray-500 mt-1">{resumo.length}/500 — aparece na listagem do blog</p>
       </div>
 
       <div>
         <label className={labelClass}>Conteúdo (HTML)</label>
         <textarea value={conteudo} onChange={e => setConteudo(e.target.value)} className={`${inputClass} font-mono text-xs`} rows={15} />
-        <p className="text-xs text-gray-400 mt-1">Use tags HTML: &lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;strong&gt;, &lt;a&gt;</p>
+        <p className="text-xs text-gray-500 mt-1">Use tags HTML: &lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;strong&gt;, &lt;a&gt;</p>
       </div>
 
       <div>
@@ -164,12 +164,12 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
         <div>
           <label className={labelClass}>Meta título (SEO)</label>
           <input type="text" value={metaTitulo} onChange={e => setMetaTitulo(e.target.value)} className={inputClass} maxLength={200} />
-          <p className="text-xs text-gray-400 mt-1">{metaTitulo.length}/200</p>
+          <p className="text-xs text-gray-500 mt-1">{metaTitulo.length}/200</p>
         </div>
         <div>
           <label className={labelClass}>Meta descrição (SEO)</label>
           <input type="text" value={metaDescricao} onChange={e => setMetaDescricao(e.target.value)} className={inputClass} maxLength={300} />
-          <p className="text-xs text-gray-400 mt-1">{metaDescricao.length}/300</p>
+          <p className="text-xs text-gray-500 mt-1">{metaDescricao.length}/300</p>
         </div>
       </div>
 

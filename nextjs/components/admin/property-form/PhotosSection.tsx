@@ -16,7 +16,7 @@ export default function PhotosSection({ imageUrls, isUploading, onUpload, onRemo
   return (
     <div className="bg-white border border-gray-200 p-6">
       <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Imagens</h2>
-      <p className="text-[10px] text-gray-400 mb-4">Selecione uma ou mais fotos do seu computador.</p>
+      <p className="text-[10px] text-gray-500 mb-4">Selecione uma ou mais fotos do seu computador.</p>
       <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={onUpload} className="hidden" />
       <button
         type="button"

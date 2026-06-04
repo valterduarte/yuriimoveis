@@ -98,7 +98,7 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
                 <div className="min-w-0">
                   <p className="font-medium text-dark">
                     {SOURCE_LABELS[c.source] || c.source}
-                    <span className="ml-2 text-[10px] uppercase tracking-widest text-gray-400">
+                    <span className="ml-2 text-[10px] uppercase tracking-widest text-gray-500">
                       {c.device === 'mobile' ? 'Mobile' : 'Desktop'}
                     </span>
                   </p>
@@ -112,7 +112,7 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
                     {c.page}
                   </a>
                 </div>
-                <span className="shrink-0 text-gray-400 whitespace-nowrap">
+                <span className="shrink-0 text-gray-500 whitespace-nowrap">
                   {new Date(c.created_at).toLocaleString('pt-BR', {
                     day: '2-digit',
                     month: '2-digit',
@@ -138,7 +138,7 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
                 <p className="text-[10px] uppercase tracking-widest text-gray-500 mt-1">
                   {d.device === 'mobile' ? 'Mobile' : 'Desktop'}
                 </p>
-                <p className="text-xs text-gray-400 mt-0.5">{d.clicks} clicks</p>
+                <p className="text-xs text-gray-500 mt-0.5">{d.clicks} clicks</p>
               </div>
             )
           })}
@@ -210,7 +210,7 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
             )
           })}
         </div>
-        <div className="flex justify-between text-[8px] text-gray-400 mt-1">
+        <div className="flex justify-between text-[8px] text-gray-500 mt-1">
           <span>{stats.byDay.length > 0 && new Date(stats.byDay[stats.byDay.length - 1].date + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</span>
           <span>{stats.byDay.length > 0 && new Date(stats.byDay[0].date + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</span>
         </div>
