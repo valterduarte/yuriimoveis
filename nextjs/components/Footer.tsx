@@ -12,14 +12,48 @@ import { listEmpreendimentos } from '../lib/empreendimento'
 import { bairroDbNameToSlug, cidadeNameToSlug, cidadeSlugToName, buildHierarchicalUrl } from '../lib/navigation'
 import WhatsAppLink from './WhatsAppLink'
 import Logo from './Logo'
+import type { ReactNode } from 'react'
 
 const FOOTER_LINK_CLASS =
   'text-xs text-gray-400 hover:text-primary transition-colors flex items-center gap-2'
 const FOOTER_TITLE_CLASS =
-  'text-white text-xs uppercase tracking-widest font-bold mb-5'
+  'text-white text-xs uppercase tracking-widest font-bold mb-4'
+const FOOTER_VIEW_ALL_CLASS =
+  'text-xs text-primary hover:underline font-semibold inline-flex items-center gap-2 pt-1'
 const FOOTER_BULLET = <span aria-hidden="true" className="w-2 h-px bg-gray-600 inline-block flex-shrink-0" />
 
 const TOP_LANDING_PAGES = LANDING_PAGES.slice(0, 3)
+
+/** One titled list — every footer column shares this shape so headings line up. */
+function FooterColumn({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <div>
+      <h3 className={FOOTER_TITLE_CLASS}>{title}</h3>
+      <ul className="space-y-3">{children}</ul>
+    </div>
+  )
+}
+
+function FooterLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <li>
+      <Link href={href} className={FOOTER_LINK_CLASS}>
+        {FOOTER_BULLET}
+        {children}
+      </Link>
+    </li>
+  )
+}
+
+function FooterViewAll({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <li>
+      <Link href={href} className={FOOTER_VIEW_ALL_CLASS}>
+        {children}
+      </Link>
+    </li>
+  )
+}
 
 async function getTopBairrosWithGuide(): Promise<{ slug: string; nome: string }[]> {
   const matrix = await fetchNavigationMatrix()
@@ -38,15 +72,18 @@ async function getTopBairrosWithGuide(): Promise<{ slug: string; nome: string }[
 
 async function getCidadesWithApartamento(): Promise<{ slug: string; nome: string; count: number }[]> {
   const matrix = await fetchNavigationMatrix()
-  const counts = new Map<string, number>()
+  const counts = new Map<string, { nome: string; count: number }>()
   for (const row of matrix) {
     if (row.tipo !== 'venda' || row.categoria !== 'apartamento') continue
     const slug = cidadeNameToSlug(row.cidade)
-    if (!cidadeSlugToName(slug)) continue
-    counts.set(slug, (counts.get(slug) || 0) + row.count)
+    const nome = cidadeSlugToName(slug)
+    if (!nome) continue
+    const entry = counts.get(slug)
+    if (entry) entry.count += row.count
+    else counts.set(slug, { nome, count: row.count })
   }
   return Array.from(counts.entries())
-    .map(([slug, count]) => ({ slug, nome: cidadeSlugToName(slug)!, count }))
+    .map(([slug, { nome, count }]) => ({ slug, nome, count }))
     .sort((a, b) => b.count - a.count)
 }
 
@@ -64,14 +101,15 @@ export default async function Footer() {
   return (
     <footer className="bg-dark text-gray-400">
       <div className="container mx-auto px-6 pt-16 pb-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
 
-          <div>
+        {/* Brand band — logo, tagline and direct contact, kept apart from the link grid */}
+        <div className="flex flex-col gap-8 pb-10 mb-12 border-b border-gray-800/60 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-xs">
             <Link href="/" className="mb-5 inline-block" aria-label="Página inicial — Corretor Yuri Imóveis">
               <Logo className="h-9 w-auto" />
             </Link>
-            <p className="text-sm leading-relaxed text-gray-400 mb-6 max-w-xs">
-              Do primeiro imóvel <br />ao imóvel dos sonhos.
+            <p className="text-sm leading-relaxed text-gray-400 mb-6">
+              Do primeiro imóvel ao imóvel dos sonhos.
             </p>
             <div className="flex items-center gap-3">
               <WhatsAppLink href={PHONE_WA} source="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Fale pelo WhatsApp (abre em nova aba)"
@@ -85,202 +123,115 @@ export default async function Footer() {
             </div>
           </div>
 
-          <nav aria-label="Navegação do rodapé">
-            <h3 className={FOOTER_TITLE_CLASS}>Navegação</h3>
-            <ul className="space-y-3">
-              {NAVIGATION_LINKS.map(link => (
-                <li key={link.href}>
-                  <Link href={link.href} className={FOOTER_LINK_CLASS}>
-                    {FOOTER_BULLET}
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <h3 className={`${FOOTER_TITLE_CLASS} mt-8`}>Guias</h3>
-            <ul className="space-y-3">
-              {Object.values(GUIAS).map(guia => (
-                <li key={guia.slug}>
-                  <Link href={`/guia/${guia.slug}`} className={FOOTER_LINK_CLASS}>
-                    {FOOTER_BULLET}
-                    <span className="line-clamp-1">{guia.titulo}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <h3 className={`${FOOTER_TITLE_CLASS} mt-8`}>Ferramentas</h3>
-            <ul className="space-y-3">
-              {FOOTER_TOOL_LINKS.map(link => (
-                <li key={link.href}>
-                  <Link href={link.href} className={FOOTER_LINK_CLASS}>
-                    {FOOTER_BULLET}
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <nav aria-label="Encontre seu imóvel">
-            <h3 className={FOOTER_TITLE_CLASS}>Encontre seu imóvel</h3>
-            <ul className="space-y-3">
-              {TOP_LANDING_PAGES.map(lp => (
-                <li key={lp.slug}>
-                  <Link href={`/imoveis/${lp.slug}`} className={FOOTER_LINK_CLASS}>
-                    {FOOTER_BULLET}
-                    {lp.h1}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link href="/imoveis" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
-                  Ver todos os imóveis →
-                </Link>
-              </li>
-            </ul>
-
-            {cidadesApartamento.length > 0 && (
-              <>
-                <h3 className={`${FOOTER_TITLE_CLASS} mt-8`}>Apartamentos por cidade</h3>
-                <ul className="space-y-3">
-                  {cidadesApartamento.map(c => (
-                    <li key={c.slug}>
-                      <Link
-                        href={buildHierarchicalUrl({ acao: 'comprar', cidade: c.slug, categoria: 'apartamento' })}
-                        className={FOOTER_LINK_CLASS}
-                      >
-                        {FOOTER_BULLET}
-                        Apartamentos em {c.nome}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-
-            {topBairros.length > 0 && (
-              <>
-                <h3 className={`${FOOTER_TITLE_CLASS} mt-8`}>Guias de bairro</h3>
-                <ul className="space-y-3">
-                  {topBairros.map(b => (
-                    <li key={b.slug}>
-                      <Link href={`/bairros/${b.slug}`} className={FOOTER_LINK_CLASS}>
-                        {FOOTER_BULLET}
-                        Morar no {b.nome}
-                      </Link>
-                    </li>
-                  ))}
-                  <li>
-                    <Link href="/bairros" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
-                      Todos os bairros →
-                    </Link>
-                  </li>
-                </ul>
-              </>
-            )}
-
-          </nav>
-
-          <nav aria-label="Ajuda e contato">
-            <h3 className={FOOTER_TITLE_CLASS}>Ajuda</h3>
-            <ul className="space-y-3 mb-8">
-              {AJUDA_ARTIGOS.map(a => (
-                <li key={a.slug}>
-                  <Link href={`/ajuda/${a.slug}`} className={FOOTER_LINK_CLASS}>
-                    {FOOTER_BULLET}
-                    <span className="line-clamp-1">{fullH1(a)}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
+          <div className="lg:text-right">
             <h3 className={FOOTER_TITLE_CLASS}>Contato</h3>
             <ul className="space-y-3 text-xs">
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-2 lg:justify-end">
                 <FiMapPin className="text-primary flex-shrink-0" size={13} aria-hidden="true" />
                 <span>Osasco — SP</span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-2 lg:justify-end">
                 <FiPhone className="text-primary flex-shrink-0" size={13} aria-hidden="true" />
                 <a href={PHONE_TEL} className="hover:text-primary transition-colors">{PHONE_DISPLAY}</a>
               </li>
             </ul>
-
             <WhatsAppLink href={PHONE_WA} source="footer-cta" target="_blank" rel="noopener noreferrer"
               className="mt-5 inline-flex items-center gap-2 bg-primary text-white text-xs font-bold uppercase tracking-widest px-5 py-3 hover:brightness-110 transition-all">
               <FaWhatsapp size={14} aria-hidden="true" />
               Falar pelo WhatsApp
             </WhatsAppLink>
-          </nav>
-
+          </div>
         </div>
 
-        {topEmpreendimentos.length > 0 && (
-          <div className="mt-12 pt-10 border-t border-gray-800/60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-8">
-            <nav aria-label="Lançamentos">
-              <h3 className={FOOTER_TITLE_CLASS}>Lançamentos</h3>
-              <ul className="space-y-3">
-                {topEmpreendimentos.map(e => (
-                  <li key={e.slug}>
-                    <Link href={`/empreendimentos/${e.slug}`} className={FOOTER_LINK_CLASS}>
-                      {FOOTER_BULLET}
-                      {e.nome}
-                    </Link>
-                  </li>
-                ))}
-                <li>
-                  <Link href="/empreendimentos" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
-                    Todos os lançamentos →
-                  </Link>
-                </li>
-              </ul>
-            </nav>
+        {/* Link grid — every list is an equal cell so all headings align per row */}
+        <nav aria-label="Links do rodapé"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-10">
 
-            {empreendimentosConstrucao.length > 0 && (
-              <nav aria-label="Empreendimentos em construção">
-                <h3 className={FOOTER_TITLE_CLASS}>Em construção</h3>
-                <ul className="space-y-3">
-                  {empreendimentosConstrucao.map(e => (
-                    <li key={e.slug}>
-                      <Link href={`/empreendimentos/${e.slug}`} className={FOOTER_LINK_CLASS}>
-                        {FOOTER_BULLET}
-                        {e.nome}
-                      </Link>
-                    </li>
-                  ))}
-                  <li>
-                    <Link href="/empreendimentos/em-construcao" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
-                      Todos em construção →
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-            )}
+          <FooterColumn title="Navegação">
+            {NAVIGATION_LINKS.map(link => (
+              <FooterLink key={link.href} href={link.href}>{link.label}</FooterLink>
+            ))}
+          </FooterColumn>
 
-            {empreendimentosProntos.length > 0 && (
-              <nav aria-label="Empreendimentos prontos para morar">
-                <h3 className={FOOTER_TITLE_CLASS}>Pronto para morar</h3>
-                <ul className="space-y-3">
-                  {empreendimentosProntos.map(e => (
-                    <li key={e.slug}>
-                      <Link href={`/empreendimentos/${e.slug}`} className={FOOTER_LINK_CLASS}>
-                        {FOOTER_BULLET}
-                        {e.nome}
-                      </Link>
-                    </li>
-                  ))}
-                  <li>
-                    <Link href="/empreendimentos/pronto-para-morar" className="text-xs text-primary hover:underline font-semibold flex items-center gap-2 pt-1">
-                      Todos prontos para morar →
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-            )}
-          </div>
-        )}
+          <FooterColumn title="Encontre seu imóvel">
+            {TOP_LANDING_PAGES.map(lp => (
+              <FooterLink key={lp.slug} href={`/imoveis/${lp.slug}`}>{lp.h1}</FooterLink>
+            ))}
+            <FooterViewAll href="/imoveis">Ver todos os imóveis →</FooterViewAll>
+          </FooterColumn>
+
+          {cidadesApartamento.length > 0 && (
+            <FooterColumn title="Apartamentos por cidade">
+              {cidadesApartamento.map(c => (
+                <FooterLink
+                  key={c.slug}
+                  href={buildHierarchicalUrl({ acao: 'comprar', cidade: c.slug, categoria: 'apartamento' })}
+                >
+                  Apartamentos em {c.nome}
+                </FooterLink>
+              ))}
+            </FooterColumn>
+          )}
+
+          {topBairros.length > 0 && (
+            <FooterColumn title="Guias de bairro">
+              {topBairros.map(b => (
+                <FooterLink key={b.slug} href={`/bairros/${b.slug}`}>Morar no {b.nome}</FooterLink>
+              ))}
+              <FooterViewAll href="/bairros">Todos os bairros →</FooterViewAll>
+            </FooterColumn>
+          )}
+
+          {topEmpreendimentos.length > 0 && (
+            <FooterColumn title="Lançamentos">
+              {topEmpreendimentos.map(e => (
+                <FooterLink key={e.slug} href={`/empreendimentos/${e.slug}`}>{e.nome}</FooterLink>
+              ))}
+              <FooterViewAll href="/empreendimentos">Todos os lançamentos →</FooterViewAll>
+            </FooterColumn>
+          )}
+
+          {empreendimentosConstrucao.length > 0 && (
+            <FooterColumn title="Em construção">
+              {empreendimentosConstrucao.map(e => (
+                <FooterLink key={e.slug} href={`/empreendimentos/${e.slug}`}>{e.nome}</FooterLink>
+              ))}
+              <FooterViewAll href="/empreendimentos/em-construcao">Todos em construção →</FooterViewAll>
+            </FooterColumn>
+          )}
+
+          {empreendimentosProntos.length > 0 && (
+            <FooterColumn title="Pronto para morar">
+              {empreendimentosProntos.map(e => (
+                <FooterLink key={e.slug} href={`/empreendimentos/${e.slug}`}>{e.nome}</FooterLink>
+              ))}
+              <FooterViewAll href="/empreendimentos/pronto-para-morar">Todos prontos para morar →</FooterViewAll>
+            </FooterColumn>
+          )}
+
+          <FooterColumn title="Guias">
+            {Object.values(GUIAS).map(guia => (
+              <FooterLink key={guia.slug} href={`/guia/${guia.slug}`}>
+                <span className="line-clamp-1">{guia.titulo}</span>
+              </FooterLink>
+            ))}
+          </FooterColumn>
+
+          <FooterColumn title="Ferramentas">
+            {FOOTER_TOOL_LINKS.map(link => (
+              <FooterLink key={link.href} href={link.href}>{link.label}</FooterLink>
+            ))}
+          </FooterColumn>
+
+          <FooterColumn title="Ajuda">
+            {AJUDA_ARTIGOS.map(a => (
+              <FooterLink key={a.slug} href={`/ajuda/${a.slug}`}>
+                <span className="line-clamp-1">{fullH1(a)}</span>
+              </FooterLink>
+            ))}
+          </FooterColumn>
+
+        </nav>
       </div>
 
       <div className="border-t border-gray-800">
