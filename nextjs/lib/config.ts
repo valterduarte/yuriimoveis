@@ -10,7 +10,8 @@ export const PHONE_WA_BASE: string     = `https://wa.me/${PHONE_NUMBER}`
 export const PHONE_WA: string         = `${PHONE_WA_BASE}?text=${encodeURIComponent('Olá! Gostaria de mais informações sobre imóveis.')}`
 export const PHONE_TEL: string        = `tel:${PHONE_NUMBER}`
 export const INSTAGRAM_URL: string    = 'https://www.instagram.com/valterrduarte/'
-export const GOOGLE_BUSINESS_URL: string = 'https://share.google/rZGtrt3WPRbGuJplE'
+// Canonical Google Maps place URL (CID) — stable entity reference for hasMap/sameAs.
+export const GOOGLE_BUSINESS_URL: string = 'https://maps.google.com/?cid=17982882895268664003'
 export const CRECI: string            = '235509'
 
 export const API_URL: string =

@@ -4,10 +4,11 @@ import {
   buildBreadcrumb,
   buildCollectionPage,
   buildFaqPageSchema,
+  buildGlobalJsonLd,
   buildPlaceSchema,
   AGENT_ID,
 } from './jsonLd'
-import { SITE_URL } from './config'
+import { SITE_URL, GOOGLE_BUSINESS_URL } from './config'
 
 describe('buildBreadcrumb', () => {
   it('numbers items starting at 1 and prefixes paths with SITE_URL', () => {
@@ -140,5 +141,20 @@ describe('buildPlaceSchema', () => {
     expect(schema.name).toBe('Tamboré, Barueri')
     expect(schema.address).toMatchObject({ addressLocality: 'Barueri', addressRegion: 'SP' })
     expect(schema.containedInPlace).toMatchObject({ '@type': 'City', name: 'Barueri' })
+  })
+})
+
+describe('buildGlobalJsonLd', () => {
+  const agent = () =>
+    buildGlobalJsonLd().find(node => node['@type'] === 'RealEstateAgent') as Record<string, unknown>
+
+  it('points hasMap and sameAs at the canonical Google Maps place (CID), not the share link', () => {
+    const canonical = 'https://maps.google.com/?cid=17982882895268664003'
+    expect(GOOGLE_BUSINESS_URL).toBe(canonical)
+    expect(GOOGLE_BUSINESS_URL).not.toContain('share.google')
+
+    const a = agent()
+    expect(a.hasMap).toBe(canonical)
+    expect(a.sameAs).toContain(canonical)
   })
 })
