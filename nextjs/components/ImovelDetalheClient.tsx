@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { FiPhone, FiArrowLeft, FiCalendar } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-import { imovelSlug } from '../utils/imovelUtils'
+import { imovelSlug, deriveVideoPoster } from '../utils/imovelUtils'
 import { PHONE_WA_BASE, PHONE_TEL, PHONE_DISPLAY, SITE_URL } from '../lib/config'
 import { PLACEHOLDER_IMAGE } from '../lib/constants'
 import { useScrollSpy } from '../hooks/useScrollSpy'
@@ -15,22 +15,28 @@ import PropertyLightbox from './property/PropertyLightbox'
 import PropertySidebar from './property/PropertySidebar'
 import PropertyOverview from './property/PropertyOverview'
 import PropertyGallery from './property/PropertyGallery'
+import PropertyVideoSection from './property/PropertyVideoSection'
 import PropertyLocationSection from './property/PropertyLocationSection'
 import type { Imovel } from '../types'
 
-const TABS = [
-  { id: 'visao-geral', label: 'Visão Geral' },
-  { id: 'galeria',     label: 'Galeria'     },
-  { id: 'localizacao', label: 'Localização' },
-  { id: 'contato',     label: 'Contato'     },
-]
+function buildTabs(hasVideo: boolean) {
+  return [
+    { id: 'visao-geral', label: 'Visão Geral' },
+    { id: 'galeria',     label: 'Galeria'     },
+    ...(hasVideo ? [{ id: 'video', label: 'Vídeo' }] : []),
+    { id: 'localizacao', label: 'Localização' },
+    { id: 'contato',     label: 'Contato'     },
+  ]
+}
 
 interface ImovelDetalheClientProps {
   imovel: Imovel
 }
 
 export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps) {
-  const { activeSection, setActiveSection } = useScrollSpy(TABS, imovel)
+  const hasVideo = Boolean(imovel.video_url && deriveVideoPoster(imovel.video_url))
+  const tabs = buildTabs(hasVideo)
+  const { activeSection, setActiveSection } = useScrollSpy(tabs, imovel)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [showVisitModal, setShowVisitModal] = useState(false)
 
@@ -49,7 +55,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
 
       <div className="bg-dark sticky top-16 md:top-20 z-30 border-b border-white/10">
         <div role="tablist" aria-label="Seções do imóvel" className="max-w-6xl mx-auto px-8 flex overflow-x-auto">
-          {TABS.map(tab => (
+          {tabs.map(tab => (
             <button
               key={tab.id}
               role="tab"
@@ -89,6 +95,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
       <PropertyGallery imovel={imovel} images={images} onImageClick={setLightboxIndex} />
 
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-14 space-y-14">
+        <PropertyVideoSection imovel={imovel} />
         <PropertyLocationSection imovel={imovel} />
 
         <section id="contato">

@@ -1,5 +1,5 @@
 import { SITE_URL } from '../config'
-import { imovelSlug, slugify } from '../../utils/imovelUtils'
+import { imovelSlug, slugify, deriveVideoPoster } from '../../utils/imovelUtils'
 import { AGENT_ID } from './ids'
 import type { Imovel } from '../../types'
 
@@ -25,6 +25,22 @@ export function buildRealEstateListingSchema({
   const businessFunction = imovel.tipo === 'aluguel'
     ? 'http://purl.org/goodrelations/v1#LeaseOut'
     : 'http://purl.org/goodrelations/v1#Sell'
+
+  const poster = imovel.video_url ? deriveVideoPoster(imovel.video_url) : ''
+  const video = imovel.video_url && poster
+    ? {
+        video: {
+          '@type': 'VideoObject',
+          name: imovel.titulo,
+          description,
+          thumbnailUrl: poster,
+          contentUrl: imovel.video_url,
+          uploadDate: imovel.created_at
+            ? new Date(imovel.created_at).toISOString().split('T')[0]
+            : undefined,
+        },
+      }
+    : {}
 
   const isPartOf = empreendimento
     ? {
@@ -53,6 +69,7 @@ export function buildRealEstateListingSchema({
     image: images,
     url,
     sku: empreendimento ? `${slugify(empreendimento.nome)}-${imovel.id}` : String(imovel.id),
+    ...video,
     ...isPartOf,
     datePosted:   imovel.created_at ? new Date(imovel.created_at).toISOString().split('T')[0] : undefined,
     dateModified: imovel.updated_at ? new Date(imovel.updated_at).toISOString().split('T')[0] : undefined,

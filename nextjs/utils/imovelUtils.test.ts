@@ -12,6 +12,7 @@ import {
   capitalize,
   pluralizeImoveis,
   optimizeCloudinaryUrl,
+  deriveVideoPoster,
   ogImageUrl,
   buildPropertyNarrative,
 } from './imovelUtils'
@@ -135,6 +136,30 @@ describe('optimizeCloudinaryUrl', () => {
 
   it('handles falsy input', () => {
     expect(optimizeCloudinaryUrl('')).toBe('')
+  })
+})
+
+describe('deriveVideoPoster', () => {
+  it('swaps a Cloudinary video extension for a .jpg frame', () => {
+    const url = 'https://res.cloudinary.com/demo/video/upload/v1/tour.mp4'
+    expect(deriveVideoPoster(url)).toBe('https://res.cloudinary.com/demo/video/upload/v1/tour.jpg')
+  })
+
+  it('handles other Cloudinary video formats', () => {
+    const url = 'https://res.cloudinary.com/demo/video/upload/v1/tour.mov'
+    expect(deriveVideoPoster(url)).toBe('https://res.cloudinary.com/demo/video/upload/v1/tour.jpg')
+  })
+
+  it('returns empty string for non-Cloudinary URLs', () => {
+    expect(deriveVideoPoster('https://example.com/tour.mp4')).toBe('')
+  })
+
+  it('returns empty string when no recognizable extension is present', () => {
+    expect(deriveVideoPoster('https://res.cloudinary.com/demo/video/upload/v1/tour')).toBe('')
+  })
+
+  it('handles falsy input', () => {
+    expect(deriveVideoPoster('')).toBe('')
   })
 })
 

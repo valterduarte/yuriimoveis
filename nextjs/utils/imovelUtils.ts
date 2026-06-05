@@ -8,6 +8,14 @@ export function optimizeCloudinaryUrl(url: string, width?: number): string {
   return url.replace('/upload/', `/upload/${transforms}/`)
 }
 
+// Cloudinary serves a generated still frame when a video asset is requested
+// with an image extension, so the poster is just the same URL ending in .jpg.
+export function deriveVideoPoster(videoUrl: string): string {
+  if (!videoUrl || !videoUrl.includes('res.cloudinary.com')) return ''
+  if (!/\.(mp4|mov|webm|m4v|ogv)$/i.test(videoUrl)) return ''
+  return videoUrl.replace(/\.(mp4|mov|webm|m4v|ogv)$/i, '.jpg')
+}
+
 export function slugify(text: string): string {
   return stripDiacritics(String(text).toLowerCase())
     .replace(/[^a-z0-9\s-]/g, '')

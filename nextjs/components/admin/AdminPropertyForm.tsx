@@ -12,6 +12,7 @@ import DescriptionSection from './property-form/DescriptionSection'
 import DescriptionSeoSection from './property-form/DescriptionSeoSection'
 import DifferentialsSection from './property-form/DifferentialsSection'
 import PhotosSection from './property-form/PhotosSection'
+import VideoSection from './property-form/VideoSection'
 import { EMPTY_FORM, type FormState, type UpdateField } from './property-form/types'
 import type { Imovel } from '../../types'
 
@@ -55,23 +56,27 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
   const [form, setForm] = useState<FormState>(EMPTY_FORM)
   const [empreendimentoOptions, setEmpreendimentoOptions] = useState<string[]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [initialSnapshot, setInitialSnapshot] = useState(() => JSON.stringify({ form: EMPTY_FORM, imageUrls: [] }))
+  const [videoUrl, setVideoUrl] = useState('')
+  const [initialSnapshot, setInitialSnapshot] = useState(() => JSON.stringify({ form: EMPTY_FORM, imageUrls: [], videoUrl: '' }))
   const [submitted, setSubmitted] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false)
   const { loading, error, setError, submit } = useApiSubmit({ onAuthError, fallbackError: 'Erro ao salvar.' })
 
   useEffect(() => {
     if (!editingId) {
-      setInitialSnapshot(JSON.stringify({ form: EMPTY_FORM, imageUrls: [] }))
+      setInitialSnapshot(JSON.stringify({ form: EMPTY_FORM, imageUrls: [], videoUrl: '' }))
       return
     }
     apiClient.get<Imovel>(`${API_URL}/api/imoveis/${editingId}`)
       .then(imovel => {
         const loadedForm = propertyToForm(imovel)
         const loadedImages = Array.isArray(imovel.imagens) ? imovel.imagens : []
+        const loadedVideo = imovel.video_url || ''
         setForm(loadedForm)
         setImageUrls(loadedImages)
-        setInitialSnapshot(JSON.stringify({ form: loadedForm, imageUrls: loadedImages }))
+        setVideoUrl(loadedVideo)
+        setInitialSnapshot(JSON.stringify({ form: loadedForm, imageUrls: loadedImages, videoUrl: loadedVideo }))
       })
       .catch(() => setError('Erro ao carregar imóvel.'))
   }, [editingId, setError])
@@ -85,8 +90,8 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
   }, [])
 
   const isDirty = useMemo(
-    () => !submitted && JSON.stringify({ form, imageUrls }) !== initialSnapshot,
-    [form, imageUrls, initialSnapshot, submitted],
+    () => !submitted && JSON.stringify({ form, imageUrls, videoUrl }) !== initialSnapshot,
+    [form, imageUrls, videoUrl, initialSnapshot, submitted],
   )
   useDirtyFormWarning(isDirty)
 
@@ -130,6 +135,29 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
 
   const removeImage = (url: string) => setImageUrls(prev => prev.filter(u => u !== url))
 
+  const handleVideoUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setIsUploadingVideo(true)
+    try {
+      const data = new FormData()
+      data.append('file', file)
+      data.append('upload_preset', CLOUDINARY_PRESET)
+      const result = await apiClient.post<{ secure_url: string }>(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/video/upload`,
+        data,
+      )
+      setVideoUrl(result.secure_url)
+    } catch {
+      setError('Erro ao fazer upload do vídeo.')
+    } finally {
+      setIsUploadingVideo(false)
+      e.target.value = ''
+    }
+  }
+
+  const removeVideo = () => setVideoUrl('')
+
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     const payload = {
@@ -141,6 +169,7 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
       banheiros:  Number(form.banheiros) || 0,
       vagas:      Number(form.vagas)     || 0,
       imagens:    imageUrls,
+      video_url:  videoUrl,
       diferenciais: form.diferenciais
         ? form.diferenciais.split('\n').map(s => s.trim()).filter(Boolean)
         : [],
@@ -185,6 +214,12 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
         isUploading={isUploading}
         onUpload={handleUpload}
         onRemove={removeImage}
+      />
+      <VideoSection
+        videoUrl={videoUrl}
+        isUploading={isUploadingVideo}
+        onUpload={handleVideoUpload}
+        onRemove={removeVideo}
       />
 
       {isDirty && (

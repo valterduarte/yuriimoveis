@@ -124,6 +124,39 @@ describe('buildRealEstateListingSchema', () => {
     expect((s.offers as Record<string, unknown>).seller).toEqual({ '@id': AGENT_ID })
   })
 
+  it('emits a VideoObject when the property has a video', () => {
+    const s = buildRealEstateListingSchema({
+      imovel: makeImovel({
+        video_url: 'https://res.cloudinary.com/x/video/upload/v1/tour.mp4',
+        created_at: '2026-01-15T10:00:00Z',
+      }),
+      description: 'A lovely tour',
+      images: ['x'],
+    })
+    const video = s.video as Record<string, unknown>
+    expect(video['@type']).toBe('VideoObject')
+    expect(video.contentUrl).toBe('https://res.cloudinary.com/x/video/upload/v1/tour.mp4')
+    expect(video.thumbnailUrl).toBe('https://res.cloudinary.com/x/video/upload/v1/tour.jpg')
+    expect(video.uploadDate).toBe('2026-01-15')
+    expect(video.name).toBe(makeImovel().titulo)
+  })
+
+  it('omits video when the property has no video_url', () => {
+    const s = buildRealEstateListingSchema({
+      imovel: makeImovel({ video_url: null }),
+      description: '', images: [],
+    })
+    expect(s.video).toBeUndefined()
+  })
+
+  it('omits video when the video_url is not a Cloudinary asset (no derivable poster)', () => {
+    const s = buildRealEstateListingSchema({
+      imovel: makeImovel({ video_url: 'https://example.com/tour.mp4' }),
+      description: '', images: [],
+    })
+    expect(s.video).toBeUndefined()
+  })
+
   it('formats dates as YYYY-MM-DD', () => {
     const s = buildRealEstateListingSchema({
       imovel: makeImovel({ created_at: '2026-01-15T10:00:00Z', updated_at: '2026-02-20T12:30:00Z' }),

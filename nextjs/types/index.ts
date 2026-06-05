@@ -36,6 +36,8 @@ export interface Imovel {
   lng?: number
   /** Explicit development this unit belongs to (overrides title parsing for grouping). */
   empreendimento?: string | null
+  /** Cloudinary video URL for the optional property tour section. */
+  video_url?: string | null
 }
 
 export interface ImovelRow extends Omit<Imovel, 'imagens' | 'diferenciais'> {
