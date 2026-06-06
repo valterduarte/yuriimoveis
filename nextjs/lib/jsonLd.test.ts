@@ -9,6 +9,7 @@ import {
   AGENT_ID,
 } from './jsonLd'
 import { SITE_URL, GOOGLE_BUSINESS_URL } from './config'
+import { coordsForBairro } from './bairroCoords'
 
 describe('buildBreadcrumb', () => {
   it('numbers items starting at 1 and prefixes paths with SITE_URL', () => {
@@ -156,5 +157,16 @@ describe('buildGlobalJsonLd', () => {
     const a = agent()
     expect(a.hasMap).toBe(canonical)
     expect(a.sameAs).toContain(canonical)
+  })
+
+  it('places the business geo at the Jardim Roberto centroid (service-area neighborhood)', () => {
+    const jr = coordsForBairro('Jardim Roberto', 'Osasco')!
+    expect(agent().geo).toMatchObject({ latitude: jr.lat, longitude: jr.lng })
+  })
+
+  it('keeps a service-area address without a precise postal code', () => {
+    const a = agent()
+    expect(a.address).toMatchObject({ addressLocality: 'Osasco', addressRegion: 'SP', addressCountry: 'BR' })
+    expect(a.address).not.toHaveProperty('postalCode')
   })
 })

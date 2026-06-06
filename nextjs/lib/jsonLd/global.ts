@@ -1,6 +1,12 @@
 import { SITE_URL, PHONE_STRUCTURED, INSTAGRAM_URL, GOOGLE_BUSINESS_URL, OG_DEFAULT_IMAGE, CRECI } from '../config'
+import { coordsForBairro, DEFAULT_MAP_CENTER } from '../bairroCoords'
 import { AGENT_ID, PERSON_ID, WEBSITE_ID } from './ids'
 import { buildFaqPageSchema, type FaqEntry } from './faq'
+
+// Service-area business: location is shown as the Jardim Roberto neighborhood
+// in Osasco rather than a precise street address. Geo reuses the curated
+// bairro centroid so the schema stays consistent with the rest of the site.
+const OFFICE_GEO = coordsForBairro('Jardim Roberto', 'Osasco') ?? DEFAULT_MAP_CENTER
 
 export function buildGlobalJsonLd(): Record<string, unknown>[] {
   return [
@@ -36,12 +42,11 @@ export function buildGlobalJsonLd(): Record<string, unknown>[] {
         addressLocality: 'Osasco',
         addressRegion: 'SP',
         addressCountry: 'BR',
-        postalCode: '06010-000',
       },
       geo: {
         '@type': 'GeoCoordinates',
-        latitude: -23.53296,
-        longitude: -46.79173,
+        latitude: OFFICE_GEO.lat,
+        longitude: OFFICE_GEO.lng,
       },
       openingHoursSpecification: [
         {
