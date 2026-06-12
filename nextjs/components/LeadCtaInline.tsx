@@ -10,14 +10,30 @@ interface LeadCtaInlineProps {
   source: string
   heading?: string
   body?: string
+  /** Where the "browse listings" link points — the buyable inventory that
+   *  closes the loop for research-stage readers. */
+  listingsHref?: string
+  listingsLabel?: string
 }
 
 /**
  * Inline lead-capture block for content pages (guides, blog posts).
  * Drops into the middle of an article where the reader is most engaged,
  * turning research-stage traffic into a WhatsApp conversation with Yuri.
+ *
+ * Besides the WhatsApp CTA it offers the two next steps a research-stage
+ * reader actually wants: browsing real listings and running the financing
+ * simulator. The listings link doubles as an internal link into the
+ * commercial pages that need ranking help.
  */
-export default function LeadCtaInline({ message, source, heading, body }: LeadCtaInlineProps) {
+export default function LeadCtaInline({
+  message,
+  source,
+  heading,
+  body,
+  listingsHref = '/comprar/osasco/apartamento',
+  listingsLabel = 'ou veja apartamentos em Osasco →',
+}: LeadCtaInlineProps) {
   const href = `${PHONE_WA_BASE}?text=${encodeURIComponent(message)}`
 
   return (
@@ -40,9 +56,14 @@ export default function LeadCtaInline({ message, source, heading, body }: LeadCt
         >
           <FaWhatsapp size={18} /> Falar com o Yuri
         </WhatsAppLink>
-        <Link href="/simulador" className="text-sm font-semibold text-primary hover:underline">
-          ou simule seu financiamento →
-        </Link>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-x-5 gap-y-1.5">
+          <Link href={listingsHref} className="text-sm font-semibold text-primary hover:underline">
+            {listingsLabel}
+          </Link>
+          <Link href="/simulador" className="text-sm font-semibold text-primary hover:underline">
+            ou simule seu financiamento →
+          </Link>
+        </div>
       </div>
     </aside>
   )
