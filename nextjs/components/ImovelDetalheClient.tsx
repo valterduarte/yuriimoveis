@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { FiPhone, FiArrowLeft, FiCalendar } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-import { imovelSlug, deriveVideoPoster } from '../utils/imovelUtils'
+import { imovelSlug, deriveVideoPoster, buildPropertyWhatsAppMessage } from '../utils/imovelUtils'
 import { PHONE_WA_BASE, PHONE_TEL, PHONE_DISPLAY, SITE_URL } from '../lib/config'
 import { PLACEHOLDER_IMAGE } from '../lib/constants'
 import { useScrollSpy } from '../hooks/useScrollSpy'
@@ -46,7 +46,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
   }
 
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
-  const whatsappMessage = encodeURIComponent(`Olá! Tenho interesse no imóvel: ${imovel.titulo} — Código #${imovel.id}`)
+  const whatsappMessage = encodeURIComponent(buildPropertyWhatsAppMessage(imovel))
   const shareUrl = `${SITE_URL}/imoveis/${imovelSlug(imovel)}`
 
   return (

@@ -5,7 +5,7 @@ import { FiCalendar, FiTrendingUp, FiCheck, FiPlus } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { PHONE_WA_BASE } from '../../lib/config'
 import WhatsAppLink from '../WhatsAppLink'
-import { formatPrice, imovelSlug } from '../../utils/imovelUtils'
+import { formatPrice, imovelSlug, buildPropertyWhatsAppMessage } from '../../utils/imovelUtils'
 import {
   COMPARE_MAX_ITEMS,
   buildCompareItem,
@@ -30,7 +30,7 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
   }
 
   const simulationMessage = encodeURIComponent(
-    `Olá! Gostaria de fazer uma simulação de financiamento para o imóvel: ${imovel.titulo} — Código #${imovel.id}`
+    buildPropertyWhatsAppMessage(imovel, 'simulacao')
   )
 
   const infoItems: { label: string; value: string | number }[] = [

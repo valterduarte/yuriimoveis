@@ -15,6 +15,7 @@ import {
   deriveVideoPoster,
   ogImageUrl,
   buildPropertyNarrative,
+  buildPropertyWhatsAppMessage,
 } from './imovelUtils'
 import type { Imovel } from '../types'
 
@@ -203,5 +204,40 @@ describe('buildPropertyNarrative', () => {
     expect(narrative).toContain('Conta com 64 m² de área, 2 banheiros e 1 vaga de garagem.')
     expect(narrative).toContain('Entre os diferenciais do empreendimento estão piscina, academia e área gourmet.')
     expect(narrative).toContain('O imóvel está pronto para entrega imediata.')
+  })
+})
+
+describe('buildPropertyWhatsAppMessage', () => {
+  const baseImovel: Imovel = {
+    id: 73, titulo: 'Apartamento Vila Ayrosa', descricao: '', descricao_seo: '',
+    tipo: 'venda', categoria: 'apartamento', preco: 320000, area: 51,
+    quartos: 3, banheiros: 1, vagas: 1,
+    endereco: '', bairro: 'Vila Ayrosa', cidade: 'Osasco', cep: '',
+    status: 'pronto', destaque: false, ativo: true,
+    imagens: [], diferenciais: [],
+    parcela_display: '', parcela_label: '',
+    created_at: '', updated_at: '',
+  }
+
+  it('embeds price, code and a forward-moving question for the interest intent', () => {
+    const message = normaliseSpaces(buildPropertyWhatsAppMessage(baseImovel))
+    expect(message).toContain('*Apartamento Vila Ayrosa*')
+    expect(message).toContain('R$ 320.000')
+    expect(message).toContain('Código #73')
+    expect(message).toContain('ainda está disponível')
+    expect(message).toContain('agendar uma visita')
+    expect(message).toContain('/imoveis/apartamento-vila-ayrosa-73')
+  })
+
+  it('asks for financing terms on the simulation intent', () => {
+    const message = buildPropertyWhatsAppMessage(baseImovel, 'simulacao')
+    expect(message).toContain('simular o financiamento')
+    expect(message).toContain('valor de entrada, parcelas e prazo')
+  })
+
+  it('omits the price when the property has no value set', () => {
+    const message = buildPropertyWhatsAppMessage({ ...baseImovel, preco: 0 })
+    expect(message).not.toContain('por R$')
+    expect(message).toContain('(Código #73)')
   })
 })
