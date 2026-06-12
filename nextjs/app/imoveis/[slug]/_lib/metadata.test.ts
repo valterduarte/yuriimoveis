@@ -68,6 +68,24 @@ describe('buildPropertyMetadata', () => {
     expect(meta.twitter).toBeDefined()
     expect((meta.twitter as { card: string } | undefined)?.card).toBe('summary_large_image')
   })
+
+  it('marks priced listings as og:type product and leads the share text with the price', async () => {
+    fetchImovelMock.mockResolvedValueOnce(makeImovel({ preco: 850_000 }))
+    const meta = await buildPropertyMetadata('42')
+
+    expect((meta.openGraph as { type?: string }).type).toBe('product')
+    // Price leads the social description so it shows in WhatsApp/Instagram previews.
+    const ogDescription = (meta.openGraph?.description ?? '').replace(/ /g, ' ')
+    expect(ogDescription).toMatch(/^R\$ 850\.000 ·/)
+  })
+
+  it('omits the product treatment when the listing has no price', async () => {
+    fetchImovelMock.mockResolvedValueOnce(makeImovel({ preco: 0 }))
+    const meta = await buildPropertyMetadata('42')
+
+    expect((meta.openGraph as { type?: string }).type).not.toBe('product')
+    expect(meta.openGraph?.description ?? '').not.toContain('·')
+  })
 })
 
 describe('buildLandingMetadata', () => {

@@ -1,5 +1,5 @@
 import { fetchImovel } from '../../../../lib/api'
-import { imovelSlug, formatNeighborhoodName, buildSeoDescription, ogImageUrl } from '../../../../utils/imovelUtils'
+import { imovelSlug, formatNeighborhoodName, buildSeoDescription, ogImageUrl, formatPrice } from '../../../../utils/imovelUtils'
 import { getBairroBySlug } from '../../../../data/bairros'
 import { findLandingPage } from '../../../../data/landingPages'
 import { PLACEHOLDER_IMAGE } from '../../../../lib/constants'
@@ -21,6 +21,9 @@ export async function buildPropertyMetadata(id: string): Promise<Metadata> {
     socialTitle: `${imovel.titulo} — ${SITE_NAME}`,
     ogImage: ogImageUrl(rawImage),
     ogImageAlt: imovel.titulo,
+    productPrice: imovel.preco > 0
+      ? { amount: imovel.preco, label: formatPrice(imovel.preco, imovel.tipo) }
+      : undefined,
   })
 }
 

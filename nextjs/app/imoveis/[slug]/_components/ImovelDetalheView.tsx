@@ -56,6 +56,12 @@ export default async function ImovelDetalheView({ id }: { id: string }) {
   return (
     <>
       <link rel="preload" as="image" href={lcpImage} fetchPriority="high" />
+      {imovel.preco > 0 && (
+        <>
+          <meta property="product:price:amount" content={String(imovel.preco)} />
+          <meta property="product:price:currency" content="BRL" />
+        </>
+      )}
       {jsonLd.map((schema, i) => (
         <script
           key={i}
