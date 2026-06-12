@@ -29,9 +29,7 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
     toggleCompareItem(buildCompareItem(imovel, imovelSlug(imovel)))
   }
 
-  const simulationMessage = encodeURIComponent(
-    buildPropertyWhatsAppMessage(imovel, 'simulacao')
-  )
+  const interesseMessage = encodeURIComponent(buildPropertyWhatsAppMessage(imovel))
 
   const infoItems: { label: string; value: string | number }[] = [
     { label: 'Código',    value: `#${imovel.id}`  },
@@ -67,13 +65,13 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
 
       <div className="p-7 space-y-3">
         <WhatsAppLink
-          href={`${PHONE_WA_BASE}?text=${simulationMessage}`}
-          source="imovel-simulacao"
+          href={`${PHONE_WA_BASE}?text=${interesseMessage}`}
+          source="imovel-sidebar"
           target="_blank"
           rel="noreferrer"
           className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors"
         >
-          <FaWhatsapp size={16} /> Faça Sua Simulação
+          <FaWhatsapp size={16} /> Falar no WhatsApp
         </WhatsAppLink>
         <button
           onClick={onScheduleVisit}
@@ -100,10 +98,10 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
                 ? 'Remover do comparador'
                 : 'Adicionar ao comparador'
           }
-          className={`w-full flex items-center justify-center gap-2 border font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors ${
+          className={`w-full flex items-center justify-center gap-2 font-bold uppercase tracking-[0.15em] text-[9px] py-2.5 transition-colors ${
             isInCompare
-              ? 'bg-primary border-primary text-white hover:bg-primary/90'
-              : 'border-gray-300 text-dark hover:border-primary hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-300 disabled:hover:text-dark'
+              ? 'bg-primary text-white hover:bg-primary/90'
+              : 'text-gray-500 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-gray-500'
           }`}
         >
           {isInCompare ? <FiCheck size={14} /> : <FiPlus size={14} />}

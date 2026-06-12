@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { FiPhone, FiArrowLeft, FiCalendar } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-import { imovelSlug, deriveVideoPoster, buildPropertyWhatsAppMessage } from '../utils/imovelUtils'
+import { imovelSlug, deriveVideoPoster, buildPropertyWhatsAppMessage, formatPrice } from '../utils/imovelUtils'
 import { PHONE_WA_BASE, PHONE_TEL, PHONE_DISPLAY, SITE_URL } from '../lib/config'
 import { PLACEHOLDER_IMAGE } from '../lib/constants'
 import { useScrollSpy } from '../hooks/useScrollSpy'
@@ -48,6 +48,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
   const images = imovel.imagens?.length > 0 ? imovel.imagens : [PLACEHOLDER_IMAGE]
   const whatsappMessage = encodeURIComponent(buildPropertyWhatsAppMessage(imovel))
   const shareUrl = `${SITE_URL}/imoveis/${imovelSlug(imovel)}`
+  const precoLabel = imovel.preco > 0 ? formatPrice(imovel.preco, imovel.tipo) : 'Sob consulta'
 
   return (
     <div className="min-h-screen bg-gray-100 pb-20 md:pb-0">
@@ -122,32 +123,39 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
         </section>
       </div>
 
-      <nav className="fixed bottom-0 left-0 right-0 md:hidden z-40 grid grid-cols-3 pb-[env(safe-area-inset-bottom)]" aria-label="Contato rápido">
-        <WhatsAppLink
-          href={`${PHONE_WA_BASE}?text=${whatsappMessage}`}
-          source="imovel-barra-mobile"
-          aria-label="Contato via WhatsApp"
-          className="flex flex-col items-center justify-center gap-1 bg-green-500 text-white py-3"
-        >
-          <FaWhatsapp size={18} />
-          <span className="text-[9px] uppercase tracking-widest font-bold">WhatsApp</span>
-        </WhatsAppLink>
+      <nav className="fixed bottom-0 left-0 right-0 md:hidden z-40 flex items-stretch border-t border-white/10 pb-[env(safe-area-inset-bottom)]" aria-label="Preço e contato rápido">
+        <div className="flex-1 bg-dark px-4 py-2 flex flex-col justify-center min-w-0">
+          <span className="text-[8px] uppercase tracking-[0.2em] text-gray-400 leading-none mb-0.5">
+            {imovel.tipo === 'aluguel' ? 'Aluguel' : 'A partir de'}
+          </span>
+          <span className="text-base font-black text-primary leading-tight truncate">
+            {precoLabel}
+          </span>
+        </div>
         <a
           href={PHONE_TEL}
           aria-label={`Ligar para ${PHONE_DISPLAY}`}
-          className="flex flex-col items-center justify-center gap-1 bg-primary text-white py-3"
+          className="w-12 flex flex-col items-center justify-center gap-0.5 bg-dark text-white border-l border-white/10"
         >
-          <FiPhone size={18} />
-          <span className="text-[9px] uppercase tracking-widest font-bold">Ligar</span>
+          <FiPhone size={16} />
+          <span className="text-[8px] uppercase tracking-widest font-bold">Ligar</span>
         </a>
         <button
           onClick={() => setShowVisitModal(true)}
           aria-label="Agendar visita"
-          className="flex flex-col items-center justify-center gap-1 bg-dark text-white py-3"
+          className="w-12 flex flex-col items-center justify-center gap-0.5 bg-dark text-white border-l border-white/10"
         >
-          <FiCalendar size={18} />
-          <span className="text-[9px] uppercase tracking-widest font-bold">Visita</span>
+          <FiCalendar size={16} />
+          <span className="text-[8px] uppercase tracking-widest font-bold">Visita</span>
         </button>
+        <WhatsAppLink
+          href={`${PHONE_WA_BASE}?text=${whatsappMessage}`}
+          source="imovel-barra-mobile"
+          aria-label="Contato via WhatsApp"
+          className="flex items-center gap-2 bg-green-500 text-white px-5 font-bold uppercase tracking-[0.1em] text-xs"
+        >
+          <FaWhatsapp size={18} /> WhatsApp
+        </WhatsAppLink>
       </nav>
 
       {lightboxIndex !== null && (

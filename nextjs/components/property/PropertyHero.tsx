@@ -11,7 +11,7 @@ import { FiShare2, FiLink, FiCheck } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { PLACEHOLDER_IMAGE, PROPERTY_STATUSES } from '../../lib/constants'
 import { SITE_URL } from '../../lib/config'
-import { imovelSlug, optimizeCloudinaryUrl } from '../../utils/imovelUtils'
+import { imovelSlug, optimizeCloudinaryUrl, formatPrice } from '../../utils/imovelUtils'
 import type { Swiper as SwiperType } from 'swiper'
 import type { Imovel } from '../../types'
 
@@ -139,10 +139,22 @@ export default function PropertyHero({ imovel, images, shareUrl }: PropertyHeroP
             <h1 className="text-3xl md:text-5xl font-black text-white uppercase leading-tight mb-3">
               {imovel.titulo}
             </h1>
-            <p className="flex items-center gap-2 text-gray-300 text-sm">
-              <span className="text-primary">▸</span>
-              {imovel.bairro}, {imovel.cidade} — SP
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+              <p className="flex items-center gap-2 text-gray-300 text-sm">
+                <span className="text-primary">▸</span>
+                {imovel.bairro}, {imovel.cidade} — SP
+              </p>
+              {imovel.preco > 0 && (
+                <div className="sm:text-right">
+                  <span className="block text-[10px] uppercase tracking-[0.2em] text-gray-300 leading-none mb-1">
+                    {imovel.tipo === 'aluguel' ? 'Aluguel' : 'A partir de'}
+                  </span>
+                  <span className="text-2xl md:text-4xl font-black text-primary leading-none">
+                    {formatPrice(imovel.preco, imovel.tipo)}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
