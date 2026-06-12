@@ -128,7 +128,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
           <span className="text-[8px] uppercase tracking-[0.2em] text-gray-400 leading-none mb-0.5">
             {imovel.tipo === 'aluguel' ? 'Aluguel' : 'A partir de'}
           </span>
-          <span className="text-base font-black text-primary leading-tight truncate">
+          <span className="text-base font-black text-primary-light leading-tight truncate">
             {precoLabel}
           </span>
         </div>

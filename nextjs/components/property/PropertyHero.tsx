@@ -149,7 +149,7 @@ export default function PropertyHero({ imovel, images, shareUrl }: PropertyHeroP
                   <span className="block text-[10px] uppercase tracking-[0.2em] text-gray-300 leading-none mb-1">
                     {imovel.tipo === 'aluguel' ? 'Aluguel' : 'A partir de'}
                   </span>
-                  <span className="text-2xl md:text-4xl font-black text-primary leading-none">
+                  <span className="text-2xl md:text-4xl font-black text-primary-light leading-none">
                     {formatPrice(imovel.preco, imovel.tipo)}
                   </span>
                 </div>

@@ -50,7 +50,7 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
     <div className="bg-white border border-gray-200 sticky top-36">
       <div className="bg-dark p-7">
         <p className="text-[10px] uppercase tracking-[0.2em] text-gray-300 mb-1">A partir de</p>
-        <p className="text-3xl font-black text-primary leading-tight">
+        <p className="text-3xl font-black text-primary-light leading-tight">
           {formatPrice(imovel.preco, imovel.tipo)}
         </p>
         {imovel.tipo === 'venda' && (

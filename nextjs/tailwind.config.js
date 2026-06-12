@@ -11,6 +11,10 @@ module.exports = {
     extend: {
       colors: {
         primary: '#af1e23',
+        // Lighter brand red for use ON dark backgrounds. The base #af1e23 only
+        // reaches 2.51:1 over #1a1a1a (below WCAG); this tint hits 5.76:1 while
+        // keeping the red identity. Use for the price and accents on dark.
+        'primary-light': '#f4675f',
         dark: '#1a1a1a',
         gray: {
           50:  '#fafafa',
