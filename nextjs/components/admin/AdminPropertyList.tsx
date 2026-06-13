@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { FiEdit2, FiPlus, FiSearch, FiTrash2, FiX } from 'react-icons/fi'
 import { ADMIN_LIST_PAGE_SIZE } from '../../lib/constants'
+import { matchesSearchQuery } from '../../lib/search'
 import AdminListItem from './AdminListItem'
 import type { Imovel, PropertyCategory, TransactionType } from '../../types'
 
@@ -40,18 +41,13 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
   }, [properties])
 
   const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase()
     return properties.filter(p => {
       if (statusFilter === 'active'   && !p.ativo) return false
       if (statusFilter === 'inactive' &&  p.ativo) return false
       if (categoriaFilter && p.categoria !== categoriaFilter) return false
       if (cidadeFilter    && p.cidade    !== cidadeFilter)    return false
       if (tipoFilter      && p.tipo      !== tipoFilter)      return false
-      if (q) {
-        const haystack = `${p.titulo} ${p.bairro} ${p.cidade} ${p.id}`.toLowerCase()
-        if (!haystack.includes(q)) return false
-      }
-      return true
+      return matchesSearchQuery([p.titulo, p.bairro, p.cidade, p.id, p.categoria], search)
     })
   }, [properties, search, statusFilter, categoriaFilter, cidadeFilter, tipoFilter])
 
@@ -94,7 +90,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
             type="search"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Buscar por título, bairro, cidade ou ID"
+            placeholder="Buscar por nome, código, bairro, cidade ou categoria"
             aria-label="Buscar imóveis"
             className="w-full border border-gray-300 text-xs pl-9 pr-3 py-2.5 focus:outline-none focus:border-primary"
           />

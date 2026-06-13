@@ -8,7 +8,7 @@ import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import { PHONE_WA, PHONE_TEL, PHONE_DISPLAY, INSTAGRAM_URL } from '../lib/config'
 import { NAVIGATION_LINKS, SCROLL_THRESHOLD } from '../lib/constants'
 import Logo from './Logo'
-import CodeSearch from './CodeSearch'
+import SiteSearch from './SiteSearch'
 import WhatsAppLink from './WhatsAppLink'
 
 export default function Header() {
@@ -53,7 +53,7 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center gap-5">
-            <CodeSearch />
+            <SiteSearch />
             <div className="flex items-center gap-1 text-gray-400">
               <WhatsAppLink href={PHONE_WA} source="header-icon" target="_blank" rel="noreferrer" aria-label="Fale pelo WhatsApp (abre em nova aba)"
                 className="w-10 h-10 flex items-center justify-center hover:text-green-400 transition-colors">
