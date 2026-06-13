@@ -18,10 +18,9 @@ interface PageMetadataInput {
   keywords?: string
   publishedTime?: string
   modifiedTime?: string
-  /** When set, the page is treated as a priced product: og:type becomes
-   *  "product" and the formatted label leads the share description so the
-   *  price is visible in WhatsApp/Instagram previews (which ignore the
-   *  product:price:* tags). `amount` feeds those structured tags upstream. */
+  /** When set, the formatted label leads the share description so the price is
+   *  visible in WhatsApp/Instagram previews, which only render og:description
+   *  (they ignore structured product:price:* tags). */
   productPrice?: { amount: number; label: string }
 }
 
@@ -59,9 +58,6 @@ export function buildPageMetadata({
     type,
     images: [{ url: ogImage, width: ogImageWidth, height: ogImageHeight, alt: ogAlt }],
   }
-  // og:type "product" is outside Next's typed OpenGraph union, so assign it past
-  // the type. Next still emits whatever string it finds on `type`.
-  if (productPrice) (openGraph as { type?: string }).type = 'product'
   if (type === 'article') {
     if (publishedTime) (openGraph as { publishedTime?: string }).publishedTime = publishedTime
     if (modifiedTime) (openGraph as { modifiedTime?: string }).modifiedTime = modifiedTime
