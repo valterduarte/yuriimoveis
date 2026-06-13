@@ -314,7 +314,7 @@ export default async function AjudaArtigoPage({ params }: PageProps) {
               source={`ajuda-${artigo.slug}`}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-sm py-4 px-8 transition-colors"
+              className="flex items-center justify-center gap-3 bg-whatsapp hover:bg-whatsapp-dark text-white font-bold uppercase tracking-[0.15em] text-sm py-4 px-8 transition-colors"
             >
               <FaWhatsapp size={20} /> WhatsApp
             </WhatsAppLink>

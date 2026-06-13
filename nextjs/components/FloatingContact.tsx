@@ -24,7 +24,7 @@ export default function FloatingContact() {
           target="_blank"
           rel="noreferrer"
           aria-label="Falar agora pelo WhatsApp (abre em nova aba)"
-          className="col-span-2 bg-[#25D366] hover:bg-[#1ebe57] text-white flex items-center justify-center gap-2 py-3 font-bold uppercase tracking-wider text-xs transition-colors duration-200"
+          className="col-span-2 bg-whatsapp hover:bg-whatsapp-dark text-white flex items-center justify-center gap-2 py-3 font-bold uppercase tracking-wider text-xs transition-colors duration-200"
         >
           <FaWhatsapp size={18} aria-hidden="true" />
           Falar agora

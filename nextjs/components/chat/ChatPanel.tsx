@@ -160,7 +160,7 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
               href={PHONE_WA}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1ebe57]"
+              className="flex items-center justify-center gap-2 rounded-lg bg-whatsapp px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-whatsapp-dark"
             >
               <FaWhatsapp size={16} />
               Falar com o Yuri no WhatsApp
@@ -268,7 +268,7 @@ function WhatsAppHandoff({ url }: { url: string }) {
       href={url}
       target="_blank"
       rel="noreferrer"
-      className="flex items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-[#1ebe57]"
+      className="flex items-center justify-center gap-2 rounded-lg bg-whatsapp px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-whatsapp-dark"
     >
       <FaWhatsapp size={18} />
       Falar agora com o Yuri

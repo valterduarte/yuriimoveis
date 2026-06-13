@@ -254,7 +254,7 @@ export default function SimuladorResult({
             source="simulador"
             target="_blank"
             rel="noreferrer"
-            className="w-full inline-flex items-center justify-center gap-2.5 bg-green-500 hover:bg-green-600 text-white font-black uppercase tracking-[0.2em] text-xs py-4 px-7 transition-all hover:shadow-lg hover:shadow-green-500/25"
+            className="w-full inline-flex items-center justify-center gap-2.5 bg-whatsapp hover:bg-whatsapp-dark text-white font-black uppercase tracking-[0.2em] text-xs py-4 px-7 transition-all hover:shadow-lg hover:shadow-whatsapp/25"
           >
             <FaWhatsapp size={18} /> Enviar esta simulação
           </WhatsAppLink>
@@ -288,7 +288,7 @@ export default function SimuladorResult({
           source="simulador-floating"
           target="_blank"
           rel="noreferrer"
-          className="w-full flex items-center justify-center gap-2.5 bg-green-500 hover:bg-green-600 text-white font-black uppercase tracking-[0.15em] text-xs py-4"
+          className="w-full flex items-center justify-center gap-2.5 bg-whatsapp hover:bg-whatsapp-dark text-white font-black uppercase tracking-[0.15em] text-xs py-4"
         >
           <FaWhatsapp size={18} /> Enviar simulação para o Yuri
         </WhatsAppLink>

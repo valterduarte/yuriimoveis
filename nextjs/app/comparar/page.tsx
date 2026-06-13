@@ -226,7 +226,7 @@ export default function CompararPage() {
                         source="comparador"
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe57] text-white font-bold uppercase tracking-wider text-[11px] py-2.5 px-4 transition-colors w-full"
+                        className="inline-flex items-center justify-center gap-2 bg-whatsapp hover:bg-whatsapp-dark text-white font-bold uppercase tracking-wider text-[11px] py-2.5 px-4 transition-colors w-full"
                       >
                         <FaWhatsapp size={14} />
                         Quero esse

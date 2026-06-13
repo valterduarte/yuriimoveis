@@ -223,7 +223,7 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
               source="empreendimento-hero"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-sm uppercase tracking-wider px-6 py-3.5 transition-colors"
+              className="inline-flex items-center gap-2 bg-whatsapp hover:bg-whatsapp-dark text-white font-bold text-sm uppercase tracking-wider px-6 py-3.5 transition-colors"
               aria-label={`Falar com o Corretor Yuri sobre o ${emp.nome} pelo WhatsApp (abre em nova aba)`}
             >
               <FaWhatsapp size={18} /> Falar sobre o {emp.nome}
@@ -336,7 +336,7 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
               source="empreendimento-cta"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-sm uppercase tracking-wider px-6 py-3.5 transition-colors"
+              className="inline-flex items-center gap-2 bg-whatsapp hover:bg-whatsapp-dark text-white font-bold text-sm uppercase tracking-wider px-6 py-3.5 transition-colors"
               aria-label={`Falar com o Corretor Yuri sobre o ${emp.nome} pelo WhatsApp (abre em nova aba)`}
             >
               <FaWhatsapp size={18} /> Quero falar com o Yuri

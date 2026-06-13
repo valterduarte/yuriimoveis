@@ -92,7 +92,7 @@ export default function Contato() {
 
               <div className="flex gap-2 pt-2">
                 <WhatsAppLink href={PHONE_WA} source="contato-info" target="_blank" rel="noreferrer"
-                  className="flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white text-[10px] uppercase tracking-wider font-bold px-3 py-2.5 transition-colors">
+                  className="flex items-center gap-1.5 bg-whatsapp hover:bg-whatsapp-dark text-white text-[10px] uppercase tracking-wider font-bold px-3 py-2.5 transition-colors">
                   <FaWhatsapp size={14} /> WhatsApp
                 </WhatsAppLink>
                 <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer"
@@ -110,7 +110,7 @@ export default function Contato() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <WhatsAppLink href={`${PHONE_WA_BASE}?text=${encodeURIComponent('Olá! Gostaria de mais informações sobre imóveis.')}`}
                     source="contato-cta" target="_blank" rel="noreferrer"
-                    className="flex-1 flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
+                    className="flex-1 flex items-center justify-center gap-3 bg-whatsapp hover:bg-whatsapp-dark text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors">
                     <FaWhatsapp size={22} /> WhatsApp
                   </WhatsAppLink>
                   <a href={PHONE_TEL}

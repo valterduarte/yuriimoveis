@@ -183,7 +183,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <WhatsAppLink
               href={`${PHONE_WA_BASE}?text=${encodeURIComponent(leadMessage)}`}
               source="blog-cta"
-              className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-widest text-xs py-3 px-6 transition-colors"
+              className="inline-flex items-center gap-2 bg-whatsapp hover:bg-whatsapp-dark text-white font-bold uppercase tracking-widest text-xs py-3 px-6 transition-colors"
             >
               <FaWhatsapp size={14} /> Falar com o Corretor
             </WhatsAppLink>

@@ -148,7 +148,7 @@ export default async function BairroView({ slug }: { slug: string }) {
                 source="bairro-sem-resultado"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-widest text-xs py-3 px-6 transition-colors"
+                className="flex items-center justify-center gap-2 bg-whatsapp hover:bg-whatsapp-dark text-white font-bold uppercase tracking-widest text-xs py-3 px-6 transition-colors"
               >
                 <FaWhatsapp size={14} /> Falar com o Corretor
               </WhatsAppLink>
