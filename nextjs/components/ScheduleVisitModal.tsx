@@ -246,7 +246,7 @@ export default function ScheduleVisitModal({ imovelTitulo, imovelId, onClose }: 
               <button
                 type="submit"
                 disabled={!isValid}
-                className="group w-full flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-200 disabled:cursor-not-allowed text-white disabled:text-gray-400 font-black uppercase tracking-[0.2em] text-xs py-5 transition-all duration-200 hover:shadow-lg hover:shadow-green-500/25"
+                className="group w-full flex items-center justify-center gap-3 bg-whatsapp hover:bg-whatsapp-dark disabled:bg-gray-200 disabled:cursor-not-allowed text-white disabled:text-gray-400 font-black uppercase tracking-[0.2em] text-xs py-5 transition-all duration-200 hover:shadow-lg hover:shadow-whatsapp/25"
               >
                 {isValid ? (
                   <>

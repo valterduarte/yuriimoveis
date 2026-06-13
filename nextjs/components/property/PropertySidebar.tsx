@@ -69,20 +69,20 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
           source="imovel-sidebar"
           target="_blank"
           rel="noreferrer"
-          className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors"
+          className="w-full flex items-center justify-center gap-2 bg-whatsapp hover:bg-whatsapp-dark text-white font-bold uppercase tracking-[0.15em] text-[11px] py-4 transition-colors"
         >
           <FaWhatsapp size={16} /> Falar no WhatsApp
         </WhatsAppLink>
         <button
           onClick={onScheduleVisit}
-          className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-primary hover:text-primary text-dark font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors"
+          className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-primary hover:text-primary text-dark font-bold uppercase tracking-[0.15em] text-[11px] py-4 transition-colors"
         >
           <FiCalendar size={14} /> Agendar Visita
         </button>
         {imovel.tipo === 'venda' && (
           <Link
             href={`/simulador?valor=${imovel.preco}`}
-            className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-primary hover:text-primary text-dark font-bold uppercase tracking-[0.15em] text-[10px] py-4 transition-colors"
+            className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-primary hover:text-primary text-dark font-bold uppercase tracking-[0.15em] text-[11px] py-4 transition-colors"
           >
             <FiTrendingUp size={14} /> Simular Financiamento
           </Link>

@@ -109,7 +109,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
               source="imovel-contato"
               target="_blank"
               rel="noreferrer"
-              className="flex-1 flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors"
+              className="flex-1 flex items-center justify-center gap-3 bg-whatsapp hover:bg-whatsapp-dark text-white font-bold uppercase tracking-[0.15em] text-sm py-6 transition-colors"
             >
               <FaWhatsapp size={22} /> WhatsApp
             </WhatsAppLink>
@@ -125,7 +125,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
 
       <nav className="fixed bottom-0 left-0 right-0 md:hidden z-40 flex items-stretch border-t border-white/10 pb-[env(safe-area-inset-bottom)]" aria-label="Preço e contato rápido">
         <div className="flex-1 bg-dark px-4 py-2 flex flex-col justify-center min-w-0">
-          <span className="text-[8px] uppercase tracking-[0.2em] text-gray-400 leading-none mb-0.5">
+          <span className="text-[9px] uppercase tracking-[0.2em] text-gray-400 leading-none mb-0.5">
             {imovel.tipo === 'aluguel' ? 'Aluguel' : 'A partir de'}
           </span>
           <span className="text-base font-black text-primary-light leading-tight truncate">
@@ -138,7 +138,7 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
           className="w-12 flex flex-col items-center justify-center gap-0.5 bg-dark text-white border-l border-white/10"
         >
           <FiPhone size={16} />
-          <span className="text-[8px] uppercase tracking-widest font-bold">Ligar</span>
+          <span className="text-[9px] uppercase tracking-widest font-bold">Ligar</span>
         </a>
         <button
           onClick={() => setShowVisitModal(true)}
@@ -146,13 +146,13 @@ export default function ImovelDetalheClient({ imovel }: ImovelDetalheClientProps
           className="w-12 flex flex-col items-center justify-center gap-0.5 bg-dark text-white border-l border-white/10"
         >
           <FiCalendar size={16} />
-          <span className="text-[8px] uppercase tracking-widest font-bold">Visita</span>
+          <span className="text-[9px] uppercase tracking-widest font-bold">Visita</span>
         </button>
         <WhatsAppLink
           href={`${PHONE_WA_BASE}?text=${whatsappMessage}`}
           source="imovel-barra-mobile"
           aria-label="Contato via WhatsApp"
-          className="flex items-center gap-2 bg-green-500 text-white px-5 font-bold uppercase tracking-[0.1em] text-xs"
+          className="flex items-center gap-2 bg-whatsapp text-white px-5 font-bold uppercase tracking-[0.1em] text-xs"
         >
           <FaWhatsapp size={18} /> WhatsApp
         </WhatsAppLink>

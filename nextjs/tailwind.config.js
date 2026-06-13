@@ -16,6 +16,10 @@ module.exports = {
         // keeping the red identity. Use for the price and accents on dark.
         'primary-light': '#f4675f',
         dark: '#1a1a1a',
+        // Canonical WhatsApp brand green — one token for every "Falar no
+        // WhatsApp" button so the same action looks identical site-wide.
+        whatsapp: '#25D366',
+        'whatsapp-dark': '#1ebe5d',
         gray: {
           50:  '#fafafa',
           100: '#f5f5f5',
