@@ -107,6 +107,8 @@ const registrarLead = tool({
     orcamento: z.string().optional().describe('Faixa de orçamento informada'),
     financiamento: z.string().optional().describe('Forma de pagamento / faixa de financiamento'),
     prazo: z.string().optional().describe('Prazo para mudar / urgência'),
+    motivacao: z.string().optional().describe('Motivo da compra/procura (ex: primeiro imóvel, casamento, mudança de cidade)'),
+    querVisita: z.boolean().optional().describe('true quando a pessoa topou agendar uma visita ao imóvel'),
     imovelId: z.number().int().optional().describe('Código do imóvel de interesse, se houver'),
     imovelTitulo: z.string().optional().describe('Título do imóvel de interesse, se houver'),
     observacoes: z.string().optional().describe('Qualquer detalhe adicional relevante'),
