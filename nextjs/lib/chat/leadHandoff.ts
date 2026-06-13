@@ -13,6 +13,8 @@ export interface LeadInfo {
   orcamento?: string
   financiamento?: string
   prazo?: string
+  motivacao?: string
+  querVisita?: boolean
   imovelTitulo?: string
   imovelId?: number
   observacoes?: string
@@ -39,9 +41,11 @@ export function buildLeadSummary(lead: LeadInfo): string {
   add('Orçamento', lead.orcamento)
   add('Financiamento', lead.financiamento)
   add('Prazo para mudar', lead.prazo)
+  add('Motivo', lead.motivacao)
   if (clean(lead.imovelTitulo)) {
     lines.push(`Imóvel de interesse: ${clean(lead.imovelTitulo)}${lead.imovelId ? ` (#${lead.imovelId})` : ''}`)
   }
+  if (lead.querVisita) lines.push('Quer agendar visita: Sim')
   add('Observações', lead.observacoes)
 
   return lines.length > 0
@@ -70,8 +74,15 @@ export function buildHandoffMessage(lead: LeadInfo): string {
   if (clean(lead.orcamento)) parts.push(`Orçamento: ${clean(lead.orcamento)}.`)
   if (clean(lead.financiamento)) parts.push(`Financiamento: ${clean(lead.financiamento)}.`)
   if (clean(lead.prazo)) parts.push(`Prazo para mudar: ${clean(lead.prazo)}.`)
-  if (clean(lead.imovelTitulo)) {
-    parts.push(`Tenho interesse no imóvel: ${clean(lead.imovelTitulo)}${lead.imovelId ? ` (#${lead.imovelId})` : ''}.`)
+  if (clean(lead.motivacao)) parts.push(`Motivo: ${clean(lead.motivacao)}.`)
+  const imovel = clean(lead.imovelTitulo)
+  if (imovel) {
+    const ref = `${imovel}${lead.imovelId ? ` (#${lead.imovelId})` : ''}`
+    parts.push(lead.querVisita
+      ? `Quero agendar uma visita ao imóvel: ${ref}.`
+      : `Tenho interesse no imóvel: ${ref}.`)
+  } else if (lead.querVisita) {
+    parts.push('Quero agendar uma visita.')
   }
   if (clean(lead.telefone)) parts.push(`Meu telefone: ${clean(lead.telefone)}.`)
 

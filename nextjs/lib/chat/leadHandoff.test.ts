@@ -39,6 +39,16 @@ describe('buildLeadSummary', () => {
   it('falls back to an incomplete-qualification note when nothing is known', () => {
     expect(buildLeadSummary({})).toContain('qualificação incompleta')
   })
+
+  it('includes motivation and visit intent when present', () => {
+    const summary = buildLeadSummary({ motivacao: 'primeiro apê', querVisita: true })
+    expect(summary).toContain('Motivo: primeiro apê')
+    expect(summary).toContain('Quer agendar visita: Sim')
+  })
+
+  it('omits the visit line when no visit was agreed', () => {
+    expect(buildLeadSummary({ nome: 'João' })).not.toContain('Quer agendar visita')
+  })
 })
 
 describe('buildHandoffMessage', () => {
@@ -56,6 +66,24 @@ describe('buildHandoffMessage', () => {
   it('degrades gracefully without a name', () => {
     expect(buildHandoffMessage({})).toContain('Olá Yuri!')
     expect(buildHandoffMessage({})).toContain('Quero comprar um imóvel.')
+  })
+
+  it('leads with the visit request when the lead wants to schedule a visit', () => {
+    const message = buildHandoffMessage({ ...fullLead, querVisita: true })
+    expect(message).toContain('Quero agendar uma visita ao imóvel: Apartamento no Centro (#1234).')
+    expect(message).not.toContain('Tenho interesse no imóvel:')
+  })
+
+  it('keeps the interest phrasing when no visit was agreed', () => {
+    expect(buildHandoffMessage(fullLead)).toContain('Tenho interesse no imóvel: Apartamento no Centro (#1234).')
+  })
+
+  it('includes the motivation line', () => {
+    expect(buildHandoffMessage({ ...fullLead, motivacao: 'casamento' })).toContain('Motivo: casamento.')
+  })
+
+  it('falls back to a generic visit request without a specific listing', () => {
+    expect(buildHandoffMessage({ querVisita: true })).toContain('Quero agendar uma visita.')
   })
 })
 
