@@ -16,6 +16,10 @@ import VideoSection from './property-form/VideoSection'
 import { EMPTY_FORM, type FormState, type UpdateField } from './property-form/types'
 import type { Imovel } from '../../types'
 
+// String(undefined) yields the literal "undefined", which would leak into the
+// input; keep numeric fields blank when the value is missing.
+const numToStr = (value: number | null | undefined) => (value != null ? String(value) : '')
+
 function propertyToForm(property: Imovel): FormState {
   return {
     titulo:          property.titulo          || '',
@@ -24,14 +28,14 @@ function propertyToForm(property: Imovel): FormState {
     tipo:            property.tipo            || 'venda',
     categoria:       property.categoria       || 'apartamento',
     status:          property.status          || 'pronto',
-    preco:           String(property.preco)   || '',
+    preco:           numToStr(property.preco),
     parcela_display: property.parcela_display || '',
     parcela_label:   property.parcela_label   || '',
-    area:            String(property.area)    || '',
+    area:            numToStr(property.area),
     area_display:    property.area_display    || '',
-    quartos:         String(property.quartos) || '',
-    banheiros:       String(property.banheiros) || '',
-    vagas:           String(property.vagas)   || '',
+    quartos:         numToStr(property.quartos),
+    banheiros:       numToStr(property.banheiros),
+    vagas:           numToStr(property.vagas),
     vagas_display:   property.vagas_display   || '',
     empreendimento:  property.empreendimento  || '',
     endereco:        property.endereco        || '',
