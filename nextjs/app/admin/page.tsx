@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect, useCallback } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { FiPlus, FiBarChart2, FiFileText } from 'react-icons/fi'
 import { apiClient, isAuthError } from '../../lib/apiClient'
 import { ADMIN_PROPERTIES_LIMIT } from '../../lib/constants'
@@ -20,7 +21,25 @@ interface AdminMessage {
   text: string
 }
 
-export default function AdminPage() {
+type AdminView = 'list' | 'form' | 'stats' | 'blog' | 'blog-form'
+const ADMIN_VIEWS: readonly AdminView[] = ['list', 'form', 'stats', 'blog', 'blog-form']
+
+interface ViewParams {
+  id?: number | null
+  blogId?: number | null
+}
+
+/** Encode a view (and its target id) into a shareable, refresh-safe /admin URL. */
+function buildAdminUrl(view: AdminView, params: ViewParams = {}): string {
+  const search = new URLSearchParams()
+  if (view !== 'list') search.set('view', view)
+  if (params.id != null) search.set('id', String(params.id))
+  if (params.blogId != null) search.set('blogId', String(params.blogId))
+  const query = search.toString()
+  return query ? `/admin?${query}` : '/admin'
+}
+
+function AdminPanel() {
   const {
     username, setUsername, password, setPassword,
     isAuthenticated, authenticatedUser, hydrated,
@@ -28,13 +47,18 @@ export default function AdminPage() {
     authHeader, handleLogin, handleLogout,
   } = useAdminAuth()
 
-  const [activeView, setActiveView] = useState<'list' | 'form' | 'stats' | 'blog' | 'blog-form'>('list')
-  const [editingId, setEditingId] = useState<number | null>(null)
-  const [editingBlogId, setEditingBlogId] = useState<number | null>(null)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const viewParam = searchParams.get('view') as AdminView | null
+  const activeView: AdminView = viewParam && ADMIN_VIEWS.includes(viewParam) ? viewParam : 'list'
+  const editingId = searchParams.get('id') ? Number(searchParams.get('id')) : null
+  const editingBlogId = searchParams.get('blogId') ? Number(searchParams.get('blogId')) : null
+
   const [properties, setProperties] = useState<Imovel[]>([])
   const [message, setMessage] = useState<AdminMessage | null>(null)
 
-  const loadProperties = async () => {
+  const loadProperties = useCallback(async () => {
     try {
       const data = await apiClient.get<{ imoveis?: Imovel[] }>(
         `${API_URL}/api/imoveis?limit=${ADMIN_PROPERTIES_LIMIT}&ordem=recente&todos=true`,
@@ -45,29 +69,28 @@ export default function AdminPage() {
       if (isAuthError(err)) handleLogout()
       setProperties([])
     }
-  }
+  }, [authHeader, handleLogout])
 
   useEffect(() => {
     if (isAuthenticated) loadProperties()
-  }, [isAuthenticated])
+  }, [isAuthenticated, loadProperties])
 
-  const openNewPropertyForm = () => {
-    setEditingId(null)
+  // Navigate to a view: clears any banner and pushes the URL so the back
+  // button and a refresh both land on the same screen.
+  const goTo = useCallback((view: AdminView, params?: ViewParams) => {
     setMessage(null)
-    setActiveView('form')
-  }
-
-  const openEditForm = (id: number) => {
-    setEditingId(id)
-    setMessage(null)
-    setActiveView('form')
-  }
+    router.push(buildAdminUrl(view, params))
+  }, [router])
 
   const handleFormSuccess = (successMessage: string) => {
     setMessage({ type: 'success', text: successMessage })
     loadProperties()
-    setEditingId(null)
-    setActiveView('list')
+    router.push(buildAdminUrl('list'))
+  }
+
+  const handleBlogFormSuccess = (successMessage: string) => {
+    setMessage({ type: 'success', text: successMessage })
+    router.push(buildAdminUrl('blog'))
   }
 
   const setActiveStatus = async (id: number, ativo: boolean, errorMessage: string) => {
@@ -130,31 +153,31 @@ export default function AdminPage() {
           <div className="flex items-center gap-4">
             {activeView === 'list' ? (
               <>
-                <button onClick={() => setActiveView('blog')}
+                <button onClick={() => goTo('blog')}
                   className="flex items-center gap-2 text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
                   <FiFileText size={14} /> Blog
                 </button>
-                <button onClick={() => setActiveView('stats')}
+                <button onClick={() => goTo('stats')}
                   className="flex items-center gap-2 text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
                   <FiBarChart2 size={14} /> Clicks
                 </button>
-                <button onClick={openNewPropertyForm} className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs">
+                <button onClick={() => goTo('form')} className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs">
                   <FiPlus size={14} /> Novo Imóvel
                 </button>
               </>
             ) : activeView === 'blog' ? (
               <>
-                <button onClick={() => { setActiveView('list'); setMessage(null) }}
+                <button onClick={() => goTo('list')}
                   className="text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
                   ← Imóveis
                 </button>
-                <button onClick={() => { setEditingBlogId(null); setMessage(null); setActiveView('blog-form') }}
+                <button onClick={() => goTo('blog-form')}
                   className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs">
                   <FiPlus size={14} /> Novo Post
                 </button>
               </>
             ) : (
-              <button onClick={() => { setActiveView(activeView === 'blog-form' ? 'blog' : 'list'); setMessage(null) }}
+              <button onClick={() => goTo(activeView === 'blog-form' ? 'blog' : 'list')}
                 className="text-xs uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
                 ← Voltar
               </button>
@@ -186,7 +209,7 @@ export default function AdminPage() {
             <AdminBairroAudit authHeader={authHeader} onAuthError={handleLogout} />
             <AdminPropertyList
               properties={properties}
-              onEdit={openEditForm}
+              onEdit={(id) => goTo('form', { id })}
               onDeactivate={handleDeactivate}
               onReactivate={handleReactivate}
             />
@@ -212,7 +235,7 @@ export default function AdminPage() {
         {activeView === 'blog' && (
           <AdminBlogPostList
             authHeader={authHeader}
-            onEdit={(id) => { setEditingBlogId(id); setMessage(null); setActiveView('blog-form') }}
+            onEdit={(id) => goTo('blog-form', { blogId: id })}
             onAuthError={handleLogout}
           />
         )}
@@ -221,11 +244,19 @@ export default function AdminPage() {
           <AdminBlogPostForm
             editingId={editingBlogId}
             authHeader={authHeader}
-            onSuccess={(msg) => { setMessage({ type: 'success', text: msg }); setActiveView('blog') }}
+            onSuccess={handleBlogFormSuccess}
             onAuthError={handleLogout}
           />
         )}
       </div>
     </div>
+  )
+}
+
+export default function AdminPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50" aria-hidden="true" />}>
+      <AdminPanel />
+    </Suspense>
   )
 }
