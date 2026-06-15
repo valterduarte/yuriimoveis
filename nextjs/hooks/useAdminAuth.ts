@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ApiError, apiClient } from '../lib/apiClient'
 import { API_URL } from '../lib/config'
 
@@ -26,9 +26,11 @@ export function useAdminAuth() {
     setHydrated(true)
   }, [])
 
-  const authHeader = () => ({ Authorization: `Bearer ${token}` })
+  // Stable identities so children can safely list these in effect deps
+  // without retriggering fetches on every parent render.
+  const authHeader = useCallback(() => ({ Authorization: `Bearer ${token}` }), [token])
 
-  const handleLogin = async (e: React.SyntheticEvent) => {
+  const handleLogin = useCallback(async (e: React.SyntheticEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
@@ -50,16 +52,16 @@ export function useAdminAuth() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [username, password])
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     sessionStorage.removeItem(TOKEN_KEY)
     sessionStorage.removeItem(USER_KEY)
     setToken('')
     setAuthenticatedUser(null)
     setUsername('')
     setPassword('')
-  }
+  }, [])
 
   return {
     username, setUsername,

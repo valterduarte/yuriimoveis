@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useId, useState } from 'react'
 import { apiClient, isAuthError } from '../../../lib/apiClient'
 import { API_URL } from '../../../lib/config'
+import { card, fieldInput, fieldLabel, fieldHint, sectionHeading } from '../ui/styles'
 import type { FormState, UpdateField } from './types'
 
 const AdminLocationPicker = dynamic(() => import('../AdminLocationPicker'), {
@@ -23,9 +24,6 @@ interface LocationSectionProps {
   authHeader: () => Record<string, string>
   onAuthError: () => void
 }
-
-const inputClass = 'w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary'
-const labelClass = 'block text-[10px] font-bold uppercase tracking-widest text-gray-700 mb-1.5'
 
 const MAP_HEIGHT_PX = 320
 
@@ -52,36 +50,36 @@ export default function LocationSection({ form, updateField, onCoordsChange, onC
   }, [authHeader, onAuthError])
 
   return (
-    <div className="bg-white border border-gray-200 p-6">
-      <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-5">Localização</h2>
+    <div className={card}>
+      <h2 className={`${sectionHeading} mb-5`}>Localização</h2>
       <div className="space-y-4">
         <div>
-          <label className={labelClass}>Endereço</label>
-          <input value={form.endereco} onChange={e => updateField('endereco', e.target.value)} className={inputClass} />
+          <label className={fieldLabel}>Endereço</label>
+          <input value={form.endereco} onChange={e => updateField('endereco', e.target.value)} className={fieldInput} />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={labelClass}>Bairro</label>
+            <label className={fieldLabel}>Bairro</label>
             <input
               list={bairrosListId}
               value={form.bairro}
               onChange={e => updateField('bairro', e.target.value)}
-              className={inputClass}
+              className={fieldInput}
               autoComplete="off"
             />
             <datalist id={bairrosListId}>
               {bairros.map(b => <option key={b} value={b} />)}
             </datalist>
-            <p className="text-[10px] text-gray-500 mt-1">Selecione um existente ou digite um novo. A capitalização é normalizada ao salvar.</p>
+            <p className={fieldHint}>Selecione um existente ou digite um novo. A capitalização é normalizada ao salvar.</p>
           </div>
           <div>
-            <label className={labelClass}>Cidade</label>
+            <label className={fieldLabel}>Cidade</label>
             <input
               list={cidadesListId}
               value={form.cidade}
               onChange={e => updateField('cidade', e.target.value)}
-              className={inputClass}
+              className={fieldInput}
               autoComplete="off"
             />
             <datalist id={cidadesListId}>
@@ -92,14 +90,14 @@ export default function LocationSection({ form, updateField, onCoordsChange, onC
 
         <div className="pt-2">
           <div className="flex items-baseline justify-between mb-2">
-            <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700">
+            <label className="block text-xs font-bold uppercase tracking-wide text-gray-700">
               Posição no mapa
             </label>
-            <p className="text-[10px] text-gray-500">
+            <p className="text-xs text-gray-500">
               Clique no mapa pra fixar o pino. Arraste pra ajustar.
             </p>
           </div>
-          <div className="border border-gray-200" style={{ height: MAP_HEIGHT_PX }}>
+          <div className="rounded-md overflow-hidden border border-gray-300" style={{ height: MAP_HEIGHT_PX }}>
             <AdminLocationPicker
               value={pickerValue}
               bairro={form.bairro}
@@ -107,25 +105,25 @@ export default function LocationSection({ form, updateField, onCoordsChange, onC
               onChange={onCoordsChange}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4 mt-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
             <div>
-              <label className={labelClass}>Latitude</label>
+              <label className={fieldLabel}>Latitude</label>
               <input
                 value={form.lat}
                 onChange={e => updateField('lat', e.target.value)}
                 inputMode="decimal"
                 placeholder="-23.5329"
-                className={inputClass}
+                className={fieldInput}
               />
             </div>
             <div>
-              <label className={labelClass}>Longitude</label>
+              <label className={fieldLabel}>Longitude</label>
               <input
                 value={form.lng}
                 onChange={e => updateField('lng', e.target.value)}
                 inputMode="decimal"
                 placeholder="-46.7917"
-                className={inputClass}
+                className={fieldInput}
               />
             </div>
           </div>
@@ -133,7 +131,7 @@ export default function LocationSection({ form, updateField, onCoordsChange, onC
             <button
               type="button"
               onClick={onClearCoords}
-              className="mt-2 text-[10px] uppercase tracking-widest text-gray-500 hover:text-primary font-bold"
+              className="mt-2 text-xs uppercase tracking-wide text-gray-500 hover:text-primary font-bold"
             >
               Limpar coordenadas (volta ao centroide do bairro)
             </button>

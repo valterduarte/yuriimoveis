@@ -59,7 +59,7 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
 
   if (!stats || stats.total === 0) {
     return (
-      <div className="text-center py-16 bg-white border border-gray-200">
+      <div className="text-center py-16 bg-white rounded-md border border-gray-300">
         <p className="text-4xl mb-3" aria-hidden="true">📊</p>
         <p className="text-sm text-gray-500">Nenhum click registrado nos últimos {days} dias.</p>
       </div>
@@ -78,7 +78,7 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
         <select
           value={days}
           onChange={e => setDays(Number(e.target.value))}
-          className="border border-gray-300 text-xs px-3 py-2 bg-white"
+          className="rounded-md border border-gray-300 text-xs px-3 py-2 bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/40"
         >
           <option value={7}>7 dias</option>
           <option value={14}>14 dias</option>
@@ -90,15 +90,15 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
 
       {/* Recent clicks feed — trace an individual lead back to its button + property */}
       {stats.recent?.length > 0 && (
-        <div className="bg-white border border-gray-200 p-6">
-          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-4">Cliques recentes</h3>
+        <div className="bg-white rounded-md border border-gray-300 p-6">
+          <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-4">Cliques recentes</h3>
           <div className="divide-y divide-gray-50">
             {stats.recent.map(c => (
               <div key={c.id} className="flex items-center justify-between gap-3 py-2.5 text-xs">
                 <div className="min-w-0">
                   <p className="font-medium text-dark">
                     {SOURCE_LABELS[c.source] || c.source}
-                    <span className="ml-2 text-[10px] uppercase tracking-widest text-gray-500">
+                    <span className="ml-2 text-xs uppercase tracking-wide text-gray-500">
                       {c.device === 'mobile' ? 'Mobile' : 'Desktop'}
                     </span>
                   </p>
@@ -127,15 +127,15 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
       )}
 
       {/* Device split */}
-      <div className="bg-white border border-gray-200 p-6">
-        <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-4">Dispositivo</h3>
+      <div className="bg-white rounded-md border border-gray-300 p-6">
+        <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-4">Dispositivo</h3>
         <div className="flex gap-4">
           {stats.byDevice.map(d => {
             const pct = Math.round((Number(d.clicks) / stats.total) * 100)
             return (
               <div key={d.device} className="flex-1 text-center p-4 bg-gray-50 border border-gray-100">
                 <p className="text-2xl font-black text-dark">{pct}%</p>
-                <p className="text-[10px] uppercase tracking-widest text-gray-500 mt-1">
+                <p className="text-xs uppercase tracking-wide text-gray-500 mt-1">
                   {d.device === 'mobile' ? 'Mobile' : 'Desktop'}
                 </p>
                 <p className="text-xs text-gray-500 mt-0.5">{d.clicks} clicks</p>
@@ -146,8 +146,8 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
       </div>
 
       {/* By source */}
-      <div className="bg-white border border-gray-200 p-6">
-        <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-4">Por origem</h3>
+      <div className="bg-white rounded-md border border-gray-300 p-6">
+        <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-4">Por origem</h3>
         <div className="space-y-3">
           {stats.bySource.map(s => {
             const pct = (Number(s.clicks) / maxBySource) * 100
@@ -170,8 +170,8 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
       </div>
 
       {/* By page */}
-      <div className="bg-white border border-gray-200 p-6">
-        <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-4">Por página</h3>
+      <div className="bg-white rounded-md border border-gray-300 p-6">
+        <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-4">Por página</h3>
         <div className="space-y-2">
           {stats.byPage.map(p => (
             <div key={p.page} className="flex items-center justify-between text-xs py-2 border-b border-gray-50 last:border-0">
@@ -191,8 +191,8 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
       </div>
 
       {/* By day */}
-      <div className="bg-white border border-gray-200 p-6">
-        <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-4">Por dia</h3>
+      <div className="bg-white rounded-md border border-gray-300 p-6">
+        <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-4">Por dia</h3>
         <div className="flex items-end gap-1 h-32">
           {stats.byDay.slice().reverse().map(d => {
             const pct = maxByDay > 0 ? (Number(d.clicks) / maxByDay) * 100 : 0
@@ -203,14 +203,14 @@ export default function AdminClickStats({ authHeader, onAuthError }: AdminClickS
                   className="w-full bg-primary/80 hover:bg-primary rounded-t transition-all min-h-[2px]"
                   style={{ height: `${Math.max(pct, 2)}%` }}
                 />
-                <span className="text-[8px] mt-1 hidden group-hover:block absolute -top-5 bg-dark text-white px-1.5 py-0.5 rounded whitespace-nowrap">
+                <span className="text-[10px] mt-1 hidden group-hover:block absolute -top-5 bg-dark text-white px-1.5 py-0.5 rounded whitespace-nowrap">
                   {dateLabel}: {d.clicks}
                 </span>
               </div>
             )
           })}
         </div>
-        <div className="flex justify-between text-[8px] text-gray-500 mt-1">
+        <div className="flex justify-between text-[10px] text-gray-500 mt-1">
           <span>{stats.byDay.length > 0 && new Date(stats.byDay[stats.byDay.length - 1].date + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</span>
           <span>{stats.byDay.length > 0 && new Date(stats.byDay[0].date + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</span>
         </div>

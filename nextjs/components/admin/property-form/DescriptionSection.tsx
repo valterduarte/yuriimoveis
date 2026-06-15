@@ -1,5 +1,6 @@
 'use client'
 
+import { card, fieldTextarea, sectionHeading } from '../ui/styles'
 import type { FormState, UpdateField } from './types'
 
 const DESCRIPTION_TEMPLATE = `🏢 NOME DO EMPREENDIMENTO – CIDADE
@@ -27,17 +28,17 @@ interface DescriptionSectionProps {
 
 export default function DescriptionSection({ form, updateField }: DescriptionSectionProps) {
   return (
-    <div className="bg-white border border-gray-200 p-6">
-      <h2 className="text-[10px] font-bold uppercase tracking-widest text-dark mb-1">Descrição</h2>
-      <p className="text-[10px] text-gray-500 mb-3">Use o template abaixo como base. Pode usar emojis e formatação livre.</p>
-      <div className="bg-gray-50 border border-dashed border-gray-300 p-4 mb-3 text-xs text-gray-500 font-mono leading-relaxed whitespace-pre-line">
+    <div className={card}>
+      <h2 className={`${sectionHeading} mb-1`}>Descrição</h2>
+      <p className="text-xs text-gray-500 mb-3">Use o template abaixo como base. Pode usar emojis e formatação livre.</p>
+      <div className="bg-gray-50 rounded-md border border-dashed border-gray-300 p-4 mb-3 text-xs text-gray-500 font-mono leading-relaxed whitespace-pre-line">
         {DESCRIPTION_TEMPLATE}
       </div>
       <textarea value={form.descricao} onChange={e => updateField('descricao', e.target.value)} rows={14}
         placeholder="Cole o template acima e edite..."
-        className="w-full border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:border-primary resize-y font-mono" />
+        className={`${fieldTextarea} font-mono`} />
       <button type="button" onClick={() => updateField('descricao', DESCRIPTION_TEMPLATE)}
-        className="mt-2 text-[10px] uppercase tracking-widest text-primary font-bold hover:underline">
+        className="mt-2 text-xs uppercase tracking-wide text-primary font-bold hover:underline">
         Preencher com template
       </button>
     </div>

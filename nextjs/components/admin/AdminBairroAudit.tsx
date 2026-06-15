@@ -60,7 +60,7 @@ export default function AdminBairroAudit({ authHeader, onAuthError }: Props) {
 
   if (!hasIssues) {
     return (
-      <div className="mb-6 px-4 py-3 text-sm border border-green-300 bg-green-50 text-green-700 flex items-center gap-2">
+      <div className="mb-6 px-4 py-3 text-sm rounded-md border border-green-300 bg-green-50 text-green-700 flex items-center gap-2">
         <FiCheckCircle size={16} />
         <span>Todos os {summary.total} bairros com imóveis estão configurados e indexáveis.</span>
       </div>
@@ -68,7 +68,7 @@ export default function AdminBairroAudit({ authHeader, onAuthError }: Props) {
   }
 
   return (
-    <div className={`mb-6 border ${summary.broken > 0 ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50'}`}>
+    <div className={`mb-6 rounded-md border ${summary.broken > 0 ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50'}`}>
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
@@ -105,7 +105,7 @@ export default function AdminBairroAudit({ authHeader, onAuthError }: Props) {
                     {r.cidade} • {r.count} imóve{r.count !== 1 ? 'is' : 'l'} • {STATUS_LABEL[r.status]}
                   </div>
                 </div>
-                <code className="text-[10px] text-gray-500 bg-white px-1.5 py-0.5">{r.slug}</code>
+                <code className="text-[11px] text-gray-500 bg-white px-1.5 py-0.5 rounded">{r.slug}</code>
               </li>
             ))}
           </ul>

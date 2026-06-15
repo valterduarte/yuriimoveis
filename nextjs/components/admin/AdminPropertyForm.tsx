@@ -192,7 +192,7 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div role="alert" className="px-4 py-3 text-sm border border-red-300 bg-red-50 text-red-600">
+        <div role="alert" className="px-4 py-3 text-sm rounded-md border border-red-300 bg-red-50 text-red-600">
           {error}
         </div>
       )}
@@ -223,12 +223,12 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
       />
 
       {isDirty && (
-        <p role="status" className="text-[10px] uppercase tracking-widest font-bold text-amber-600 text-center">
+        <p role="status" className="text-xs uppercase tracking-wide font-bold text-amber-600 text-center">
           Alterações não salvas
         </p>
       )}
       <button type="submit" disabled={loading}
-        className="w-full btn-primary py-4 text-sm uppercase tracking-widest font-bold disabled:opacity-50">
+        className="w-full btn-primary rounded-md py-4 text-sm uppercase tracking-widest font-bold disabled:opacity-50">
         {loading ? 'Salvando...' : editingId ? 'Salvar Alterações' : 'Cadastrar Imóvel'}
       </button>
     </form>

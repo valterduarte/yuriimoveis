@@ -16,7 +16,7 @@ interface AdminPropertyListProps {
 
 type StatusFilter = 'all' | 'active' | 'inactive'
 
-const SELECT_CLASS = 'border border-gray-300 text-xs px-3 py-2 bg-white text-dark'
+const SELECT_CLASS = 'rounded-md border border-gray-300 text-xs px-3 py-2 bg-white text-dark focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/40'
 
 export default function AdminPropertyList({ properties, onEdit, onDeactivate, onReactivate }: AdminPropertyListProps) {
   const [confirmingId, setConfirmingId] = useState<number | null>(null)
@@ -75,7 +75,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
 
   if (properties.length === 0) {
     return (
-      <div className="bg-white border border-gray-200 p-8 text-center text-sm text-gray-500">
+      <div className="bg-white rounded-md border border-gray-300 p-8 text-center text-sm text-gray-500">
         Nenhum imóvel cadastrado.
       </div>
     )
@@ -83,7 +83,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
 
   return (
     <div className="space-y-4">
-      <div className="bg-white border border-gray-200 p-4 space-y-3">
+      <div className="bg-white rounded-md border border-gray-300 p-4 space-y-3">
         <div className="relative">
           <FiSearch size={14} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
@@ -92,7 +92,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar por nome, código, bairro, cidade ou categoria"
             aria-label="Buscar imóveis"
-            className="w-full border border-gray-300 text-xs pl-9 pr-3 py-2.5 focus:outline-none focus:border-primary"
+            className="w-full rounded-md border border-gray-300 text-xs pl-9 pr-3 py-2.5 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/40"
           />
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -120,7 +120,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
           </select>
           {hasActiveFilter && (
             <button type="button" onClick={handleClearFilters}
-              className="flex items-center gap-1 text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:text-dark">
+              className="flex items-center gap-1 text-xs uppercase tracking-wide font-bold text-gray-500 hover:text-dark">
               <FiX size={12} aria-hidden="true" /> Limpar
             </button>
           )}
@@ -131,7 +131,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
       </div>
 
       {visible.length === 0 ? (
-        <div className="bg-white border border-gray-200 p-8 text-center text-sm text-gray-500">
+        <div className="bg-white rounded-md border border-gray-300 p-8 text-center text-sm text-gray-500">
           Nenhum imóvel encontrado com esses filtros.
         </div>
       ) : (
@@ -153,7 +153,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
                   {property.ativo && (
                     <button
                       onClick={() => onEdit(property.id)}
-                      className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-primary hover:underline"
+                      className="flex items-center gap-1.5 text-xs uppercase tracking-wide font-bold text-primary hover:underline"
                     >
                       <FiEdit2 size={12} aria-hidden="true" /> Editar
                     </button>
@@ -162,16 +162,16 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
                   {property.ativo ? (
                     confirmingId === property.id ? (
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-gray-500">Confirmar?</span>
+                        <span className="text-xs text-gray-500">Confirmar?</span>
                         <button
                           onClick={() => handleDeactivate(property.id)}
-                          className="text-[10px] uppercase tracking-widest font-bold text-red-500 hover:underline"
+                          className="text-xs uppercase tracking-wide font-bold text-red-500 hover:underline"
                         >
                           Sim
                         </button>
                         <button
                           onClick={() => setConfirmingId(null)}
-                          className="text-[10px] uppercase tracking-widest font-bold text-gray-500 hover:underline"
+                          className="text-xs uppercase tracking-wide font-bold text-gray-500 hover:underline"
                         >
                           Não
                         </button>
@@ -179,7 +179,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
                     ) : (
                       <button
                         onClick={() => setConfirmingId(property.id)}
-                        className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-red-500 hover:underline"
+                        className="flex items-center gap-1.5 text-xs uppercase tracking-wide font-bold text-red-500 hover:underline"
                       >
                         <FiTrash2 size={12} aria-hidden="true" /> Desativar
                       </button>
@@ -187,7 +187,7 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
                   ) : (
                     <button
                       onClick={() => onReactivate(property.id)}
-                      className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-green-500 hover:underline"
+                      className="flex items-center gap-1.5 text-xs uppercase tracking-wide font-bold text-green-500 hover:underline"
                     >
                       <FiPlus size={12} aria-hidden="true" /> Reativar
                     </button>
@@ -202,14 +202,14 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
       {totalPages > 1 && (
         <nav aria-label="Paginação" className="flex items-center justify-center gap-2 pt-2">
           <button type="button" disabled={safePage === 1} onClick={() => setPage(p => p - 1)}
-            className="text-[10px] uppercase tracking-widest font-bold text-gray-600 disabled:opacity-30 hover:text-dark px-3 py-2">
+            className="text-xs uppercase tracking-wide font-bold text-gray-600 disabled:opacity-30 hover:text-dark px-3 py-2">
             ← Anterior
           </button>
           <span className="text-xs text-gray-500">
             Página {safePage} de {totalPages}
           </span>
           <button type="button" disabled={safePage === totalPages} onClick={() => setPage(p => p + 1)}
-            className="text-[10px] uppercase tracking-widest font-bold text-gray-600 disabled:opacity-30 hover:text-dark px-3 py-2">
+            className="text-xs uppercase tracking-wide font-bold text-gray-600 disabled:opacity-30 hover:text-dark px-3 py-2">
             Próxima →
           </button>
         </nav>

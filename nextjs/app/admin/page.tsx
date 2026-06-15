@@ -117,7 +117,7 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-dark text-white py-10">
-        <div className="container mx-auto px-6 flex items-center justify-between">
+        <div className="container mx-auto px-6 flex flex-wrap items-center justify-between gap-4">
           <div>
             <span className="section-label">Admin{authenticatedUser ? ` · ${authenticatedUser}` : ''}</span>
             <h1 className="text-3xl font-black uppercase text-white">{viewTitle}</h1>
@@ -171,7 +171,7 @@ export default function AdminPage() {
           <div
             role="alert"
             aria-live="polite"
-            className={`mb-6 px-4 py-3 text-sm border ${
+            className={`mb-6 px-4 py-3 text-sm rounded-md border ${
               message.type === 'success'
                 ? 'border-green-300 bg-green-50 text-green-700'
                 : 'border-red-300 bg-red-50 text-red-600'

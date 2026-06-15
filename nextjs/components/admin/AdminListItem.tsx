@@ -9,7 +9,7 @@ interface AdminListItemProps {
 
 export default function AdminListItem({ title, meta, actions, inactive = false }: AdminListItemProps) {
   return (
-    <div className={`bg-white border border-gray-200 px-5 py-4 flex items-center justify-between gap-4 ${inactive ? 'opacity-60' : ''}`}>
+    <div className={`bg-white rounded-md border border-gray-300 px-5 py-4 flex items-center justify-between gap-4 ${inactive ? 'opacity-60' : ''}`}>
       <div className="flex-1 min-w-0">
         <h3 className="text-sm font-bold text-dark truncate">{title}</h3>
         <p className="text-xs text-gray-600 mt-0.5">{meta}</p>
