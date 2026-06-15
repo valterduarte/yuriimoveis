@@ -73,6 +73,9 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
 
   const hasActiveFilter = !!(search || statusFilter !== 'all' || categoriaFilter || cidadeFilter || tipoFilter)
 
+  const activeCount = properties.filter(p => p.ativo).length
+  const inactiveCount = properties.length - activeCount
+
   if (properties.length === 0) {
     return (
       <div className="bg-white rounded-md border border-gray-300 p-8 text-center text-sm text-gray-500">
@@ -83,6 +86,9 @@ export default function AdminPropertyList({ properties, onEdit, onDeactivate, on
 
   return (
     <div className="space-y-4">
+      <p className="text-xs text-gray-500">
+        {activeCount} {activeCount === 1 ? 'ativo' : 'ativos'} · {inactiveCount} {inactiveCount === 1 ? 'inativo' : 'inativos'} · {properties.length} total
+      </p>
       <div className="bg-white rounded-md border border-gray-300 p-4 space-y-3">
         <div className="relative">
           <FiSearch size={14} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
