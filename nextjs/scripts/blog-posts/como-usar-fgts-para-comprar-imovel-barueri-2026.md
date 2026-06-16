@@ -4,7 +4,7 @@ slug: "como-usar-fgts-para-comprar-imovel-barueri-2026"
 resumo: "O FGTS pode entrar como entrada, abater o saldo devedor ou pagar parte das parcelas. Veja as regras de 2026, quem tem direito, o limite do SFH e como usar o saldo para comprar em Barueri, Alphaville e região — incluindo o detalhe do ITBI que pesa sobre quem dá entrada."
 meta_titulo: "FGTS para comprar imóvel em Barueri 2026: regras e como usar"
 meta_descricao: "Use o FGTS na entrada, para amortizar o saldo ou abater parcelas do financiamento em Barueri e região. Veja as regras de 2026, quem tem direito e o detalhe do ITBI."
-imagem_capa: ""
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1781630261/blog/como-usar-fgts-para-comprar-imovel-barueri-2026.png"
 tags: ["FGTS", "Financiamento", "Barueri", "MCMV", "Compra de imóvel"]
 publicado: true
 ---

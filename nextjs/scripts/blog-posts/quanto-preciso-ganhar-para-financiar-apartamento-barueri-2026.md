@@ -4,7 +4,7 @@ slug: "quanto-preciso-ganhar-para-financiar-apartamento-barueri-2026"
 resumo: "A parcela do financiamento não pode passar de 30% da sua renda. Veja a tabela de renda mínima por valor de imóvel em Barueri — do centro a Alphaville — com entrada, faixa do MCMV e parcela estimada em 2026."
 meta_titulo: "Renda para financiar apartamento em Barueri 2026 (tabela)"
 meta_descricao: "Quanto ganhar para financiar um apê em Barueri? Veja a renda mínima por valor de imóvel, da regra dos 30% à faixa do MCMV, com parcelas estimadas em 2026."
-imagem_capa: ""
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1781630479/blog/quanto-preciso-ganhar-para-financiar-apartamento-barueri-2026.png"
 tags: ["Financiamento", "Renda", "Barueri", "MCMV", "Simulador"]
 publicado: true
 ---
