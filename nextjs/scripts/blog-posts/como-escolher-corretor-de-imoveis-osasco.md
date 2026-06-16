@@ -4,7 +4,7 @@ slug: "como-escolher-corretor-de-imoveis-osasco"
 resumo: "Um bom corretor economiza tempo, dinheiro e dor de cabeça. Veja 7 sinais para reconhecer um profissional confiável em Osasco e região — do CRECI ativo ao conhecimento real dos bairros — e as perguntas certas para fazer antes de fechar."
 meta_titulo: "Como escolher corretor de imóveis em Osasco: 7 sinais"
 meta_descricao: "Como escolher um corretor de imóveis confiável em Osasco e região: CRECI ativo, conhecimento dos bairros, transparência e as perguntas certas antes de fechar."
-imagem_capa: ""
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1781574122/blog/como-escolher-corretor-de-imoveis-osasco.png"
 tags: ["Corretor", "Osasco", "Compra de imóvel", "Dicas"]
 publicado: true
 ---
