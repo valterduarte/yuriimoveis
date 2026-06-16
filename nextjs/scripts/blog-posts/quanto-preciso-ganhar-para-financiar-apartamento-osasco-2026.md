@@ -4,7 +4,7 @@ slug: "quanto-preciso-ganhar-para-financiar-apartamento-osasco-2026"
 resumo: "A parcela do financiamento não pode passar de 30% da sua renda. Veja a tabela de renda mínima por valor de imóvel em Osasco — de R$ 200 mil a R$ 500 mil — com entrada, faixa do MCMV e parcela estimada em 2026."
 meta_titulo: "Renda para financiar apartamento em Osasco 2026 (tabela)"
 meta_descricao: "Quanto ganhar para financiar um apê em Osasco? Veja a renda mínima por valor de imóvel, da regra dos 30% à faixa do MCMV, com parcelas estimadas em 2026."
-imagem_capa: ""
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1781573682/blog/quanto-preciso-ganhar-para-financiar-apartamento-osasco-2026.png"
 tags: ["Financiamento", "Renda", "Osasco", "MCMV", "Simulador"]
 publicado: true
 ---
