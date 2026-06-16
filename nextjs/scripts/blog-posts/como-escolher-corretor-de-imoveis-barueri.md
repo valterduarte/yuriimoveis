@@ -4,7 +4,7 @@ slug: "como-escolher-corretor-de-imoveis-barueri"
 resumo: "Um bom corretor economiza tempo, dinheiro e dor de cabeça. Veja 7 sinais para reconhecer um profissional confiável em Barueri e Alphaville — do CRECI ativo ao conhecimento real dos bairros — e as perguntas certas para fazer antes de fechar."
 meta_titulo: "Como escolher corretor de imóveis em Barueri: 7 sinais"
 meta_descricao: "Como escolher um corretor de imóveis confiável em Barueri e Alphaville: CRECI ativo, conhecimento dos bairros, transparência e as perguntas certas antes de fechar."
-imagem_capa: ""
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1781650664/blog/como-escolher-corretor-de-imoveis-barueri.png"
 tags: ["Corretor", "Barueri", "Compra de imóvel", "Dicas"]
 publicado: true
 ---
