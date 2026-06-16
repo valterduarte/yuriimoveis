@@ -4,7 +4,7 @@ slug: "como-usar-fgts-para-comprar-imovel-osasco-2026"
 resumo: "O FGTS pode entrar como entrada, abater o saldo devedor ou pagar parte das parcelas. Veja as regras de 2026, quem tem direito, o limite do SFH e como usar o saldo para comprar em Osasco, Barueri e Carapicuíba."
 meta_titulo: "FGTS para comprar imóvel em Osasco 2026: regras e como usar"
 meta_descricao: "Use o FGTS na entrada, para amortizar o saldo ou abater parcelas do financiamento em Osasco e região. Veja as regras de 2026 e quem tem direito."
-imagem_capa: ""
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1781572632/blog/como-usar-fgts-para-comprar-imovel-osasco-2026.png"
 tags: ["FGTS", "Financiamento", "Osasco", "MCMV", "Compra de imóvel"]
 publicado: true
 ---
