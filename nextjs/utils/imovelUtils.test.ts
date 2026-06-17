@@ -12,6 +12,7 @@ import {
   capitalize,
   pluralizeImoveis,
   optimizeCloudinaryUrl,
+  optimizeCloudinaryVideo,
   deriveVideoPoster,
   ogImageUrl,
   buildPropertyNarrative,
@@ -137,6 +138,22 @@ describe('optimizeCloudinaryUrl', () => {
 
   it('handles falsy input', () => {
     expect(optimizeCloudinaryUrl('')).toBe('')
+  })
+})
+
+describe('optimizeCloudinaryVideo', () => {
+  it('injects f_auto:video,q_auto transforms into Cloudinary video URLs', () => {
+    const url = 'https://res.cloudinary.com/demo/video/upload/v1/tour.mp4'
+    expect(optimizeCloudinaryVideo(url)).toBe('https://res.cloudinary.com/demo/video/upload/f_auto:video,q_auto/v1/tour.mp4')
+  })
+
+  it('leaves non-Cloudinary URLs untouched', () => {
+    const url = 'https://example.com/tour.mp4'
+    expect(optimizeCloudinaryVideo(url)).toBe(url)
+  })
+
+  it('handles falsy input', () => {
+    expect(optimizeCloudinaryVideo('')).toBe('')
   })
 })
 

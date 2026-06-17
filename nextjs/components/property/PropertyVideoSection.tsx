@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { FiPlay } from 'react-icons/fi'
-import { deriveVideoPoster } from '../../utils/imovelUtils'
+import { deriveVideoPoster, optimizeCloudinaryVideo } from '../../utils/imovelUtils'
 import type { Imovel } from '../../types'
 
 interface PropertyVideoSectionProps {
@@ -27,7 +27,7 @@ export default function PropertyVideoSection({ imovel }: PropertyVideoSectionPro
       <div className="relative overflow-hidden bg-dark border border-gray-200" style={{ height: VIDEO_HEIGHT_PX }}>
         {playing ? (
           <video
-            src={videoUrl}
+            src={optimizeCloudinaryVideo(videoUrl)}
             poster={poster}
             controls
             autoPlay

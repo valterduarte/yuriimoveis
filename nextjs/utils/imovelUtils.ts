@@ -10,6 +10,15 @@ export function optimizeCloudinaryUrl(url: string, width?: number): string {
   return url.replace('/upload/', `/upload/${transforms}/`)
 }
 
+// Serving the raw upload makes playback depend on whatever the user happened to
+// export. Routing the <video> src through f_auto:video,q_auto lets Cloudinary
+// deliver a browser-friendly codec at a sane bitrate instead of the original
+// file verbatim.
+export function optimizeCloudinaryVideo(url: string): string {
+  if (!url || !url.includes('res.cloudinary.com')) return url
+  return url.replace('/upload/', '/upload/f_auto:video,q_auto/')
+}
+
 // Cloudinary serves a generated still frame when a video asset is requested
 // with an image extension, so the poster is just the same URL ending in .jpg.
 export function deriveVideoPoster(videoUrl: string): string {
