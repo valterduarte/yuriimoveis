@@ -4,7 +4,7 @@ slug: "quanto-dar-de-entrada-apartamento-2026"
 resumo: "A entrada mínima de um financiamento é 20% do valor do imóvel, mas dar mais reduz a parcela, os juros totais e a renda exigida. Veja exemplos reais em 2026 e como usar o FGTS na entrada."
 meta_titulo: "Quanto dar de entrada num apartamento em 2026? Mínimo e exemplos"
 meta_descricao: "Entrada mínima de 20% no financiamento, por que dar mais compensa, exemplos reais com R$ 250 mil, R$ 350 mil e R$ 450 mil e como usar o FGTS na entrada em 2026."
-imagem_capa: ""
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1781749258/blog/quanto-dar-de-entrada-apartamento-2026.jpg"
 tags: ["Financiamento", "Entrada", "FGTS", "MCMV"]
 publicado: true
 ---
