@@ -26,7 +26,6 @@ import { AMENITY_FILTERS } from '../../../../../../../data/amenityFilters'
 import { resolveListingFilter, filterToFetchOptions, filterLabel, type ResolvedFilter } from '../../../../../../../lib/listingFilter'
 import { expandFilterSlugsForRow } from '../../../../../../../lib/listingStaticParams'
 import { SITE_URL } from '../../../../../../../lib/config'
-import { SEO_MIN_PROPERTIES_FOR_FILTER } from '../../../../../../../lib/constants'
 import { buildBreadcrumb, buildCollectionPage, buildPropertyProduct } from '../../../../../../../lib/jsonLd'
 import { buildListingMetadata } from '../../../../../../../lib/seo'
 import { buildListingInsight } from '../../../../../../../lib/listingInsight'
@@ -121,7 +120,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     url: `${SITE_URL}${buildBairroFilterUrl(raw.acao, raw.cidade, raw.categoria, raw.bairro, raw.filtro)}`,
-    noindex: total < SEO_MIN_PROPERTIES_FOR_FILTER,
+    // City+category+bairro+filter is the deepest facet: near-zero search demand
+    // and heavy duplication of the bairro page. Always noindex (still follow, so
+    // it stays navigable) and keep it out of the sitemap to save crawl budget.
+    noindex: true,
   })
 }
 

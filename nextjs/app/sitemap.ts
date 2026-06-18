@@ -146,18 +146,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const cityFilterCounts = new Map<string, number>()
   const categoryFilterCounts = new Map<string, number>()
-  const bairroFilterCounts = new Map<string, number>()
 
-  const bumpCounts = (acao: AcaoSlug, cidadeSlug: string, categoria: string, hasCategoria: boolean, bairroSlug: string, filterSlug: string) => {
+  // The bairro+filter tier is intentionally omitted: it is noindexed at the route
+  // level (deepest facet, near-zero demand, duplicates the bairro page), so it has
+  // no place in the sitemap either.
+  const bumpCounts = (acao: AcaoSlug, cidadeSlug: string, categoria: string, hasCategoria: boolean, filterSlug: string) => {
     const cityKey = `${acao}|${cidadeSlug}|${filterSlug}`
     cityFilterCounts.set(cityKey, (cityFilterCounts.get(cityKey) ?? 0) + 1)
     if (hasCategoria) {
       const catKey = `${acao}|${cidadeSlug}|${categoria}|${filterSlug}`
       categoryFilterCounts.set(catKey, (categoryFilterCounts.get(catKey) ?? 0) + 1)
-      if (bairroSlug) {
-        const bairroKey = `${acao}|${cidadeSlug}|${categoria}|${bairroSlug}|${filterSlug}`
-        bairroFilterCounts.set(bairroKey, (bairroFilterCounts.get(bairroKey) ?? 0) + 1)
-      }
     }
   }
 
@@ -166,23 +164,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const cidadeSlug = cidadeNameToSlug(row.cidade)
     if (!cidadeSlugToName(cidadeSlug)) continue
     const hasCategoria = !!getCategoriaBySlug(row.categoria)
-    const bairroSlug = bairroDbNameToSlug(row.bairro)
 
     for (const range of getAllPriceRanges(row.tipo as 'venda' | 'aluguel')) {
       const inRange = (!range.min || row.preco >= range.min) && (!range.max || row.preco <= range.max)
       if (!inRange) continue
-      bumpCounts(acao, cidadeSlug, row.categoria, hasCategoria, bairroSlug, range.slug)
+      bumpCounts(acao, cidadeSlug, row.categoria, hasCategoria, range.slug)
     }
 
     for (const amenity of AMENITY_FILTERS) {
       if (!imovelMatchesAmenity(row.diferenciais, amenity)) continue
-      bumpCounts(acao, cidadeSlug, row.categoria, hasCategoria, bairroSlug, amenity.slug)
+      bumpCounts(acao, cidadeSlug, row.categoria, hasCategoria, amenity.slug)
     }
 
     for (const bf of BEDROOM_FILTERS) {
       const minBedrooms = bf.value === '4+' ? 4 : bf.value
       if (row.quartos < minBedrooms) continue
-      bumpCounts(acao, cidadeSlug, row.categoria, hasCategoria, bairroSlug, bf.slug)
+      bumpCounts(acao, cidadeSlug, row.categoria, hasCategoria, bf.slug)
     }
   }
 
@@ -206,15 +203,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const [acao, cidadeSlug, categoria, filterSlug] = key.split('|') as [AcaoSlug, string, string, string]
     filterUrls.push({
       url: `${SITE_URL}/${acao}/${cidadeSlug}/${categoria}/filtro/${filterSlug}`,
-      lastModified: lastModForCityCategory(acao, cidadeSlug, categoria),
-    })
-  }
-
-  for (const [key, count] of bairroFilterCounts) {
-    if (count < MIN_PROPERTIES_FOR_FILTER) continue
-    const [acao, cidadeSlug, categoria, bairroSlug, filterSlug] = key.split('|') as [AcaoSlug, string, string, string, string]
-    filterUrls.push({
-      url: `${SITE_URL}/${acao}/${cidadeSlug}/${categoria}/${bairroSlug}/filtro/${filterSlug}`,
       lastModified: lastModForCityCategory(acao, cidadeSlug, categoria),
     })
   }
