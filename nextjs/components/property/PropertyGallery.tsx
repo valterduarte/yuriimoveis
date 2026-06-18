@@ -36,6 +36,7 @@ export default function PropertyGallery({ imovel, images, onImageClick }: Proper
         {images.map((img, i) => (
           <SwiperSlide key={i}>
             <div className="overflow-hidden cursor-pointer" onClick={() => onImageClick(i)}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- gallery served through the Cloudinary loader (f_auto,q_auto), lazy and below the fold; next/image would only add an extra optimizer hop */}
               <img
                 src={img}
                 alt={`${imovel.titulo} em ${imovel.cidade || 'Osasco'} – foto ${i + 1} de ${images.length}`}

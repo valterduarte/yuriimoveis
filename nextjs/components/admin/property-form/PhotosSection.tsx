@@ -32,7 +32,8 @@ export default function PhotosSection({ imageUrls, isUploading, onUpload, onRemo
         <div className="grid grid-cols-3 gap-3 mt-4">
           {imageUrls.map((url, i) => (
             <div key={i} className="relative group">
-              <img src={url} alt="" className="w-full h-24 object-cover rounded-md border border-gray-300" />
+              {/* eslint-disable-next-line @next/next/no-img-element -- admin-only upload preview (behind auth, noindex); next/image adds an optimizer hop with no LCP/SEO value here */}
+              <img src={url} alt={`Foto ${i + 1} do imóvel`} className="w-full h-24 object-cover rounded-md border border-gray-300" />
               <button
                 type="button"
                 onClick={() => onRemove(url)}

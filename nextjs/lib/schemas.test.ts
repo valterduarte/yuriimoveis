@@ -5,6 +5,7 @@ import {
   blogPostCreateSchema,
   blogPostUpdateSchema,
   contatoSchema,
+  loginSchema,
 } from './schemas'
 
 const validImovelPayload = {
@@ -172,5 +173,25 @@ describe('contatoSchema', () => {
 
   it('rejects a negative imovel_id', () => {
     expect(contatoSchema.safeParse({ ...valid, imovel_id: -1 }).success).toBe(false)
+  })
+})
+
+describe('loginSchema', () => {
+  it('accepts a valid credential pair', () => {
+    expect(loginSchema.safeParse({ usuario: 'admin', senha: 'secret' }).success).toBe(true)
+  })
+
+  it('rejects an empty user or password', () => {
+    expect(loginSchema.safeParse({ usuario: '', senha: 'secret' }).success).toBe(false)
+    expect(loginSchema.safeParse({ usuario: 'admin', senha: '' }).success).toBe(false)
+  })
+
+  it('rejects missing fields', () => {
+    expect(loginSchema.safeParse({ usuario: 'admin' }).success).toBe(false)
+    expect(loginSchema.safeParse({}).success).toBe(false)
+  })
+
+  it('rejects non-string values', () => {
+    expect(loginSchema.safeParse({ usuario: 123, senha: true }).success).toBe(false)
   })
 })

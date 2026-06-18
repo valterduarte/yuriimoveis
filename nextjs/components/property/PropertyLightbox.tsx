@@ -92,6 +92,7 @@ export default function PropertyLightbox({ images, activeIndex, onClose, onNext,
 
       <div className="w-full h-full flex items-center justify-center">
         <div className="relative border-2 border-white/30 shadow-[0_0_120px_20px_rgba(0,0,0,0.95),0_0_40px_rgba(175,30,35,0.15)]">
+          {/* eslint-disable-next-line @next/next/no-img-element -- fullscreen overlay with viewport-relative sizing (max-h-[82vh]/max-w-[88vw]), shown only on click; next/image's fixed dimensions/fill don't fit */}
           <img
             src={images[activeIndex]}
             alt={`Foto ${activeIndex + 1} de ${images.length}`}

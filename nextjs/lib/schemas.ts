@@ -5,6 +5,11 @@ const TIPOS = ['venda', 'aluguel'] as const
 const CATEGORIAS = ['casa', 'apartamento', 'terreno', 'chale', 'comercial', 'chacara'] as const
 const STATUSES = ['pronto', 'construcao', 'planta'] as const
 
+export const loginSchema = z.object({
+  usuario: z.string().min(1, 'Informe usuário e senha').max(200),
+  senha:   z.string().min(1, 'Informe usuário e senha').max(200),
+})
+
 export const imovelCreateSchema = z.object({
   titulo:          z.string().trim().min(3).max(200),
   tipo:            z.enum(TIPOS),

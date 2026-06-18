@@ -61,7 +61,8 @@ describe('cidadeNameToSlug', () => {
     for (const slug of getAllCidadeSlugs()) {
       const name = cidadeSlugToName(slug)
       expect(name).toBeDefined()
-      expect(cidadeNameToSlug(name!)).toBe(slug)
+      if (!name) continue
+      expect(cidadeNameToSlug(name)).toBe(slug)
     }
   })
 

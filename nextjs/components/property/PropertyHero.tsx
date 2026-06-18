@@ -68,6 +68,7 @@ export default function PropertyHero({ imovel, images, shareUrl }: PropertyHeroP
             const optimized = optimizeCloudinaryUrl(img, i === 0 ? 1920 : 1200)
             return (
               <SwiperSlide key={i}>
+                {/* eslint-disable-next-line @next/next/no-img-element -- deliberate responsive Cloudinary pipeline (f_auto,q_auto + srcSet/sizes + per-slide fetchPriority/decoding for LCP); next/image would only add an extra optimizer hop */}
                 <img
                   src={optimized}
                   alt={`${imovel.titulo} — ${imovel.categoria} em ${imovel.bairro || imovel.cidade}`}
@@ -172,6 +173,7 @@ export default function PropertyHero({ imovel, images, shareUrl }: PropertyHeroP
             >
               {images.map((img, i) => (
                 <SwiperSlide key={i} style={{ width: 80, height: 54 }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- fixed 80x54 thumbnail served through the Cloudinary loader; next/image adds no benefit here */}
                   <img
                     src={img}
                     alt={`${imovel.titulo} – foto ${i + 1} de ${images.length}`}

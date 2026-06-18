@@ -83,6 +83,14 @@ const config = [
       'no-console': 'off',
     },
   },
+  {
+    // Test files interleave vi.mock() between imports (mock-before-import idiom),
+    // which import/order cannot model without breaking that ordering.
+    files: ['**/*.test.{ts,tsx}', '**/__tests__/**'],
+    rules: {
+      'import/order': 'off',
+    },
+  },
 ]
 
 export default config

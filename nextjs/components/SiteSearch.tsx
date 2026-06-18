@@ -96,6 +96,7 @@ export default function SiteSearch() {
       <div
         role="combobox"
         aria-expanded={showDropdown}
+        aria-controls={LISTBOX_ID}
         aria-owns={LISTBOX_ID}
         aria-haspopup="listbox"
         className="relative flex items-center"

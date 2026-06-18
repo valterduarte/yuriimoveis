@@ -33,6 +33,7 @@ describe('coordsForImovelJittered', () => {
   it('returns a jittered coord when the bairro is known', () => {
     const result = coordsForImovelJittered(7, 'centro')
     expect(result).not.toBeNull()
-    expect(result!.lat).not.toEqual(BASE.lat)
+    if (!result) throw new Error('expected a jittered coord for a known bairro')
+    expect(result.lat).not.toEqual(BASE.lat)
   })
 })

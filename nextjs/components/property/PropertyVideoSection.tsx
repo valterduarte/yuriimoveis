@@ -49,6 +49,7 @@ export default function PropertyVideoSection({ imovel }: PropertyVideoSectionPro
             aria-label="Reproduzir vídeo"
             className="group relative block"
           >
+            {/* eslint-disable-next-line @next/next/no-img-element -- video poster facade with intrinsic auto sizing (h-auto w-auto) from the Cloudinary still frame; next/image requires fixed dimensions */}
             <img
               src={poster}
               alt={`Tour em vídeo — ${imovel.titulo} em ${imovel.cidade || 'Osasco'}`}

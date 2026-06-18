@@ -21,7 +21,7 @@ export const POST = withErrorHandler('POST /api/revalidate', async (request: Nex
   const data = parseSchema(revalidateSchema, body)
   if (data instanceof NextResponse) return data
 
-  const tagsToRevalidate = data.tags ?? [data.tag!]
+  const tagsToRevalidate = data.tags ?? (data.tag ? [data.tag] : [])
   for (const tag of tagsToRevalidate) revalidateTag(tag)
 
   return NextResponse.json({

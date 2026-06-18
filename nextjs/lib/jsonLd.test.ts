@@ -160,7 +160,8 @@ describe('buildGlobalJsonLd', () => {
   })
 
   it('places the business geo at the Jardim Roberto centroid (service-area neighborhood)', () => {
-    const jr = coordsForBairro('Jardim Roberto', 'Osasco')!
+    const jr = coordsForBairro('Jardim Roberto', 'Osasco')
+    if (!jr) throw new Error('expected Jardim Roberto coordinates')
     expect(agent().geo).toMatchObject({ latitude: jr.lat, longitude: jr.lng })
   })
 
