@@ -23,8 +23,13 @@ export interface MapImovel {
 }
 
 export function parseImovel(row: ImovelRow): Imovel {
+  // torre/numero_apartamento are admin-only. Strip them here so no public fetch
+  // (listings, detail page, empreendimentos) can leak them into the API response
+  // or the page's hydration data. The admin edit route re-attaches them for the
+  // authenticated user. See the admin branch in app/api/imoveis/[id]/route.ts.
+  const { torre: _torre, numero_apartamento: _numApto, ...publicRow } = row
   return {
-    ...row,
+    ...publicRow,
     preco:        Number(row.preco),
     area:         Number(row.area),
     lat:          row.lat == null ? undefined : Number(row.lat),

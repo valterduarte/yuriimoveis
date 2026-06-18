@@ -58,6 +58,31 @@ export default function LocationSection({ form, updateField, onCoordsChange, onC
           <input value={form.endereco} onChange={e => updateField('endereco', e.target.value)} className={fieldInput} />
         </div>
 
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-md border border-gray-200 bg-gray-50 p-4">
+          <div className="sm:col-span-2">
+            <p className="text-[11px] font-bold uppercase tracking-wide text-gray-600">Identificação da unidade</p>
+            <p className={fieldHint}>Uso interno do corretor. Não aparece no site, nos buscadores nem em nenhuma página pública — serve só para você diferenciar unidades do mesmo empreendimento.</p>
+          </div>
+          <div>
+            <label className={fieldLabel}>Torre / Bloco</label>
+            <input
+              value={form.torre}
+              onChange={e => updateField('torre', e.target.value)}
+              className={fieldInput}
+              placeholder="Ex.: Torre A"
+            />
+          </div>
+          <div>
+            <label className={fieldLabel}>Número do apartamento</label>
+            <input
+              value={form.numero_apartamento}
+              onChange={e => updateField('numero_apartamento', e.target.value)}
+              className={fieldInput}
+              placeholder="Ex.: 142"
+            />
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className={fieldLabel}>Bairro</label>

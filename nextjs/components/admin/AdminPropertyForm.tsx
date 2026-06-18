@@ -38,6 +38,8 @@ function propertyToForm(property: Imovel): FormState {
     vagas:           numToStr(property.vagas),
     vagas_display:   property.vagas_display   || '',
     empreendimento:  property.empreendimento  || '',
+    torre:              property.torre              || '',
+    numero_apartamento: property.numero_apartamento || '',
     endereco:        property.endereco        || '',
     bairro:          property.bairro          || '',
     cidade:          property.cidade          || 'Osasco',
@@ -72,7 +74,9 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
       setInitialSnapshot(JSON.stringify({ form: EMPTY_FORM, imageUrls: [], videoUrl: '' }))
       return
     }
-    apiClient.get<Imovel>(`${API_URL}/api/imoveis/${editingId}`)
+    // Send the auth header so the detail route returns the admin-only fields
+    // (torre, numero_apartamento) that are stripped from public responses.
+    apiClient.get<Imovel>(`${API_URL}/api/imoveis/${editingId}`, { headers: authHeader() })
       .then(imovel => {
         const loadedForm = propertyToForm(imovel)
         const loadedImages = Array.isArray(imovel.imagens) ? imovel.imagens : []
@@ -83,7 +87,7 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
         setInitialSnapshot(JSON.stringify({ form: loadedForm, imageUrls: loadedImages, videoUrl: loadedVideo }))
       })
       .catch(() => setError('Erro ao carregar imóvel.'))
-  }, [editingId, setError])
+  }, [editingId, setError, authHeader])
 
   useEffect(() => {
     apiClient.get<{ nomes: string[] }>(`${API_URL}/api/admin/empreendimentos`, { headers: authHeader() })

@@ -4,18 +4,33 @@ import { getDb } from '../../../../lib/db'
 import { imovelUpdateSchema } from '../../../../lib/schemas'
 import { parseImovel, CACHE_TAG_IMOVEIS } from '../../../../lib/api'
 import { notFoundJson, parseSchema, requireUser, withErrorHandler } from '../../../../lib/apiHandler'
-import { publicCacheHeaders } from '../../../../lib/cacheHeaders'
+import { requireAuth } from '../../../../lib/requireAuth'
+import { publicCacheHeaders, PRIVATE_NO_STORE } from '../../../../lib/cacheHeaders'
 
 type RouteContext = { params: Promise<{ id: string }> }
 
-export const GET = withErrorHandler('GET /api/imoveis/[id]', async (_request: NextRequest, { params }: RouteContext) => {
+export const GET = withErrorHandler('GET /api/imoveis/[id]', async (request: NextRequest, { params }: RouteContext) => {
   const { id } = await params
   const result = await getDb().query(
     'SELECT * FROM imoveis WHERE id = $1 AND ativo = true',
     [id]
   )
-  if (!result.rows[0]) return notFoundJson('Imóvel não encontrado')
-  return NextResponse.json(parseImovel(result.rows[0]), {
+  const row = result.rows[0]
+  if (!row) return notFoundJson('Imóvel não encontrado')
+
+  const imovel = parseImovel(row)
+
+  // The authenticated admin (edit form) gets the sensitive unit fields back so
+  // they can be edited; public callers never receive them. parseImovel already
+  // strips them, so re-attach from the raw row here. Keep the admin copy uncached.
+  if (requireAuth(request)) {
+    return NextResponse.json(
+      { ...imovel, torre: row.torre ?? '', numero_apartamento: row.numero_apartamento ?? '' },
+      { headers: PRIVATE_NO_STORE },
+    )
+  }
+
+  return NextResponse.json(imovel, {
     headers: publicCacheHeaders({ browserMaxAge: 300, cdnMaxAge: 300, swr: 600 }),
   })
 })
@@ -60,8 +75,10 @@ export const PUT = withErrorHandler('PUT /api/imoveis/[id]', async (request: Nex
       lng             = COALESCE($25, lng),
       empreendimento  = COALESCE($26, empreendimento),
       video_url       = COALESCE($27, video_url),
+      torre              = COALESCE($28, torre),
+      numero_apartamento = COALESCE($29, numero_apartamento),
       updated_at      = NOW()
-    WHERE id = $28
+    WHERE id = $30
   `, [
     data.titulo        ?? null,
     data.descricao     ?? null,
@@ -90,6 +107,8 @@ export const PUT = withErrorHandler('PUT /api/imoveis/[id]', async (request: Nex
     data.lng ?? null,
     data.empreendimento === undefined ? null : data.empreendimento,
     data.video_url === undefined ? null : data.video_url,
+    data.torre === undefined ? null : data.torre,
+    data.numero_apartamento === undefined ? null : data.numero_apartamento,
     id,
   ])
 

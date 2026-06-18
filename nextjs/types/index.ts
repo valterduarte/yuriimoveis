@@ -38,6 +38,18 @@ export interface Imovel {
   empreendimento?: string | null
   /** Cloudinary video URL for the optional property tour section. */
   video_url?: string | null
+  /**
+   * Tower/block label within a development, e.g. "Torre A".
+   * SENSITIVE / admin-only: present only on records read by the authenticated
+   * admin (the edit form). `parseImovel` strips it from public responses.
+   */
+  torre?: string | null
+  /**
+   * Apartment/unit number within the building, e.g. "142".
+   * SENSITIVE / admin-only: the broker's internal reference. Never returned in
+   * public responses nor rendered on the public site.
+   */
+  numero_apartamento?: string | null
 }
 
 export interface ImovelRow extends Omit<Imovel, 'imagens' | 'diferenciais'> {
