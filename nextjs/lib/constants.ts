@@ -36,12 +36,18 @@ export const RENT_PRICE_OPTIONS = [
   { value: '5000', label: 'R$ 5.000/mês' },
 ]
 
+// The logo already links home, so 'Início' is dropped to make room for the
+// section hubs (Empreendimentos, Bairros, Guias). Surfacing them in the sitewide
+// header gives Google a strong internal link into clusters that were otherwise
+// only reachable via the footer and went uncrawled ("Discovered, not indexed").
 export const NAVIGATION_LINKS = [
-  { href: '/',        label: 'Início'  },
-  { href: '/imoveis', label: 'Imóveis' },
-  { href: '/blog',    label: 'Blog'    },
-  { href: '/sobre',   label: 'Sobre'   },
-  { href: '/contato', label: 'Contato' },
+  { href: '/imoveis',         label: 'Imóveis'         },
+  { href: '/empreendimentos', label: 'Empreendimentos' },
+  { href: '/bairros',         label: 'Bairros'         },
+  { href: '/guia',            label: 'Guias'           },
+  { href: '/blog',            label: 'Blog'            },
+  { href: '/sobre',           label: 'Sobre'           },
+  { href: '/contato',         label: 'Contato'         },
 ]
 
 export const FOOTER_TOOL_LINKS = [

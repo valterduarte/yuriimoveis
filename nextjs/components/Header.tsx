@@ -35,7 +35,7 @@ export default function Header() {
             <Logo className="h-9 w-auto" />
           </Link>
 
-          <nav aria-label="Navegação principal" className="hidden md:flex items-center gap-8">
+          <nav aria-label="Navegação principal" className="hidden lg:flex items-center gap-6">
             {NAVIGATION_LINKS.map(link => (
               <Link
                 key={link.href}
@@ -52,7 +52,7 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-5">
+          <div className="hidden lg:flex items-center gap-5">
             <SiteSearch />
             <div className="flex items-center gap-1 text-gray-400">
               <WhatsAppLink href={PHONE_WA} source="header-icon" target="_blank" rel="noreferrer" aria-label="Fale pelo WhatsApp (abre em nova aba)"
@@ -79,7 +79,7 @@ export default function Header() {
 
           <button
             type="button"
-            className="md:hidden text-white p-3"
+            className="lg:hidden text-white p-3"
             aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
@@ -90,7 +90,7 @@ export default function Header() {
         </div>
       </div>
 
-      <div id="mobile-menu" className={`md:hidden bg-dark border-t border-gray-800 overflow-hidden transition-all duration-200 ${menuOpen ? 'max-h-96' : 'max-h-0'}`}>
+      <div id="mobile-menu" className={`lg:hidden bg-dark border-t border-gray-800 overflow-hidden transition-all duration-200 ${menuOpen ? 'max-h-96' : 'max-h-0'}`}>
         <nav aria-label="Navegação mobile" className="flex flex-col py-4 container mx-auto px-6">
           {NAVIGATION_LINKS.map(link => (
             <Link
