@@ -4,7 +4,7 @@ slug: "morar-em-osasco-guia-cidade-2026"
 resumo: "Osasco é a 2ª cidade mais populosa da Grande SP e um polo de empresas como iFood e Mercado Livre. Veja como é o custo de vida, transporte para a capital, segurança, lazer e quais bairros combinam com cada perfil em 2026."
 meta_titulo: "Morar em Osasco 2026: custo de vida, transporte e vale a pena?"
 meta_descricao: "Guia de quem pensa em morar em Osasco em 2026: custo de vida, aluguel, transporte para São Paulo pela CPTM, segurança, lazer e os melhores bairros para cada perfil."
-imagem_capa: ""
+imagem_capa: "https://res.cloudinary.com/dfl3eskr9/image/upload/v1781750346/blog/morar-em-osasco-guia-cidade-2026.png"
 tags: ["Osasco", "Morar", "Custo de vida", "Bairros"]
 publicado: true
 ---
