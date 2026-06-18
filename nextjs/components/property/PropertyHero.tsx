@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Thumbs } from 'swiper/modules'
 import 'swiper/css'
@@ -14,6 +15,13 @@ import { SITE_URL } from '../../lib/config'
 import { imovelSlug, optimizeCloudinaryUrl, formatPrice } from '../../utils/imovelUtils'
 import type { Swiper as SwiperType } from 'swiper'
 import type { Imovel } from '../../types'
+
+// Below-the-fold thumbnail strip. Loading it lazily keeps the Thumbs Swiper
+// chunk out of the critical bundle; the placeholder reserves its height so
+// hydration adds zero CLS.
+const PropertyHeroThumbs = dynamic(() => import('./PropertyHeroThumbs'), {
+  loading: () => <div className="bg-[#111] border-t border-white/10 py-4 h-[86px]" />,
+})
 
 const HERO_HEIGHT = '70vh'
 const HERO_MIN_HEIGHT = 420
@@ -161,34 +169,7 @@ export default function PropertyHero({ imovel, images, shareUrl }: PropertyHeroP
       </div>
 
       {images.length > 1 && (
-        <div className="bg-[#111] border-t border-white/10 py-4">
-          <div className="max-w-6xl mx-auto px-8">
-            <Swiper
-              modules={[Thumbs]}
-              onSwiper={setThumbsSwiper}
-              slidesPerView="auto"
-              spaceBetween={10}
-              watchSlidesProgress
-              className="thumbs-swiper"
-            >
-              {images.map((img, i) => (
-                <SwiperSlide key={i} style={{ width: 80, height: 54 }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- fixed 80x54 thumbnail served through the Cloudinary loader; next/image adds no benefit here */}
-                  <img
-                    src={img}
-                    alt={`${imovel.titulo} – foto ${i + 1} de ${images.length}`}
-                    width={80}
-                    height={54}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover"
-                    onError={e => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE }}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-        </div>
+        <PropertyHeroThumbs images={images} titulo={imovel.titulo} onReady={setThumbsSwiper} />
       )}
     </>
   )

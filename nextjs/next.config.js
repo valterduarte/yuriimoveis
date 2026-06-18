@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
+  experimental: {
+    // react-icons subpath barrels (react-icons/fi, /fa, ...) re-export hundreds
+    // of icons each; this tree-shakes them to only the icons actually imported.
+    optimizePackageImports: ['react-icons'],
+  },
   images: {
     remotePatterns: [
       {
