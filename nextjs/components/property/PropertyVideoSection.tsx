@@ -9,7 +9,9 @@ interface PropertyVideoSectionProps {
   imovel: Pick<Imovel, 'titulo' | 'cidade' | 'video_url'>
 }
 
-const VIDEO_HEIGHT_PX = 420
+// Cap how tall a portrait tour can get so a 9:16 clip doesn't dominate the page,
+// while letting each video keep its own aspect ratio instead of being cropped.
+const VIDEO_MAX_HEIGHT_PX = 600
 
 export default function PropertyVideoSection({ imovel }: PropertyVideoSectionProps) {
   const [playing, setPlaying] = useState(false)
@@ -24,7 +26,10 @@ export default function PropertyVideoSection({ imovel }: PropertyVideoSectionPro
       <span className="section-label">Vídeo</span>
       <h2 className="section-title mb-8">Tour em vídeo</h2>
 
-      <div className="relative overflow-hidden bg-dark border border-gray-200" style={{ height: VIDEO_HEIGHT_PX }}>
+      {/* The media sizes to its own intrinsic ratio (capped in height and width),
+          so a vertical video stays vertical and a horizontal one stays horizontal
+          instead of being cropped into a fixed landscape box. */}
+      <div className="flex justify-center bg-dark border border-gray-200">
         {playing ? (
           <video
             src={optimizeCloudinaryVideo(videoUrl)}
@@ -32,7 +37,8 @@ export default function PropertyVideoSection({ imovel }: PropertyVideoSectionPro
             controls
             autoPlay
             preload="none"
-            className="w-full h-full object-cover bg-black"
+            className="block h-auto w-auto max-w-full object-contain bg-black"
+            style={{ maxHeight: VIDEO_MAX_HEIGHT_PX }}
           >
             <track kind="captions" />
           </video>
@@ -41,16 +47,15 @@ export default function PropertyVideoSection({ imovel }: PropertyVideoSectionPro
             type="button"
             onClick={() => setPlaying(true)}
             aria-label="Reproduzir vídeo"
-            className="group absolute inset-0 w-full h-full"
+            className="group relative block"
           >
             <img
               src={poster}
               alt={`Tour em vídeo — ${imovel.titulo} em ${imovel.cidade || 'Osasco'}`}
-              width={800}
-              height={VIDEO_HEIGHT_PX}
               loading="lazy"
               decoding="async"
-              className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-80"
+              className="block h-auto w-auto max-w-full object-contain transition-opacity duration-300 group-hover:opacity-80"
+              style={{ maxHeight: VIDEO_MAX_HEIGHT_PX }}
             />
             <span className="absolute inset-0 flex items-center justify-center">
               <span className="flex items-center justify-center w-20 h-20 rounded-full bg-primary/90 text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
