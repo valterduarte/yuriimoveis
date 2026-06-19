@@ -88,7 +88,7 @@ export default function SobrePage() {
           <div className="max-w-3xl">
             <h2 className="text-xs font-bold uppercase tracking-widest text-dark mb-6">Sobre o Corretor</h2>
             <p className="text-gray-700 text-sm leading-relaxed mb-4">
-              Sou <strong>Yuri Duarte</strong>, corretor de imóveis registrado no <strong>CRECI-SP {CRECI}</strong>, atuando há mais de 10 anos no mercado imobiliário de Osasco, Barueri, Carapicuíba e cidades da Grande São Paulo. Você pode confirmar meu registro diretamente no{' '}
+              Sou <strong>Yuri</strong>, corretor de imóveis registrado no <strong>CRECI-SP {CRECI}</strong>, atuando há mais de 10 anos no mercado imobiliário de Osasco, Barueri, Carapicuíba e cidades da Grande São Paulo. Você pode confirmar meu registro diretamente no{' '}
               <a
                 href="https://www.crecisp.gov.br/atendimento/profissionais"
                 target="_blank"
