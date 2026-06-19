@@ -24,6 +24,7 @@ export interface FormState {
   empreendimento: string
   torre: string
   numero_apartamento: string
+  observacoes: string
   endereco: string
   bairro: string
   cidade: string
@@ -39,7 +40,7 @@ export const EMPTY_FORM: FormState = {
   status: 'pronto',
   preco: '', parcela_display: '', parcela_label: '', area: '', area_display: '', quartos: '', banheiros: '', vagas: '', vagas_display: '',
   empreendimento: '',
-  torre: '', numero_apartamento: '',
+  torre: '', numero_apartamento: '', observacoes: '',
   endereco: '', bairro: '', cidade: 'Osasco', cep: '',
   destaque: false, diferenciais: '',
   lat: '', lng: '',

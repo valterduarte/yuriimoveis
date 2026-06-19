@@ -25,7 +25,12 @@ export const GET = withErrorHandler('GET /api/imoveis/[id]', async (request: Nex
   // strips them, so re-attach from the raw row here. Keep the admin copy uncached.
   if (requireAuth(request)) {
     return NextResponse.json(
-      { ...imovel, torre: row.torre ?? '', numero_apartamento: row.numero_apartamento ?? '' },
+      {
+        ...imovel,
+        torre: row.torre ?? '',
+        numero_apartamento: row.numero_apartamento ?? '',
+        observacoes: row.observacoes ?? '',
+      },
       { headers: PRIVATE_NO_STORE },
     )
   }
@@ -77,8 +82,9 @@ export const PUT = withErrorHandler('PUT /api/imoveis/[id]', async (request: Nex
       video_url       = COALESCE($27, video_url),
       torre              = COALESCE($28, torre),
       numero_apartamento = COALESCE($29, numero_apartamento),
+      observacoes        = COALESCE($30, observacoes),
       updated_at      = NOW()
-    WHERE id = $30
+    WHERE id = $31
   `, [
     data.titulo        ?? null,
     data.descricao     ?? null,
@@ -109,6 +115,7 @@ export const PUT = withErrorHandler('PUT /api/imoveis/[id]', async (request: Nex
     data.video_url === undefined ? null : data.video_url,
     data.torre === undefined ? null : data.torre,
     data.numero_apartamento === undefined ? null : data.numero_apartamento,
+    data.observacoes === undefined ? null : data.observacoes,
     id,
   ])
 

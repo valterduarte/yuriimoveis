@@ -50,6 +50,12 @@ export interface Imovel {
    * public responses nor rendered on the public site.
    */
   numero_apartamento?: string | null
+  /**
+   * Free-text internal notes (where the keys are, how to schedule a visit, etc.).
+   * SENSITIVE / admin-only: the broker's private memo. `parseImovel` strips it
+   * from public responses and it is never rendered on the public site.
+   */
+  observacoes?: string | null
 }
 
 export interface ImovelRow extends Omit<Imovel, 'imagens' | 'diferenciais'> {

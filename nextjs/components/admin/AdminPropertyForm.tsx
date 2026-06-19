@@ -13,6 +13,7 @@ import DescriptionSeoSection from './property-form/DescriptionSeoSection'
 import DifferentialsSection from './property-form/DifferentialsSection'
 import PhotosSection from './property-form/PhotosSection'
 import VideoSection from './property-form/VideoSection'
+import InternalNotesSection from './property-form/InternalNotesSection'
 import { EMPTY_FORM, type FormState, type UpdateField } from './property-form/types'
 import type { Imovel } from '../../types'
 
@@ -40,6 +41,7 @@ function propertyToForm(property: Imovel): FormState {
     empreendimento:  property.empreendimento  || '',
     torre:              property.torre              || '',
     numero_apartamento: property.numero_apartamento || '',
+    observacoes:        property.observacoes        || '',
     endereco:        property.endereco        || '',
     bairro:          property.bairro          || '',
     cidade:          property.cidade          || 'Osasco',
@@ -229,6 +231,7 @@ export default function AdminPropertyForm({ editingId, authHeader, onSuccess, on
         onUpload={handleVideoUpload}
         onRemove={removeVideo}
       />
+      <InternalNotesSection form={form} updateField={updateField} />
 
       {isDirty && (
         <p role="status" className="text-xs uppercase tracking-wide font-bold text-amber-600 text-center">

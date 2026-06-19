@@ -30,23 +30,26 @@ function row(overrides: Partial<ImovelRow> = {}): ImovelRow {
     updated_at: '2026-01-01',
     torre: 'Torre A',
     numero_apartamento: '142',
+    observacoes: 'Chave com o porteiro',
     ...overrides,
   }
 }
 
 describe('parseImovel', () => {
-  it('never exposes the admin-only unit fields in the public shape', () => {
+  it('never exposes the admin-only fields in the public shape', () => {
     const imovel = parseImovel(row())
-    // These are sensitive (the broker's internal unit reference) and must never
-    // reach a public response or the page's hydration data.
+    // These are sensitive (the broker's internal unit reference and private
+    // notes) and must never reach a public response or the page's hydration data.
     expect('torre' in imovel).toBe(false)
     expect('numero_apartamento' in imovel).toBe(false)
+    expect('observacoes' in imovel).toBe(false)
   })
 
-  it('strips the unit fields even when the row carries no values', () => {
-    const imovel = parseImovel(row({ torre: null, numero_apartamento: null }))
+  it('strips the admin-only fields even when the row carries no values', () => {
+    const imovel = parseImovel(row({ torre: null, numero_apartamento: null, observacoes: null }))
     expect('torre' in imovel).toBe(false)
     expect('numero_apartamento' in imovel).toBe(false)
+    expect('observacoes' in imovel).toBe(false)
   })
 
   it('still parses the public fields, coercing numerics and JSON columns', () => {
