@@ -14,6 +14,15 @@ export const INSTAGRAM_URL: string    = 'https://www.instagram.com/valterrduarte
 export const GOOGLE_BUSINESS_URL: string = 'https://maps.google.com/?cid=17982882895268664003'
 export const CRECI: string            = '235509'
 
+// Broker identity for the trust card shown at the decision moment.
+export const BROKER_NAME: string       = 'Yuri'
+// Headshot URL. Empty string falls back to an initials avatar.
+export const BROKER_PHOTO_URL: string  = '/images/yuri-corretor.webp'
+// Real Google Business rating — keep null until wired to live reviews so we never
+// publish fabricated numbers. Set both to the real values to light up the stars.
+export const BROKER_RATING: number | null       = null
+export const BROKER_REVIEW_COUNT: number | null = null
+
 export const API_URL: string =
   process.env.NEXT_PUBLIC_API_URL || ''
 

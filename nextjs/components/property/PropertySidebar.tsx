@@ -12,6 +12,7 @@ import {
   toggleCompareItem,
   useCompareItems,
 } from '../../lib/compareStore'
+import PropertyBroker from './PropertyBroker'
 import type { Imovel } from '../../types'
 
 interface PropertySidebarProps {
@@ -64,6 +65,9 @@ export default function PropertySidebar({ imovel, onScheduleVisit }: PropertySid
       </div>
 
       <div className="p-7 space-y-3">
+        <div className="pb-4 mb-1 border-b border-gray-100">
+          <PropertyBroker />
+        </div>
         <WhatsAppLink
           href={`${PHONE_WA_BASE}?text=${interesseMessage}`}
           source="imovel-sidebar"
