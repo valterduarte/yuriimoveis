@@ -1,5 +1,6 @@
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
+import { optionalServerEnv } from './env'
 
 interface RateLimitConfig {
   name: string
@@ -23,7 +24,7 @@ let redisLookupDone = false
 function getRedis(): Redis | null {
   if (redisLookupDone) return cachedRedis
   redisLookupDone = true
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+  if (optionalServerEnv('UPSTASH_REDIS_REST_URL') && optionalServerEnv('UPSTASH_REDIS_REST_TOKEN')) {
     cachedRedis = Redis.fromEnv()
   }
   return cachedRedis

@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { rateLimit, rateLimitClear } from '../../../../lib/rateLimit'
 import { loginSchema } from '../../../../lib/schemas'
-import { badRequest, parseSchema, serverError, tooManyRequests, withErrorHandler } from '../../../../lib/apiHandler'
+import { badRequest, parseSchema, tooManyRequests, withErrorHandler } from '../../../../lib/apiHandler'
+import { requireServerEnv } from '../../../../lib/env'
 
 function constantTimeEqual(a: string, b: string): boolean {
   const bufA = Buffer.from(a, 'utf8')
@@ -28,13 +29,9 @@ export const POST = withErrorHandler('POST /api/auth/login', async (request: Nex
   if (data instanceof NextResponse) return data
   const { usuario, senha } = data
 
-  const adminUser     = process.env.ADMIN_USER
-  const adminPassword = process.env.ADMIN_PASSWORD
-  const jwtSecret     = process.env.JWT_SECRET
-
-  if (!adminUser || !adminPassword || !jwtSecret) {
-    return serverError('POST /api/auth/login', new Error('Auth env vars ausentes'))
-  }
+  const adminUser     = requireServerEnv('ADMIN_USER')
+  const adminPassword = requireServerEnv('ADMIN_PASSWORD')
+  const jwtSecret     = requireServerEnv('JWT_SECRET')
 
   const userOk = constantTimeEqual(usuario, adminUser)
   const passOk = constantTimeEqual(senha, adminPassword)
