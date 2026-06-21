@@ -1,5 +1,6 @@
-import { google } from '@ai-sdk/google'
+import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { streamText, convertToModelMessages, stepCountIs, type UIMessage } from 'ai'
+import { requireServerEnv } from '../../../lib/env'
 import { rateLimit } from '../../../lib/rateLimit'
 import { logHandlerError } from '../../../lib/logger'
 import { CHAT_MODEL, CHAT_MAX_STEPS } from '../../../lib/chat/config'
@@ -19,6 +20,8 @@ export async function POST(request: Request): Promise<Response> {
 
   try {
     const { messages }: { messages: UIMessage[] } = await request.json()
+
+    const google = createGoogleGenerativeAI({ apiKey: requireServerEnv('GOOGLE_GENERATIVE_AI_API_KEY') })
 
     const result = streamText({
       model: google(CHAT_MODEL),
