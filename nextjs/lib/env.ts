@@ -51,7 +51,13 @@ function assertServer(caller: string): void {
  */
 export function requireServerEnv<K extends ServerEnvKey>(key: K): string {
   assertServer('requireServerEnv')
-  const result = serverEnvSchema.shape[key].safeParse(process.env[key])
+  // Trim before validating so this matches optionalServerEnv exactly. A secret
+  // pasted into the Vercel dashboard often carries surrounding whitespace; if
+  // requireServerEnv (which signs JWTs and compares admin credentials) kept it
+  // while optionalServerEnv (which verifies JWTs) stripped it, every
+  // authenticated request would 401 and the admin would silently bounce back to
+  // the login screen.
+  const result = serverEnvSchema.shape[key].safeParse(process.env[key]?.trim())
   if (!result.success || result.data == null) {
     throw new Error(`Missing or invalid environment variable: ${key}`)
   }
@@ -80,7 +86,7 @@ export function validateServerEnv(): void {
   assertServer('validateServerEnv')
 
   const missing = REQUIRED_KEYS.filter((key) => {
-    const result = serverEnvSchema.shape[key].safeParse(process.env[key])
+    const result = serverEnvSchema.shape[key].safeParse(process.env[key]?.trim())
     return !result.success || result.data == null
   })
 
