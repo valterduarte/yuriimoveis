@@ -26,6 +26,19 @@ describe('lib/env', () => {
       expect(requireServerEnv('ADMIN_USER')).toBe('admin')
     })
 
+    it('trims surrounding whitespace so signing and verifying use the same secret', () => {
+      // A JWT_SECRET pasted into the Vercel dashboard often carries a trailing
+      // newline. requireServerEnv (token signing) must trim identically to
+      // optionalServerEnv (token verifying), or every authenticated request 401s.
+      process.env.JWT_SECRET = '  s3cr3t\n'
+      expect(requireServerEnv('JWT_SECRET')).toBe('s3cr3t')
+    })
+
+    it('throws when the variable is only whitespace', () => {
+      process.env.ADMIN_PASSWORD = '   '
+      expect(() => requireServerEnv('ADMIN_PASSWORD')).toThrow(/ADMIN_PASSWORD/)
+    })
+
     it('throws when the variable is missing', () => {
       delete process.env.ADMIN_USER
       expect(() => requireServerEnv('ADMIN_USER')).toThrow(/ADMIN_USER/)
