@@ -3,7 +3,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { FiPlus, FiBarChart2, FiFileText } from 'react-icons/fi'
+import { FiPlus, FiBarChart2, FiFileText, FiSettings } from 'react-icons/fi'
 import { useAdminAuth } from '../../hooks/useAdminAuth'
 import AdminLogin from '../../components/admin/AdminLogin'
 import { AdminContext, type AdminMessage } from './admin-context'
@@ -18,6 +18,7 @@ function titleFor(pathname: string): string {
   if (pathname === '/admin/blog/novo') return 'Novo Post'
   if (pathname.startsWith('/admin/blog/')) return 'Editar Post'
   if (pathname === '/admin/clicks') return 'Clicks WhatsApp'
+  if (pathname === '/admin/conta') return 'Conta'
   return 'Admin'
 }
 
@@ -94,6 +95,9 @@ export default function AdminShell({ children }: { children: ReactNode }) {
             </div>
             <div className="flex items-center gap-4">
               <HeaderActions pathname={pathname} />
+              <Link href="/admin/conta" className="flex items-center gap-1.5 text-xs uppercase tracking-widest text-gray-400 hover:text-white transition-colors" title="Conta">
+                <FiSettings size={14} /> Conta
+              </Link>
               <button onClick={handleLogout} className="text-xs uppercase tracking-widest text-gray-400 hover:text-white transition-colors">
                 Sair
               </button>

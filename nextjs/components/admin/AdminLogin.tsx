@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { fieldInput } from './ui/styles'
 
 interface AdminLoginProps {
@@ -41,6 +42,12 @@ export default function AdminLogin({ username, password, onUsernameChange, onPas
             {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
+        <Link
+          href="/recuperar-senha"
+          className="mt-4 block text-center text-xs text-gray-500 hover:text-primary transition-colors"
+        >
+          Esqueci minha senha
+        </Link>
       </div>
     </div>
   )
