@@ -1,10 +1,22 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { NextRequest } from 'next/server'
-import { POST } from './route'
 
 const TEST_USER = 'admin-test'
 const TEST_PASSWORD = 'super-secret-test'
 const TEST_JWT_SECRET = 'test-jwt-secret-for-login-route'
+
+// Credentials now live in the database behind verifyCredentials; mock it so the
+// route can be tested without a real connection. Literals are inlined because
+// vi.mock factories are hoisted above module-scope constants.
+vi.mock('../../../../lib/auth/adminAccount', () => ({
+  verifyCredentials: vi.fn(async (usuario: string, senha: string) =>
+    usuario === 'admin-test' && senha === 'super-secret-test'
+      ? { id: 1, username: 'admin-test', passwordHash: 'hash', recoveryEmail: null }
+      : null,
+  ),
+}))
+
+import { POST } from './route'
 
 function buildLoginRequest(body: unknown, ip = '198.51.100.1'): NextRequest {
   return new NextRequest('http://localhost/api/auth/login', {
@@ -15,23 +27,16 @@ function buildLoginRequest(body: unknown, ip = '198.51.100.1'): NextRequest {
 }
 
 describe('POST /api/auth/login', () => {
-  let originalUser: string | undefined
-  let originalPass: string | undefined
   let originalSecret: string | undefined
 
   beforeEach(() => {
-    originalUser = process.env.ADMIN_USER
-    originalPass = process.env.ADMIN_PASSWORD
     originalSecret = process.env.JWT_SECRET
-    process.env.ADMIN_USER = TEST_USER
-    process.env.ADMIN_PASSWORD = TEST_PASSWORD
     process.env.JWT_SECRET = TEST_JWT_SECRET
   })
 
   afterEach(() => {
-    if (originalUser   === undefined) delete process.env.ADMIN_USER;     else process.env.ADMIN_USER     = originalUser
-    if (originalPass   === undefined) delete process.env.ADMIN_PASSWORD; else process.env.ADMIN_PASSWORD = originalPass
-    if (originalSecret === undefined) delete process.env.JWT_SECRET;     else process.env.JWT_SECRET     = originalSecret
+    if (originalSecret === undefined) delete process.env.JWT_SECRET
+    else process.env.JWT_SECRET = originalSecret
   })
 
   it('returns a token for valid credentials', async () => {
@@ -55,10 +60,10 @@ describe('POST /api/auth/login', () => {
     expect(response.status).toBe(401)
   })
 
-  it('returns 500 when admin env vars are not configured', async () => {
-    delete process.env.ADMIN_USER
+  it('returns 500 when JWT_SECRET is not configured', async () => {
+    delete process.env.JWT_SECRET
     const ip = '198.51.100.40'
-    const response = await POST(buildLoginRequest({ usuario: 'x', senha: 'y' }, ip))
+    const response = await POST(buildLoginRequest({ usuario: TEST_USER, senha: TEST_PASSWORD }, ip))
     expect(response.status).toBe(500)
   })
 

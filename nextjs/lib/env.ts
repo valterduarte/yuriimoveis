@@ -25,6 +25,13 @@ const serverEnvSchema = z.object({
   UPSTASH_REDIS_REST_URL: z.string().min(1).optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
   GOOGLE_SERVICE_ACCOUNT_JSON: z.string().min(1).optional(),
+  // Email (password recovery). Without RESEND_API_KEY the forgot-password flow
+  // degrades gracefully — no email is sent (see lib/email.ts). EMAIL_FROM falls
+  // back to Resend's onboarding sender; ADMIN_RECOVERY_EMAIL seeds the recovery
+  // address for the admin account on first boot.
+  RESEND_API_KEY: z.string().min(1).optional(),
+  EMAIL_FROM: z.string().min(1).optional(),
+  ADMIN_RECOVERY_EMAIL: z.string().min(1).optional(),
 })
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>

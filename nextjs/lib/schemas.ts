@@ -10,6 +10,37 @@ export const loginSchema = z.object({
   senha:   z.string().min(1, 'Informe usuário e senha').max(200),
 })
 
+// Shared rules so the admin UI, the change-credentials route, and the reset
+// route all enforce the same minimums.
+const usernameField = z.string().trim().min(3, 'O usuário deve ter ao menos 3 caracteres').max(200)
+const passwordField = z.string().min(8, 'A senha deve ter ao menos 8 caracteres').max(200)
+
+// Change username and/or password while logged in. The current password is
+// always required as a re-authentication step; at least one new value must be
+// provided or there is nothing to change.
+export const changeCredentialsSchema = z
+  .object({
+    senhaAtual:  z.string().min(1, 'Informe a senha atual').max(200),
+    novoUsuario: usernameField.optional(),
+    novaSenha:   passwordField.optional(),
+  })
+  .refine((data) => data.novoUsuario != null || data.novaSenha != null, {
+    message: 'Informe um novo usuário ou uma nova senha',
+  })
+
+export const recoveryEmailSchema = z.object({
+  email: z.string().trim().email('E-mail inválido').max(200),
+})
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().trim().email('E-mail inválido').max(200),
+})
+
+export const resetPasswordSchema = z.object({
+  token:     z.string().min(1, 'Token inválido').max(200),
+  novaSenha: passwordField,
+})
+
 export const imovelCreateSchema = z.object({
   titulo:          z.string().trim().min(3).max(200),
   tipo:            z.enum(TIPOS),
