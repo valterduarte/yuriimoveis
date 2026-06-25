@@ -22,7 +22,11 @@ const FOOTER_VIEW_ALL_CLASS =
   'text-xs text-primary hover:underline font-semibold inline-flex items-center gap-2 pt-1'
 const FOOTER_BULLET = <span aria-hidden="true" className="w-2 h-px bg-gray-600 inline-block flex-shrink-0" />
 
-const TOP_LANDING_PAGES = LANDING_PAGES.slice(0, 3)
+interface FooterLandingLink {
+  slug: string
+  h1: string
+  href: string
+}
 
 /** One titled list — every footer column shares this shape so headings line up. */
 function FooterColumn({ title, children }: { title: string; children: ReactNode }) {
@@ -70,6 +74,35 @@ async function getTopBairrosWithGuide(): Promise<{ slug: string; nome: string }[
     .map(b => ({ slug: b.slug, nome: BAIRROS[b.slug].nome }))
 }
 
+/**
+ * Top landing-page categories that still have live stock in Osasco.
+ * Links go straight to the canonical hierarchical URL — the legacy `/imoveis/<slug>`
+ * route 301s to `/comprar/osasco/<categoria>`, which 404s when the category sells out,
+ * so a static slice would point the sitewide footer at 404s. Filtering by the navigation
+ * matrix (count > 0 ⟹ at least one active listing ⟹ the route renders 200) keeps every
+ * link live and skips the redirect hop.
+ */
+async function getTopLandingPagesInStock(): Promise<FooterLandingLink[]> {
+  const matrix = await fetchNavigationMatrix()
+  const inStock = new Set(
+    matrix
+      .filter(row => row.count > 0 && cidadeNameToSlug(row.cidade) === 'osasco')
+      .map(row => `${row.tipo}|${row.categoria}`),
+  )
+  return LANDING_PAGES
+    .filter(lp => inStock.has(`${lp.tipo}|${lp.categoria}`))
+    .slice(0, 3)
+    .map(lp => ({
+      slug: lp.slug,
+      h1: lp.h1,
+      href: buildHierarchicalUrl({
+        acao: lp.tipo === 'venda' ? 'comprar' : 'alugar',
+        cidade: 'osasco',
+        categoria: lp.categoria,
+      }),
+    }))
+}
+
 async function getCidadesWithApartamento(): Promise<{ slug: string; nome: string; count: number }[]> {
   const matrix = await fetchNavigationMatrix()
   const counts = new Map<string, { nome: string; count: number }>()
@@ -89,10 +122,11 @@ async function getCidadesWithApartamento(): Promise<{ slug: string; nome: string
 
 export default async function Footer() {
   const year = new Date().getFullYear()
-  const [topBairros, empreendimentos, cidadesApartamento] = await Promise.all([
+  const [topBairros, empreendimentos, cidadesApartamento, topLandingPages] = await Promise.all([
     getTopBairrosWithGuide(),
     listEmpreendimentos(),
     getCidadesWithApartamento(),
+    getTopLandingPagesInStock(),
   ])
   const topEmpreendimentos = empreendimentos.slice(0, 5)
   const empreendimentosConstrucao = empreendimentos.filter(e => e.status === 'construcao').slice(0, 5)
@@ -154,8 +188,8 @@ export default async function Footer() {
           </FooterColumn>
 
           <FooterColumn title="Encontre seu imóvel">
-            {TOP_LANDING_PAGES.map(lp => (
-              <FooterLink key={lp.slug} href={`/imoveis/${lp.slug}`}>{lp.h1}</FooterLink>
+            {topLandingPages.map(lp => (
+              <FooterLink key={lp.slug} href={lp.href}>{lp.h1}</FooterLink>
             ))}
             <FooterViewAll href="/imoveis">Ver todos os imóveis →</FooterViewAll>
           </FooterColumn>
