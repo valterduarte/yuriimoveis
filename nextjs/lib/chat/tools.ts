@@ -94,6 +94,18 @@ const estimarFinanciamento = tool({
   },
 })
 
+/**
+ * Ask for the household income as tappable MCMV-range buttons instead of free
+ * text. The tool carries no data — it just signals the UI to render the chips;
+ * the person's tap comes back as a normal message the model can act on.
+ */
+const perguntarRenda = tool({
+  description:
+    'Pergunta a faixa de renda mensal familiar exibindo botões clicáveis (faixas do Minha Casa Minha Vida) em vez de pedir o valor em texto. Use sempre que for perguntar a renda para montar a simulação de financiamento — depois que a pessoa aceitar simular. Não digite a pergunta de renda em texto quando usar esta ferramenta: os botões já são a pergunta.',
+  inputSchema: z.object({}),
+  execute: async () => ({ render: 'faixaRenda' as const }),
+})
+
 /** Persist the lead to the `contatos` inbox and produce the WhatsApp handoff link. */
 const registrarLead = tool({
   description:
@@ -130,6 +142,7 @@ const registrarLead = tool({
 
 export const chatTools = {
   buscarImoveis,
+  perguntarRenda,
   estimarFinanciamento,
   registrarLead,
 }

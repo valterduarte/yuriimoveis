@@ -29,6 +29,18 @@ const GREETING = 'Oi! 👋 Bora achar o seu próximo imóvel? Me conta o que voc
 
 const QUICK_REPLIES = ['Quero comprar', 'Quero alugar', 'Simular financiamento']
 
+/**
+ * Household-income ranges aligned to the 2026 Minha Casa Minha Vida bands.
+ * `label` is the chip; `message` is the text sent on tap so the model knows
+ * the band and can simulate with the midpoint.
+ */
+const INCOME_RANGES = [
+  { label: 'R$ 2.850 a R$ 4.700', message: 'Minha renda familiar é de R$ 2.850 a R$ 4.700' },
+  { label: 'R$ 4.700 a R$ 8.600', message: 'Minha renda familiar é de R$ 4.700 a R$ 8.600' },
+  { label: 'R$ 8.600 a R$ 13.000', message: 'Minha renda familiar é de R$ 8.600 a R$ 13.000' },
+  { label: 'Acima de R$ 13.000', message: 'Minha renda familiar é acima de R$ 13.000' },
+] as const
+
 function asProperties(output: unknown): PropertyResult[] {
   if (!output || typeof output !== 'object') return []
   const imoveis = (output as { imoveis?: unknown }).imoveis
@@ -139,6 +151,9 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
                   const fin = asFinancing(part.output)
                   if (!fin) return null
                   return <FinancingCard key={index} fin={fin} />
+                }
+                if (part.type === 'tool-perguntarRenda') {
+                  return <IncomeRanges key={index} onSelect={send} disabled={busy} />
                 }
                 if (part.type === 'tool-registrarLead') {
                   const url = asWhatsappUrl(part.output)
@@ -258,6 +273,26 @@ function FinancingCard({ fin }: { fin: FinancingResult }) {
       <p className="bg-gray-50 px-3.5 py-2 text-[11px] leading-snug text-gray-500">
         Parcelas decrescentes (SAC). Estimativa aproximada — a aprovação depende da análise do banco.
       </p>
+    </div>
+  )
+}
+
+function IncomeRanges({ onSelect, disabled }: { onSelect: (message: string) => void; disabled: boolean }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-[11px] font-medium text-gray-500">Qual é a renda mensal da sua família? 👇</p>
+      <div className="flex flex-wrap gap-2">
+        {INCOME_RANGES.map(range => (
+          <button
+            key={range.label}
+            onClick={() => onSelect(range.message)}
+            disabled={disabled}
+            className="rounded-full border border-primary/40 bg-white px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-white disabled:opacity-40"
+          >
+            {range.label}
+          </button>
+        ))}
+      </div>
     </div>
   )
 }
