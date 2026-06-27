@@ -7,6 +7,7 @@ import { normalizeCidade } from '../textNormalization'
 import {
   detectCreditProgram,
   calculateSacFinancing,
+  maxAffordablePropertyValue,
   MIN_DOWN_PAYMENT_RATE,
 } from '../financiamento'
 import { imovelSlug, calcParcela, formatPrice } from '../../utils/imovelUtils'
@@ -28,16 +29,26 @@ const buscarImoveis = tool({
       .describe('Tipo de imóvel, se a pessoa especificou'),
     cidade: z.string().optional().describe('Cidade de interesse (ex: Osasco, Barueri, Carapicuíba)'),
     bairro: z.string().optional().describe('Bairro de interesse'),
-    precoMax: z.number().optional().describe('Orçamento máximo em reais'),
+    precoMax: z.number().optional().describe('Orçamento máximo em reais, se a pessoa informou um valor explícito'),
+    rendaMensal: z
+      .number()
+      .optional()
+      .describe('Renda mensal bruta familiar em reais (use o ponto médio da faixa de renda escolhida). Em compras, filtra os imóveis para os que cabem nessa renda.'),
     quartosMin: z.number().int().optional().describe('Número mínimo de quartos'),
   }),
-  execute: async ({ intencao, categoria, cidade, bairro, precoMax, quartosMin }) => {
+  execute: async ({ intencao, categoria, cidade, bairro, precoMax, rendaMensal, quartosMin }) => {
+    // On a purchase, when no explicit budget was given, cap the search at what
+    // the stated income can afford so the results actually fit the buyer.
+    const affordableMax =
+      intencao === 'comprar' && rendaMensal ? maxAffordablePropertyValue(rendaMensal) : null
+    const precoMaxEfetivo = precoMax ?? affordableMax ?? undefined
+
     const result = await fetchProperties({
       tipo: intencao === 'alugar' ? 'aluguel' : 'venda',
       categoria,
       cidade: cidade ? normalizeCidade(cidade) : undefined,
       bairro,
-      precoMax: precoMax ? String(precoMax) : undefined,
+      precoMax: precoMaxEfetivo ? String(precoMaxEfetivo) : undefined,
       quartos: quartosMin ? String(quartosMin) : undefined,
       limit: MAX_RESULTS,
     })

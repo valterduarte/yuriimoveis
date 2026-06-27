@@ -280,7 +280,7 @@ function FinancingCard({ fin }: { fin: FinancingResult }) {
 function IncomeRanges({ onSelect, disabled }: { onSelect: (message: string) => void; disabled: boolean }) {
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-[11px] font-medium text-gray-500">Qual é a renda mensal da sua família? 👇</p>
+      <p className="text-sm font-semibold text-dark">Qual é a renda mensal da sua família? 👇</p>
       <div className="flex flex-wrap gap-2">
         {INCOME_RANGES.map(range => (
           <button
