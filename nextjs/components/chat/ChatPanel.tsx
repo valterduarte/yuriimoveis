@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { FiSend, FiX } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { PHONE_WA } from '../../lib/config'
+import { INCOME_RANGES } from '../../lib/chat/incomeRanges'
 
 interface ChatPanelProps {
   onClose: () => void
@@ -28,18 +29,6 @@ type LoosePart = { type: string; text?: string; output?: unknown }
 const GREETING = 'Oi! 👋 Bora achar o seu próximo imóvel? Me conta o que você procura 👇'
 
 const QUICK_REPLIES = ['Quero comprar', 'Quero alugar', 'Simular financiamento']
-
-/**
- * Household-income ranges aligned to the 2026 Minha Casa Minha Vida bands.
- * `label` is the chip; `message` is the text sent on tap so the model knows
- * the band and can simulate with the midpoint.
- */
-const INCOME_RANGES = [
-  { label: 'R$ 2.850 a R$ 4.700', message: 'Minha renda familiar é de R$ 2.850 a R$ 4.700' },
-  { label: 'R$ 4.700 a R$ 8.600', message: 'Minha renda familiar é de R$ 4.700 a R$ 8.600' },
-  { label: 'R$ 8.600 a R$ 13.000', message: 'Minha renda familiar é de R$ 8.600 a R$ 13.000' },
-  { label: 'Acima de R$ 13.000', message: 'Minha renda familiar é acima de R$ 13.000' },
-] as const
 
 function asProperties(output: unknown): PropertyResult[] {
   if (!output || typeof output !== 'object') return []

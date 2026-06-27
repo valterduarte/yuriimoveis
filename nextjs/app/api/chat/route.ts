@@ -6,6 +6,7 @@ import { logHandlerError } from '../../../lib/logger'
 import { CHAT_MODEL, CHAT_MAX_STEPS } from '../../../lib/chat/config'
 import { CORRETOR_SYSTEM_PROMPT } from '../../../lib/chat/systemPrompt'
 import { chatTools } from '../../../lib/chat/tools'
+import { shouldForcePropertySearch } from '../../../lib/chat/incomeRanges'
 
 // Must be a static literal — Next.js analyses route segment config at build time.
 export const maxDuration = 30
@@ -29,6 +30,14 @@ export async function POST(request: Request): Promise<Response> {
       messages: await convertToModelMessages(messages),
       tools: chatTools,
       stopWhen: stepCountIs(CHAT_MAX_STEPS),
+      // Right after the income tap the model often narrates ("achei opções, dá
+      // uma olhada acima") or re-asks the property type instead of searching, so
+      // the buyer never sees a single listing. Force the search on that step;
+      // later steps stay on auto so the model presents the results next.
+      prepareStep: ({ stepNumber, messages: stepMessages }) =>
+        shouldForcePropertySearch(stepMessages, stepNumber)
+          ? { toolChoice: { type: 'tool', toolName: 'buscarImoveis' } }
+          : {},
       // Fail fast on quota/rate-limit errors instead of amplifying them 3x.
       maxRetries: 1,
       onError: ({ error }) => logHandlerError('POST /api/chat stream', error),
