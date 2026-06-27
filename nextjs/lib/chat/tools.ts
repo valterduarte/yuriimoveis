@@ -7,6 +7,7 @@ import { normalizeCidade } from '../textNormalization'
 import {
   detectCreditProgram,
   calculateSacFinancing,
+  maxAffordablePropertyValue,
   MIN_DOWN_PAYMENT_RATE,
 } from '../financiamento'
 import { imovelSlug, calcParcela, formatPrice } from '../../utils/imovelUtils'
@@ -28,16 +29,26 @@ const buscarImoveis = tool({
       .describe('Tipo de imóvel, se a pessoa especificou'),
     cidade: z.string().optional().describe('Cidade de interesse (ex: Osasco, Barueri, Carapicuíba)'),
     bairro: z.string().optional().describe('Bairro de interesse'),
-    precoMax: z.number().optional().describe('Orçamento máximo em reais'),
+    precoMax: z.number().optional().describe('Orçamento máximo em reais, se a pessoa informou um valor explícito'),
+    rendaMensal: z
+      .number()
+      .optional()
+      .describe('Renda mensal bruta familiar em reais (use o ponto médio da faixa de renda escolhida). Em compras, filtra os imóveis para os que cabem nessa renda.'),
     quartosMin: z.number().int().optional().describe('Número mínimo de quartos'),
   }),
-  execute: async ({ intencao, categoria, cidade, bairro, precoMax, quartosMin }) => {
+  execute: async ({ intencao, categoria, cidade, bairro, precoMax, rendaMensal, quartosMin }) => {
+    // On a purchase, when no explicit budget was given, cap the search at what
+    // the stated income can afford so the results actually fit the buyer.
+    const affordableMax =
+      intencao === 'comprar' && rendaMensal ? maxAffordablePropertyValue(rendaMensal) : null
+    const precoMaxEfetivo = precoMax ?? affordableMax ?? undefined
+
     const result = await fetchProperties({
       tipo: intencao === 'alugar' ? 'aluguel' : 'venda',
       categoria,
       cidade: cidade ? normalizeCidade(cidade) : undefined,
       bairro,
-      precoMax: precoMax ? String(precoMax) : undefined,
+      precoMax: precoMaxEfetivo ? String(precoMaxEfetivo) : undefined,
       quartos: quartosMin ? String(quartosMin) : undefined,
       limit: MAX_RESULTS,
     })
@@ -94,6 +105,18 @@ const estimarFinanciamento = tool({
   },
 })
 
+/**
+ * Ask for the household income as tappable MCMV-range buttons instead of free
+ * text. The tool carries no data — it just signals the UI to render the chips;
+ * the person's tap comes back as a normal message the model can act on.
+ */
+const perguntarRenda = tool({
+  description:
+    'Pergunta a faixa de renda mensal familiar exibindo botões clicáveis (faixas do Minha Casa Minha Vida) em vez de pedir o valor em texto. Use sempre que for perguntar a renda para montar a simulação de financiamento — depois que a pessoa aceitar simular. Não digite a pergunta de renda em texto quando usar esta ferramenta: os botões já são a pergunta.',
+  inputSchema: z.object({}),
+  execute: async () => ({ render: 'faixaRenda' as const }),
+})
+
 /** Persist the lead to the `contatos` inbox and produce the WhatsApp handoff link. */
 const registrarLead = tool({
   description:
@@ -130,6 +153,7 @@ const registrarLead = tool({
 
 export const chatTools = {
   buscarImoveis,
+  perguntarRenda,
   estimarFinanciamento,
   registrarLead,
 }
