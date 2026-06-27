@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { FiSend, FiX } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 import { PHONE_WA } from '../../lib/config'
+import { INCOME_RANGES } from '../../lib/chat/incomeRanges'
 
 interface ChatPanelProps {
   onClose: () => void
@@ -140,6 +141,9 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
                   if (!fin) return null
                   return <FinancingCard key={index} fin={fin} />
                 }
+                if (part.type === 'tool-perguntarRenda') {
+                  return <IncomeRanges key={index} onSelect={send} disabled={busy} />
+                }
                 if (part.type === 'tool-registrarLead') {
                   const url = asWhatsappUrl(part.output)
                   if (!url) return null
@@ -258,6 +262,26 @@ function FinancingCard({ fin }: { fin: FinancingResult }) {
       <p className="bg-gray-50 px-3.5 py-2 text-[11px] leading-snug text-gray-500">
         Parcelas decrescentes (SAC). Estimativa aproximada — a aprovação depende da análise do banco.
       </p>
+    </div>
+  )
+}
+
+function IncomeRanges({ onSelect, disabled }: { onSelect: (message: string) => void; disabled: boolean }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-sm font-semibold text-dark">Qual é a renda mensal da sua família? 👇</p>
+      <div className="flex flex-wrap gap-2">
+        {INCOME_RANGES.map(range => (
+          <button
+            key={range.label}
+            onClick={() => onSelect(range.message)}
+            disabled={disabled}
+            className="rounded-full border border-primary/40 bg-white px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-white disabled:opacity-40"
+          >
+            {range.label}
+          </button>
+        ))}
+      </div>
     </div>
   )
 }

@@ -170,3 +170,26 @@ export function isMcmvOrAssociativo(programId: CreditProgram['id']): boolean {
 export function maxAffordableInstallment(monthlyIncome: number): number {
   return monthlyIncome * 0.30
 }
+
+/**
+ * Largest property value whose first SAC installment stays within the affordable
+ * share (~30%) of the given gross monthly income, assuming the 20% minimum down
+ * payment, a 360-month term, and the interest rate of the income's likely credit
+ * program. Inverts the first-installment identity analytically:
+ *   firstInstallment = financedAmount * (1/n + i), with financedAmount = 0.8 * value.
+ * Returns null at/above the Faixa 4 income ceiling — premium buyers get no budget
+ * cap so they still see the full range. Rounded down to the nearest R$ 1.000.
+ */
+export function maxAffordablePropertyValue(monthlyIncome: number): number | null {
+  if (monthlyIncome <= 0) return 0
+  if (monthlyIncome >= MCMV_FAIXA_4_INCOME_LIMIT) return null
+  const annualRate =
+    monthlyIncome <= MCMV_FAIXA_1_INCOME_LIMIT ? MCMV_FAIXA_1.rate
+    : monthlyIncome <= MCMV_FAIXA_2_INCOME_LIMIT ? MCMV_FAIXA_2.rate
+    : monthlyIncome <= MCMV_FAIXA_3_INCOME_LIMIT ? MCMV_FAIXA_3.rate
+    : MCMV_FAIXA_4.rate
+  const monthlyRate = annualToMonthlyRate(annualRate)
+  const financedShare = 1 - MIN_DOWN_PAYMENT_RATE
+  const value = maxAffordableInstallment(monthlyIncome) / (financedShare * (1 / 360 + monthlyRate))
+  return Math.floor(value / 1000) * 1000
+}

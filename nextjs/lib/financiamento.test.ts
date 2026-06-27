@@ -6,6 +6,7 @@ import {
   isMcmvEligible,
   isMcmvOrAssociativo,
   maxAffordableInstallment,
+  maxAffordablePropertyValue,
   ITBI_RATE,
   REGISTRATION_RATE,
 } from './financiamento'
@@ -161,5 +162,35 @@ describe('maxAffordableInstallment', () => {
     expect(maxAffordableInstallment(9600)).toBe(2880)
     expect(maxAffordableInstallment(13000)).toBe(3900)
     expect(maxAffordableInstallment(0)).toBe(0)
+  })
+})
+
+describe('maxAffordablePropertyValue', () => {
+  it('returns 0 for no income', () => {
+    expect(maxAffordablePropertyValue(0)).toBe(0)
+  })
+
+  it('applies no cap at or above the Faixa 4 income ceiling (premium buyers)', () => {
+    expect(maxAffordablePropertyValue(13000)).toBeNull()
+    expect(maxAffordablePropertyValue(20000)).toBeNull()
+  })
+
+  it('keeps the first installment within ~30% of income for the band midpoints', () => {
+    // Sanity-check the inverted SAC formula against the published ranges.
+    expect(maxAffordablePropertyValue(3775)).toBeGreaterThan(180000) // Faixa 2 band
+    expect(maxAffordablePropertyValue(3775)).toBeLessThan(210000)
+    expect(maxAffordablePropertyValue(6650)).toBeGreaterThan(260000) // Faixa 3 band
+    expect(maxAffordablePropertyValue(6650)).toBeLessThan(295000)
+    expect(maxAffordablePropertyValue(10800)).toBeGreaterThan(360000) // Faixa 4 band
+    expect(maxAffordablePropertyValue(10800)).toBeLessThan(400000)
+  })
+
+  it('grows with income and is rounded down to whole thousands', () => {
+    const low = maxAffordablePropertyValue(3775)!
+    const mid = maxAffordablePropertyValue(6650)!
+    const high = maxAffordablePropertyValue(10800)!
+    expect(low).toBeLessThan(mid)
+    expect(mid).toBeLessThan(high)
+    for (const value of [low, mid, high]) expect(value % 1000).toBe(0)
   })
 })
