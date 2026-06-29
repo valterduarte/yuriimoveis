@@ -15,6 +15,7 @@ import {
   optimizeCloudinaryVideo,
   deriveVideoPoster,
   ogImageUrl,
+  brandedOgImageUrl,
   buildPropertyNarrative,
   buildPropertyWhatsAppMessage,
 } from './imovelUtils'
@@ -189,6 +190,38 @@ describe('ogImageUrl', () => {
 
   it('leaves non-Cloudinary URLs untouched', () => {
     expect(ogImageUrl('https://example.com/x.jpg')).toBe('https://example.com/x.jpg')
+  })
+})
+
+describe('brandedOgImageUrl', () => {
+  const raw = 'https://res.cloudinary.com/demo/image/upload/v1/sample.jpg'
+
+  it('overlays the price and location text layers on the photo', () => {
+    const result = brandedOgImageUrl(raw, { priceLabel: 'R$ 450.000', location: 'Centro - Osasco' })
+    expect(result).toContain('/upload/f_jpg,q_82,w_1200,h_630,c_fill/')
+    expect(result).toContain('l_text:Montserrat_76_bold:R%24%20450.000')
+    expect(result).toContain('l_text:Montserrat_42_semibold:Centro%20-%20Osasco')
+    expect(result.endsWith('/v1/sample.jpg')).toBe(true)
+  })
+
+  it('always includes the brand domain layer', () => {
+    const result = brandedOgImageUrl(raw)
+    expect(result).toContain('g_south_east')
+    expect(result).toContain('com.br')
+  })
+
+  it('double-encodes commas and slashes so they are not read as delimiters', () => {
+    const result = brandedOgImageUrl(raw, { location: 'Vila A, B/C' })
+    expect(result).toContain('Vila%20A%252C%20B%252FC')
+  })
+
+  it('omits the price layer when no price is given', () => {
+    const result = brandedOgImageUrl(raw, { location: 'Centro - Osasco' })
+    expect(result).not.toContain('Montserrat_76_bold')
+  })
+
+  it('falls back to the plain resized photo for non-Cloudinary URLs', () => {
+    expect(brandedOgImageUrl('https://example.com/x.jpg', { priceLabel: 'R$ 1' })).toBe('https://example.com/x.jpg')
   })
 })
 
