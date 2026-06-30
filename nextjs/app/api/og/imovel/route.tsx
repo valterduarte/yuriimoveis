@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { NextRequest, NextResponse } from 'next/server'
+import sharp from 'sharp'
 
 // Brand tokens mirrored from tailwind.config.js / components/Logo.tsx
 const BRAND_RED = '#af1e23'
@@ -45,7 +46,7 @@ export async function GET(request: NextRequest) {
   try {
     const { bold, semibold } = await getFonts()
 
-    return new ImageResponse(
+    const image = new ImageResponse(
       (
         <div style={{ position: 'relative', display: 'flex', width: '1200px', height: '630px', backgroundColor: '#1a1a1a' }}>
           {img ? (
@@ -136,11 +137,24 @@ export async function GET(request: NextRequest) {
           { name: 'Montserrat', data: bold, weight: 700, style: 'normal' },
           { name: 'Montserrat', data: semibold, weight: 600, style: 'normal' },
         ],
-        headers: {
-          'Cache-Control': 'public, immutable, no-transform, max-age=86400, s-maxage=604800',
-        },
       },
     )
+
+    // ImageResponse emits a large, streamed PNG (no Content-Length). WhatsApp
+    // and other link-preview crawlers skip the thumbnail for oversized images
+    // and dislike length-less responses, so re-encode to a compact JPEG buffer.
+    const png = Buffer.from(await image.arrayBuffer())
+    const jpeg = await sharp(png).jpeg({ quality: 78, mozjpeg: true }).toBuffer()
+    const body = new Uint8Array(jpeg.byteLength)
+    body.set(jpeg)
+
+    // A Blob body makes the Response set Content-Type and Content-Length, which
+    // link-preview crawlers (WhatsApp) need to fetch the thumbnail.
+    return new NextResponse(new Blob([body], { type: 'image/jpeg' }), {
+      headers: {
+        'Cache-Control': 'public, immutable, no-transform, max-age=86400, s-maxage=604800',
+      },
+    })
   } catch {
     // Never break the social preview: fall back to the plain property photo.
     if (img) return NextResponse.redirect(img)
