@@ -6,6 +6,7 @@ import { parseImovel, CACHE_TAG_IMOVEIS } from '../../../../lib/api'
 import { notFoundJson, parseSchema, requireUser, withErrorHandler } from '../../../../lib/apiHandler'
 import { requireAuth } from '../../../../lib/requireAuth'
 import { publicCacheHeaders, PRIVATE_NO_STORE } from '../../../../lib/cacheHeaders'
+import { warmPropertyOgCard } from '../../../../lib/ogWarm'
 
 type RouteContext = { params: Promise<{ id: string }> }
 
@@ -120,6 +121,7 @@ export const PUT = withErrorHandler('PUT /api/imoveis/[id]', async (request: Nex
   ])
 
   revalidateTag(CACHE_TAG_IMOVEIS)
+  warmPropertyOgCard(data)
   return NextResponse.json({ message: 'Imóvel atualizado com sucesso' })
 })
 
