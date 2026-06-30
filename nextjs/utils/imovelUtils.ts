@@ -227,46 +227,19 @@ export function ogImageUrl(url: string): string {
   return url.replace('/upload/', '/upload/f_jpg,q_80,w_1200,h_630,c_fill/')
 }
 
-const OG_BRAND_DOMAIN = SITE_URL.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '')
-
-// Cloudinary text layers use `,` and `/` as delimiters, so those characters
-// (and the `%` from encoding them) must be double URL-encoded inside the text.
-function encodeCloudinaryText(value: string): string {
-  return encodeURIComponent(value)
-    .replace(/%2C/g, '%252C')
-    .replace(/%2F/g, '%252F')
-}
-
 /**
- * Builds a branded 1200x630 social-share image: the property photo with the
- * price, location and site domain overlaid via Cloudinary transformations.
- * White text with a black outline + shadow stays legible on light or dark
- * photos. Falls back to the plain resized photo for non-Cloudinary URLs so a
- * preview is never broken.
+ * Builds the URL of the branded social-share card for a property. The card is
+ * rendered on the fly by /api/og/imovel — the property photo with a brand-red
+ * price badge, location and the Corretor Yuri logo lockup. The raw photo is
+ * pre-sized to 1200x630 so the renderer fetches a light background.
  */
-export function brandedOgImageUrl(
+export function propertyOgImageUrl(
   rawUrl: string,
   { priceLabel, location }: { priceLabel?: string; location?: string } = {},
 ): string {
-  if (!rawUrl || !rawUrl.includes('res.cloudinary.com') || !rawUrl.includes('/upload/')) {
-    return ogImageUrl(rawUrl)
-  }
-
-  const layers = ['f_jpg,q_82,w_1200,h_630,c_fill']
-
-  if (priceLabel) {
-    layers.push(
-      `co_rgb:FFFFFF,bo_3px_solid_rgb:000000B3,e_shadow:50,l_text:Montserrat_76_bold:${encodeCloudinaryText(priceLabel)}/fl_layer_apply,g_south_west,x_60,y_120`,
-    )
-  }
-  if (location) {
-    layers.push(
-      `co_rgb:FFFFFF,bo_2px_solid_rgb:000000B3,e_shadow:50,l_text:Montserrat_42_semibold:${encodeCloudinaryText(location)}/fl_layer_apply,g_south_west,x_62,y_66`,
-    )
-  }
-  layers.push(
-    `co_rgb:FFFFFFE6,bo_2px_solid_rgb:000000B3,l_text:Montserrat_30_bold:${encodeCloudinaryText(OG_BRAND_DOMAIN)}/fl_layer_apply,g_south_east,x_46,y_44`,
-  )
-
-  return rawUrl.replace('/upload/', `/upload/${layers.join('/')}/`)
+  const params = new URLSearchParams()
+  if (rawUrl) params.set('img', ogImageUrl(rawUrl))
+  if (priceLabel) params.set('price', priceLabel)
+  if (location) params.set('loc', location)
+  return `${SITE_URL}/api/og/imovel?${params.toString()}`
 }
