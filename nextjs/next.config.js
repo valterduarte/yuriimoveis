@@ -22,6 +22,8 @@ const nextConfig = {
       },
     ],
     formats: ['image/avif', 'image/webp'],
+    // Required from Next 16: list every quality passed to next/image.
+    qualities: [65, 75],
   },
   async redirects() {
     const categoriaAliases = [
