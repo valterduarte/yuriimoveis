@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { ImageResponse } from 'next/og'
 import { NextRequest, NextResponse } from 'next/server'
 import sharp from 'sharp'
@@ -16,22 +18,46 @@ const LOGO_MARK = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" w
 </svg>`
 const LOGO_MARK_SRC = `data:image/svg+xml;utf8,${encodeURIComponent(LOGO_MARK)}`
 
-let fontCache: { bold: ArrayBuffer; semibold: ArrayBuffer } | null = null
+// Re-encode at descending quality until the JPEG fits under the cap, so even a
+// noisy photo can never produce an image too large for WhatsApp to thumbnail.
+const MAX_CARD_BYTES = 250_000
 
-async function loadGoogleFont(weight: number): Promise<ArrayBuffer> {
-  // Default fetch UA makes Google Fonts serve TrueType, which Satori supports
-  // (it cannot decode woff2).
+async function encodeUnderCap(png: Buffer): Promise<Buffer> {
+  let out = png
+  for (const quality of [78, 70, 62, 54, 46, 40]) {
+    out = await sharp(png).jpeg({ quality, mozjpeg: true }).toBuffer()
+    if (out.byteLength <= MAX_CARD_BYTES) break
+  }
+  return out
+}
+
+let fontCache: { bold: Buffer; semibold: Buffer } | null = null
+
+async function loadGoogleFont(weight: number): Promise<Buffer> {
+  // Resilience fallback only — the default fetch UA makes Google Fonts serve
+  // TrueType, which Satori supports (it cannot decode woff2).
   const css = await fetch(
     `https://fonts.googleapis.com/css2?family=Montserrat:wght@${weight}`,
   ).then(res => res.text())
   const src = css.match(/src:\s*url\(([^)]+)\)\s*format\('(?:truetype|opentype|woff)'\)/)?.[1]
   if (!src) throw new Error(`Montserrat ${weight} source not found`)
-  return fetch(src).then(res => res.arrayBuffer())
+  const data = await fetch(src).then(res => res.arrayBuffer())
+  return Buffer.from(data)
+}
+
+async function loadFont(weight: number): Promise<Buffer> {
+  // Self-hosted fonts keep cold renders fast and remove the Google dependency;
+  // fall back to fetching only if the bundled file is somehow unavailable.
+  try {
+    return await readFile(join(process.cwd(), 'app/api/og/imovel/fonts', `Montserrat-${weight}.ttf`))
+  } catch {
+    return loadGoogleFont(weight)
+  }
 }
 
 async function getFonts() {
   if (!fontCache) {
-    const [bold, semibold] = await Promise.all([loadGoogleFont(700), loadGoogleFont(600)])
+    const [bold, semibold] = await Promise.all([loadFont(700), loadFont(600)])
     fontCache = { bold, semibold }
   }
   return fontCache
@@ -144,7 +170,7 @@ export async function GET(request: NextRequest) {
     // and other link-preview crawlers skip the thumbnail for oversized images
     // and dislike length-less responses, so re-encode to a compact JPEG buffer.
     const png = Buffer.from(await image.arrayBuffer())
-    const jpeg = await sharp(png).jpeg({ quality: 78, mozjpeg: true }).toBuffer()
+    const jpeg = await encodeUnderCap(png)
     const body = new Uint8Array(jpeg.byteLength)
     body.set(jpeg)
 

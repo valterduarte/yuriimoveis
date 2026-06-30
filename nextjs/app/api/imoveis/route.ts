@@ -5,6 +5,7 @@ import { imovelCreateSchema } from '../../../lib/schemas'
 import { fetchProperties, CACHE_TAG_IMOVEIS } from '../../../lib/api'
 import { parseSchema, requireUser, withErrorHandler } from '../../../lib/apiHandler'
 import { publicCacheHeaders, PRIVATE_NO_STORE } from '../../../lib/cacheHeaders'
+import { warmPropertyOgCard } from '../../../lib/ogWarm'
 
 export const GET = withErrorHandler('GET /api/imoveis', async (request: NextRequest) => {
   const { searchParams } = new URL(request.url)
@@ -51,5 +52,6 @@ export const POST = withErrorHandler('POST /api/imoveis', async (request: NextRe
     data.observacoes || null,
   ])
   revalidateTag(CACHE_TAG_IMOVEIS)
+  warmPropertyOgCard(data)
   return NextResponse.json({ id: result.rows[0].id, message: 'Imóvel criado com sucesso' }, { status: 201 })
 })

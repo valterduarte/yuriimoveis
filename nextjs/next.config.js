@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
+  // Bundle the self-hosted OG card fonts into the route's serverless function
+  // so it reads them from disk instead of fetching Google Fonts at render time.
+  outputFileTracingIncludes: {
+    '/api/og/imovel': ['./app/api/og/imovel/fonts/*.ttf'],
+  },
   experimental: {
     // react-icons subpath barrels (react-icons/fi, /fa, ...) re-export hundreds
     // of icons each; this tree-shakes them to only the icons actually imported.
