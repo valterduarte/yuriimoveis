@@ -33,8 +33,8 @@ export const POST = withErrorHandler('POST /api/imoveis', async (request: NextRe
   if (data instanceof NextResponse) return data
 
   const result = await getDb().query(`
-    INSERT INTO imoveis (titulo, descricao, descricao_seo, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, area_display, vagas_display, parcela_display, parcela_label, lat, lng, empreendimento, video_url, torre, numero_apartamento, observacoes)
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29)
+    INSERT INTO imoveis (titulo, descricao, descricao_seo, tipo, categoria, preco, area, quartos, banheiros, vagas, endereco, bairro, cidade, cep, destaque, imagens, diferenciais, status, area_display, vagas_display, parcela_display, parcela_label, lat, lng, empreendimento, video_url, torre, numero_apartamento, observacoes, sindicar_portais)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30)
     RETURNING id
   `, [
     data.titulo, data.descricao, data.descricao_seo, data.tipo, data.categoria, data.preco,
@@ -50,6 +50,7 @@ export const POST = withErrorHandler('POST /api/imoveis', async (request: NextRe
     data.torre || null,
     data.numero_apartamento || null,
     data.observacoes || null,
+    data.sindicar_portais,
   ])
   revalidateTag(CACHE_TAG_IMOVEIS)
   warmPropertyOgCard(data)

@@ -132,6 +132,15 @@ export default function BasicInfoSection({ form, updateField, onPriceChange, emp
             Imóvel em destaque
           </label>
         </div>
+
+        <div className="flex items-center gap-2">
+          <input type="checkbox" id="sindicar_portais" checked={form.sindicar_portais}
+            onChange={e => updateField('sindicar_portais', e.target.checked)}
+            className="w-4 h-4 accent-primary" />
+          <label htmlFor="sindicar_portais" className="text-xs text-gray-600 uppercase tracking-wide font-bold">
+            Publicar nos portais (OLX / ZAP / Viva Real)
+          </label>
+        </div>
       </div>
     </div>
   )

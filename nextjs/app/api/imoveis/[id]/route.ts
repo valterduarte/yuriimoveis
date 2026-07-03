@@ -84,8 +84,9 @@ export const PUT = withErrorHandler('PUT /api/imoveis/[id]', async (request: Nex
       torre              = COALESCE($28, torre),
       numero_apartamento = COALESCE($29, numero_apartamento),
       observacoes        = COALESCE($30, observacoes),
+      sindicar_portais   = COALESCE($31, sindicar_portais),
       updated_at      = NOW()
-    WHERE id = $31
+    WHERE id = $32
   `, [
     data.titulo        ?? null,
     data.descricao     ?? null,
@@ -117,6 +118,7 @@ export const PUT = withErrorHandler('PUT /api/imoveis/[id]', async (request: Nex
     data.torre === undefined ? null : data.torre,
     data.numero_apartamento === undefined ? null : data.numero_apartamento,
     data.observacoes === undefined ? null : data.observacoes,
+    data.sindicar_portais ?? null,
     id,
   ])
 
