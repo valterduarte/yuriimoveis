@@ -28,6 +28,7 @@ export {
   fetchPropertiesByTypeCategory,
   fetchAllPropertySlugs,
   fetchPropertiesForMap,
+  fetchSyndicatableProperties,
   type MapImovel,
 } from './properties'
 

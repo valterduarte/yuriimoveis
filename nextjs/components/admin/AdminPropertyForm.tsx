@@ -47,6 +47,7 @@ function propertyToForm(property: Imovel): FormState {
     cidade:          property.cidade          || 'Osasco',
     cep:             property.cep             || '',
     destaque:        property.destaque        || false,
+    sindicar_portais: property.sindicar_portais ?? true,
     diferenciais:    Array.isArray(property.diferenciais) ? property.diferenciais.join('\n') : '',
     lat:             property.lat != null ? String(property.lat) : '',
     lng:             property.lng != null ? String(property.lng) : '',

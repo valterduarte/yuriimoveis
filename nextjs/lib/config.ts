@@ -13,6 +13,8 @@ export const INSTAGRAM_URL: string    = 'https://www.instagram.com/valterrduarte
 // Canonical Google Maps place URL (CID) — stable entity reference for hasMap/sameAs.
 export const GOOGLE_BUSINESS_URL: string = 'https://maps.google.com/?cid=17982882895268664003'
 export const CRECI: string            = '235509'
+// E-mail do anunciante publicado no feed dos portais (VRSync). Trocar aqui atualiza em todo lugar.
+export const BROKER_EMAIL: string     = 'valter.rduarte@gmail.com'
 
 // Broker identity for the trust card shown at the decision moment.
 export const BROKER_NAME: string       = 'Yuri'

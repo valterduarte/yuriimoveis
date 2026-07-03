@@ -30,6 +30,7 @@ export interface FormState {
   cidade: string
   cep: string
   destaque: boolean
+  sindicar_portais: boolean
   diferenciais: string
   lat: string
   lng: string
@@ -42,7 +43,7 @@ export const EMPTY_FORM: FormState = {
   empreendimento: '',
   torre: '', numero_apartamento: '', observacoes: '',
   endereco: '', bairro: '', cidade: 'Osasco', cep: '',
-  destaque: false, diferenciais: '',
+  destaque: false, sindicar_portais: true, diferenciais: '',
   lat: '', lng: '',
 }
 
