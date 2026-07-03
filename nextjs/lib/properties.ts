@@ -238,6 +238,17 @@ const fetchPropertiesForMapCached = unstable_cache(
   { tags: [CACHE_TAG_IMOVEIS], revalidate: LISTING_REVALIDATE_SECONDS }
 )
 
+const fetchSyndicatablePropertiesCached = unstable_cache(
+  async (): Promise<Imovel[]> => {
+    const result = await getDb().query(
+      `SELECT * FROM imoveis WHERE ativo = true AND sindicar_portais = true ORDER BY created_at DESC LIMIT 1000`
+    )
+    return result.rows.map(parseImovel)
+  },
+  ['fetchSyndicatableProperties'],
+  { tags: [CACHE_TAG_IMOVEIS], revalidate: LISTING_REVALIDATE_SECONDS }
+)
+
 const fetchAllPropertySlugsCached = unstable_cache(
   async (): Promise<Pick<Imovel, 'id' | 'titulo' | 'updated_at' | 'imagens'>[]> => {
     const result = await getDb().query(
@@ -352,6 +363,15 @@ export async function fetchAllPropertySlugs(): Promise<Pick<Imovel, 'id' | 'titu
     return await fetchAllPropertySlugsCached()
   } catch (err) {
     logDbError('fetchAllPropertySlugs', err)
+    return []
+  }
+}
+
+export async function fetchSyndicatableProperties(): Promise<Imovel[]> {
+  try {
+    return await fetchSyndicatablePropertiesCached()
+  } catch (err) {
+    logDbError('fetchSyndicatableProperties', err)
     return []
   }
 }

@@ -21,6 +21,8 @@ export interface Imovel {
   status: PropertyStatus
   destaque: boolean
   ativo: boolean
+  /** Se true, o imóvel entra no feed VRSync dos portais (OLX/ZAP/Viva Real). Default true. */
+  sindicar_portais?: boolean
   imagens: string[]
   diferenciais: string[]
   parcela_display: string

@@ -87,12 +87,12 @@ describe('buildVrsyncFeed', () => {
 
   it('clamps a too-short title to at least 10 chars', () => {
     const xml = buildVrsyncFeed([{ ...base, titulo: 'Casa' }])
-    expect(xml).toMatch(/<Title>.{10,100}<\/Title>/s)
+    expect(xml).toMatch(/<Title>[\s\S]{10,100}<\/Title>/)
   })
 
   it('pads a too-short description to the 50-char minimum', () => {
     const xml = buildVrsyncFeed([{ ...base, descricao: 'Casa boa' }])
-    const match = xml.match(/<Description><!\[CDATA\[(.*?)\]\]><\/Description>/s)
+    const match = xml.match(/<Description><!\[CDATA\[([\s\S]*?)\]\]><\/Description>/)
     expect(match).not.toBeNull()
     expect((match as RegExpMatchArray)[1].length).toBeGreaterThanOrEqual(50)
   })
