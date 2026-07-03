@@ -6,6 +6,7 @@ import { apiClient, isAuthError } from '../../../lib/apiClient'
 import { ADMIN_PROPERTIES_LIMIT } from '../../../lib/constants'
 import { API_URL } from '../../../lib/config'
 import AdminBairroAudit from '../../../components/admin/AdminBairroAudit'
+import AdminPortalFeed from '../../../components/admin/AdminPortalFeed'
 import AdminPropertyList from '../../../components/admin/AdminPropertyList'
 import { useAdminContext } from '../admin-context'
 import type { Imovel } from '../../../types'
@@ -42,6 +43,7 @@ export default function AdminImoveisPage() {
 
   return (
     <>
+      <AdminPortalFeed />
       <AdminBairroAudit authHeader={authHeader} onAuthError={onAuthError} />
       <AdminPropertyList
         properties={properties}
