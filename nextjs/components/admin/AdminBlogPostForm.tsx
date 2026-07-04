@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef, type ChangeEvent } from 'react'
+import { FiUpload } from 'react-icons/fi'
 import { apiClient, isAuthError } from '../../lib/apiClient'
-import { API_URL } from '../../lib/config'
+import { API_URL, CLOUDINARY_CLOUD, CLOUDINARY_PRESET } from '../../lib/config'
 import { slugify } from '../../utils/imovelUtils'
 import { useApiSubmit } from '../../hooks/useApiSubmit'
 import { useDirtyFormWarning } from '../../hooks/useDirtyFormWarning'
@@ -42,10 +43,33 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
   const [slugManual, setSlugManual] = useState(false)
   const [initialSnapshot, setInitialSnapshot] = useState(EMPTY_SNAPSHOT)
   const [submitted, setSubmitted] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const { loading, error, setError, submit } = useApiSubmit({ onAuthError, fallbackError: 'Erro ao salvar post.' })
 
   const update = <K extends keyof BlogFormState>(key: K, value: BlogFormState[K]) =>
     setForm(f => ({ ...f, [key]: value }))
+
+  const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setIsUploading(true)
+    try {
+      const data = new FormData()
+      data.append('file', file)
+      data.append('upload_preset', CLOUDINARY_PRESET)
+      const result = await apiClient.post<{ secure_url: string }>(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,
+        data,
+      )
+      update('imagemCapa', result.secure_url)
+    } catch {
+      setError('Erro ao fazer upload da imagem.')
+    } finally {
+      setIsUploading(false)
+      e.target.value = ''
+    }
+  }
 
   useEffect(() => {
     if (!editingId) {
@@ -162,8 +186,28 @@ export default function AdminBlogPostForm({ editingId, authHeader, onSuccess, on
       </div>
 
       <div>
-        <label className={fieldLabel}>Imagem de capa (URL)</label>
-        <input type="text" value={form.imagemCapa} onChange={e => update('imagemCapa', e.target.value)} className={fieldInput} placeholder="https://res.cloudinary.com/..." />
+        <label className={fieldLabel}>Imagem de capa</label>
+        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isUploading}
+          className="flex items-center gap-2 rounded-md border border-dashed border-gray-300 px-4 py-3 text-xs text-gray-500 hover:border-primary hover:text-primary transition-colors disabled:opacity-50 w-full justify-center"
+        >
+          <FiUpload size={14} />
+          {isUploading ? 'Enviando...' : form.imagemCapa ? 'Trocar imagem' : 'Selecionar imagem'}
+        </button>
+        {form.imagemCapa && (
+          // eslint-disable-next-line @next/next/no-img-element -- admin-only upload preview (behind auth, noindex); next/image adds an optimizer hop with no LCP/SEO value here
+          <img src={form.imagemCapa} alt="Prévia da imagem de capa" className="w-full h-40 object-cover rounded-md border border-gray-300 mt-3" />
+        )}
+        <input
+          type="text"
+          value={form.imagemCapa}
+          onChange={e => update('imagemCapa', e.target.value)}
+          className={`${fieldInput} mt-3`}
+          placeholder="ou cole uma URL: https://res.cloudinary.com/..."
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
