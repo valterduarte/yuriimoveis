@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { FiEdit2, FiEye, FiEyeOff } from 'react-icons/fi'
+import { FiEdit2, FiEye, FiEyeOff, FiExternalLink } from 'react-icons/fi'
 import { apiClient, isAuthError } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
 import AdminListItem from './AdminListItem'
@@ -63,6 +63,9 @@ export default function AdminBlogPostList({ authHeader, onEdit, onAuthError }: A
               <button onClick={() => onEdit(post.id)} className="p-2 text-gray-500 hover:text-primary transition-colors" title="Editar">
                 <FiEdit2 size={14} />
               </button>
+              <a href={`/blog/${post.slug}`} target="_blank" rel="noreferrer noopener" className="p-2 text-gray-500 hover:text-primary transition-colors" title="Ver artigo em nova aba">
+                <FiExternalLink size={14} />
+              </a>
             </>
           }
         />
