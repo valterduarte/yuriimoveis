@@ -6,7 +6,9 @@ import {
   buildFaqPageSchema,
   buildGlobalJsonLd,
   buildPlaceSchema,
+  buildYuriPersonSchema,
   AGENT_ID,
+  PERSON_ID,
 } from './jsonLd'
 import { SITE_URL, GOOGLE_BUSINESS_URL } from './config'
 import { coordsForBairro } from './bairroCoords'
@@ -100,6 +102,15 @@ describe('buildArticleSchema', () => {
     expect(schema.publisher).toEqual({ '@id': AGENT_ID })
   })
 
+  it('defaults to Article but emits BlogPosting when type is set', () => {
+    const landing = buildArticleSchema({ headline: 'X', description: 'Y', url: 'z' })
+    expect(landing['@type']).toBe('Article')
+
+    const post = buildArticleSchema({ headline: 'X', description: 'Y', url: 'z', type: 'BlogPosting' })
+    expect(post['@type']).toBe('BlogPosting')
+    expect(post.author).toEqual({ '@id': PERSON_ID })
+  })
+
   it('uses the default OG image when no image is provided', () => {
     const schema = buildArticleSchema({
       headline: 'X',
@@ -113,6 +124,16 @@ describe('buildArticleSchema', () => {
     const schema = buildArticleSchema({ headline: 'X', description: 'Y', url: 'z' })
     expect(schema).not.toHaveProperty('datePublished')
     expect(schema).not.toHaveProperty('dateModified')
+  })
+})
+
+describe('buildYuriPersonSchema', () => {
+  it('emits the canonical Person node the article author @id resolves to', () => {
+    const person = buildYuriPersonSchema()
+    expect(person['@type']).toBe('Person')
+    expect(person['@id']).toBe(PERSON_ID)
+    expect(person.name).toBe('Yuri Duarte')
+    expect(person.alternateName).toBe('Corretor Yuri')
   })
 })
 

@@ -50,3 +50,13 @@ export function buildPersonSchema({
     sameAs: [INSTAGRAM_URL, GOOGLE_BUSINESS_URL],
   }
 }
+
+/** Canonical Person node for Yuri, reused wherever the author graph is emitted. */
+export function buildYuriPersonSchema(): Record<string, unknown> {
+  return buildPersonSchema({
+    name: 'Yuri Duarte',
+    givenName: 'Yuri',
+    familyName: 'Duarte',
+    alternateName: 'Corretor Yuri',
+  })
+}

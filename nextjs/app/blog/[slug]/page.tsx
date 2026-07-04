@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { FaWhatsapp } from 'react-icons/fa'
 import { fetchBlogPostBySlug, fetchAllBlogSlugs, fetchRelatedBlogPosts } from '../../../lib/api'
 import { SITE_URL, OG_DEFAULT_IMAGE, PHONE_WA_BASE } from '../../../lib/config'
-import { buildBreadcrumb, buildArticleSchema, buildFaqPageSchema } from '../../../lib/jsonLd'
+import { buildBreadcrumb, buildArticleSchema, buildFaqPageSchema, buildYuriPersonSchema } from '../../../lib/jsonLd'
 import { buildPageMetadata } from '../../../lib/seo'
 import { extractFaqsFromHtml } from '../../../lib/blogFaqs'
 import { sanitizeBlogHtml } from '../../../lib/sanitizeHtml'
@@ -89,6 +89,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     image: post.imagem_capa || OG_DEFAULT_IMAGE,
     datePublished: post.created_at,
     dateModified: post.updated_at,
+    type: 'BlogPosting',
   })
   if (post.tags.length > 0) article.keywords = post.tags.join(', ')
 
@@ -99,6 +100,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       { name: post.titulo,  path: `/blog/${post.slug}` },
     ]),
     article,
+    buildYuriPersonSchema(),
   ]
   if (faqs.length > 0) jsonLd.push(buildFaqPageSchema(faqs))
 
