@@ -8,7 +8,7 @@ import {
   PHONE_TEL,
   CRECI,
 } from '../../lib/config'
-import { buildPersonSchema } from '../../lib/jsonLd'
+import { buildYuriPersonSchema } from '../../lib/jsonLd'
 import { buildPageMetadata } from '../../lib/seo'
 import WhatsAppLink from '../../components/WhatsAppLink'
 
@@ -28,12 +28,7 @@ const breadcrumbJsonLd = {
   ],
 }
 
-const personJsonLd = buildPersonSchema({
-  name: 'Yuri Duarte',
-  givenName: 'Yuri',
-  familyName: 'Duarte',
-  alternateName: 'Corretor Yuri',
-})
+const personJsonLd = buildYuriPersonSchema()
 
 const DIFERENCIAIS = [
   {

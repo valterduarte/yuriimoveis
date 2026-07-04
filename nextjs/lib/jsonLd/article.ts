@@ -8,6 +8,8 @@ interface ArticleSchemaInput {
   image?: string
   datePublished?: string
   dateModified?: string
+  /** Schema.org type. Use 'BlogPosting' for blog posts, 'Article' (default) for landing/guide pages. */
+  type?: 'Article' | 'BlogPosting'
 }
 
 export function buildArticleSchema({
@@ -17,10 +19,11 @@ export function buildArticleSchema({
   image = OG_DEFAULT_IMAGE,
   datePublished,
   dateModified,
+  type = 'Article',
 }: ArticleSchemaInput): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': type,
     headline,
     description,
     image,
