@@ -61,7 +61,7 @@ A regra prática: **quanto mais tempo você pretende ficar no imóvel, mais comp
 
 Outros fatores que mexem no ponto de equilíbrio:
 
-- **Tamanho da entrada e uso do [FGTS](/blog/como-usar-fgts-para-comprar-imovel-osasco-2026):** quanto maior a entrada, menor a parcela e mais cedo comprar supera alugar.
+- **Tamanho da entrada e uso do [FGTS](/blog/fgts-compra-imovel-como-usar):** quanto maior a entrada, menor a parcela e mais cedo comprar supera alugar.
 - **A faixa do MCMV em que você se encaixa:** juros menores antecipam o ponto de equilíbrio.
 - **O quanto o aluguel da sua região sobe:** regiões com aluguel em alta empurram a balança para comprar.
 

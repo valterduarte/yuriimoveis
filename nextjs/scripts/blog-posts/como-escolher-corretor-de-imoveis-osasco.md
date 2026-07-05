@@ -33,7 +33,7 @@ O mesmo vale para riscos: se o imóvel tem alguma pendência na matrícula ou o 
 
 ## 4. Ajuda de verdade com o financiamento
 
-A maior parte das compras na região passa por financiamento, e é aí que muita gente trava. Um bom corretor sabe explicar as [faixas do Minha Casa Minha Vida](/blog/minha-casa-minha-vida-2026-faixas-subsidio), como usar o [FGTS na entrada](/blog/como-usar-fgts-para-comprar-imovel-osasco-2026) e [quanto de renda você precisa](/blog/quanto-preciso-ganhar-para-financiar-apartamento-osasco-2026) para o imóvel que quer.
+A maior parte das compras na região passa por financiamento, e é aí que muita gente trava. Um bom corretor sabe explicar as [faixas do Minha Casa Minha Vida](/blog/minha-casa-minha-vida-2026-faixas-subsidio), como usar o [FGTS na entrada](/blog/fgts-compra-imovel-como-usar) e [quanto de renda você precisa](/blog/quanto-preciso-ganhar-para-financiar-apartamento-osasco-2026) para o imóvel que quer.
 
 Ele não precisa ser um gerente de banco, mas precisa te orientar a tempo de não perder o imóvel por falta de planejamento. Um sinal forte: o corretor que já te manda **[simular o financiamento](/simulador)** antes de visitar imóveis está cuidando do seu bolso.
 

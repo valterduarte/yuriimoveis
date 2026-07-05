@@ -57,7 +57,7 @@ O FGTS é a forma mais comum de completar a entrada sem precisar de tudo em dinh
 - Você precisa ter pelo menos **3 anos de trabalho sob o regime do FGTS** (somando todos os contratos).
 - Não pode ter outro financiamento ativo no SFH nem outro imóvel na mesma cidade.
 
-O passo a passo completo, com os documentos, está no guia [como usar o FGTS para comprar imóvel](/blog/como-usar-fgts-para-comprar-imovel-osasco-2026). Na prática, somar FGTS + dinheiro guardado é o que viabiliza a entrada de boa parte dos compradores.
+O passo a passo completo, com os documentos, está no guia [como usar o FGTS para comprar imóvel](/blog/fgts-compra-imovel-como-usar). Na prática, somar FGTS + dinheiro guardado é o que viabiliza a entrada de boa parte dos compradores.
 
 ## Não confunda entrada com os custos de cartório
 

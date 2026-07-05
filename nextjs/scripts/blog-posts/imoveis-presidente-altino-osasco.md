@@ -67,7 +67,7 @@ A região concentra escolas particulares e públicas de qualidade, o IFSP Osasco
 
 Em Osasco, o **ITBI é de 3%** sobre o valor de transação — o mais alto da região oeste (compare no [guia de ITBI de Osasco, Barueri e Carapicuíba](/blog/itbi-osasco-barueri-carapicuiba-sao-paulo-2026)). Some o registro em cartório, em torno de 2,5%.
 
-Para um apartamento de R$ 450 mil, isso significa cerca de **R$ 13.500 de ITBI** e mais ou menos **R$ 11.250 de registro** — algo perto de R$ 25 mil de custos iniciais **além** da entrada. Dá para abater parte da entrada usando o [FGTS na compra do imóvel em Osasco](/blog/como-usar-fgts-para-comprar-imovel-osasco-2026). O [simulador](/simulador) já soma esses custos junto com a parcela.
+Para um apartamento de R$ 450 mil, isso significa cerca de **R$ 13.500 de ITBI** e mais ou menos **R$ 11.250 de registro** — algo perto de R$ 25 mil de custos iniciais **além** da entrada. Dá para abater parte da entrada usando o [FGTS na compra do imóvel em Osasco](/blog/fgts-compra-imovel-como-usar). O [simulador](/simulador) já soma esses custos junto com a parcela.
 
 ## Como encontrar o imóvel certo no bairro
 
