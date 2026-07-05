@@ -40,7 +40,7 @@ A diferença é enorme: financiar pela Faixa 3 (7,66%) em vez do SBPE (11,49%) p
 
 A Caixa financia em geral até **80% do valor do imóvel**, então a **entrada mínima é de 20%**. Dar mais que isso reduz a parcela, os juros totais e a renda exigida — o efeito está detalhado no guia [quanto dar de entrada num apartamento](/blog/quanto-dar-de-entrada-apartamento-2026).
 
-O **FGTS** pode compor a entrada se você tiver pelo menos 3 anos de regime, o imóvel for residencial urbano dentro dos limites do programa e você não tiver outro financiamento ativo no SFH. Veja as condições no guia de [como usar o FGTS para comprar imóvel](/blog/como-usar-fgts-para-comprar-imovel-osasco-2026).
+O **FGTS** pode compor a entrada se você tiver pelo menos 3 anos de regime, o imóvel for residencial urbano dentro dos limites do programa e você não tiver outro financiamento ativo no SFH. Veja as condições no guia de [como usar o FGTS para comprar imóvel](/blog/fgts-compra-imovel-como-usar).
 
 ## Quanto de renda o financiamento exige
 

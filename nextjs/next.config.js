@@ -69,9 +69,22 @@ const nextConfig = {
       { source: `/${singular}`, destination: '/imoveis', permanent: true },
     ])
 
+    // The osasco/barueri FGTS posts were consolidated into the evergreen
+    // regional pillar to end the near-duplicate cannibalization; 301 their
+    // paths so the accumulated signals flow to the surviving guide.
+    const fgtsConsolidation = [
+      'como-usar-fgts-para-comprar-imovel-osasco-2026',
+      'como-usar-fgts-para-comprar-imovel-barueri-2026',
+    ].map(slug => ({
+      source: `/blog/${slug}`,
+      destination: '/blog/fgts-compra-imovel-como-usar',
+      permanent: true,
+    }))
+
     return [
       ...pluralRedirects,
       ...rootCategoryRedirects,
+      ...fgtsConsolidation,
       {
         source: '/comprar',
         destination: '/imoveis',

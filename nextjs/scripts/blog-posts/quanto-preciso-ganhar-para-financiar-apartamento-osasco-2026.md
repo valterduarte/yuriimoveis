@@ -46,7 +46,7 @@ A lição prática: às vezes um imóvel um pouco mais barato (ou uma entrada ma
 
 A tabela é um ponto de partida. Estes fatores mexem no número:
 
-- **Tamanho da entrada:** quanto mais você der de entrada (usando [FGTS](/blog/como-usar-fgts-para-comprar-imovel-osasco-2026), por exemplo), menor o valor financiado e menor a renda exigida.
+- **Tamanho da entrada:** quanto mais você der de entrada (usando [FGTS](/blog/fgts-compra-imovel-como-usar), por exemplo), menor o valor financiado e menor a renda exigida.
 - **Prazo do financiamento:** prazos mais longos (até 420 meses) reduzem a parcela e, com ela, a renda mínima — ao custo de mais juros no total.
 - **Renda somada:** juntar a renda do cônjuge ou de um co-comprador é a forma mais rápida de alcançar a parcela necessária.
 - **Outras dívidas:** financiamentos de carro, cartão e empréstimos consignados entram na conta de comprometimento e reduzem o que sobra para a prestação.
