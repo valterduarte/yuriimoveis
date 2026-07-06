@@ -65,7 +65,9 @@ async function main() {
          titulo = EXCLUDED.titulo,
          resumo = EXCLUDED.resumo,
          conteudo = EXCLUDED.conteudo,
-         imagem_capa = EXCLUDED.imagem_capa,
+         -- Keep an existing cover when the markdown has no imagem_capa, so
+         -- reseeding never wipes a cover uploaded later through the admin.
+         imagem_capa = COALESCE(NULLIF(EXCLUDED.imagem_capa, ''), blog_posts.imagem_capa),
          meta_titulo = EXCLUDED.meta_titulo,
          meta_descricao = EXCLUDED.meta_descricao,
          tags = EXCLUDED.tags,
