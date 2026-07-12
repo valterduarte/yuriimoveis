@@ -7,7 +7,8 @@ import { filterSearchItems, type SearchItem } from '../lib/search'
 
 const LISTBOX_ID = 'site-search-results'
 
-export default function SiteSearch() {
+export default function SiteSearch({ variant = 'desktop' }: { variant?: 'desktop' | 'mobile' }) {
+  const isMobile = variant === 'mobile'
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -76,6 +77,20 @@ export default function SiteSearch() {
   }
 
   if (!open) {
+    if (isMobile) {
+      return (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Buscar imóvel ou empreendimento"
+          aria-expanded={false}
+          className="w-full flex items-center gap-2 bg-gray-800 border border-gray-600 text-gray-400 text-xs px-3 py-2.5"
+        >
+          <FiSearch size={14} aria-hidden="true" />
+          <span>Buscar imóvel, bairro ou código…</span>
+        </button>
+      )
+    }
     return (
       <button
         type="button"
@@ -92,7 +107,7 @@ export default function SiteSearch() {
   const showDropdown = query.trim().length > 0
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className={isMobile ? 'relative w-full' : 'relative'}>
       <div
         role="combobox"
         aria-expanded={showDropdown}
@@ -113,7 +128,7 @@ export default function SiteSearch() {
           aria-controls={LISTBOX_ID}
           aria-activedescendant={showDropdown && results[activeIndex] ? `ss-opt-${activeIndex}` : undefined}
           autoComplete="off"
-          className="w-60 bg-gray-800 border border-gray-600 text-white text-xs pl-8 pr-2.5 py-2.5 focus:outline-none focus:border-primary placeholder:text-gray-500"
+          className={`${isMobile ? 'w-full' : 'w-60'} bg-gray-800 border border-gray-600 text-white text-xs pl-8 pr-2.5 py-2.5 focus:outline-none focus:border-primary placeholder:text-gray-500`}
         />
         <button
           type="button"
@@ -130,7 +145,9 @@ export default function SiteSearch() {
           id={LISTBOX_ID}
           role="listbox"
           aria-label="Resultados da busca"
-          className="absolute right-0 top-full mt-1 w-80 max-w-[85vw] bg-dark border border-white/10 shadow-xl z-50 max-h-96 overflow-auto"
+          className={isMobile
+            ? 'mt-1 w-full bg-dark border border-white/10 shadow-xl max-h-72 overflow-auto'
+            : 'absolute right-0 top-full mt-1 w-80 max-w-[85vw] bg-dark border border-white/10 shadow-xl z-50 max-h-96 overflow-auto'}
         >
           {loading && !items ? (
             <li className="px-4 py-3 text-xs text-gray-400">Carregando…</li>

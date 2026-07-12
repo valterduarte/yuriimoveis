@@ -90,8 +90,11 @@ export default function Header() {
         </div>
       </div>
 
-      <div id="mobile-menu" className={`lg:hidden bg-dark border-t border-gray-800 overflow-hidden transition-all duration-200 ${menuOpen ? 'max-h-96' : 'max-h-0'}`}>
+      <div id="mobile-menu" className={`lg:hidden bg-dark border-t border-gray-800 transition-all duration-200 ${menuOpen ? 'max-h-[85vh] overflow-y-auto' : 'max-h-0 overflow-hidden'}`}>
         <nav aria-label="Navegação mobile" className="flex flex-col py-4 container mx-auto px-6">
+          <div className="pb-4">
+            <SiteSearch variant="mobile" />
+          </div>
           {NAVIGATION_LINKS.map(link => (
             <Link
               key={link.href}
