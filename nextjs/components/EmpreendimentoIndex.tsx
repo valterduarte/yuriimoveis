@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { FiArrowRight, FiMapPin } from 'react-icons/fi'
 import { PLACEHOLDER_IMAGE, PROPERTY_STATUSES } from '../lib/constants'
 import { formatPrice } from '../utils/imovelUtils'
+import { formatAreaRange } from '../lib/formatters'
 import type { EmpreendimentoSummary } from '../lib/empreendimento'
 import type { PropertyStatus } from '../types'
 
@@ -25,11 +26,6 @@ interface EmpreendimentoIndexProps {
 function formatPriceRange(min: number, max: number): string {
   if (min === max) return `a partir de ${formatPrice(min, 'venda')}`
   return `${formatPrice(min, 'venda')} a ${formatPrice(max, 'venda')}`
-}
-
-function formatAreaRange(min: number, max: number): string {
-  if (min === max) return `${min.toFixed(0)}m²`
-  return `${min.toFixed(0)} a ${max.toFixed(0)}m²`
 }
 
 function statusLabel(status: PropertyStatus): string {

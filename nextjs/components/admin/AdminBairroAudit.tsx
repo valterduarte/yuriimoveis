@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import { FiAlertTriangle, FiCheckCircle, FiXCircle, FiChevronDown, FiChevronUp } from 'react-icons/fi'
-import { apiClient, isAuthError } from '../../lib/apiClient'
+import { apiClient } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
+import { useApiResource } from '../../hooks/useApiResource'
 
 type AuditStatus = 'ok' | 'weak' | 'broken'
 
@@ -35,23 +36,14 @@ const STATUS_LABEL: Record<AuditStatus, string> = {
 }
 
 export default function AdminBairroAudit({ authHeader, onAuthError }: Props) {
-  const [summary, setSummary] = useState<AuditSummary | null>(null)
-  const [rows, setRows] = useState<AuditRow[]>([])
   const [expanded, setExpanded] = useState(false)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    apiClient
-      .get<{ summary: AuditSummary; rows: AuditRow[] }>(`${API_URL}/api/admin/bairros-audit`, { headers: authHeader() })
-      .then(data => {
-        setSummary(data.summary)
-        setRows(data.rows)
-      })
-      .catch(err => {
-        if (isAuthError(err)) onAuthError()
-      })
-      .finally(() => setLoading(false))
-  }, [authHeader, onAuthError])
+  const fetchAudit = useCallback(
+    () => apiClient.get<{ summary: AuditSummary; rows: AuditRow[] }>(`${API_URL}/api/admin/bairros-audit`, { headers: authHeader() }),
+    [authHeader],
+  )
+  const { data, loading } = useApiResource(fetchAudit, { onAuthError })
+  const summary = data?.summary ?? null
+  const rows = data?.rows ?? []
 
   if (loading || !summary) return null
 

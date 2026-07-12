@@ -1,6 +1,7 @@
 'use client'
 
 import { FiX } from 'react-icons/fi'
+import { formatBRL } from '../../lib/formatters'
 
 interface ActiveFiltersProps {
   tipo: string
@@ -35,10 +36,10 @@ export default function ActiveFilters({ tipo, categoria, cidade, bairro, precoMi
         <FilterTag label={bairro} onRemove={() => onRemove('bairro')} />
       )}
       {precoMin && (
-        <FilterTag label={`Mín R$ ${Number(precoMin).toLocaleString('pt-BR')}`} onRemove={() => onRemove('precoMin')} />
+        <FilterTag label={`Mín ${formatBRL(Number(precoMin))}`} onRemove={() => onRemove('precoMin')} />
       )}
       {precoMax && (
-        <FilterTag label={`Máx R$ ${Number(precoMax).toLocaleString('pt-BR')}`} onRemove={() => onRemove('precoMax')} />
+        <FilterTag label={`Máx ${formatBRL(Number(precoMax))}`} onRemove={() => onRemove('precoMax')} />
       )}
       {quartos && (
         <FilterTag

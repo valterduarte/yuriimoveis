@@ -1,6 +1,7 @@
 'use client'
 
 import { AdvancedMarker } from '@vis.gl/react-google-maps'
+import { formatPriceShort } from '../../../lib/formatters'
 import { useListingMapStore } from './ListingMapStoreProvider'
 import type { LatLng } from '../../../lib/bairroCoords'
 import type { MapImovel } from '../../../lib/api'
@@ -9,21 +10,6 @@ interface PriceMarkerProps {
   imovel: MapImovel
   coords: LatLng
   onClick: () => void
-}
-
-function formatPriceShort(preco: number, tipo: 'venda' | 'aluguel'): string {
-  if (tipo === 'aluguel') {
-    const value = preco.toLocaleString('pt-BR', { maximumFractionDigits: 0 })
-    return `R$ ${value}/mês`
-  }
-  if (preco >= 1_000_000) {
-    const v = (preco / 1_000_000).toFixed(1).replace('.', ',').replace(/,0$/, '')
-    return `R$ ${v}M`
-  }
-  if (preco >= 1_000) {
-    return `R$ ${Math.round(preco / 1_000)}K`
-  }
-  return `R$ ${preco}`
 }
 
 export default function PriceMarker({ imovel, coords, onClick }: PriceMarkerProps) {

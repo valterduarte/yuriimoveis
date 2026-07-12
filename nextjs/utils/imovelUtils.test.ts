@@ -18,8 +18,13 @@ import {
   propertyOgImageUrl,
   buildPropertyNarrative,
   buildPropertyWhatsAppMessage,
+  calcParcela,
 } from './imovelUtils'
+import { detectCreditProgram, calculateSacFinancing, MIN_DOWN_PAYMENT_RATE } from '../lib/financiamento'
 import type { Imovel } from '../types'
+
+const brl = (value: number) =>
+  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(value)
 
 // Intl.NumberFormat in pt-BR uses a non-breaking space (U+00A0) between
 // the BRL symbol and the digits. Normalising it to a regular space keeps
@@ -249,6 +254,39 @@ describe('buildPropertyNarrative', () => {
     expect(narrative).toContain('Conta com 64 m² de área, 2 banheiros e 1 vaga de garagem.')
     expect(narrative).toContain('Entre os diferenciais do empreendimento estão piscina, academia e área gourmet.')
     expect(narrative).toContain('O imóvel está pronto para entrega imediata.')
+  })
+})
+
+describe('calcParcela', () => {
+  // The teaser must never diverge from the /simulador page. These lock the fix:
+  // same credit-program selection and the same first SAC installment.
+  const expectedFirstInstallment = (preco: number) => {
+    const program = detectCreditProgram(preco, 0)
+    const { firstInstallment } = calculateSacFinancing({
+      propertyValue: preco,
+      downPayment: preco * MIN_DOWN_PAYMENT_RATE,
+      termMonths: 360,
+      annualInterestRate: program.rate,
+    })
+    return brl(firstInstallment)
+  }
+
+  it('uses the MCMV-estimado rate for a price within the MCMV ceiling', () => {
+    expect(detectCreditProgram(300000, 0).id).toBe('mcmv_estimado')
+    expect(calcParcela(300000)).toBe(expectedFirstInstallment(300000))
+  })
+
+  it('uses SBPE for a price above the MCMV ceiling', () => {
+    expect(detectCreditProgram(800000, 0).id).toBe('sbpe')
+    expect(calcParcela(800000)).toBe(expectedFirstInstallment(800000))
+  })
+
+  it('produces a plausible BRL installment (independent sanity bound)', () => {
+    const value = calcParcela(300000)
+    expect(value).toMatch(/^R\$/)
+    const digits = Number(value.replace(/[^\d]/g, ''))
+    expect(digits).toBeGreaterThan(2000)
+    expect(digits).toBeLessThan(3000)
   })
 })
 

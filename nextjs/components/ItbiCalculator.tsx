@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { FiInfo } from 'react-icons/fi'
+import { formatBRL } from '../lib/formatters'
 
 interface CityRate {
   label: string
@@ -16,7 +17,6 @@ const CITY_RATES: Record<string, CityRate> = {
   sao_paulo:   { label: 'São Paulo',   padrao: 0.03,  sfh: 0.005 },
 }
 
-const FMT = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
 
 function parseNumber(raw: string): number {
   return Number(raw.replace(/\D/g, '')) || 0
@@ -25,7 +25,7 @@ function parseNumber(raw: string): number {
 function formatInput(raw: string): string {
   const n = parseNumber(raw)
   if (!n) return ''
-  return FMT.format(n)
+  return formatBRL(n)
 }
 
 export default function ItbiCalculator() {
@@ -86,13 +86,13 @@ export default function ItbiCalculator() {
         <div>
           <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">ITBI estimado</p>
           <p className="text-base font-bold text-primary">
-            {numericValor > 0 ? FMT.format(itbi) : '—'}
+            {numericValor > 0 ? formatBRL(itbi) : '—'}
           </p>
         </div>
         <div>
           <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">Custo total estimado*</p>
           <p className="text-base font-bold text-dark">
-            {numericValor > 0 ? FMT.format(itbi + numericValor * 0.025) : '—'}
+            {numericValor > 0 ? formatBRL(itbi + numericValor * 0.025) : '—'}
           </p>
         </div>
       </div>

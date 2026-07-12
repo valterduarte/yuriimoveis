@@ -14,6 +14,7 @@ import {
 import { CATEGORIAS } from '../../../data/categorias'
 import { emBairro, pluralizeImoveis } from '../../../utils/imovelUtils'
 import { SITE_URL } from '../../../lib/config'
+import { formatBRL } from '../../../lib/formatters'
 import {
   buildArticleSchema,
   buildBreadcrumb,
@@ -175,14 +176,14 @@ export default async function BairroGuidePage({ params }: PageProps) {
                 <div>
                   <dt className="text-xs uppercase tracking-wider text-gray-500 mb-1">Metro quadrado</dt>
                   <dd className="font-bold text-dark text-lg">
-                    R$ {bairro.precoMedio.m2.toLocaleString('pt-BR')}/m²
+                    {formatBRL(bairro.precoMedio.m2)}/m²
                   </dd>
                 </div>
                 {bairro.precoMedio.apartamento2qts && (
                   <div>
                     <dt className="text-xs uppercase tracking-wider text-gray-500 mb-1">Apartamento 2 dorm.</dt>
                     <dd className="font-bold text-dark text-lg">
-                      a partir de R$ {bairro.precoMedio.apartamento2qts.toLocaleString('pt-BR')}
+                      a partir de {formatBRL(bairro.precoMedio.apartamento2qts)}
                     </dd>
                   </div>
                 )}
@@ -190,7 +191,7 @@ export default async function BairroGuidePage({ params }: PageProps) {
                   <div>
                     <dt className="text-xs uppercase tracking-wider text-gray-500 mb-1">Casa 3 dorm.</dt>
                     <dd className="font-bold text-dark text-lg">
-                      a partir de R$ {bairro.precoMedio.casa3qts.toLocaleString('pt-BR')}
+                      a partir de {formatBRL(bairro.precoMedio.casa3qts)}
                     </dd>
                   </div>
                 )}
