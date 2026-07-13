@@ -7,10 +7,8 @@ import { FaWhatsapp } from 'react-icons/fa'
 import { removeCompareItem, useCompareItems, type CompareItem } from '../../lib/compareStore'
 import { PHONE_WA_BASE } from '../../lib/config'
 import { PROPERTY_CATEGORIES, PROPERTY_STATUSES } from '../../lib/constants'
+import { formatBRL } from '../../lib/formatters'
 import WhatsAppLink from '../../components/WhatsAppLink'
-
-const formatBRL = (value: number) =>
-  value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
 
 const formatPriceBy = (price: number, area: number): string => {
   if (!area || area <= 0) return '—'

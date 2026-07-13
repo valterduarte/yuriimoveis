@@ -3,7 +3,9 @@ import { imovelSlug, slugify, deriveVideoPoster } from '../../utils/imovelUtils'
 import { AGENT_ID } from './ids'
 import type { Imovel } from '../../types'
 
-interface Empreendimento {
+/** Minimal reference to a development, used only to build the isPartOf link.
+ *  Not the canonical entity — see lib/empreendimento.ts for that. */
+interface EmpreendimentoRef {
   nome: string
   totalUnidades: number
 }
@@ -12,7 +14,7 @@ export interface RealEstateListingInput {
   imovel: Imovel
   description: string
   images: string[]
-  empreendimento?: Empreendimento | null
+  empreendimento?: EmpreendimentoRef | null
 }
 
 export function buildRealEstateListingSchema({

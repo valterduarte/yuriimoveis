@@ -8,6 +8,7 @@ import WhatsAppLink from '../../../components/WhatsAppLink'
 import EmpreendimentoFinancingCard from '../../../components/EmpreendimentoFinancingCard'
 import EmpreendimentoEnrichmentSections from '../../../components/EmpreendimentoEnrichmentSections'
 import { buildEmpreendimentoFinancingExample } from '../../../lib/empreendimentoFinance'
+import { formatAreaRange } from '../../../lib/formatters'
 import { getEmpreendimentoEnrichment } from '../../../data/empreendimentoEnrichment'
 import { SITE_URL, PHONE_WA_BASE, PHONE_DISPLAY, CRECI } from '../../../lib/config'
 import { formatPrice, imovelSlug, slugify } from '../../../utils/imovelUtils'
@@ -56,11 +57,6 @@ function formatPriceRange(min: number, max: number): string {
   return `de ${formatPrice(min, 'venda')} a ${formatPrice(max, 'venda')}`
 }
 
-function formatAreaRange(min: number, max: number): string {
-  if (min === max) return `${min.toFixed(2).replace('.', ',')} m²`
-  return `${min.toFixed(2).replace('.', ',')} a ${max.toFixed(2).replace('.', ',')} m²`
-}
-
 const STATUS_PHRASE: Record<string, string> = {
   pronto: 'pronto para morar',
   construcao: 'em construção',
@@ -94,7 +90,7 @@ function buildEmpreendimentoFaqs(
     },
     {
       q: `Quais plantas e tamanhos o ${emp.nome} oferece?`,
-      a: `São ${emp.totalUnidades} ${emp.totalUnidades === 1 ? 'planta' : 'plantas'}, com metragem de ${formatAreaRange(emp.areaMin, emp.areaMax)}.`,
+      a: `São ${emp.totalUnidades} ${emp.totalUnidades === 1 ? 'planta' : 'plantas'}, com metragem de ${formatAreaRange(emp.areaMin, emp.areaMax, 2)}.`,
     },
     {
       q: `O ${emp.nome} está pronto ou em construção?`,
@@ -214,7 +210,7 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
           </p>
           <div className="flex flex-wrap gap-4 mt-5 text-xs uppercase tracking-wider">
             <span className="bg-white/10 px-3 py-1.5">{emp.totalUnidades} plantas</span>
-            <span className="bg-white/10 px-3 py-1.5">{formatAreaRange(emp.areaMin, emp.areaMax)}</span>
+            <span className="bg-white/10 px-3 py-1.5">{formatAreaRange(emp.areaMin, emp.areaMax, 2)}</span>
             <span className="bg-primary text-white px-3 py-1.5 font-bold">{formatPriceRange(emp.precoMin, emp.precoMax)}</span>
           </div>
           <div className="mt-6">
@@ -249,7 +245,7 @@ export default async function EmpreendimentoDetailPage({ params }: PageProps) {
           <p className="text-gray-700 text-sm md:text-base leading-relaxed">
             O {emp.nome} é um empreendimento {statusPhrase} no bairro {emp.bairro}, em {emp.cidade} (SP).
             São {emp.totalUnidades} {emp.totalUnidades === 1 ? 'planta' : 'plantas'}{' '}
-            de {formatAreaRange(emp.areaMin, emp.areaMax)}, com valores {formatPriceRange(emp.precoMin, emp.precoMax)}.
+            de {formatAreaRange(emp.areaMin, emp.areaMax, 2)}, com valores {formatPriceRange(emp.precoMin, emp.precoMax)}.
             {fitsMcmv && ' Há unidades que podem se enquadrar no programa Minha Casa Minha Vida — vale simular as condições de financiamento.'}
           </p>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm mt-5">

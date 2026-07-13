@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { apiClient, isAuthError } from '../../lib/apiClient'
+import { useCallback, useState } from 'react'
+import { apiClient } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
+import { useApiResource } from '../../hooks/useApiResource'
 
 interface ClickStats {
   days: number
@@ -38,20 +39,12 @@ interface AdminClickStatsProps {
 }
 
 export default function AdminClickStats({ authHeader, onAuthError }: AdminClickStatsProps) {
-  const [stats, setStats] = useState<ClickStats | null>(null)
   const [days, setDays] = useState(30)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    setLoading(true)
-    apiClient
-      .get<ClickStats>(`${API_URL}/api/track-click?days=${days}`, { headers: authHeader() })
-      .then(setStats)
-      .catch(err => {
-        if (isAuthError(err)) onAuthError()
-      })
-      .finally(() => setLoading(false))
-  }, [days, authHeader, onAuthError])
+  const fetchStats = useCallback(
+    () => apiClient.get<ClickStats>(`${API_URL}/api/track-click?days=${days}`, { headers: authHeader() }),
+    [days, authHeader],
+  )
+  const { data: stats, loading } = useApiResource(fetchStats, { onAuthError })
 
   if (loading) {
     return <p className="text-sm text-gray-500 py-10 text-center">Carregando estatísticas...</p>

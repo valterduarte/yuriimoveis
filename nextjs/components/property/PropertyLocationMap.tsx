@@ -2,6 +2,7 @@
 
 import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps'
 import { FiMapPin } from 'react-icons/fi'
+import { formatPriceShort } from '../../lib/formatters'
 import type { LatLng } from '../../lib/bairroCoords'
 
 interface PropertyLocationMapProps {
@@ -13,21 +14,6 @@ interface PropertyLocationMapProps {
 }
 
 const MAP_ZOOM = 15
-
-function formatPriceShort(preco: number, tipo: 'venda' | 'aluguel'): string {
-  if (tipo === 'aluguel') {
-    const value = preco.toLocaleString('pt-BR', { maximumFractionDigits: 0 })
-    return `R$ ${value}/mês`
-  }
-  if (preco >= 1_000_000) {
-    const v = (preco / 1_000_000).toFixed(1).replace('.', ',').replace(/,0$/, '')
-    return `R$ ${v}M`
-  }
-  if (preco >= 1_000) {
-    return `R$ ${Math.round(preco / 1_000)}K`
-  }
-  return `R$ ${preco}`
-}
 
 export default function PropertyLocationMap({
   coords,

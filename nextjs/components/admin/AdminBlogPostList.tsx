@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useCallback } from 'react'
 import { FiEdit2, FiEye, FiEyeOff, FiExternalLink } from 'react-icons/fi'
 import { apiClient, isAuthError } from '../../lib/apiClient'
 import { API_URL } from '../../lib/config'
+import { useApiResource } from '../../hooks/useApiResource'
 import AdminListItem from './AdminListItem'
 import type { BlogPost } from '../../types'
 
@@ -14,26 +15,17 @@ interface AdminBlogPostListProps {
 }
 
 export default function AdminBlogPostList({ authHeader, onEdit, onAuthError }: AdminBlogPostListProps) {
-  const [posts, setPosts] = useState<BlogPost[]>([])
-  const [loading, setLoading] = useState(true)
-
-  const loadPosts = async () => {
-    try {
-      const data = await apiClient.get<{ posts?: BlogPost[] }>(`${API_URL}/api/blog?todos=true&limit=50`)
-      setPosts(data.posts || [])
-    } catch {
-      setPosts([])
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => { loadPosts() }, [])
+  const fetchPosts = useCallback(
+    () => apiClient.get<{ posts?: BlogPost[] }>(`${API_URL}/api/blog?todos=true&limit=50`),
+    [],
+  )
+  const { data, loading, reload } = useApiResource(fetchPosts)
+  const posts = data?.posts ?? []
 
   const togglePublicado = async (post: BlogPost) => {
     try {
       await apiClient.put(`${API_URL}/api/blog/${post.id}`, { publicado: !post.publicado }, { headers: authHeader() })
-      loadPosts()
+      reload()
     } catch (err) {
       if (isAuthError(err)) onAuthError()
     }
