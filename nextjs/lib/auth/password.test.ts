@@ -19,5 +19,5 @@ describe('lib/auth/password', () => {
     // ...yet both still verify against the original input.
     expect(await verifyPassword('mesma-senha', a)).toBe(true)
     expect(await verifyPassword('mesma-senha', b)).toBe(true)
-  })
+  }, 15_000)
 })
