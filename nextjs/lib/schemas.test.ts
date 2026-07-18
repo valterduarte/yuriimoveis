@@ -21,7 +21,7 @@ describe('imovelCreateSchema', () => {
     expect(result.success).toBe(true)
     if (result.success) {
       expect(result.data.cidade).toBe('Osasco')          // default
-      expect(result.data.status).toBe('pronto')           // default
+      expect(result.data.status).toBe('')                 // opcional
       expect(result.data.destaque).toBe(false)            // default
       expect(result.data.imagens).toEqual([])             // default
     }
@@ -79,6 +79,12 @@ describe('imovelCreateSchema', () => {
     const result = imovelCreateSchema.safeParse({ ...validImovelPayload, imagens: ['not-a-url'] })
     expect(result.success).toBe(false)
   })
+
+  it('accepts a blank status when the construction stage does not apply', () => {
+    const result = imovelCreateSchema.safeParse({ ...validImovelPayload, categoria: 'comercial', status: '' })
+    expect(result.success).toBe(true)
+    if (result.success) expect(result.data.status).toBe('')
+  })
 })
 
 describe('imovelUpdateSchema', () => {
@@ -98,6 +104,10 @@ describe('imovelUpdateSchema', () => {
   it('accepts ativo (the soft-delete flag)', () => {
     const result = imovelUpdateSchema.safeParse({ ativo: false })
     expect(result.success).toBe(true)
+  })
+
+  it('allows clearing a previously selected construction status', () => {
+    expect(imovelUpdateSchema.safeParse({ status: '' }).success).toBe(true)
   })
 })
 

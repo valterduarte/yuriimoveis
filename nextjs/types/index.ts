@@ -18,7 +18,11 @@ export interface Imovel {
   bairro: string
   cidade: string
   cep: string
-  status: PropertyStatus
+  /**
+   * Etapa da obra. É opcional porque não descreve terrenos e imóveis
+   * comerciais (e também pode não ser informada em imóveis residenciais).
+   */
+  status: PropertyStatus | ''
   destaque: boolean
   ativo: boolean
   /** Se true, o imóvel entra no feed VRSync dos portais (OLX/ZAP/Viva Real). Default true. */

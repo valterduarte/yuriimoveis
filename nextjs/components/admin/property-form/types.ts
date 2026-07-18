@@ -38,7 +38,7 @@ export interface FormState {
 
 export const EMPTY_FORM: FormState = {
   titulo: '', descricao: '', descricao_seo: '', tipo: 'venda', categoria: 'apartamento',
-  status: 'pronto',
+  status: '',
   preco: '', parcela_display: '', parcela_label: '', area: '', area_display: '', quartos: '', banheiros: '', vagas: '', vagas_display: '',
   empreendimento: '',
   torre: '', numero_apartamento: '', observacoes: '',

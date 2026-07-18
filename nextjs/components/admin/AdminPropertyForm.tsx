@@ -28,7 +28,10 @@ function propertyToForm(property: Imovel): FormState {
     descricao_seo:   property.descricao_seo   || '',
     tipo:            property.tipo            || 'venda',
     categoria:       property.categoria       || 'apartamento',
-    status:          property.status          || 'pronto',
+    // Status da obra não se aplica a imóveis comerciais nem terrenos. Ao abrir
+    // um cadastro legado, já o deixamos vazio para a próxima gravação corrigir
+    // também o valor persistido.
+    status:          ['comercial', 'terreno'].includes(property.categoria) ? '' : (property.status || ''),
     preco:           numToStr(property.preco),
     parcela_display: property.parcela_display || '',
     parcela_label:   property.parcela_label   || '',

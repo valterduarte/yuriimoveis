@@ -220,7 +220,7 @@ export function buildEmpreendimentosFromRows(rows: EmpreendimentoSourceRow[]): E
 
     if (existing) {
       existing.ids.push(row.id)
-      existing.statuses.push(row.status)
+      if (row.status) existing.statuses.push(row.status)
       existing.precos.push(Number(row.preco))
       existing.areas.push(Number(row.area))
       // An explicit name wins over a parsed one for display consistency.
@@ -240,7 +240,7 @@ export function buildEmpreendimentosFromRows(rows: EmpreendimentoSourceRow[]): E
         bairro: row.bairro ?? '',
         cidade: row.cidade ?? '',
         ids: [row.id],
-        statuses: [row.status],
+        statuses: row.status ? [row.status] : [],
         precos: [Number(row.preco)],
         areas: [Number(row.area)],
         firstImagens: row.imagens ?? null,
