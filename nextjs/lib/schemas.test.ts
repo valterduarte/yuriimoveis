@@ -80,7 +80,7 @@ describe('imovelCreateSchema', () => {
     expect(result.success).toBe(false)
   })
 
-  it('accepts a blank status when the construction stage does not apply', () => {
+  it('accepts a blank status when the construction stage is not informed', () => {
     const result = imovelCreateSchema.safeParse({ ...validImovelPayload, categoria: 'comercial', status: '' })
     expect(result.success).toBe(true)
     if (result.success) expect(result.data.status).toBe('')

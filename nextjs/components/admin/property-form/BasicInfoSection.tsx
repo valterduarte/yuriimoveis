@@ -13,15 +13,6 @@ interface BasicInfoSectionProps {
 }
 
 export default function BasicInfoSection({ form, updateField, onPriceChange, empreendimentoOptions = [] }: BasicInfoSectionProps) {
-  const statusApplies = form.categoria !== 'comercial' && form.categoria !== 'terreno'
-
-  const handleCategoriaChange = (categoria: string) => {
-    updateField('categoria', categoria)
-    // Etapa da obra não descreve galpões/salas nem terrenos. Limpar o valor
-    // evita que um status escolhido antes continue aparecendo no site.
-    if (categoria === 'comercial' || categoria === 'terreno') updateField('status', '')
-  }
-
   return (
     <div className={card}>
       <h2 className={`${sectionHeading} mb-5`}>Informações Básicas</h2>
@@ -65,13 +56,13 @@ export default function BasicInfoSection({ form, updateField, onPriceChange, emp
           </div>
           <div>
             <label className={fieldLabel}>Categoria *</label>
-            <select value={form.categoria} onChange={e => handleCategoriaChange(e.target.value)} className={fieldInput}>
+            <select value={form.categoria} onChange={e => updateField('categoria', e.target.value)} className={fieldInput}>
               {PROPERTY_CATEGORIES.map(c => (
                 <option key={c.value} value={c.value}>{c.label}</option>
               ))}
             </select>
           </div>
-          {statusApplies && <div>
+          <div>
             <label className={fieldLabel}>Status da obra</label>
             <select value={form.status} onChange={e => updateField('status', e.target.value)} className={fieldInput}>
               <option value="">Não informar</option>
@@ -79,7 +70,7 @@ export default function BasicInfoSection({ form, updateField, onPriceChange, emp
               <option value="construcao">Em construção</option>
               <option value="planta">Na planta</option>
             </select>
-          </div>}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
