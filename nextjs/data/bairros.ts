@@ -264,6 +264,27 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'pestana': {
+    nome: 'Pestana',
+    slug: 'pestana',
+    cidade: 'Osasco',
+    titulo: 'Imóveis no Pestana, Osasco SP',
+    descricaoMeta:
+      'Casas, apartamentos e imóveis comerciais no Pestana, Osasco, SP. Veja opções para venda e aluguel com atendimento do Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Pestana é um bairro residencial consolidado de Osasco, situado entre regiões como Km 18, Jardim das Flores e Jardim Roberto. O perfil é predominantemente familiar, com ruas de moradia e pontos de comércio que atendem a rotina de quem busca viver em uma área estabelecida da cidade.',
+      infraestrutura:
+        'O bairro reúne mercados, padarias, farmácias, serviços e comércio de proximidade para as necessidades do dia a dia. O Campo do Pestana é um espaço tradicional de convivência esportiva na região, e a localização permite acessar com facilidade a estrutura mais ampla do centro de Osasco.',
+      transporte:
+        'As avenidas General Pedro Pinho e Newton Estilac Leal ajudam a conectar o Pestana a outros bairros de Osasco, Carapicuíba, Barueri e São Paulo. Linhas de ônibus atendem a região, enquanto as estações da Linha 8-Diamante nas áreas de Km 18 e Quitaúna ampliam as alternativas de deslocamento para quem utiliza transporte público.',
+      educacao:
+        'A região conta com opções de educação infantil e ensino básico no entorno. Para cursos técnicos, ensino médio e superior, moradores têm acesso às instituições e serviços educacionais distribuídos pelo centro de Osasco e por bairros próximos.',
+      porqueMorar:
+        'Morar no Pestana é uma escolha interessante para quem procura um bairro residencial com comércio próximo e acesso prático a diferentes regiões de Osasco. Há opções de casas, apartamentos e imóveis comerciais, atendendo famílias, investidores e quem busca espaço para empreender.',
+    },
+  },
+
   'rochdale': {
     nome: 'Rochdale',
     slug: 'rochdale',
