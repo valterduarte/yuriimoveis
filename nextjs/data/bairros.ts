@@ -243,6 +243,27 @@ export const BAIRROS: Record<string, BairroData> = {
     },
   },
 
+  'jardim-das-flores': {
+    nome: 'Jardim das Flores',
+    slug: 'jardim-das-flores',
+    cidade: 'Osasco',
+    titulo: 'Imóveis no Jardim das Flores, Osasco SP',
+    descricaoMeta:
+      'Casas e apartamentos no Jardim das Flores, Osasco SP. Encontre imóveis à venda e para aluguel com atendimento do Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'O Jardim das Flores é um bairro residencial de Osasco, conhecido por suas ruas tranquilas e perfil familiar. Oferece opções de moradia em casas e pequenos condomínios, com comércio local que atende à rotina dos moradores.',
+      infraestrutura:
+        'O bairro conta com padarias, mercados, farmácias e serviços de bairro. Há praças e áreas verdes que contribuem para a qualidade de vida local.',
+      transporte:
+        'Linhas de ônibus conectam o Jardim das Flores ao centro de Osasco e ao Terminal Osasco. O acesso por vias locais facilita o deslocamento para bairros vizinhos e para a Rodovia Castelo Branco.',
+      educacao:
+        'A região possui escolas de ensino fundamental e creches próximas. Para ensino médio e superior, os moradores acessam opções no centro de Osasco.',
+      porqueMorar:
+        'Ideal para famílias que buscam tranquilidade sem perder contato com a infraestrutura urbana de Osasco. O Jardim das Flores oferece equilíbrio entre residencial e comércio de bairro, com preços competitivos e boa acessibilidade.',
+    },
+  },
+
   'padroeira': {
     nome: 'Padroeira',
     slug: 'padroeira',
