@@ -18,7 +18,8 @@
     "gsc:index-status": "tsx scripts/inspect-index-status.ts",
     "gsc:token": "tsx scripts/verify-gsc-ownership.ts token",
     "gsc:verify": "tsx scripts/verify-gsc-ownership.ts verify",
-    "prepare": "cd .. && git config core.hooksPath nextjs/.husky || true"
+    "prepare": "cd .. && git config core.hooksPath nextjs/.husky || true",
+    "save:graph": "bash scripts/save-today-to-graph.sh"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,mjs,cjs}": "eslint --fix"
