@@ -20,6 +20,7 @@ const serverEnvSchema = z.object({
   ADMIN_USER: z.string().min(1),
   ADMIN_PASSWORD: z.string().min(1),
   GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1),
+  VERCEL_ANALYTICS_TOKEN: z.string().min(1).optional(),
   // Optional — graceful fallbacks exist (in-memory rate limiting / file-based
   // service account), so their absence must not crash the app.
   UPSTASH_REDIS_REST_URL: z.string().min(1).optional(),
