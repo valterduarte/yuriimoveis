@@ -17,6 +17,7 @@ function titleFor(pathname: string): string {
   if (pathname === '/admin/blog') return 'Blog — Posts'
   if (pathname === '/admin/blog/novo') return 'Novo Post'
   if (pathname.startsWith('/admin/blog/')) return 'Editar Post'
+  if (pathname === '/admin/analytics') return 'Analytics'
   if (pathname === '/admin/clicks') return 'Clicks WhatsApp'
   if (pathname === '/admin/conta') return 'Conta'
   return 'Admin'
@@ -28,6 +29,7 @@ function HeaderActions({ pathname }: { pathname: string }) {
       <>
         <Link href="/admin/blog" className={navLink}><FiFileText size={14} /> Blog</Link>
         <Link href="/admin/clicks" className={navLink}><FiBarChart2 size={14} /> Clicks</Link>
+          <Link href="/admin/analytics" className={navLink}><FiBarChart2 size={14} /> Analytics</Link>
         <Link href="/admin/imoveis/novo" className="btn-primary flex items-center gap-2 py-2.5 px-5 text-xs">
           <FiPlus size={14} /> Novo Imóvel
         </Link>
