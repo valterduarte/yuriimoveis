@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireUser, withErrorHandler } from '../../../../../lib/apiHandler'
+import { z } from 'zod'
+import { parseSchema, requireUser, withErrorHandler } from '../../../../../lib/apiHandler'
 import { getDb } from '../../../../../lib/db'
 import { fetchAllPropertySlugs } from '../../../../../lib/properties'
 import { imovelSlug } from '../../../../../lib/imovel/slug'
@@ -7,21 +8,30 @@ import { getPropertyAnalyticsByPath } from '../../../../../lib/vercelAnalytics'
 
 const DEFAULT_DAYS = 31
 
+const analyticsQuerySchema = z.object({
+  since: z.string().datetime().optional(),
+  until: z.string().datetime().optional(),
+})
+
 export const GET = withErrorHandler(
   'GET /api/admin/analytics/properties',
   async (request: NextRequest) => {
     const user = requireUser(request)
     if (user instanceof NextResponse) return user
 
+    const query = parseSchema(analyticsQuerySchema, {
+      since: request.nextUrl.searchParams.get('since') ?? undefined,
+      until: request.nextUrl.searchParams.get('until') ?? undefined,
+    })
+    if (query instanceof NextResponse) return query
+
     const since =
-      request.nextUrl.searchParams.get('since') ??
+      query.since ??
       new Date(
         Date.now() - DEFAULT_DAYS * 24 * 60 * 60 * 1000,
       ).toISOString()
 
-    const until =
-      request.nextUrl.searchParams.get('until') ??
-      new Date().toISOString()
+    const until = query.until ?? new Date().toISOString()
 
     const properties = await fetchAllPropertySlugs()
 
