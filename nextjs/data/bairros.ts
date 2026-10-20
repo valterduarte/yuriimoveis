@@ -859,6 +859,27 @@ export const BAIRROS: Record<string, BairroData> = {
         'A Vila Ayrosa combina localização central com preços mais acessíveis que bairros como Centro e Presidente Altino. É ideal para quem depende de transporte público, já que a CPTM e diversas linhas de ônibus estão a poucos minutos. O comércio forte e a infraestrutura consolidada fazem do bairro uma escolha segura para morar em Osasco.',
     },
   },
+
+  'veloso': {
+    nome: 'Veloso',
+    slug: 'veloso',
+    cidade: 'Osasco',
+    titulo: 'Imóveis no Veloso, Osasco SP',
+    descricaoMeta:
+      'Encontre imóveis à venda ou para alugar no Veloso, em Osasco. Consulte as opções disponíveis e compare os detalhes de cada imóvel com o Corretor Yuri.',
+    conteudo: {
+      sobre:
+        'Veloso é um bairro de Osasco para quem está pesquisando uma moradia na cidade. As opções anunciadas podem ser consultadas conforme o objetivo: comprar um imóvel ou encontrar um imóvel para alugar.',
+      infraestrutura:
+        'Ao comparar imóveis no Veloso, confira as informações de cada anúncio, como tipo de imóvel, metragem, número de dormitórios, valores e características informadas. A disponibilidade e os detalhes variam de um imóvel para outro.',
+      transporte:
+        'Para avaliar a localização de um imóvel no Veloso, consulte o endereço indicado no anúncio e considere os trajetos que fazem parte da sua rotina. As páginas de listagem permitem comparar as opções disponíveis no bairro.',
+      educacao:
+        'Se a proximidade de escolas ou instituições de ensino é importante para sua escolha, verifique os endereços e as opções relevantes a partir de cada imóvel anunciado no Veloso antes de agendar uma visita.',
+      porqueMorar:
+        'A página reúne opções anunciadas no Veloso, em Osasco, para compra e locação. Compare valores, características e localização dos imóveis disponíveis e converse com o Corretor Yuri para tirar dúvidas sobre uma opção específica.',
+    },
+  },
 }
 
 /**
